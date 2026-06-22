@@ -17,11 +17,17 @@ v1.0.0
 
 This addon is built on top of HealBot Continues by Strife. Majority of code got refactored, removed and moved around.
 New functionality implemented:
+
 -Buff tracking
+
 -Hot tracking with icons
+
 -Incoming heals use newer protocol
+
 -Chat functionalities
+
 -Might not work on servers other than TurtleWow clones. It uses Turtle based api for some calls
+
 -Mana bars for healers in grid.
 
 TODO: 
