@@ -264,9 +264,23 @@
           <OnClick>HealBot_Options_PanelSounds_OnClick(this)</OnClick> 
         </Scripts>
       </CheckButton>
+      <CheckButton name="HealBot_Options_ActionMouseover" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PanelSounds" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ActionMouseover_OnLoad(this,"Enable Action Bar Mouseover")</OnLoad> 
+          <OnClick>HealBot_Options_ActionMouseover_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
 
         </Frames>
       </Frame>
+
 
       <CheckButton name="HealBot_Options_HideOptions" inherits="OptionsCheckButtonTemplate">
         <Anchors>

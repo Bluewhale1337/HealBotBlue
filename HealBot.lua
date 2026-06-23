@@ -227,7 +227,7 @@ function HealBot_GetSpellName(id)
   if (not subSpellName or subSpellName=="") then
     return spellName;
   end
-  return spellName .. "(" .. subSpellName .. ")";
+  return spellName .. " (" .. subSpellName .. ")";
 end
 
 function HealBot_GetSpellId(spell)
@@ -938,43 +938,11 @@ HealBot_MissingBuffs = {}
 
 function HealBot_CheckShamanWeaponBuff(spellName)
   local hasMainHandEnchant, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
-  if not (hasMainHandEnchant or hasOffHandEnchant) then return false end
   
-  local baseName = string.gsub(spellName, " Weapon", "")
-  
-  HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
-  
-  if hasMainHandEnchant then
-    HealBot_ScanTooltip:ClearLines()
-    HealBot_ScanTooltip:SetInventoryItem("player", 16)
-    local numLines = HealBot_ScanTooltip:NumLines()
-    for i = 1, numLines do
-      local line = getglobal("HealBot_ScanTooltipTextLeft"..i)
-      if line and line:GetText() then
-        if string.find(line:GetText(), baseName) then
-          HealBot_ScanTooltip:Hide()
-          return true
-        end
-      end
-    end
+  if hasMainHandEnchant or hasOffHandEnchant then
+    return true
   end
   
-  if hasOffHandEnchant then
-    HealBot_ScanTooltip:ClearLines()
-    HealBot_ScanTooltip:SetInventoryItem("player", 17)
-    local numLines = HealBot_ScanTooltip:NumLines()
-    for i = 1, numLines do
-      local line = getglobal("HealBot_ScanTooltipTextLeft"..i)
-      if line and line:GetText() then
-        if string.find(line:GetText(), baseName) then
-          HealBot_ScanTooltip:Hide()
-          return true
-        end
-      end
-    end
-  end
-  
-  HealBot_ScanTooltip:Hide()
   return false
 end
 
@@ -1069,6 +1037,7 @@ function HealBot_OnEvent_UnitAura(this,unit)
         ["Interface\\Icons\\Spell_Nature_ResistNature"] = true,
         ["Interface\\Icons\\Spell_Holy_PowerWordShield"] = true,
         ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
+        ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
       }
       
       local i = 1;
@@ -1577,5 +1546,46 @@ function HealBot_Range_Check(unit, range)
     end
   end
   return return_val;
+end
+
+--------------------------------------------------------------------------------
+-- Native Action Bar Hovercasting (Mouseover Hook)
+--------------------------------------------------------------------------------
+do
+  local pass = function() end
+  local orig = UseAction
+  function UseAction(slot, checkCursor, onSelf)
+    if HealBot_Config.ActionMouseover == 1 then
+      local mouseover = HealBot_Action_TooltipUnit
+      if mouseover and mouseover ~= 'target' then
+        local _PlaySound = PlaySound
+        local target = UnitName("target")
+        
+        PlaySound = pass
+        ClearTarget()
+        PlaySound = _PlaySound
+        
+        do
+          local autoSelfCast = GetCVar("autoSelfCast")
+          SetCVar("autoSelfCast", "0") -- Ensure disabled
+          orig(slot, checkCursor, onSelf)
+          if autoSelfCast then
+            SetCVar("autoSelfCast", autoSelfCast)
+          end
+        end
+        
+        SpellTargetUnit(mouseover)
+        
+        if target then
+          PlaySound = pass
+          TargetLastTarget()
+          PlaySound = _PlaySound
+        end
+        
+        return
+      end
+    end
+    orig(slot, checkCursor, onSelf)
+  end
 end
 

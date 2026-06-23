@@ -1,4 +1,4 @@
-HEALBOT_VERSION = "1.0";
+HEALBOT_VERSION = "1.1";
 
 -------------
 -- ENGLISH --
@@ -116,17 +116,17 @@ HEALBOT_MAGIC_en           = "Magic";  -- Do NOT localize this value.
 HEALBOT_CURSE_en           = "Curse";  -- Do NOT localize this value.
 HEALBOT_POISON_en          = "Poison";  -- Do NOT localize this value.
 
-HEALBOT_RANK_1              = "(Rank 1)";
-HEALBOT_RANK_2              = "(Rank 2)";
-HEALBOT_RANK_3              = "(Rank 3)";
-HEALBOT_RANK_4              = "(Rank 4)";
-HEALBOT_RANK_5              = "(Rank 5)";
-HEALBOT_RANK_6              = "(Rank 6)";
-HEALBOT_RANK_7              = "(Rank 7)";
-HEALBOT_RANK_8              = "(Rank 8)";
-HEALBOT_RANK_9              = "(Rank 9)";
-HEALBOT_RANK_10             = "(Rank 10)";
-HEALBOT_RANK_11             = "(Rank 11)";
+HEALBOT_RANK_1              = " (Rank 1)";
+HEALBOT_RANK_2              = " (Rank 2)";
+HEALBOT_RANK_3              = " (Rank 3)";
+HEALBOT_RANK_4              = " (Rank 4)";
+HEALBOT_RANK_5              = " (Rank 5)";
+HEALBOT_RANK_6              = " (Rank 6)";
+HEALBOT_RANK_7              = " (Rank 7)";
+HEALBOT_RANK_8              = " (Rank 8)";
+HEALBOT_RANK_9              = " (Rank 9)";
+HEALBOT_RANK_10             = " (Rank 10)";
+HEALBOT_RANK_11             = " (Rank 11)";
 
 HEALBOT_LIBRARY_INCHEAL    = "Increases healing done by spells and effects by up to (%d+)%.";
 HEALBOT_LIBRARY_INCDAMHEAL = "Increases damage and healing done by magical spells and effects by up to (%d+)%.";
@@ -168,6 +168,7 @@ HEALBOT_BUFF_POWER_WORD_SHIELD   = "Interface\\Icons\\Spell_Holy_PowerWordShield
 HEALBOT_BUFF_REJUVENATION        = "Interface\\Icons\\Spell_Nature_Rejuvenation";
 HEALBOT_BUFF_REGROWTH            = "Interface\\Icons\\Spell_Nature_ResistNature";
 HEALBOT_BUFF_RENEW               = "Interface\\Icons\\Spell_Holy_Renew";
+HEALBOT_BUFF_FEAR_WARD           = "Interface\\Icons\\Spell_Holy_Excorcism";
 HEALBOT_DEBUFF_WEAKENED_SOUL     = "Interface\\Icons\\Spell_Holy_AshesToAshes";
 HEALBOT_DEBUFF_RECENTLY_BANDAGED = "Interface\\Icons\\INV_Misc_Bandage_08";
 
@@ -376,6 +377,7 @@ HEALBOT_WORDS_SEC               = "sec";
 HEALBOT_WORDS_TO                = "to";
 HEALBOT_WORDS_CAST              = "Cast"
 HEALBOT_WORDS_FOR               = "for";
+
 
 
 

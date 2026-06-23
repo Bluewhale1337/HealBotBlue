@@ -82,17 +82,17 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 	HEALBOT_CURSE			= "저주";
 	HEALBOT_POISON			= "독";
 
-	HEALBOT_RANK_1              = "(1 레벨)";
-	HEALBOT_RANK_2              = "(2 레벨)";
-	HEALBOT_RANK_3              = "(3 레벨)";
-	HEALBOT_RANK_4              = "(4 레벨)";
-	HEALBOT_RANK_5              = "(5 레벨)";
-	HEALBOT_RANK_6              = "(6 레벨)";
-	HEALBOT_RANK_7              = "(7 레벨)";
-	HEALBOT_RANK_8              = "(8 레벨)";
-	HEALBOT_RANK_9              = "(9 레벨)";
-	HEALBOT_RANK_10            = "(10 레벨)";
-	HEALBOT_RANK_11            = "(11 레벨)";
+	HEALBOT_RANK_1              = " (1 레벨)";
+	HEALBOT_RANK_2              = " (2 레벨)";
+	HEALBOT_RANK_3              = " (3 레벨)";
+	HEALBOT_RANK_4              = " (4 레벨)";
+	HEALBOT_RANK_5              = " (5 레벨)";
+	HEALBOT_RANK_6              = " (6 레벨)";
+	HEALBOT_RANK_7              = " (7 레벨)";
+	HEALBOT_RANK_8              = " (8 레벨)";
+	HEALBOT_RANK_9              = " (9 레벨)";
+	HEALBOT_RANK_10            = " (10 레벨)";
+	HEALBOT_RANK_11            = " (11 레벨)";
 
 	HEALBOT_LIBRARY_INCHEAL		= "모든 주문 및 효과에 의한 치유량이 최대 (%d+)만큼 증가합니다%.";
 	HEALBOT_LIBRARY_INCDAMHEAL		= "모든 주문 및 효과에 의한 피해와 치유량이 최대 (%d+)만큼 증가합니다%.";
@@ -323,6 +323,7 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 	HEALBOT_WORDS_FOR				= "for";
 
 end
+
 
 
 

@@ -1,48 +1,37 @@
-HealBotBlue by Bluewhale.
+**HealBotBlue**
+By Bluewhale.
 
-This addon is built on top of Strife's HealBot Continues which was built on original Healbot, however a lot of code got refactored and changed, with more flexibilty and functions. 
+> **NOTE:** For HealBot to work correctly, the **Selfcast** feature in WoW options needs to be disabled.
 
---------------------------------------------
-NOTE: For HealBot to work correctly, the Selfcast feature in wow options needs to be disabled. 
---------------------------------------------
+### Reporting Errors
+Major errors will pop up a frame with error information. Take a screenshot and post comments.
 
-Reporting ERRORS:
-================
-Major error will popup a frame with error information.
-Take a screenshot and post comments.
+### Installation
+Unpack the zipped file and place the `HealBotBlue` folder under `Interface/AddOns` in your World of Warcraft directory. 
+Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\HealBotBlue`
 
+### Chat Commands
+* `/hb` - Toggles the main HealBot panel on and off
+* `/hb options` - Toggles the HealBot options panel on and off
+* `/hb reset` - Resets the contents of the main HealBot panel
 
-Change log:
-v1.0.0
+### Option Changes from the original HealBot Continues
 
-This addon is built on top of HealBot Continues by Strife. Majority of code got refactored, removed and moved around.
-New functionality implemented:
+### Change Log
 
--Buff tracking
+**v1.1**
+* **Native Hovercasting:** Added a native Action Bar Hovercasting (Mouseover) engine. You can now cast spells on hovered targets using action bar keybinds without losing your current target. Togglable in Options -> General.
+* **Fear Ward Tracking:** Added Fear Ward to the global HoT tracker, which will display the icon directly on the unit frame.
+* **Bug Fix:** Fixed Shaman weapon buff tracking (e.g., Rockbiter) failing due to spell ranks in tooltips.
+* **Bug Fix:** Fixed missing health bar skin textures by ensuring `.tga` paths are explicitly resolved.
+* **Bug Fix:** Fixed division-by-zero math errors during UI scaling that caused the addon to crash.
 
--Hot tracking with icons
-
--Incoming heals use newer protocol
-
--Chat functionalities
-
--Might not work on servers other than TurtleWow clones. It uses Turtle based api for some calls
-
--Mana bars for healers in grid.
-
-TODO: 
-- Mouseover casting
-- Updating bonus values according to TurtleWoW and it's clones talent values.
-
-Installation :
-
-Unpack the zipped file and place the HealBot folder under Interface/AddOns
-in your World of Warcraft directory.  Path with default installation:
-C:\Program Files\World of Warcraft\Interface\AddOns\HealBot
+**v1.0**
+* **Buff tracking** - Added submenu for tracking buffs on element
+* ***Hot tracking with icons** - Hots and DoTs display on player bars
+* **Incoming heals use newer protocol** 
+* **Chat functionalities** - modified chat functionalities for spellcast announcements
+* **Mana Bars** - Mana bars for healers in the grid added togglable from options menu.
 
 
-Chat commands :
 
-/hb          -  toggles the main HealBot panel on and off
-/hb options  -  toggles the HealBot options panel on and off
-/hb reset    -  resets the contents of the main HealBot panel

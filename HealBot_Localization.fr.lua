@@ -97,17 +97,17 @@ HEALBOT_MAGIC              = "Magie";
 HEALBOT_CURSE              = "Mal\195\169diction";
 HEALBOT_POISON             = "Poison";
 
-HEALBOT_RANK_1              = "(Rang 1)";
-HEALBOT_RANK_2              = "(Rang 2)";
-HEALBOT_RANK_3              = "(Rang 3)";
-HEALBOT_RANK_4              = "(Rang 4)";
-HEALBOT_RANK_5              = "(Rang 5)";
-HEALBOT_RANK_6              = "(Rang 6)";
-HEALBOT_RANK_7              = "(Rang 7)";
-HEALBOT_RANK_8              = "(Rang 8)";
-HEALBOT_RANK_9              = "(Rang 9)";
-HEALBOT_RANK_10             = "(Rang 10)";
-HEALBOT_RANK_11             = "(Rang 11)";
+HEALBOT_RANK_1              = " (Rang 1)";
+HEALBOT_RANK_2              = " (Rang 2)";
+HEALBOT_RANK_3              = " (Rang 3)";
+HEALBOT_RANK_4              = " (Rang 4)";
+HEALBOT_RANK_5              = " (Rang 5)";
+HEALBOT_RANK_6              = " (Rang 6)";
+HEALBOT_RANK_7              = " (Rang 7)";
+HEALBOT_RANK_8              = " (Rang 8)";
+HEALBOT_RANK_9              = " (Rang 9)";
+HEALBOT_RANK_10             = " (Rang 10)";
+HEALBOT_RANK_11             = " (Rang 11)";
 
 HEALBOT_LIBRARY_INCHEAL    = "Increases healing done by spells and effects by up to (%d+)%.";  -- ***************    needs French translation    ***************
 HEALBOT_LIBRARY_INCDAMHEAL = "Increases damage and healing done by magical spells and effects by up to (%d+)%.";  -- ***************    needs French translation    ***************
@@ -327,6 +327,7 @@ HEALBOT_WORDS_CAST              = "Cast"   -- ***************    needs translati
 HEALBOT_WORDS_FOR               = "for";   -- ***************    needs translation    ***************
 
 end
+
 
 
 

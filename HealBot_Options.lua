@@ -342,6 +342,14 @@ function HealBot_Options_PanelSounds_OnClick(this)
   HealBot_Config.PanelSounds = this:GetChecked() or 0;
 end
 
+function HealBot_Options_ActionMouseover_OnLoad(this, text)
+  getglobal(this:GetName().."Text"):SetText(text);
+end
+
+function HealBot_Options_ActionMouseover_OnClick(this)
+  HealBot_Config.ActionMouseover = this:GetChecked() or 0;
+end
+
 
 function HealBot_Options_ActionLocked_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_ACTIONLOCKED);
@@ -1380,6 +1388,9 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_AlertLevel:SetValue(HealBot_Config.AlertLevel);
   HealBot_Options_AutoShow:SetChecked(HealBot_Config.AutoClose);
   HealBot_Options_PanelSounds:SetChecked(HealBot_Config.PanelSounds);
+  
+  if HealBot_Config.ActionMouseover == nil then HealBot_Config.ActionMouseover = 1; end
+  HealBot_Options_ActionMouseover:SetChecked(HealBot_Config.ActionMouseover);
   HealBot_Options_GroupHeals:SetChecked(HealBot_Config.GroupHeals);
   if CT_RA_MainTanks then
     HealBot_Options_TankHeals:SetChecked(HealBot_Config.TankHeals);

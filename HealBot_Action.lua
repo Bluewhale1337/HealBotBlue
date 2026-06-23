@@ -143,7 +143,8 @@ function HealBot_Action_EnableButton(button)
   local sb=HealBot_Config.btextenabledcolb[HealBot_Config.Current_Skin];
   local sa=HealBot_Config.btextenabledcola[HealBot_Config.Current_Skin];
   local r,g,b,a = HealBot_HealthColor(button.unit,hlth,maxhlth)
-  local btextheight=HealBot_Config.btextheight[HealBot_Config.Current_Skin]
+  local btextheight=HealBot_Config.btextheight[HealBot_Config.Current_Skin] or 10;
+  if btextheight == 0 then btextheight = 10 end
   local bwidth = HealBot_Config.bwidth[HealBot_Config.Current_Skin]
   local textlen = floor(5+(((bwidth*1.8)/btextheight)-(btextheight/2)))
 
@@ -248,14 +249,14 @@ end
 function HealBot_Action_ResetSkin()
   HealBot_Action_PartyChanged()
   if HealBot_Options:IsVisible() then 
-    HealBot_DiseaseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_MagicColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_PoisonColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_CurseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_EnTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_EnTextColorpickin:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_DisTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
-    HealBot_DebTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]);
+    HealBot_DiseaseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_MagicColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_PoisonColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_CurseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_EnTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_EnTextColorpickin:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_DisTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_DebTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
     HealBot_SetSkinColours()
   end
 end
@@ -705,13 +706,13 @@ if not HealBot_IsFighting then
     local bar2 = HealBot_Action_HealthBar2(button);
     bar.txt = getglobal(bar:GetName().."_text");
     bar:SetHeight(bheight);
-    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture);
+    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
     bar.txt:SetTextHeight(btextheight);
     local barScale = bar:GetScale();
     bar:SetScale(barScale + 0.01);
     bar:SetScale(barScale);
     bar2:SetHeight(bheight);
-    bar2:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture);
+    bar2:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
   end);
 
   if MaxOffsetY<OffsetY then MaxOffsetY = OffsetY; end
@@ -728,12 +729,14 @@ if not HealBot_IsFighting then
     HealBot_Action_AbortButton:Hide();
   else
     local bar = HealBot_Action_HealthBar(HealBot_Action_AbortButton);
-    local width=(bwidth-12)+(OffsetX/(6-(abortsize/3)));
+    local denom = 6-(abortsize/3)
+    if denom == 0 then denom = 1 end
+    local width=(bwidth-12)+(OffsetX/denom);
 
     bar.txt = getglobal(bar:GetName().."_text");
     bar.txt:SetTextColor(sr,sg,sb,sa);
     bar.txt:SetText(HEALBOT_ACTION_ABORT);
-    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture);
+    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
     bar:SetMinMaxValues(0,100);
     bar:SetValue(100);
     bar:ClearAllPoints();

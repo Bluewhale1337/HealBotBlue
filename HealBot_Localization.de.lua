@@ -98,17 +98,17 @@ HEALBOT_MAGIC              = "Magie";
 HEALBOT_CURSE              = "Fluch";   
 HEALBOT_POISON             = "Gift";
 
-HEALBOT_RANK_1              = "(Rang 1)";
-HEALBOT_RANK_2              = "(Rang 2)";
-HEALBOT_RANK_3              = "(Rang 3)";
-HEALBOT_RANK_4              = "(Rang 4)";
-HEALBOT_RANK_5              = "(Rang 5)";
-HEALBOT_RANK_6              = "(Rang 6)";
-HEALBOT_RANK_7              = "(Rang 7)";
-HEALBOT_RANK_8              = "(Rang 8)";
-HEALBOT_RANK_9              = "(Rang 9)";
-HEALBOT_RANK_10             = "(Rang 10)";
-HEALBOT_RANK_11             = "(Rang 11)";
+HEALBOT_RANK_1              = " (Rang 1)";
+HEALBOT_RANK_2              = " (Rang 2)";
+HEALBOT_RANK_3              = " (Rang 3)";
+HEALBOT_RANK_4              = " (Rang 4)";
+HEALBOT_RANK_5              = " (Rang 5)";
+HEALBOT_RANK_6              = " (Rang 6)";
+HEALBOT_RANK_7              = " (Rang 7)";
+HEALBOT_RANK_8              = " (Rang 8)";
+HEALBOT_RANK_9              = " (Rang 9)";
+HEALBOT_RANK_10             = " (Rang 10)";
+HEALBOT_RANK_11             = " (Rang 11)";
 
 HEALBOT_LIBRARY_INCHEAL    = "Erh\195\182ht durch Zauber und Effekte verursachte Heilung um bis zu (%d+)%.";
 HEALBOT_LIBRARY_INCDAMHEAL = "Erh\195\182ht durch Zauber und magische Effekte zugef\195\188gten Schaden und Heilung um bis zu (%d+)%.";
@@ -149,6 +149,7 @@ HEALBOT_BUFF_POWER_WORD_SHIELD   = "Interface\\Icons\\Spell_Holy_PowerWordShield
 HEALBOT_BUFF_REJUVENATION        = "Interface\\Icons\\Spell_Nature_Rejuvenation";
 HEALBOT_BUFF_REGROWTH            = "Interface\\Icons\\Spell_Nature_ResistNature";
 HEALBOT_BUFF_RENEW               = "Interface\\Icons\\Spell_Holy_Renew";
+HEALBOT_BUFF_FEAR_WARD           = "Interface\\Icons\\Spell_Holy_Excorcism";
 HEALBOT_DEBUFF_WEAKENED_SOUL     = "Interface\\Icons\\Spell_Holy_AshesToAshes";
 HEALBOT_DEBUFF_RECENTLY_BANDAGED = "Interface\\Icons\\INV_Misc_Bandage_08";
 
@@ -345,6 +346,7 @@ HEALBOT_WORDS_CAST              = "Zauber"
 HEALBOT_WORDS_FOR               = "f\195\188r";
 
 end
+
 
 
 
