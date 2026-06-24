@@ -1,3 +1,11 @@
+function HealBot_Action_SetTexture(bar, btexture)
+  if not bar then return end
+  if btexture == 10 then
+    bar:SetStatusBarTexture("Interface\\Buttons\\WHITE8X8");
+  else
+    HealBot_Action_SetTexture(bar, btexture);
+  end
+end
 local headerno=0;
 
 HealBot_Action_HealGroup = {
@@ -23,16 +31,24 @@ function HealBot_Action_AddDebug(msg)
 end
 
 function HealBot_HealthColor(unit,hlth,maxhlth)
-  if HealBot_UnitDebuff[unit] then
+    if HealBot_UnitDebuff[unit] then
     local debuff, tmp, debuff_type = UnitDebuff(unit,1, 1)
     if not debuff then
       HealBot_UnitDebuff[unit] = nil;
       HealBot_UnitDebuff[unit.."_debuff_texture"]=nil
     else
-      return HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].R,
-             HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].G,
-             HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].B,
-             HealBot_Config.Barcola[HealBot_Config.Current_Skin];
+      local dr = HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].R
+      local dg = HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].G
+      local db = HealBot_Config.CDCBarColour[HealBot_UnitDebuff[unit]].B
+      if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
+        dr = dr * 4
+        dg = dg * 4
+        db = db * 4
+        if dr > 1 then dr = 1 end
+        if dg > 1 then dg = 1 end
+        if db > 1 then db = 1 end
+      end
+      return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
   end
   local text = UnitName(unit);
@@ -57,10 +73,20 @@ function HealBot_HealthColor(unit,hlth,maxhlth)
     a=HealBot_Config.bardisa[HealBot_Config.Current_Skin];
   end
 
-  if pct>=0.98 then r = 0.0; end
-  if pct<0.98 and pct>=0.65 then r=2.94-(pct*3); end 
-  if pct<=0.64 and pct>0.31 then g=(pct-0.31)*3; end 
-  if pct<=0.31 then g = 0.0; end
+  local colorMode = HealBot_Config.bcolormode[HealBot_Config.Current_Skin] or 1
+  if colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass then
+    local engClass = HealBot_Model.units[unit].englishClass
+    if RAID_CLASS_COLORS and RAID_CLASS_COLORS[engClass] then
+      r = RAID_CLASS_COLORS[engClass].r
+      g = RAID_CLASS_COLORS[engClass].g
+      b = RAID_CLASS_COLORS[engClass].b
+    end
+  else
+    if pct>=0.98 then r = 0.0; end
+    if pct<0.98 and pct>=0.65 then r=2.94-(pct*3); end 
+    if pct<=0.64 and pct>0.31 then g=(pct-0.31)*3; end 
+    if pct<=0.31 then g = 0.0; end
+  end
   return r,g,b,a;
 end
 
@@ -130,9 +156,14 @@ end
 
 function HealBot_Action_EnableButton(button)
   local unit = button.unit;
-  local hlth=UnitHealth(unit);
-  local maxhlth=UnitHealthMax(unit);
-  local name = UnitName(unit);
+  local state = HealBot_Model.units[unit]
+  if not state then return end
+  
+  local hlth = state.health
+  local maxhlth = state.maxHealth
+  local name = state.name
+  if not name then name = UnitName(unit) end -- fallback
+
   local bar = HealBot_Action_HealthBar(button);
   local bar2 = HealBot_Action_HealthBar2(button);
   local bar3 = getglobal(button:GetName().."Bar3");
@@ -151,19 +182,28 @@ function HealBot_Action_EnableButton(button)
   bar:SetMinMaxValues(0,maxhlth);
   bar:SetValue(hlth);
   
-  local _, englishClass = UnitClass(unit)
+  local englishClass = state.englishClass
   local isHealer = false
   if englishClass == "PALADIN" or englishClass == "DRUID" or englishClass == "SHAMAN" or englishClass == "PRIEST" then
     isHealer = true
   end
-  local pt = UnitPowerType(unit)
+  local pt = state.powerType
+  
+  local showMana = false
+  if HealBot_Config.ShowManaBars == 1 and state.maxMana > 0 and pt == 0 then
+    if HealBot_Config.ManaBarsHealersOnly == 1 then
+      if isHealer then showMana = true end
+    else
+      showMana = true
+    end
+  end
 
-  if HealBot_Config.ShowManaBars == 1 and UnitManaMax(unit) > 0 and isHealer and pt == 0 then
+  if showMana then
     local pr, pg, pb = 0, 0, 1
     
     if bar3 then
-      bar3:SetMinMaxValues(0, UnitManaMax(unit))
-      bar3:SetValue(UnitMana(unit))
+      bar3:SetMinMaxValues(0, state.maxMana)
+      bar3:SetValue(state.mana)
       bar3:SetStatusBarColor(pr, pg, pb, HealBot_Config.Barcola[HealBot_Config.Current_Skin])
       bar3:Show()
       bar3:SetHeight(bheight * 0.2)
@@ -186,7 +226,7 @@ function HealBot_Action_EnableButton(button)
     bar2:SetValue(0);
   end
   bar.txt = getglobal(bar:GetName().."_text");
-  if (not HealBot_IsCasting and HealBot_CanHeal(unit)) then
+  if (not HealBot_IsCasting and (HealBot_CanHeal(unit) or HealBot_MissingBuffs[unit])) then
     button:Enable();
     if HealBot_UnitDebuff[unit] then
       sr=HealBot_Config.btextcursecolr[HealBot_Config.Current_Skin];
@@ -194,11 +234,11 @@ function HealBot_Action_EnableButton(button)
       sb=HealBot_Config.btextcursecolb[HealBot_Config.Current_Skin];
       sa=HealBot_Config.btextcursecola[HealBot_Config.Current_Skin];
     elseif HealBot_MissingBuffs[unit] then
-      r=1.0;
-      g=1.0;
-      b=1.0;
-      sr=0.0;
-      sg=0.0;
+      r=r*0.5;
+      g=g*0.5;
+      b=b*0.5;
+      sr=1.0;
+      sg=1.0;
       sb=0.0;
     end
     bar:SetStatusBarColor(r,g,b,HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
@@ -215,8 +255,22 @@ function HealBot_Action_EnableButton(button)
   if string.len(name)>textlen then
     name = string.sub(name,1,textlen-3) .. '...';
   end
-  bar.txt:SetText(name);
+    bar.txt:SetText(name);
   bar.txt:SetTextColor(sr,sg,sb,sa);
+  local fontName, fontHeight, fontFlags = bar.txt:GetFont()
+  local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
+  if fontOutline == 1 then
+    bar.txt:SetFont(fontName, fontHeight, "OUTLINE")
+  else
+    bar.txt:SetFont(fontName, fontHeight, "")
+  end
+  local fontName, fontHeight, fontFlags = bar.txt:GetFont()
+  local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
+  if fontOutline == 1 then
+    bar.txt:SetFont(fontName, fontHeight, "OUTLINE")
+  else
+    bar.txt:SetFont(fontName, fontHeight, "")
+  end
     
   for i = 1, 5 do
     local icon = getglobal(button:GetName().."BarIcon"..i)
@@ -249,14 +303,14 @@ end
 function HealBot_Action_ResetSkin()
   HealBot_Action_PartyChanged()
   if HealBot_Options:IsVisible() then 
-    HealBot_DiseaseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_MagicColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_PoisonColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_CurseColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_EnTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_EnTextColorpickin:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_DisTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
-    HealBot_DebTextColorpick:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..HealBot_Config.btexture[HealBot_Config.Current_Skin]..".tga");
+    HealBot_Action_SetTexture(HealBot_DiseaseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_MagicColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_PoisonColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_CurseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_EnTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+    HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
     HealBot_SetSkinColours()
   end
 end
@@ -706,13 +760,13 @@ if not HealBot_IsFighting then
     local bar2 = HealBot_Action_HealthBar2(button);
     bar.txt = getglobal(bar:GetName().."_text");
     bar:SetHeight(bheight);
-    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
+    HealBot_Action_SetTexture(bar, btexture);
     bar.txt:SetTextHeight(btextheight);
     local barScale = bar:GetScale();
     bar:SetScale(barScale + 0.01);
     bar:SetScale(barScale);
     bar2:SetHeight(bheight);
-    bar2:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
+    HealBot_Action_SetTexture(bar2, btexture);
   end);
 
   if MaxOffsetY<OffsetY then MaxOffsetY = OffsetY; end
@@ -736,7 +790,7 @@ if not HealBot_IsFighting then
     bar.txt = getglobal(bar:GetName().."_text");
     bar.txt:SetTextColor(sr,sg,sb,sa);
     bar.txt:SetText(HEALBOT_ACTION_ABORT);
-    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\images\\bar"..btexture..".tga");
+    HealBot_Action_SetTexture(bar, btexture);
     bar:SetMinMaxValues(0,100);
     bar:SetValue(100);
     bar:ClearAllPoints();
@@ -1164,11 +1218,34 @@ function HealBot_Action_OnShow(this)
     HealBot_Config.backcolg[HealBot_Config.Current_Skin],
     HealBot_Config.backcolb[HealBot_Config.Current_Skin], 
     HealBot_Config.backcola[HealBot_Config.Current_Skin]);
-  HealBot_Action:SetBackdropBorderColor(
-    HealBot_Config.borcolr[HealBot_Config.Current_Skin],
-    HealBot_Config.borcolg[HealBot_Config.Current_Skin],
-    HealBot_Config.borcolb[HealBot_Config.Current_Skin],
-    HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+    local borderStyle = HealBot_Config.bborder[HealBot_Config.Current_Skin] or 2
+  if borderStyle == 0 then
+    HealBot_Action:SetBackdropBorderColor(0,0,0,0);
+  elseif borderStyle == 1 then
+    HealBot_Action:SetBackdrop({
+      bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+      edgeFile = "Interface\\Buttons\\WHITE8X8",
+      tile = true, tileSize = 8, edgeSize = 1,
+      insets = { left = 1, right = 1, top = 1, bottom = 1 }
+    })
+    HealBot_Action:SetBackdropBorderColor(
+      HealBot_Config.borcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+  else
+    HealBot_Action:SetBackdrop({
+      bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+      edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+      tile = true, tileSize = 8, edgeSize = 16,
+      insets = { left = 4, right = 4, top = 4, bottom = 4 }
+    })
+    HealBot_Action:SetBackdropBorderColor(
+      HealBot_Config.borcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+  end
 end
 
 function HealBot_Action_OnHide(this)
@@ -1220,4 +1297,8 @@ function HealBot_Action_OnKey(this,key,state)
     HealBot_Action_Refresh();
   end
 end
+
+
+
+
 

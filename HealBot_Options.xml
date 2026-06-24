@@ -1591,6 +1591,27 @@
           <OnLoad>HealBot_Options_ShowHeaders_OnLoad(this,HEALBOT_OPTIONS_SHOWHEADERS)</OnLoad> 
           <OnClick>HealBot_Options_ShowHeaders_OnClick(this)</OnClick> 
         </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_BarColorMode" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-8" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Class Colors")</OnLoad> 
+          <OnClick>HealBot_Config.bcolormode[HealBot_Config.Current_Skin] = (this:GetChecked() and 2 or 1); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_FontOutline" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-33" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Font Outline")</OnLoad> 
+          <OnClick>HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 0); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_1pxBorders" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-58" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("1px Borders")</OnLoad> 
+          <OnClick>HealBot_Config.bborder[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 2); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
       </CheckButton>      
 
       <Slider name="HealBot_Options_BarTextureS" inherits="HealBot_Options_SliderTemplate">
@@ -1637,7 +1658,7 @@
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINHEIGHT,10,25)</OnLoad> 
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINHEIGHT,10,100)</OnLoad> 
           <OnValueChanged>HealBot_Options_BarHeightS_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider>
@@ -2767,6 +2788,7 @@
     </Scripts>
   </Frame>
 </Ui>
+
 
 
 

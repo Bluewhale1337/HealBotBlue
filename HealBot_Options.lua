@@ -294,12 +294,44 @@ function HealBot_SetSkinColours()
     HealBot_Config.babortcolb[HealBot_Config.Current_Skin],
     HealBot_Config.babortcola[HealBot_Config.Current_Skin]);
 
-  -- removed SetBackdropColor
-  HealBot_Action:SetBackdropBorderColor(
-    HealBot_Config.borcolr[HealBot_Config.Current_Skin],
-    HealBot_Config.borcolg[HealBot_Config.Current_Skin],
-    HealBot_Config.borcolb[HealBot_Config.Current_Skin],
-    HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+    local borderStyle = HealBot_Config.bborder[HealBot_Config.Current_Skin] or 2
+  if borderStyle == 0 then
+    HealBot_Action:SetBackdropBorderColor(0,0,0,0);
+  elseif borderStyle == 1 then
+    HealBot_Action:SetBackdrop({
+      bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+      edgeFile = "Interface\\Buttons\\WHITE8X8",
+      tile = true, tileSize = 8, edgeSize = 1,
+      insets = { left = 1, right = 1, top = 1, bottom = 1 }
+    })
+    HealBot_Action:SetBackdropColor(
+      HealBot_Config.backcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.backcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.backcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.backcola[HealBot_Config.Current_Skin]);
+    HealBot_Action:SetBackdropBorderColor(
+      HealBot_Config.borcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+  else
+    HealBot_Action:SetBackdrop({
+      bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+      edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+      tile = true, tileSize = 8, edgeSize = 16,
+      insets = { left = 4, right = 4, top = 4, bottom = 4 }
+    })
+    HealBot_Action:SetBackdropColor(
+      HealBot_Config.backcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.backcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.backcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.backcola[HealBot_Config.Current_Skin]);
+    HealBot_Action:SetBackdropBorderColor(
+      HealBot_Config.borcolr[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolg[HealBot_Config.Current_Skin],
+      HealBot_Config.borcolb[HealBot_Config.Current_Skin],
+      HealBot_Config.borcola[HealBot_Config.Current_Skin]);
+  end
 
     HealBot_EnTextColorpickt:SetTextHeight(btextheight);
     HealBot_DisTextColorpickt:SetTextHeight(btextheight);
@@ -1453,6 +1485,16 @@ function HealBot_Options_SetSkins()
   HealBot_Options_BarAlphaDis:SetValue(HealBot_Config.bardisa[HealBot_Config.Current_Skin])
   HealBot_Options_AbortBarSize:SetValue(HealBot_Config.abortsize[HealBot_Config.Current_Skin])
   HealBot_Options_ShowHeaders:SetChecked(HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] or 0)
+  
+  local isColorMode = (HealBot_Config.bcolormode[HealBot_Config.Current_Skin] == 2)
+  HealBot_Options_BarColorMode:SetChecked(isColorMode and 1 or nil)
+  
+  local isFontOutline = (HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] == 1)
+  HealBot_Options_FontOutline:SetChecked(isFontOutline and 1 or nil)
+  
+  local is1pxBorder = (HealBot_Config.bborder[HealBot_Config.Current_Skin] == 1)
+  HealBot_Options_1pxBorders:SetChecked(is1pxBorder and 1 or nil)
+
   HealBot_SetSkinColours()
   if HealBot_Config.Current_Skin==HEALBOT_SKINS_STD then
     HealBot_Options_DeleteSkin:Disable();
@@ -1703,6 +1745,7 @@ function HealBot_Options_SetBuffs()
     end
   end
 end
+
 
 
 

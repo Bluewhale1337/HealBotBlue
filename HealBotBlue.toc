@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: HealBotBlue
-## Version: 1.1
+## Version: 1.2
 ## Author: Bluewhale
 ## Notes: Adds panel with skinable bars for healing and decursive
 ## SavedVariables:  HealBot_Config
@@ -9,6 +9,7 @@
 ..\..\FrameXML\UIPanelTemplates.xml
 ..\..\FrameXML\UIDropDownMenu.xml
 HealBot_Error.xml
+HealBot_Model.lua
 HealBot.xml
 HealBot_Action.xml
 HealBot_Options.xml

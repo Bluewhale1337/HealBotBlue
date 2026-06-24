@@ -444,10 +444,10 @@ function HealBot_CastSpellOnFriend(spell,target)
   end
   if (UnitCanAttack("player","target")) then
     old = "enemy";
-  else
+    else
     old = UnitName("target");
     if UnitName("target")~=UnitName(target) then
-      ClearTarget();
+      TargetUnit(target);
     else
       ttype="direct";
     end
@@ -695,14 +695,37 @@ function HealBot_OnLoad(this)
     HealBot_SlashCmd(msg);
   end
   HealBot_AddError(HEALBOT_ADDON .. HEALBOT_LOADED);
+  
+  -- Register MVC Observers
+  HealBot_Model:RegisterObserver("UNIT_HEALTH_CHANGED", function(unitID)
+    HealBot_View_DirtyUnits[unitID] = true
+  end)
+  HealBot_Model:RegisterObserver("UNIT_POWER_CHANGED", function(unitID)
+    HealBot_View_DirtyUnits[unitID] = true
+  end)
+  HealBot_Model:RegisterObserver("UNIT_AURA_CHANGED", function(unitID)
+    HealBot_View_DirtyUnits[unitID] = true
+  end)
+  HealBot_Model:RegisterObserver("ROSTER_CHANGED", function()
+    Delay_RecalcParty = 1
+  end)
 end
 
 function HealBot_RegisterThis(this)
 
 end 
 
+HealBot_View_DirtyUnits = {}
 local HealBot_Timer1,HealsIn_Timer = 0,0;
 function HealBot_OnUpdate(this,arg1)
+  -- Process Dirty Queue for MVC View
+  if next(HealBot_View_DirtyUnits) ~= nil then
+    for unitID in pairs(HealBot_View_DirtyUnits) do
+      HealBot_Action_RefreshButtons(unitID)
+      HealBot_View_DirtyUnits[unitID] = nil
+    end
+  end
+
   HealBot_Timer1 = HealBot_Timer1+arg1;
   if HealBot_Timer1>=2.5 then
     if not HealBot_IsFighting then
@@ -761,62 +784,104 @@ function HealBot_OnUpdate(this,arg1)
   end
 end
 
-function HealBot_OnEvent(this, event, arg1,arg2,arg3,arg4)
-  if (event=="CHAT_MSG_ADDON") then
-    HealBot_OnEvent_AddonMsg(this,arg1,arg2,arg3,arg4);
-  elseif (event=="UNIT_HEALTH") then
-    HealBot_OnEvent_UnitHealth(this,arg1);
-  elseif (event=="UNIT_MANA" or event=="UNIT_RAGE" or event=="UNIT_ENERGY" or event=="UNIT_DISPLAYPOWER") then
+--------------------------------------------------------------------------------
+-- MVC Controller Layer
+--------------------------------------------------------------------------------
+
+local HealBot_EventHandlers = {
+  ["UNIT_HEALTH"] = function(this, arg1)
+    if HealBot_Model:UpdateUnitHealth(arg1) then
+      HealBot_Model:NotifyObservers("UNIT_HEALTH_CHANGED", arg1)
+    end
+    HealBot_OnEvent_UnitHealth(this, arg1)
+  end,
+  ["UNIT_MANA"] = function(this, arg1)
+    if HealBot_Model:UpdateUnitPower(arg1) then
+      HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
+    end
     if (arg1=="player") then HealBot_RecalcHeals(); end
     HealBot_Action_RefreshButtons(arg1);
-  elseif (event=="UNIT_AURA") then
-    HealBot_OnEvent_UnitAura(this,arg1);
-  elseif (event=="SPELLCAST_START") then
-    HealBot_OnEvent_SpellcastStart(this,arg1,arg2);
-  elseif (event=="SPELLCAST_STOP") then
-    HealBot_OnEvent_SpellcastStop(this);
-  elseif (event=="SPELLCAST_INTERRUPTED") then
-    HealBot_OnEvent_SpellcastStop(this);
-  elseif (event=="SPELLCAST_FAILED") then
-    HealBot_OnEvent_SpellcastStop(this);
-  elseif (event=="PLAYER_REGEN_DISABLED") then
-    HealBot_OnEvent_PlayerRegenDisabled(this);
-  elseif (event=="PLAYER_REGEN_ENABLED") then
-    HealBot_OnEvent_PlayerRegenEnabled(this);
-  elseif (event=="BAG_UPDATE_COOLDOWN") then
-    HealBot_OnEvent_BagUpdateCooldown(this,arg1);
-  elseif (event=="BAG_UPDATE") then
-    HealBot_OnEvent_BagUpdate(this,arg1);
-  elseif (event=="PARTY_MEMBER_DISABLE") then
-    HealBot_OnEvent_PartyMemberDisable(this,arg1);
-  elseif (event=="PARTY_MEMBER_ENABLE") then
-    HealBot_OnEvent_PartyMemberEnable(this,arg1);
-  elseif (event=="CHAT_MSG_SYSTEM") then
-    HealBot_OnEvent_SystemMsg(this,arg1);
-  elseif (event=="PARTY_MEMBERS_CHANGED") then
-    HealBot_OnEvent_PartyMembersChanged(this);
-  elseif (event=="PLAYER_TARGET_CHANGED") then
-    HealBot_OnEvent_PlayerTargetChanged(this);
-  elseif (event=="ZONE_CHANGED_NEW_AREA") then
-    HealBot_OnEvent_ZoneChanged(this);
-  elseif (event=="UPDATE_INVENTORY_ALERTS") then
-    HealBot_OnEvent_PlayerEquipmentChanged(this);
-  elseif (event=="UNIT_INVENTORY_CHANGED") then
-    HealBot_OnEvent_PlayerEquipmentChanged2(this,arg1);
-  elseif (event=="PET_BAR_SHOWGRID") then
-    HealBot_OnEvent_PartyMembersChanged(this);
-  elseif (event=="PET_BAR_HIDEGRID") then
-    HealBot_OnEvent_PartyMembersChanged(this);
-  elseif (event=="SPELLS_CHANGED") then
-    HealBot_OnEvent_SpellsChanged(this,arg1);
-  elseif (event=="PLAYER_ENTERING_WORLD") then
-    HealBot_OnEvent_PlayerEnteringWorld(this);
---  elseif (event=="CHARACTER_POINTS_CHANGED") then
---    HealBot_OnEvent_TalentsChanged(this, arg1);
-  elseif (event=="VARIABLES_LOADED") then
-    HealBot_OnEvent_VariablesLoaded(this);
+  end,
+  ["UNIT_RAGE"] = function(this, arg1)
+    if HealBot_Model:UpdateUnitPower(arg1) then
+      HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
+    end
+    if (arg1=="player") then HealBot_RecalcHeals(); end
+    HealBot_Action_RefreshButtons(arg1);
+  end,
+  ["UNIT_ENERGY"] = function(this, arg1)
+    if HealBot_Model:UpdateUnitPower(arg1) then
+      HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
+    end
+    if (arg1=="player") then HealBot_RecalcHeals(); end
+    HealBot_Action_RefreshButtons(arg1);
+  end,
+  ["UNIT_DISPLAYPOWER"] = function(this, arg1)
+    if HealBot_Model:UpdateUnitPower(arg1) then
+      HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
+    end
+    if (arg1=="player") then HealBot_RecalcHeals(); end
+    HealBot_Action_RefreshButtons(arg1);
+  end,
+  ["UNIT_AURA"] = function(this, arg1)
+    HealBot_Model:MarkAuraChanged(arg1)
+    HealBot_Model:NotifyObservers("UNIT_AURA_CHANGED", arg1)
+    HealBot_OnEvent_UnitAura(this, arg1)
+  end,
+  ["PLAYER_TARGET_CHANGED"] = function(this)
+    if HealBot_Model:UpdateUnitIdentity("target") then
+      HealBot_Model:NotifyObservers("ROSTER_CHANGED", "target")
+    end
+    HealBot_Model:UpdateUnitStatus("target")
+    HealBot_Model:UpdateUnitHealth("target")
+    HealBot_Model:UpdateUnitPower("target")
+    HealBot_OnEvent_PlayerTargetChanged(this)
+  end,
+  ["PARTY_MEMBERS_CHANGED"] = function(this)
+    for _, unit in ipairs(HealBot_Model.partyMembers) do
+      HealBot_Model:RefreshUnit(unit)
+    end
+    for _, unit in ipairs(HealBot_Model.raidMembers) do
+      HealBot_Model:RefreshUnit(unit)
+    end
+    HealBot_Model:NotifyObservers("ROSTER_CHANGED")
+    HealBot_OnEvent_PartyMembersChanged(this)
+  end,
+  ["PLAYER_ENTERING_WORLD"] = function(this)
+    HealBot_Model:RefreshUnit("player")
+    HealBot_Model:RefreshUnit("pet")
+    HealBot_OnEvent_PlayerEnteringWorld(this)
+  end,
+  ["VARIABLES_LOADED"] = function(this)
+    HealBot_OnEvent_VariablesLoaded(this)
+  end,
+  -- Legacy pass-throughs
+  ["CHAT_MSG_ADDON"] = function(this, arg1,arg2,arg3,arg4) HealBot_OnEvent_AddonMsg(this,arg1,arg2,arg3,arg4) end,
+  ["SPELLCAST_START"] = function(this, arg1,arg2) HealBot_OnEvent_SpellcastStart(this,arg1,arg2) end,
+  ["SPELLCAST_STOP"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
+  ["SPELLCAST_INTERRUPTED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
+  ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
+  ["PLAYER_REGEN_DISABLED"] = function(this) HealBot_OnEvent_PlayerRegenDisabled(this) end,
+  ["PLAYER_REGEN_ENABLED"] = function(this) HealBot_OnEvent_PlayerRegenEnabled(this) end,
+  ["BAG_UPDATE_COOLDOWN"] = function(this, arg1) HealBot_OnEvent_BagUpdateCooldown(this,arg1) end,
+  ["BAG_UPDATE"] = function(this, arg1) HealBot_OnEvent_BagUpdate(this,arg1) end,
+  ["PARTY_MEMBER_DISABLE"] = function(this, arg1) HealBot_OnEvent_PartyMemberDisable(this,arg1) end,
+  ["PARTY_MEMBER_ENABLE"] = function(this, arg1) HealBot_OnEvent_PartyMemberEnable(this,arg1) end,
+  ["CHAT_MSG_SYSTEM"] = function(this, arg1) HealBot_OnEvent_SystemMsg(this,arg1) end,
+  ["ZONE_CHANGED_NEW_AREA"] = function(this) HealBot_OnEvent_ZoneChanged(this) end,
+  ["UPDATE_INVENTORY_ALERTS"] = function(this) HealBot_OnEvent_PlayerEquipmentChanged(this) end,
+  ["UNIT_INVENTORY_CHANGED"] = function(this, arg1) HealBot_OnEvent_PlayerEquipmentChanged2(this,arg1) end,
+  ["PET_BAR_SHOWGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
+  ["PET_BAR_HIDEGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
+  ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this,arg1) end
+}
+
+function HealBot_OnEvent(this, event, arg1,arg2,arg3,arg4)
+  local handler = HealBot_EventHandlers[event]
+  if handler then
+    handler(this, arg1, arg2, arg3, arg4)
   else
-    HealBot_AddDebug("OnEvent (" .. event .. ")");
+    HealBot_AddDebug("OnEvent (" .. event .. ")")
   end
 end
 
@@ -828,7 +893,24 @@ function HealBot_OnEvent_VariablesLoaded(this)
     if not HealBot_Config[key] then
       HealBot_Config[key] = val;
     end
+    if type(val) == "table" and type(HealBot_Config[key]) == "table" then
+      for k, v in pairs(val) do
+        if HealBot_Config[key][k] == nil then
+          HealBot_Config[key][k] = v
+        end
+      end
+    end
   end);
+  
+  local foundModern = false
+  if HealBot_Config.Skins then
+    for _, skin in ipairs(HealBot_Config.Skins) do
+      if skin == "Modern Flat" then foundModern = true break end
+    end
+    if not foundModern then
+      table.insert(HealBot_Config.Skins, "Modern Flat")
+    end
+  end
   
   HealBot_InitData();
   
@@ -1588,4 +1670,5 @@ do
     orig(slot, checkCursor, onSelf)
   end
 end
+
 
