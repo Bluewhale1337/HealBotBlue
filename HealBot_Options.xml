@@ -238,6 +238,29 @@
           </OnClick> 
         </Scripts>
       </CheckButton>
+      <CheckButton name="HealBot_Options_ManaBarsHealersOnly" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="20" y="5" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("For Healers Only");
+            this:SetChecked(HealBot_Config.ManaBarsHealersOnly);
+          </OnLoad> 
+          <OnClick>
+            if (this:GetChecked()) then
+              HealBot_Config.ManaBarsHealersOnly = 1;
+            else
+              HealBot_Config.ManaBarsHealersOnly = 0;
+            end
+            HealBot_Action_Refresh();
+          </OnClick> 
+        </Scripts>
+      </CheckButton>
       <CheckButton name="HealBot_Options_AutoShow" inherits="OptionsCheckButtonTemplate">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionLocked" relativePoint="TOPLEFT">
@@ -1709,6 +1732,38 @@
         <Scripts>
           <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINBCSPACE,0,25)</OnLoad> 
           <OnValueChanged>HealBot_Options_BarBCSpaceS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_FramePaddingS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="10" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Frame Padding",0,50)</OnLoad> 
+          <OnValueChanged>HealBot_Options_FramePaddingS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_BorderThicknessS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Solid Border",1,10)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BorderThicknessS_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider> 
       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">

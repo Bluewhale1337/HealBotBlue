@@ -3,7 +3,7 @@ function HealBot_Action_SetTexture(bar, btexture)
   if btexture == 10 then
     bar:SetStatusBarTexture("Interface\\Buttons\\WHITE8X8");
   else
-    HealBot_Action_SetTexture(bar, btexture);
+    bar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar");
   end
 end
 local headerno=0;
@@ -205,6 +205,7 @@ function HealBot_Action_EnableButton(button)
       bar3:SetMinMaxValues(0, state.maxMana)
       bar3:SetValue(state.mana)
       bar3:SetStatusBarColor(pr, pg, pb, HealBot_Config.Barcola[HealBot_Config.Current_Skin])
+      HealBot_Action_SetTexture(bar3, HealBot_Config.btexture[HealBot_Config.Current_Skin])
       bar3:Show()
       bar3:SetHeight(bheight * 0.2)
     end
@@ -714,8 +715,9 @@ if not HealBot_IsFighting then
       numBars=numBars-1;
     end
   
-  OffsetY = 10;
-  OffsetX = 10;
+  local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
+  OffsetY = bpadding;
+  OffsetX = bpadding;
   MaxOffsetY=0;
   
   if cols>(numBars-numHeaders) then
@@ -738,7 +740,7 @@ if not HealBot_IsFighting then
       if h==ceil((numBars)/cols) and z<numBars then
         h=0;
         if MaxOffsetY<OffsetY then MaxOffsetY = OffsetY; end
-        OffsetY = 10;
+        OffsetY = bpadding;
         OffsetX = OffsetX + bwidth+bcspace; 
     --    z=z+1;
       end
@@ -751,7 +753,7 @@ if not HealBot_IsFighting then
     if h==ceil((numBars)/cols) and z<numBars then
       h=0;
       if MaxOffsetY<OffsetY then MaxOffsetY = OffsetY; end
-      OffsetY = 10;
+      OffsetY = bpadding;
       OffsetX = OffsetX + bwidth+bcspace; 
     end
     z=z+1;

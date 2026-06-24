@@ -298,11 +298,13 @@ function HealBot_SetSkinColours()
   if borderStyle == 0 then
     HealBot_Action:SetBackdropBorderColor(0,0,0,0);
   elseif borderStyle == 1 then
+    local bboffset = (HealBot_Config.bboffset and HealBot_Config.bboffset[HealBot_Config.Current_Skin]) or 1
+    local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
     HealBot_Action:SetBackdrop({
       bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
       edgeFile = "Interface\\Buttons\\WHITE8X8",
-      tile = true, tileSize = 8, edgeSize = 1,
-      insets = { left = 1, right = 1, top = 1, bottom = 1 }
+      tile = true, tileSize = 8, edgeSize = bboffset,
+      insets = { left = bpadding, right = bpadding, top = bpadding, bottom = bpadding }
     })
     HealBot_Action:SetBackdropColor(
       HealBot_Config.backcolr[HealBot_Config.Current_Skin],
@@ -1481,6 +1483,8 @@ function HealBot_Options_SetSkins()
   HealBot_Options_BarNumColsS:SetValue(HealBot_Config.numcols[HealBot_Config.Current_Skin])
   HealBot_Options_BarBRSpaceS:SetValue(HealBot_Config.brspace[HealBot_Config.Current_Skin])
   HealBot_Options_BarBCSpaceS:SetValue(HealBot_Config.bcspace[HealBot_Config.Current_Skin])
+  HealBot_Options_FramePaddingS:SetValue((HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10)
+  HealBot_Options_BorderThicknessS:SetValue((HealBot_Config.bboffset and HealBot_Config.bboffset[HealBot_Config.Current_Skin]) or 1)
   HealBot_Options_FontHeight:SetValue(HealBot_Config.btextheight[HealBot_Config.Current_Skin])
   HealBot_Options_BarAlphaDis:SetValue(HealBot_Config.bardisa[HealBot_Config.Current_Skin])
   HealBot_Options_AbortBarSize:SetValue(HealBot_Config.abortsize[HealBot_Config.Current_Skin])
@@ -1752,4 +1756,19 @@ end
 
 
 
+
+
+function HealBot_Options_FramePaddingS_OnValueChanged(this)
+  if not HealBot_Config.bpadding then HealBot_Config.bpadding = {} end
+  HealBot_Config.bpadding[HealBot_Config.Current_Skin] = this:GetValue();
+  getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
+  HealBot_Action_ResetSkin()
+end
+
+function HealBot_Options_BorderThicknessS_OnValueChanged(this)
+  if not HealBot_Config.bboffset then HealBot_Config.bboffset = {} end
+  HealBot_Config.bboffset[HealBot_Config.Current_Skin] = this:GetValue();
+  getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
+  HealBot_Action_ResetSkin()
+end
 

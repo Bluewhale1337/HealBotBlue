@@ -6,10 +6,7 @@
 
 local _scale=0;
 local CalcEquipBonus=false;
-local InitCalcEquipBonus=false;
-local FlagEquipUpdate1=1;
-local FlagEquipUpdate2=1;
-local NeedEquipUpdate=0;
+local HealBot_EquipChangeTimer = 0;
 local HealValue=0;
 local InitSpells=1;
 local DebugDebuff=false;
@@ -734,39 +731,23 @@ function HealBot_OnUpdate(this,arg1)
         HealBot_HealsIn={};
         HealBot_Healers={};
 	    HealsIn_Timer=0;
-        InitCalcEquipBonus=true
       end
-	  if FlagEquipUpdate1>0 and FlagEquipUpdate2>0 then
-	    FlagEquipUpdate1=0;
-	    FlagEquipUpdate2=0;
-	    NeedEquipUpdate=1;
-	  elseif FlagEquipUpdate1>0 then
-	    FlagEquipUpdate1=FlagEquipUpdate1+1;
-        if FlagEquipUpdate1>1 then
-	      FlagEquipUpdate1=0;
-	    end
-      elseif FlagEquipUpdate2>0 then
-	    FlagEquipUpdate2=FlagEquipUpdate2+1;
-        if FlagEquipUpdate2>1 then
-	      FlagEquipUpdate2=0;
-	    end
-	  end
-      if NeedEquipUpdate>0 and InitCalcEquipBonus then
-        NeedEquipUpdate=NeedEquipUpdate+1;
-        if NeedEquipUpdate>1 then
+      
+      if HealBot_EquipChangeTimer > 0 then
+        HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
+        if HealBot_EquipChangeTimer <= 0 then
+          HealBot_EquipChangeTimer = 0
           HealBot_BonusScanner:ScanEquipment()
           CalcEquipBonus=true;
-          InitCalcEquipBonus=false;
-          NeedEquipUpdate=0; 
-          HealBot_RecalcSpells();  
-	    end
+          HealBot_RecalcSpells();
+        end
       end
+      
       if InitSpells>1 then
          InitSpells=InitSpells+1;
          if InitSpells>2 then
            local cnt=HealBot_InitSpells();
            InitSpells=0;
-           InitCalcEquipBonus=true;
          end
       end
       if Delay_RecalcParty>0 then
@@ -1233,12 +1214,12 @@ function HealBot_OnEvent_PartyMemberEnable(this,unit)
 end
 
 function HealBot_OnEvent_PlayerEquipmentChanged(this)
-  FlagEquipUpdate1=1;
+  HealBot_EquipChangeTimer = 1;
 end
 
 function HealBot_OnEvent_PlayerEquipmentChanged2(this,unit)
   if unit=="player" then
-    FlagEquipUpdate2=1;
+    HealBot_EquipChangeTimer = 1;
   end
 end
 
@@ -1253,7 +1234,7 @@ function HealBot_OnEvent_TalentsChanged(this, arg1)
 end
 
 function HealBot_OnEvent_BagUpdate(this,bag)
-  if FlagEquipUpdate1==0 and FlagEquipUpdate2==0 then
+  if HealBot_EquipChangeTimer==0 then
     HealBot_RecalcSpells();
   end
 end
@@ -1261,7 +1242,7 @@ end
 function HealBot_OnEvent_BagUpdateCooldown(this,bag)
   if not bag then 
     bag = "undef"
-  elseif FlagEquipUpdate1==0 and FlagEquipUpdate2==0 then
+  elseif HealBot_EquipChangeTimer==0 then
     HealBot_RecalcSpells();
   end
 end
