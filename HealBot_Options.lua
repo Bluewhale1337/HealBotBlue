@@ -1706,6 +1706,7 @@ function HealBot_Options_Buff_Initialize()
   end
 end
 
+
 function HealBot_Options_Buff_OnClick()
   local frameName = UIDROPDOWNMENU_OPEN_MENU
   local frame = getglobal(frameName)
@@ -1747,12 +1748,17 @@ function HealBot_Options_SetBuffs()
       UIDropDownMenu_Initialize(dropDown, HealBot_Options_Buff_Initialize)
       UIDropDownMenu_SetSelectedID(dropDown, val + 1)
     end
+    
+    local selfCheck = getglobal("HealBot_Options_BuffSelf" .. i)
+    if selfCheck then
+      if HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[i] then
+        selfCheck:SetChecked(HealBot_Config.BuffWatchSelf[i])
+      else
+        selfCheck:SetChecked(0)
+      end
+    end
   end
 end
-
-
-
-
 
 
 

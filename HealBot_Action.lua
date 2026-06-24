@@ -391,7 +391,8 @@ function HealBot_Action_SetHeightWidth(width,height,bwidth)
   end
   HealBot_Action:SetHeight(height);
   HealBot_ActionHeight = height;
-  HealBot_Action:SetWidth(width+bwidth+10)
+  local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
+  HealBot_Action:SetWidth(width+bwidth+bpadding)
 end
 
 function HealBot_Action_SetHealButton(index,unit)
@@ -776,7 +777,7 @@ if not HealBot_IsFighting then
   if HealBot_Config.HideOptions==1 then
     HealBot_Action_OptionsButton:Hide();
   else
-    HealBot_Action_OptionsButton:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,10);
+    HealBot_Action_OptionsButton:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,bpadding);
     HealBot_Action_OptionsButton:Show();
     MaxOffsetY = MaxOffsetY+30;
   end  
@@ -804,8 +805,8 @@ if not HealBot_IsFighting then
     HealBot_Action_AbortButton:SetWidth(width)
     HealBot_Action_AbortButton:SetHeight(bheight+abortsize);
     if HealBot_Config.HideOptions==1 then
-       HealBot_Action_AbortButton:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,10);
-       bar:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,10);
+       HealBot_Action_AbortButton:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,bpadding);
+       bar:SetPoint("BOTTOM","HealBot_Action","BOTTOM",0,bpadding);
     else
        HealBot_Action_AbortButton:SetPoint("BOTTOM","HealBot_Action_OptionsButton","TOP",0,10);
        bar:SetPoint("BOTTOM","HealBot_Action_OptionsButton","TOP",0,10);
@@ -815,7 +816,7 @@ if not HealBot_IsFighting then
 
 
 
-  HealBot_Action_SetHeightWidth(OffsetX, MaxOffsetY+10, bwidth);
+  HealBot_Action_SetHeightWidth(OffsetX, MaxOffsetY+bpadding, bwidth);
  end
  HealBot_Action_RefreshButtons();
 end
@@ -1299,6 +1300,7 @@ function HealBot_Action_OnKey(this,key,state)
     HealBot_Action_Refresh();
   end
 end
+
 
 
 

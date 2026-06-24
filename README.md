@@ -1,6 +1,9 @@
 **HealBotBlue**
 By Bluewhale.
 
+Original Vanilla HealBot, while being a staple healing addon in Wrath and later expansions, was in its infancy during Vanilla WoW. It was a memory and CPU hog that ate up resources, featured a clunky UI, and offered limited functions. To fix all of the above while still using it as a base framework, I refactored the entire codebase. The monolithic code structure was split to follow a more modern approach (MVC design pattern), making it more stable and easily editable. Additionally, the inefficient AURA scanning was replaced with lightweight (Observer Pattern) reactive programming. It now updates only what is necessary when a trigger fires, rather than performing clumsy, continuous scans of a 40-man raid. By doing so, I managed to throttle down CPU and memory usage significantly, placing it on par with modern addons. Additional functionalities are being added over time to provide a holistic, healer-centered raid frame.
+
+
 > **NOTE:** For HealBot to work correctly, the **Selfcast** feature in WoW options needs to be disabled.
 
 ### Reporting Errors
@@ -19,6 +22,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.2.1**
+* **UI Layout Fixes:** Fixed slider width constraints in the Skin menu causing layout overlaps. Realigned Chat tab buttons to ensure they do not exceed the window bounds. Fixed Color Picker anchors.
+* **Menu Cleanup:** Fixed Options panel checkboxes overlapping due to incorrect vertical spacing offsets.
+
 **v1.2**
 * **Class Colors & Dimming:** Frame text now inherits class colors with black outline for better visibility. Missing buffs intelligently dim the class color and turn the text yellow.
 * **Modern Skin Updates:** Fixed white background bugs in modern skins and brightened debuff indicators.
@@ -33,11 +40,12 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Bug Fix:** Fixed division-by-zero math errors during UI scaling that caused the addon to crash.
 
 **v1.0**
-* **Buff tracking** - Added submenu for tracking buffs on element
-* ***Hot tracking with icons** - Hots and DoTs display on player bars
-* **Incoming heals use newer protocol** 
-* **Chat functionalities** - modified chat functionalities for spellcast announcements
-* **Mana Bars** - Mana bars for healers in the grid added togglable from options menu.
+* **Buff tracking:** Added a submenu for tracking buffs on elements.
+* **HoT tracking with icons:** HoTs and DoTs display on player bars.
+* **Incoming heals:** Now using a newer protocol.
+* **Chat functionalities:** Modified chat functionalities for spellcast announcements.
+* **Mana Bars:** Mana bars for healers in the grid added, toggleable from the options menu.
+
 
 
 

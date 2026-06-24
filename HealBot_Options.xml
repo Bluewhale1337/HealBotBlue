@@ -241,8 +241,8 @@
       <CheckButton name="HealBot_Options_ManaBarsHealersOnly" inherits="OptionsCheckButtonTemplate">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="BOTTOMLEFT">
-            <Offset>
-              <AbsDimension x="20" y="5" /> 
+              <Offset>
+                <AbsDimension x="20" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -307,9 +307,9 @@
 
       <CheckButton name="HealBot_Options_HideOptions" inherits="OptionsCheckButtonTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="BOTTOMLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ManaBarsHealersOnly" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="20" y="-10" /> 
+              <AbsDimension x="-20" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -323,7 +323,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -336,7 +336,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideAbort" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -349,7 +349,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_QualityRange" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -1739,9 +1739,9 @@
 		  <AbsDimension x="123" y="17" />
 		</Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPLEFT">
-            <Offset>
-              <AbsDimension x="10" y="-35" /> 
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="0" y="-35" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -1843,9 +1843,9 @@
 	  <AbsDimension x="87" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_FontHeight"  relativePoint="TOPLEFT">
-		<Offset>
-		  <AbsDimension x="19" y="-50"/>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -1858,9 +1858,9 @@
 	  <AbsDimension x="87" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_FontHeight"  relativePoint="TOPLEFT">
-		<Offset>
-		  <AbsDimension x="37" y="-50"/>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -1888,9 +1888,9 @@
 	  <AbsDimension x="87" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_FontHeight"  relativePoint="TOPLEFT">
-		<Offset>
-		  <AbsDimension x="37" y="-50"/>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -2575,9 +2575,9 @@
               <AbsDimension x="80" y="22"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg1_Text" relativePoint="RIGHT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg1_Text" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="10" y="0"/>
+                  <AbsDimension x="0" y="-5"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2592,7 +2592,7 @@
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-70" /> 
+                  <AbsDimension x="0" y="-90" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2621,9 +2621,9 @@
               <AbsDimension x="80" y="22"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg2_Text" relativePoint="RIGHT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg2_Text" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="10" y="0"/>
+                  <AbsDimension x="0" y="-5"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2638,7 +2638,7 @@
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-110" /> 
+                  <AbsDimension x="0" y="-150" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2667,9 +2667,9 @@
               <AbsDimension x="80" y="22"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg3_Text" relativePoint="RIGHT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg3_Text" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="10" y="0"/>
+                  <AbsDimension x="0" y="-5"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2684,7 +2684,7 @@
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-150" /> 
+                  <AbsDimension x="0" y="-210" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2713,9 +2713,9 @@
               <AbsDimension x="80" y="22"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg4_Text" relativePoint="RIGHT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg4_Text" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="10" y="0"/>
+                  <AbsDimension x="0" y="-5"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2730,7 +2730,7 @@
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-190" /> 
+                  <AbsDimension x="0" y="-270" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2759,9 +2759,9 @@
               <AbsDimension x="80" y="22"/>
             </Size>
             <Anchors>
-              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg5_Text" relativePoint="RIGHT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg5_Text" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="10" y="0"/>
+                  <AbsDimension x="0" y="-5"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -2843,6 +2843,11 @@
     </Scripts>
   </Frame>
 </Ui>
+
+
+
+
+
 
 
 
