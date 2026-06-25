@@ -1,0 +1,308 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Spells.lua" />
+      <Frame name="HealBot_Options_Panel2" parent="HealBot_Options" hidden="true" setAllPoints="true">
+        <Frames>
+     <Frame name="HealBot_Options_KeysFrame" inherits="OptionFrameBoxTemplate">
+        <Size>
+          <AbsDimension y="268"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="21" y="-30"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-21" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_ComboButtons_ButtonText1" text="HEALBOT_OPTIONS_USEBUTTONS" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="110" y="-10" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+	<Frames>
+      <Slider name="HealBot_Options_Dummy" hidden="true" inherits="HealBot_Options_SliderTemplate">
+        <Anchors>
+          <Anchor point="TOP">
+            <Offset>
+              <AbsDimension x="0" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </Slider>
+      <Frame name="HealBot_Options_ComboClassButton">
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_ComboButtons_ButtonText" text="HEALBOT_OPTIONS_COMBOBUTTON" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="BOTTOMLEFT">
+	    <Offset>
+		<AbsDimension x="-5" y="-25" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+      </Frame>
+      
+      <CheckButton name="HealBot_ComboButtons_Button1" inherits="SendMailRadioButtonTemplate" id="1">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="40" y="-30"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_ComboButtons_Button_OnLoad(this,HEALBOT_OPTIONS_BUTTONLEFT)</OnLoad>
+          <OnClick>HealBot_ComboButtons_Button_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      
+
+
+<CheckButton name="HealBot_ComboButtons_Button2" inherits="SendMailRadioButtonTemplate" id="2">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button1" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="40" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_ComboButtons_Button_OnLoad(this,HEALBOT_OPTIONS_BUTTONMIDDLE)</OnLoad>
+          <OnClick>HealBot_ComboButtons_Button_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_ComboButtons_Button3" inherits="SendMailRadioButtonTemplate" id="3">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button2" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="50" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_ComboButtons_Button_OnLoad(this,HEALBOT_OPTIONS_BUTTONRIGHT)</OnLoad>
+          <OnClick>HealBot_ComboButtons_Button_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_ComboButtons_Button4" inherits="SendMailRadioButtonTemplate" id="4">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button1" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="-18"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_ComboButtons_Button_OnLoad(this,HEALBOT_OPTIONS_BUTTON4)</OnLoad>
+          <OnClick>HealBot_ComboButtons_Button_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_ComboButtons_Button5" inherits="SendMailRadioButtonTemplate" id="5">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button4" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="55" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_ComboButtons_Button_OnLoad(this,HEALBOT_OPTIONS_BUTTON5)</OnLoad>
+          <OnClick>HealBot_ComboButtons_Button_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <EditBox name="HealBot_Options_Click" inherits="HealBot_Options_EditBoxTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="-5" y="-68"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            HealBot_Options_EditBox_OnLoad(this,HEALBOT_OPTIONS_CLICK)
+          </OnLoad>
+          <OnTextChanged>
+            HealBot_Options_Click_OnTextChanged(this)            
+          </OnTextChanged>
+        </Scripts>
+      </EditBox>
+      <EditBox name="HealBot_Options_Shift" inherits="HealBot_Options_EditBoxTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-20"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            HealBot_Options_EditBox_OnLoad(this,HEALBOT_OPTIONS_SHIFT)
+          </OnLoad>
+          <OnTextChanged>
+            HealBot_Options_Shift_OnTextChanged(this)            
+          </OnTextChanged>
+        </Scripts>
+      </EditBox>
+      <EditBox name="HealBot_Options_Ctrl" inherits="HealBot_Options_EditBoxTemplate">
+        <Anchors>
+          <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Shift" relativePoint="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="-20"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            HealBot_Options_EditBox_OnLoad(this,HEALBOT_OPTIONS_CTRL)
+          </OnLoad>
+          <OnTextChanged>
+            HealBot_Options_Ctrl_OnTextChanged(this)            
+          </OnTextChanged>
+        </Scripts>
+      </EditBox>
+      <EditBox name="HealBot_Options_ShiftCtrl" inherits="HealBot_Options_EditBoxTemplate">
+        <Anchors>
+          <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Ctrl" relativePoint="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="-20"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            HealBot_Options_EditBox_OnLoad(this,HEALBOT_OPTIONS_SHIFTCTRL)
+          </OnLoad>
+          <OnTextChanged>
+            HealBot_Options_ShiftCtrl_OnTextChanged(this)            
+          </OnTextChanged>
+        </Scripts>
+      </EditBox>
+      <CheckButton name="HealBot_Options_EnableHealthy" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShiftCtrl" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="25" y="-4" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_EnableHealthy_OnLoad(this,HEALBOT_OPTIONS_ENABLEHEALTHY)</OnLoad> 
+          <OnClick>HealBot_Options_EnableHealthy_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+        </Frames>
+      </Frame>
+
+      <Frame name="HealBot_Options_TooltipsPanel" inherits="OptionFrameBoxTemplate">
+        <Scripts>
+          <OnLoad>
+            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+            this:SetBackdropColor(0, 0, 0, 0);
+          </OnLoad>
+        </Scripts>
+        <Size>
+          <AbsDimension y="118"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-300"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-20" y="-180"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Frames>
+      <CheckButton name="HealBot_Options_ShowTooltip" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-4" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowTooltip_OnLoad(this,HEALBOT_OPTIONS_SHOWTOOLTIP)</OnLoad> 
+          <OnClick>HealBot_Options_ShowTooltip_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <Frame name="HealBot_Options_TooltipPos" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="68" y="-2" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+       <Scripts>
+          <OnLoad>HealBot_Options_TooltipPos_OnLoad(this) </OnLoad>
+       </Scripts>
+      </Frame>
+      <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-30" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowTooltipTarget_OnLoad(this,HEALBOT_OPTIONS_SHOWUNITTOOLTIP)</OnLoad> 
+          <OnClick>HealBot_Options_ShowTooltipTarget_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>      
+      <CheckButton name="HealBot_Options_ShowTooltipSpellDetail" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-55" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowTooltipSpellDetail_OnLoad(this,HEALBOT_OPTIONS_SHOWDETTOOLTIP)</OnLoad> 
+          <OnClick>HealBot_Options_ShowTooltipSpellDetail_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>      
+      <CheckButton name="HealBot_Options_ShowTooltipInstant" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-80" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowTooltipInstant_OnLoad(this,HEALBOT_OPTIONS_SHOWRECTOOLTIP)</OnLoad> 
+          <OnClick>HealBot_Options_ShowTooltipInstant_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+
+      </Frames>
+      </Frame>
+      </Frames>
+      </Frame>
+
+</Ui>
