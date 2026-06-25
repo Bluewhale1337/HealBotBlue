@@ -22,6 +22,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.3**
+* **Monolithic Code Modularization:** Split the massive, single-file options system (`HealBot_Options.xml`/`HealBot_Options.lua`) into 7 dedicated, content-named panel subfiles (`General`, `Spells`, `Healing`, `CDC`, `Skins`, `Buffs`, and `Chat`) to improve codebase modularity and stability.
+* **Scope Resolution Fix:** Promoted `HealBot_Options_ComboButtons_Button` to global scope in the base options file to resolve a `nil` comparison error when loading spell settings.
+* **Core Options Layout Correction:** Relocated the "Defaults" and "Close" buttons back into the parent options frame's container, ensuring they display consistently at the bottom of all configuration tabs.
+* **Skins Grid Alignment:** Fixed layout overlaps on the Skins panel by setting explicit width/height sizes (`123 x 17`) on the opacity sliders and reorganizing all 13 sliders into a clean, uniform 2-column grid.
+* **Startup Refresh Optimization:** Resolved initial loading lag where action bars would be missing by forcing an immediate UI refresh (`HealBot_RecalcSpells()`) once spell data loads.
+
 **v1.2.1**
 * **UI Layout Fixes:** Fixed slider width constraints in the Skin menu causing layout overlaps. Realigned Chat tab buttons to ensure they do not exceed the window bounds. Fixed Color Picker anchors.
 * **Menu Cleanup:** Fixed Options panel checkboxes overlapping due to incorrect vertical spacing offsets.

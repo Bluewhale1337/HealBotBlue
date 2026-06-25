@@ -748,6 +748,7 @@ function HealBot_OnUpdate(this,arg1)
          if InitSpells>2 then
            local cnt=HealBot_InitSpells();
            InitSpells=0;
+           HealBot_RecalcSpells();
          end
       end
       if Delay_RecalcParty>0 then

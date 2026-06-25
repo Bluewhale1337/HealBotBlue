@@ -294,10 +294,13 @@
         </Scripts>
       </Slider> 
       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="10" y="-35" /> 
+              <AbsDimension x="0" y="-35" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -308,10 +311,13 @@
       </Slider>
 
       <Slider name="HealBot_Options_BarAlphaInHeal" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlpha" relativePoint="TOPLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlpha" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="0" y="-30" /> 
+              <AbsDimension x="10" y="0" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -321,10 +327,13 @@
         </Scripts>
       </Slider>
       <Slider name="HealBot_Options_BarAlphaDis" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaInHeal" relativePoint="TOPLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlpha" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="0" y="-30" /> 
+              <AbsDimension x="0" y="-35" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -333,35 +342,36 @@
           <OnValueChanged>HealBot_Options_BarAlphaDis_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider>
-      <Slider name="HealBot_Options_FontHeight" inherits="HealBot_Options_SliderTemplate">
-        <Size>
-		  <AbsDimension x="123" y="17" />
-		</Size>        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
-            <Offset>
-              <AbsDimension x="0" y="-132" /> 
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINFHEIGHT,7,18)</OnLoad> 
-          <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(this)</OnValueChanged> 
-        </Scripts>
-      </Slider>
       <Slider name="HealBot_Options_AbortBarSize" inherits="HealBot_Options_SliderTemplate">
         <Size>
 		  <AbsDimension x="123" y="17" />
 		</Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight" relativePoint="TOPRIGHT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaDis" relativePoint="TOPRIGHT">
             <Offset>
               <AbsDimension x="10" y="0" /> 
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_ABORTSIZE,0,15)</OnLoad> 
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Abort size",0,15)</OnLoad> 
           <OnValueChanged>HealBot_Options_AbortBarSize_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_FontHeight" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaDis" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINFHEIGHT,7,18)</OnLoad> 
+          <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider> 
       
