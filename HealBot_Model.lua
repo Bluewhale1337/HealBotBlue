@@ -36,7 +36,7 @@ function HealBot_Model:NotifyObservers(event, unitID, ...)
     if self.observers[event] then
         local len = table.getn(self.observers[event])
         for i = 1, len do
-            self.observers[event][i](unitID, unpack(arg))
+            self.observers[event][i](unitID, ...)
         end
     end
 end
