@@ -3,7 +3,7 @@ function HealBot_Action_SetTexture(bar, btexture)
   if btexture == 10 then
     bar:SetStatusBarTexture("Interface\\Buttons\\WHITE8X8");
   else
-    HealBot_Action_SetTexture(bar, btexture);
+    bar:SetStatusBarTexture("Interface\\AddOns\\HealBotBlue\\Images\\bar" .. tostring(btexture) .. ".tga");
   end
 end
 local headerno=0;
