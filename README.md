@@ -19,6 +19,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**1.2.1**
+* **Initialization bug** Fixed issue where Action module would get stuck on infinite loop causing stack overflow.
+
 **v1.2**
 * **Class Colors & Dimming:** Frame text now inherits class colors with black outline for better visibility. Missing buffs intelligently dim the class color and turn the text yellow.
 * **Modern Skin Updates:** Fixed white background bugs in modern skins and brightened debuff indicators.
