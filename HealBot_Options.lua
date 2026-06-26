@@ -1344,6 +1344,7 @@ end
 
 function HealBot_Options_Click_OnTextChanged(this)
   local class=UnitClass("Player");
+  if not HealBot_Config.KeyCombo[class] then HealBot_Config.KeyCombo[class] = {} end
   local combo = HealBot_Config.KeyCombo[class]
   local button = HealBot_Options_ComboClass_Button()
   combo[button] = this:GetText()
@@ -1352,6 +1353,7 @@ end
 
 function HealBot_Options_Shift_OnTextChanged(this)
   local class=UnitClass("Player");
+  if not HealBot_Config.KeyCombo[class] then HealBot_Config.KeyCombo[class] = {} end
   local combo = HealBot_Config.KeyCombo[class]
   local button = HealBot_Options_ComboClass_Button()
   combo["Shift"..button] = this:GetText()
@@ -1360,6 +1362,7 @@ end
 
 function HealBot_Options_Ctrl_OnTextChanged(this)
   local class=UnitClass("Player");
+  if not HealBot_Config.KeyCombo[class] then HealBot_Config.KeyCombo[class] = {} end
   local combo = HealBot_Config.KeyCombo[class]
   local button = HealBot_Options_ComboClass_Button()
   combo["Ctrl"..button] = this:GetText()
@@ -1368,6 +1371,7 @@ end
 
 function HealBot_Options_ShiftCtrl_OnTextChanged(this)
   local class=UnitClass("Player");
+  if not HealBot_Config.KeyCombo[class] then HealBot_Config.KeyCombo[class] = {} end
   local combo = HealBot_Config.KeyCombo[class]
   local button = HealBot_Options_ComboClass_Button()
   combo["ShiftCtrl"..button] = this:GetText()
