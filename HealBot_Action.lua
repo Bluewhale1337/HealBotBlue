@@ -204,7 +204,7 @@ function HealBot_Action_EnableButton(button)
     if bar3 then
       bar3:SetMinMaxValues(0, state.maxMana)
       bar3:SetValue(state.mana)
-      bar3:SetStatusBarColor(pr, pg, pb, HealBot_Config.Barcola[HealBot_Config.Current_Skin])
+      bar3:SetStatusBarColor(pr, pg, pb, 1)
       bar3:Show()
       bar3:SetHeight(bheight * 0.2)
     end
@@ -241,7 +241,7 @@ function HealBot_Action_EnableButton(button)
       sg=1.0;
       sb=0.0;
     end
-    bar:SetStatusBarColor(r,g,b,HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
+    bar:SetStatusBarColor(r,g,b,1);
     bar2:SetStatusBarColor(r,g,b,HealBot_Config.BarcolaInHeal[HealBot_Config.Current_Skin]);
   else
     button:Disable();
@@ -249,9 +249,13 @@ function HealBot_Action_EnableButton(button)
     sg=HealBot_Config.btextdisbledcolg[HealBot_Config.Current_Skin];
     sb=HealBot_Config.btextdisbledcolb[HealBot_Config.Current_Skin];
     sa=HealBot_Config.btextdisbledcola[HealBot_Config.Current_Skin];
-    bar:SetStatusBarColor(r,g,b,HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
-    bar2:SetStatusBarColor(r,g,b,HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
+    
+    bar:SetStatusBarColor(r,g,b,1);
+    bar2:SetStatusBarColor(r,g,b,1);
   end
+
+  button:SetAlpha(a);
+  
   if string.len(name)>textlen then
     name = string.sub(name,1,textlen-3) .. '...';
   end
