@@ -203,6 +203,7 @@ end
 
 function HealBot_Options_ActionAlpha_OnValueChanged(this)
   HealBot_Config.backcola[HealBot_Config.Current_Skin] = HealBot_Options_Pct_OnValueChanged(this);
+  HealBot_Action_ResetSkin()
 end
 
 function HealBot_Options_BarAlpha_OnValueChanged(this)
