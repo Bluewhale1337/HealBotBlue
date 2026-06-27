@@ -297,6 +297,12 @@ function HealBot_SetSkinColours()
 
     local borderStyle = HealBot_Config.bborder[HealBot_Config.Current_Skin] or 2
   if borderStyle == 0 then
+    HealBot_Action:SetBackdrop({
+      bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+      edgeFile = "Interface\\Buttons\\WHITE8X8",
+      tile = true, tileSize = 8, edgeSize = 1,
+      insets = { left = 1, right = 1, top = 1, bottom = 1 }
+    })
     HealBot_Action:SetBackdropBorderColor(0,0,0,0);
   elseif borderStyle == 1 then
     HealBot_Action:SetBackdrop({
