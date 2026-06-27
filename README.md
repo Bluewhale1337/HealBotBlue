@@ -18,8 +18,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Option Changes from the original HealBot Continues
 
 ### Change Log
+**v1.2.2**
+* **White background fix** Fixed issue where white background would persist while alpha channel got changes.
+* **Alpha slider** Fixed bug where alpha slider wouldn't apply changes instantly.
 
-**1.2.1**
+**v1.2.1**
 * **Initialization bug** Fixed issue where Action module would get stuck on infinite loop causing stack overflow.
 
 **v1.2**
