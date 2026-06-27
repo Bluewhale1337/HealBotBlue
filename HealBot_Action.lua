@@ -253,8 +253,6 @@ function HealBot_Action_EnableButton(button)
     bar:SetStatusBarColor(r,g,b,HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
     bar2:SetStatusBarColor(r,g,b,HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
   end
-
-  button:SetAlpha(a);
   
   if string.len(name)>textlen then
     name = string.sub(name,1,textlen-3) .. '...';
