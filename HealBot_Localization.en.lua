@@ -1,4 +1,4 @@
-HEALBOT_VERSION = "1.2.1";
+HEALBOT_VERSION = "1.2.2";
 
 -------------
 -- ENGLISH --
