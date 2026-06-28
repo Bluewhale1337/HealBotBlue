@@ -1,6 +1,6 @@
 HealBot_ConfigDefaults = {
   ShowManaBars=0,
-  ManaBarsHealersOnly=1,
+  ManaBarsHealersOnly=0,
   Version = HEALBOT_VERSION,
   AlertLevel = 0.95,
   AutoClose = 1,

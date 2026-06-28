@@ -266,13 +266,34 @@ function HealBot_OnEvent_ZoneChanged(this)
 end
 
 function HealBot_OnEvent_PlayerRegenDisabled(this)
-    HealBot_RecalcParty();
-    if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
-        if HealBot_Config.AutoClose == 1 and HealBot_Config.ActionVisible ~= 0 then HealBot_Action:Hide(); end;
-    else
-        HealBot_Action:Show();
-        HealBot_IsFighting = true;
+  HealBot_RecalcParty();
+  if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
+    if HealBot_Config.AutoClose==1 and HealBot_Config.ActionVisible~=0 then HealBot_Action:Hide(); end;
+  else
+    HealBot_Action:Show();
+    
+    -- Reapply user settings to override the engine's white default
+    if HealBot_Config and HealBot_Config.Current_Skin then
+      local skin = HealBot_Config.Current_Skin;
+      if HealBot_Config.backcolr and HealBot_Config.backcolr[skin] then
+        HealBot_Action:SetBackdropColor(
+          HealBot_Config.backcolr[skin],
+          HealBot_Config.backcolg[skin],
+          HealBot_Config.backcolb[skin],
+          HealBot_Config.backcola[skin]
+        );
+        HealBot_Action:SetBackdropBorderColor(
+          HealBot_Config.borcolr[skin],
+          HealBot_Config.borcolg[skin],
+          HealBot_Config.borcolb[skin],
+          HealBot_Config.borcola[skin]
+        );
+      end
     end
+
+    HealBot_IsFighting = true;
+  end
+--  HealBot_RecalcHeals();
 end
 
 function HealBot_OnEvent_PlayerRegenEnabled(this)

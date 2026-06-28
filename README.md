@@ -32,10 +32,15 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Core Options Layout Correction:** Relocated the "Defaults" and "Close" buttons back into the parent options frame's container, ensuring they display consistently at the bottom of all configuration tabs.
 * **Skins Grid Alignment:** Fixed layout overlaps on the Skins panel by setting explicit width/height sizes (`123 x 17`) on the opacity sliders and reorganizing all 13 sliders into a clean, uniform 2-column grid.
 * **Startup Refresh Optimization:** Resolved initial loading lag where action bars would be missing by forcing an immediate UI refresh (`HealBot_RecalcSpells()`) once spell data loads.
-
-**v1.2.1**
 * **UI Layout Fixes:** Fixed slider width constraints in the Skin menu causing layout overlaps. Realigned Chat tab buttons to ensure they do not exceed the window bounds. Fixed Color Picker anchors.
 * **Menu Cleanup:** Fixed Options panel checkboxes overlapping due to incorrect vertical spacing offsets.
+
+**v1.2.2**
+* **White background fix** Fixed issue where white background would persist while alpha channel got changes.
+* **Alpha slider** Fixed bug where alpha slider wouldn't apply changes instantly.
+
+**v1.2.1**
+* **Initialization bug** Fixed issue where Action module would get stuck on infinite loop causing stack overflow.
 
 **v1.2**
 * **Class Colors & Dimming:** Frame text now inherits class colors with black outline for better visibility. Missing buffs intelligently dim the class color and turn the text yellow.

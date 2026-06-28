@@ -32,11 +32,11 @@ function HealBot_Model:RegisterObserver(event, callback)
     table.insert(self.observers[event], callback)
 end
 
-function HealBot_Model:NotifyObservers(event, unitID, ...)
+function HealBot_Model:NotifyObservers(event, unitID, arg1, arg2)
     if self.observers[event] then
         local len = table.getn(self.observers[event])
         for i = 1, len do
-            self.observers[event][i](unitID, ...)
+            self.observers[event][i](unitID, arg1, arg2)
         end
     end
 end
