@@ -29,12 +29,6 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
 ### Change Log
-**v1.2.2**
-* **White background fix** Fixed issue where white background would persist while alpha channel got changes.
-* **Alpha slider** Fixed bug where alpha slider wouldn't apply changes instantly.
-
-**v1.2.1**
-* **Initialization bug** Fixed issue where Action module would get stuck on infinite loop causing stack overflow.
 
 **v1.3**
 * **General Options Layout & Renaming:** Relabeled "Healing panel options" to "Mana bar options:", moved the "For Healers Only" checkbox side-by-side with "Show Mana Bars", and renamed "Enable mouse over action bar" to "Hovercasting".
