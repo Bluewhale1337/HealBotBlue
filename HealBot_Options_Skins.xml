@@ -1,0 +1,676 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Skins.lua" />
+      <Frame name="HealBot_Options_Panel5" parent="HealBot_Options" hidden="true" setAllPoints="true">
+        <Frames>
+
+
+    <Frame name="HealBot_Options_Skins" inherits="UIDropDownMenuTemplate" id="1">
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_Options_ScaleFrameText" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="-45" y="-5" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+      <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="70" y="-28" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Scripts>
+          <OnLoad> HealBot_Options_Skins_OnLoad(this) </OnLoad>
+	</Scripts>
+  </Frame>
+      <Button name="HealBot_Options_DeleteSkin" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
+        <Size>
+          <AbsDimension x="80" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="7" y="-1"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_DeleteSkin_OnClick(this)</OnClick> 
+        </Scripts>
+      </Button>
+
+      <EditBox name="HealBot_Options_NewSkin" inherits="HealBot_Options_EditBoxTemplate">
+        <Size>
+          <AbsDimension x="100" y="20"/>
+        </Size>      
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_Options_ScaleFrameText2" text="HEALBOT_OPTIONS_NEWSKINTEXT" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="-70" y="-2" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>        
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="25" y="-2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnTextChanged>
+            HealBot_Options_NewSkin_OnTextChanged(this)            
+          </OnTextChanged>
+        </Scripts>
+      </EditBox>
+      <Button name="HealBot_Options_NewSkinb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+        <Size>
+          <AbsDimension x="80" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NewSkin" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="32" y="2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_NewSkinb_OnClick(this)</OnClick> 
+        </Scripts>
+      </Button>
+      
+      <Frame name="HealBot_Options_Scale" inherits="OptionFrameBoxTemplate">
+        <Scripts>
+          <OnLoad>
+            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+            this:SetBackdropColor(0, 0, 0, 0);
+          </OnLoad>
+        </Scripts>
+        <Size>
+          <AbsDimension y="325"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-88"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-20" y="-180"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_Options_ScaleFrameText3" text="HEALBOT_OPTIONS_SKINBARS" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="50" y="-12" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>       
+	<Frames>
+      <CheckButton name="HealBot_Options_ShowHeaders" inherits="SendMailRadioButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="155" y="-8" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowHeaders_OnLoad(this,HEALBOT_OPTIONS_SHOWHEADERS)</OnLoad> 
+          <OnClick>HealBot_Options_ShowHeaders_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_BarColorMode" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-8" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Class Colors")</OnLoad> 
+          <OnClick>HealBot_Config.bcolormode[HealBot_Config.Current_Skin] = (this:GetChecked() and 2 or 1); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_FontOutline" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-33" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Font Outline")</OnLoad> 
+          <OnClick>HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 0); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_1pxBorders" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="290" y="-58" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("1px Borders")</OnLoad> 
+          <OnClick>HealBot_Config.bborder[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 2); HealBot_Action_ResetSkin()</OnClick> 
+        </Scripts>
+      </CheckButton>      
+
+      <Slider name="HealBot_Options_BarTextureS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="20" y="-40" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINTEXTURE,1,14)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarTextureS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_BarNumColsS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="18" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINNUMCOLS,1,8)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarNumColsS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_BarHeightS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="18" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-32" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINHEIGHT,10,100)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarHeightS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_BarWidthS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINWIDTH,50,225)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarWidthS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+
+      <Slider name="HealBot_Options_BarBRSpaceS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-32" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINBRSPACE,0,10)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarBRSpaceS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_BarBCSpaceS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINBCSPACE,0,25)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarBCSpaceS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_FramePaddingS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="0" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Frame Padding",0,50)</OnLoad> 
+          <OnValueChanged>HealBot_Options_FramePaddingS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_BorderThicknessS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Solid Border",1,10)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BorderThicknessS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FramePaddingS" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_Pct_OnLoad_MinMax(this,HEALBOT_OPTIONS_BARALPHA,0.25,1)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarAlpha_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+
+      <Slider name="HealBot_Options_BarAlphaInHeal" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlpha" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_Pct_OnLoad_MinMax(this,HEALBOT_OPTIONS_BARALPHAINHEAL,0.05,0.75)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarAlphaInHeal_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_BarAlphaDis" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlpha" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_Pct_OnLoad(this,HEALBOT_OPTIONS_BARALPHADIS)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarAlphaDis_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_AbortBarSize" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaDis" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Abort size",0,15)</OnLoad> 
+          <OnValueChanged>HealBot_Options_AbortBarSize_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
+      <Slider name="HealBot_Options_FontHeight" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaDis" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-35" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINFHEIGHT,7,18)</OnLoad> 
+          <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
+      
+   <Button name="HealBot_EnTextColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="HealBot_EnTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_ENTEXT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_EnTextColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(70); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+  <StatusBar name="HealBot_EnTextColorpickin" inherits="TextStatusBar">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight"  relativePoint="BOTTOMLEFT">
+  		<Offset>
+  		  <AbsDimension x="0" y="-15"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+  
+  <Button name="HealBot_DisTextColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="HealBot_DisTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_DISTEXT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_DisTextColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+  
+  <Button name="HealBot_DebTextColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_DebTextColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="HealBot_DebTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_DEBTEXT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_DebTextColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+    </Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+
+
+  <Button name="HealBot_BackgroundColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="0" y="-25"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_BackgroundColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="0" y="-25"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_SKIN_BACKTEXT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_BackgroundColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>    
+  <Button name="HealBot_BorderColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_BorderColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_SKIN_BORDERTEXT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_BorderColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>    
+  <Button name="HealBot_AbortColorpickb">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_AbortColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="87" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_ACTION_ABORT">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_AbortColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>    
+
+      </Frames>
+   </Frame> 
+   
+ </Frames>
+</Frame>
+
+</Ui>

@@ -1,0 +1,450 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_CDC.lua" />
+      <Frame name="HealBot_Options_Panel4" parent="HealBot_Options" hidden="true" setAllPoints="true">
+        <Frames>
+
+      <Frame name="HealBot_Options_CDCMonitor" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="170" y="-30" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCCLASS">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="-105" y="-7"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+          <OnLoad> HealBot_Options_CDCMonitor_OnLoad(this) </OnLoad>
+	</Scripts>
+      </Frame>
+      
+      <Frame name="HealBot_Options_CureDispelCleanse" inherits="OptionFrameBoxTemplate">
+        <Scripts>
+          <OnLoad>
+            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+            this:SetBackdropColor(0, 0, 0, 0);
+          </OnLoad>
+        </Scripts>
+        <Size>
+          <AbsDimension y="110"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="21" y="-75"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-21" y="-75"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_CDCBut_Text" text="HEALBOT_OPTIONS_CDCBUTTONS" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="105" y="-12" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+    </Frame>  
+    <Frame name="HealBot_Options_CDCButLeft" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="100" y="-35" /> 
+            </Offset>
+          </Anchor>
+       </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCLEFT">
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="40" y="-42"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+     <Scripts>
+          <OnLoad>
+             HealBot_Options_CDCButLeft_OnLoad(this)
+          </OnLoad>
+	</Scripts>
+   </Frame>    
+   <Frame name="HealBot_Options_CDCButRight" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="100" y="-67" /> 
+            </Offset>
+          </Anchor>
+       </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCRIGHT">
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="40" y="-74"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+     <Scripts>
+          <OnLoad>
+             HealBot_Options_CDCButRight_OnLoad(this)
+          </OnLoad>
+	</Scripts>
+   </Frame>    
+
+      <Frame name="HealBot_Options_CureDispelCleanseCol" inherits="OptionFrameBoxTemplate">
+        <Scripts>
+          <OnLoad>
+            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+            this:SetBackdropColor(0, 0, 0, 0);
+          </OnLoad>
+        </Scripts>
+        <Size>
+          <AbsDimension y="95"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="21" y="-185"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-21" y="-190"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_CDCCol_Text" text="HEALBOT_OPTIONS_CDCBARS" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="98" y="-12" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+    </Frame>  
+   <Button name="HealBot_DiseaseColorpickb">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="81" y="-55"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_Colorpick_OnClick(HEALBOT_DISEASE_en)</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_DiseaseColorpick" inherits="TextStatusBar">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="81" y="-55"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_DISEASE">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_DiseaseColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+
+  <Button name="HealBot_MagicColorpickb">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_Colorpick_OnClick(HEALBOT_MAGIC_en)</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_MagicColorpick" inherits="TextStatusBar">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_MAGIC">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_MagicColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+  
+  <Button name="HealBot_PoisonColorpickb">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="BOTTOM" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="65" y="-45"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_Colorpick_OnClick(HEALBOT_POISON_en)</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_PoisonColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="BOTTOM" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPLEFT">
+		<Offset>
+		  <AbsDimension x="65" y="-45"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_POISON">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_PoisonColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+    </Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+  
+  <Button name="HealBot_CurseColorpickb">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_PoisonColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+	<Scripts>
+      <OnClick>HealBot_Colorpick_OnClick(HEALBOT_CURSE_en)</OnClick> 
+	</Scripts>
+  </Button>
+  <StatusBar name="HealBot_CurseColorpick" inherits="HealBot_ColourButtonTemplate">
+	<Size>
+	  <AbsDimension x="130" y="20"/>
+	</Size>
+	<Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_PoisonColorpick"  relativePoint="TOPRIGHT">
+		<Offset>
+		  <AbsDimension x="5" y="0"/>
+		</Offset>
+	  </Anchor>
+	</Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_CURSE">
+              <Anchors>
+                <Anchor point="CENTER" relativeTo="HealBot_CurseColorpick" relativePoint="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="1"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
+	</Scripts>
+	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+	<BarColor r="0" g="1" b="0"/>
+  </StatusBar>
+
+      <Frame name="HealBot_Options_CureDispelCleanseWarn" inherits="OptionFrameBoxTemplate">
+        <Scripts>
+          <OnLoad>
+            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
+            this:SetBackdropColor(0, 0, 0, 0);
+          </OnLoad>
+        </Scripts>
+        <Size>
+          <AbsDimension y="120"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="21" y="-285"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-21" y="-290"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+	<Layers>
+	<Layer level="BACKGROUND">
+	<FontString name="HealBot_CDCWarn_Text" text="HEALBOT_OPTIONS_CDCWARNINGS" inherits="GameFontNormalSmall">
+	  <Anchors>
+	   <Anchor point="TOPLEFT">
+	    <Offset>
+		<AbsDimension x="98" y="-12" />
+	    </Offset>
+	   </Anchor>
+	  </Anchors>
+	</FontString>
+	</Layer>
+	</Layers>
+   </Frame>  
+      <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseWarn" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="25" y="90" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_ShowDebuffWarning_OnLoad(this,HEALBOT_OPTIONS_SHOWDEBUFFWARNING)</OnLoad> 
+          <OnClick>HealBot_Options_ShowDebuffWarning_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_Options_SoundDebuffWarning" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffWarning" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_SoundDebuffWarning_OnLoad(this,HEALBOT_OPTIONS_SOUNDDEBUFFWARNING)</OnLoad> 
+          <OnClick>HealBot_Options_SoundDebuffWarning_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
+
+      <CheckButton name="HealBot_WarningSound1" inherits="SendMailRadioButtonTemplate" id="1">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundDebuffWarning" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="25" y="-30"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_WarningSound_OnLoad(this,HEALBOT_OPTIONS_SOUND1)</OnLoad>
+          <OnClick>HealBot_WarningSound_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_WarningSound2" inherits="SendMailRadioButtonTemplate" id="2">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_WarningSound1" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="55" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_WarningSound_OnLoad(this,HEALBOT_OPTIONS_SOUND2)</OnLoad>
+          <OnClick>HealBot_WarningSound_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+      <CheckButton name="HealBot_WarningSound3" inherits="SendMailRadioButtonTemplate" id="3">
+        <Anchors>
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_WarningSound2" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="65" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_WarningSound_OnLoad(this,HEALBOT_OPTIONS_SOUND3)</OnLoad>
+          <OnClick>HealBot_WarningSound_OnClick(this,this:GetID())</OnClick>
+        </Scripts>
+      </CheckButton>
+       </Frames>
+      </Frame>
+
+</Ui>

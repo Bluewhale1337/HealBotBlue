@@ -188,7 +188,7 @@ HEALBOT_OPTIONS_TAB_CDC       = "Cure";
 HEALBOT_OPTIONS_TAB_SKIN      = "Skin"
 
 
-HEALBOT_OPTIONS_PANEL_TEXT    = "Panneau d'option de soin:"
+HEALBOT_OPTIONS_PANEL_TEXT    = "Options de barre de mana:"
 HEALBOT_OPTIONS_ACTIONLOCKED  = "Bloquer la position";
 HEALBOT_OPTIONS_GROWUPWARDS   = "Monter";
 HEALBOT_OPTIONS_AUTOSHOW      = "Ouvrir automatiquement";
@@ -200,6 +200,7 @@ HEALBOT_OPTIONS_QUALITYRANGE  = "Exact 27yard range check in instances";
 HEALBOT_OPTIONS_INTEGRATECTRA = "Intregrer CTRA";
 HEALBOT_OPTIONS_TOGGLEALTUSE  = "Toggle Alt-key";
 HEALBOT_OPTIONS_PROTECTPVP    = "Avoid accidental PvP flagging";
+HEALBOT_OPTIONS_HIDEPARTY     = "Masquer les cadres de groupe par défaut";
 
 
 HEALBOT_OPTIONS_ITEMS  = "Objets";
@@ -258,6 +259,13 @@ HEALBOT_CLASSES_MELEE   = "Corps a corps";
 HEALBOT_CLASSES_RANGES  = "Distances";
 HEALBOT_CLASSES_HEALERS = "Soigneurs";
 HEALBOT_CLASSES_CUSTOM  = "Divers";
+
+HEALBOT_OPTIONS_MONITORNO      = "Aucun";
+HEALBOT_OPTIONS_MONITORALL     = "Tous";
+HEALBOT_OPTIONS_MONITORMELEE   = "M\195\169l\195\169e";
+HEALBOT_OPTIONS_MONITORRANGE   = "\195\128 distance";
+HEALBOT_OPTIONS_MONITORHEALERS = "Soigneurs";
+HEALBOT_OPTIONS_MONITORCUSTOM  = "Personnalis\195\169";
 
 HEALBOT_OPTIONS_BARALPHAINHEAL= "Incoming heal opacity";  -- ***************    needs French translation    ***************
 

@@ -1,0 +1,240 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Chat.lua" />
+      <Frame name="HealBot_Options_Panel7" parent="HealBot_Options" hidden="true" setAllPoints="true">
+        <Frames>
+          <!-- Chat Message 1 -->
+          <Frame name="HealBot_Options_ChatMsg1" inherits="UIDropDownMenuTemplate" id="1">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-30" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </Frame>
+          <EditBox name="HealBot_Options_ChatMsg1_Text" inherits="InputBoxTemplate" autoFocus="false">
+            <Size>
+              <AbsDimension x="200" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg1" relativePoint="RIGHT">
+                <Offset>
+                  <AbsDimension x="0" y="2"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnTextChanged>
+                if HealBot_Config.ChatMessages then
+                  HealBot_Config.ChatMessages[1].Message = this:GetText();
+                end
+              </OnTextChanged>
+            </Scripts>
+          </EditBox>
+          <Button name="HealBot_Options_ChatMsg1_Channel" inherits="UIPanelButtonTemplate" text="None">
+            <Size>
+              <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg1_Text" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>
+                HealBot_Options_ChatMsg_Channel_OnClick(1, this);
+              </OnClick>
+            </Scripts>
+          </Button>
+          <!-- Chat Message 2 -->
+          <Frame name="HealBot_Options_ChatMsg2" inherits="UIDropDownMenuTemplate" id="2">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-90" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </Frame>
+          <EditBox name="HealBot_Options_ChatMsg2_Text" inherits="InputBoxTemplate" autoFocus="false">
+            <Size>
+              <AbsDimension x="200" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg2" relativePoint="RIGHT">
+                <Offset>
+                  <AbsDimension x="0" y="2"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnTextChanged>
+                if HealBot_Config.ChatMessages then
+                  HealBot_Config.ChatMessages[2].Message = this:GetText();
+                end
+              </OnTextChanged>
+            </Scripts>
+          </EditBox>
+          <Button name="HealBot_Options_ChatMsg2_Channel" inherits="UIPanelButtonTemplate" text="None">
+            <Size>
+              <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg2_Text" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>
+                HealBot_Options_ChatMsg_Channel_OnClick(2, this);
+              </OnClick>
+            </Scripts>
+          </Button>
+          <!-- Chat Message 3 -->
+          <Frame name="HealBot_Options_ChatMsg3" inherits="UIDropDownMenuTemplate" id="3">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-150" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </Frame>
+          <EditBox name="HealBot_Options_ChatMsg3_Text" inherits="InputBoxTemplate" autoFocus="false">
+            <Size>
+              <AbsDimension x="200" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg3" relativePoint="RIGHT">
+                <Offset>
+                  <AbsDimension x="0" y="2"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnTextChanged>
+                if HealBot_Config.ChatMessages then
+                  HealBot_Config.ChatMessages[3].Message = this:GetText();
+                end
+              </OnTextChanged>
+            </Scripts>
+          </EditBox>
+          <Button name="HealBot_Options_ChatMsg3_Channel" inherits="UIPanelButtonTemplate" text="None">
+            <Size>
+              <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg3_Text" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>
+                HealBot_Options_ChatMsg_Channel_OnClick(3, this);
+              </OnClick>
+            </Scripts>
+          </Button>
+          <!-- Chat Message 4 -->
+          <Frame name="HealBot_Options_ChatMsg4" inherits="UIDropDownMenuTemplate" id="4">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-210" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </Frame>
+          <EditBox name="HealBot_Options_ChatMsg4_Text" inherits="InputBoxTemplate" autoFocus="false">
+            <Size>
+              <AbsDimension x="200" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg4" relativePoint="RIGHT">
+                <Offset>
+                  <AbsDimension x="0" y="2"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnTextChanged>
+                if HealBot_Config.ChatMessages then
+                  HealBot_Config.ChatMessages[4].Message = this:GetText();
+                end
+              </OnTextChanged>
+            </Scripts>
+          </EditBox>
+          <Button name="HealBot_Options_ChatMsg4_Channel" inherits="UIPanelButtonTemplate" text="None">
+            <Size>
+              <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg4_Text" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>
+                HealBot_Options_ChatMsg_Channel_OnClick(4, this);
+              </OnClick>
+            </Scripts>
+          </Button>
+          <!-- Chat Message 5 -->
+          <Frame name="HealBot_Options_ChatMsg5" inherits="UIDropDownMenuTemplate" id="5">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-270" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+          </Frame>
+          <EditBox name="HealBot_Options_ChatMsg5_Text" inherits="InputBoxTemplate" autoFocus="false">
+            <Size>
+              <AbsDimension x="200" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="HealBot_Options_ChatMsg5" relativePoint="RIGHT">
+                <Offset>
+                  <AbsDimension x="0" y="2"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnTextChanged>
+                if HealBot_Config.ChatMessages then
+                  HealBot_Config.ChatMessages[5].Message = this:GetText();
+                end
+              </OnTextChanged>
+            </Scripts>
+          </EditBox>
+          <Button name="HealBot_Options_ChatMsg5_Channel" inherits="UIPanelButtonTemplate" text="None">
+            <Size>
+              <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ChatMsg5_Text" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-5"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>
+                HealBot_Options_ChatMsg_Channel_OnClick(5, this);
+              </OnClick>
+            </Scripts>
+          </Button>
+        </Frames>
+      </Frame>
+
+</Ui>
