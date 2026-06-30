@@ -272,3 +272,20 @@ function HealBot_Options_BorderThicknessS_OnValueChanged(this)
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+
+function HealBot_Options_HideParty_OnLoad(this, text)
+  getglobal(this:GetName().."Text"):SetText(text);
+end
+
+function HealBot_Options_HideParty_OnClick(this)
+  HealBot_Config.HideParty = this:GetChecked() or 0;
+  HealBot_Options_TogglePartyFrames();
+end
+
+function HealBot_Options_TogglePartyFrames()
+  if HealBot_Config.HideParty == 1 then
+    if HidePartyFrame then HidePartyFrame(); end
+  else
+    if ShowPartyFrame then ShowPartyFrame(); end
+  end
+end

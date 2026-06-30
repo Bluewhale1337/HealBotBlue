@@ -65,9 +65,9 @@ function HealBot_Options_TooltipPos_Refresh(onselect)
   UIDropDownMenu_SetSelectedID(HealBot_Options_TooltipPos,HealBot_Config.TooltipPos)
 end
 
-function HealBot_Options_TooltipPos_OnLoad(this)
-  HealBot_Options_TooltipPos_Initialize()
-  UIDropDownMenu_SetWidth(128)
+function HealBot_Options_TooltipPos_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_TooltipPos_DropDown)
+  UIDropDownMenu_SetWidth(128, this)
 end
 
 function HealBot_Options_TooltipPos_OnSelect()
@@ -189,7 +189,7 @@ end
 
 
 
-HealBot_Options_CurrentPanel = 0;
+
 
 
 

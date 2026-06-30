@@ -37,7 +37,25 @@ function HealBot_Action_MustHealSome()
   end);
 end
 
+function HealBot_GetRezSpellForClass()
+  local _, class = UnitClass("player");
+  if class == "PRIEST" then return HEALBOT_RESURRECTION;
+  elseif class == "DRUID" then return HEALBOT_REBIRTH;
+  elseif class == "PALADIN" then return HEALBOT_REDEMPTION;
+  elseif class == "SHAMAN" then return HEALBOT_ANCESTRALSPIRIT;
+  end
+  return nil;
+end
+
 function HealBot_CanHeal(unit)
+  if UnitIsDeadOrGhost(unit) then
+    local rezSpell = HealBot_GetRezSpellForClass();
+    if rezSpell and HealBot_GetHealSpell(unit, rezSpell) then
+      return true;
+    end
+    return false;
+  end
+
   local SHeal = HealBot_ShouldHeal(unit)
   if SHeal then
     local spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Left"))
@@ -102,6 +120,15 @@ end
 function HealBot_Action_HealUnit_OnClick(this,button)
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
+    
+    -- Resurrection override on dead target
+    if UnitIsDeadOrGhost(this.unit) then
+      local rezSpell = HealBot_GetRezSpellForClass();
+      if rezSpell then
+        HealBot_CastSpellOnFriend(rezSpell, this.unit);
+        return
+      end
+    end
     
     -- Buff casting override
     if HealBot_Config.BuffWatch == 1 then
@@ -174,12 +201,7 @@ function HealBot_Action_OnShow(this)
     PlaySound("igAbilityOpen");
   end
   HealBot_Config.ActionVisible = 1
-  HealBot_Action:SetBackdropColor(
-    HealBot_Config.backcolr[HealBot_Config.Current_Skin],
-    HealBot_Config.backcolg[HealBot_Config.Current_Skin],
-    HealBot_Config.backcolb[HealBot_Config.Current_Skin], 
-    HealBot_Config.backcola[HealBot_Config.Current_Skin]);
-    local borderStyle = HealBot_Config.bborder[HealBot_Config.Current_Skin] or 2
+  local borderStyle = HealBot_Config.bborder[HealBot_Config.Current_Skin] or 2
   if borderStyle == 0 then
     HealBot_Action:SetBackdropBorderColor(0,0,0,0);
   elseif borderStyle == 1 then
@@ -207,11 +229,18 @@ function HealBot_Action_OnShow(this)
       HealBot_Config.borcolb[HealBot_Config.Current_Skin],
       HealBot_Config.borcola[HealBot_Config.Current_Skin]);
   end
+  HealBot_Action:SetBackdropColor(
+    HealBot_Config.backcolr[HealBot_Config.Current_Skin],
+    HealBot_Config.backcolg[HealBot_Config.Current_Skin],
+    HealBot_Config.backcolb[HealBot_Config.Current_Skin], 
+    HealBot_Config.backcola[HealBot_Config.Current_Skin]);
 end
 
 function HealBot_Action_OnHide(this)
   HealBot_StopMoving(this);
-  HealBot_Config.ActionVisible = 0
+  if not this.ProgrammaticHide then
+    HealBot_Config.ActionVisible = 0
+  end
 end
 
 function HealBot_Action_OnMouseDown(this,button)
@@ -245,6 +274,7 @@ function HealBot_Action_OnDragStop(this)
 end
 
 -- http://www.flexbarforums.com/viewtopic.php?t=66
+-- no idea what it was link is dead
 function HealBot_Action_OnKey(this,key,state)
   local command = GetBindingAction(key); 
   if command then 

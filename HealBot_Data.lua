@@ -11,6 +11,7 @@ HealBot_ConfigDefaults = {
   EmergencyHeals = 1,
   ActionLocked = 0,
   ActionVisible = 1,
+  HideSolo = 0,
   OverHeal = 0.25,
   CastNotify = 1,
   ChatMessages = {
@@ -175,7 +176,7 @@ HealBot_ConfigDefaults = {
   CDCRightText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None",},
   Current_Skin = "Modern Flat",
   Skin_ID = 1,
-  Skins = {HEALBOT_SKINS_STD, "HealBot Party", "HealBot Raid", "Alteric Valley", "Modern Flat"},
+  Skins = {"Modern Flat", HEALBOT_SKINS_STD, "HealBot Party", "HealBot Raid", "Alteric Valley"},
   numcols = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 4, ["Alteric Valley"] = 2, ["Modern Flat"] = 1},
   btexture = {[HEALBOT_SKINS_STD] = 8,["HealBot Party"] = 6, ["HealBot Raid"] = 7, ["Alteric Valley"] = 9, ["Modern Flat"] = 10},
   bcspace = {[HEALBOT_SKINS_STD] = 4, ["HealBot Party"] = 4, ["HealBot Raid"] = 2, ["Alteric Valley"] = 2, ["Modern Flat"] = 4},
@@ -224,6 +225,7 @@ HealBot_ConfigDefaults = {
   Tooltip_ShowTarget = 1,
   Tooltip_Recommend = 1,
   TooltipPos = 1,  
+  HideParty = 0,
 };
 
 HealBot_Config = {};

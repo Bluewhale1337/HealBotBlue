@@ -34,6 +34,22 @@ function HealBot_RegisterThis(this)
 end 
 
 function HealBot_OnUpdate(this, arg1)
+    if HealBot_TargetRestorePending then
+        HealBot_TargetRestoreTimer = HealBot_TargetRestoreTimer + arg1;
+        if HealBot_TargetRestoreTimer >= 0.1 then
+            local pending = HealBot_TargetRestorePending;
+            HealBot_TargetRestorePending = nil;
+            HealBot_TargetRestoreTimer = 0;
+            if pending.type == "enemy" then
+                TargetLastEnemy();
+            elseif pending.type == "friend" then
+                TargetLastTarget();
+            elseif pending.type == "clear" then
+                ClearTarget();
+            end
+        end
+    end
+
     -- Process Dirty Queue for MVC View
     if next(HealBot_View_DirtyUnits) ~= nil then
         for unitID in pairs(HealBot_View_DirtyUnits) do
@@ -209,11 +225,27 @@ function HealBot_OnEvent_VariablesLoaded(this)
     end
     
     HealBot_InitData();
+
+    if not HealBot_PartyFrameHooked then
+        local origShowPartyFrame = ShowPartyFrame;
+        ShowPartyFrame = function()
+            if HealBot_Config.HideParty == 1 then
+                if HidePartyFrame then HidePartyFrame(); end
+            elseif origShowPartyFrame then
+                origShowPartyFrame();
+            end
+        end
+        HealBot_PartyFrameHooked = true;
+    end
+    
+    if HealBot_Config.HideParty == 1 and HidePartyFrame then
+        HidePartyFrame();
+    end
     
     if class == "PRIEST" or class == "DRUID" or class == "PALADIN" or class == "SHAMAN" then
         HealBot_BonusScanner:ScanEquipment();
 
-        if HealBot_Config.ActionVisible == 1 then HealBot_Action:Show() end
+        HealBot_Action_ShowFrame();
 
         this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
         this:RegisterEvent("PLAYER_REGEN_DISABLED");
@@ -268,9 +300,13 @@ end
 function HealBot_OnEvent_PlayerRegenDisabled(this)
   HealBot_RecalcParty();
   if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
-    if HealBot_Config.AutoClose==1 and HealBot_Config.ActionVisible~=0 then HealBot_Action:Hide(); end;
+    if HealBot_Config.AutoClose==1 and HealBot_Config.ActionVisible~=0 then 
+      HealBot_Action.ProgrammaticHide = true;
+      HealBot_Action:Hide(); 
+      HealBot_Action.ProgrammaticHide = nil;
+    end;
   else
-    HealBot_Action:Show();
+    HealBot_Action_ShowFrame();
     
     -- Reapply user settings to override the engine's white default
     if HealBot_Config and HealBot_Config.Current_Skin then

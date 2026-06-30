@@ -9,10 +9,12 @@ function HealBot_Options_BuffWatch_OnClick(self)
   else
     HealBot_Options_BuffWatchInCombat:Enable()
   end
+  HealBot_RecalcParty();
 end
 function HealBot_Options_BuffWatchInCombat_OnClick(self)
   local frame = self or this
   HealBot_Config.BuffWatchInCombat = frame:GetChecked() or 0;
+  HealBot_RecalcParty();
 end
 function HealBot_Options_BuffSelf_OnLoad(self)
   local frame = self or this
@@ -35,6 +37,7 @@ function HealBot_Options_BuffSelf_OnClick(self)
   else
     HealBot_Config.BuffWatchSelf[id] = 0
   end
+  HealBot_RecalcParty();
 end
 function HealBot_Options_Buff_OnLoad(self)
   local frame = self or this
@@ -76,6 +79,7 @@ function HealBot_Options_Buff_OnClick()
   
   UIDropDownMenu_SetSelectedID(frame, this.value + 1)
   UIDropDownMenu_SetText(text, frame)
+  HealBot_RecalcParty();
 end
 function HealBot_Options_SetBuffs()
   local myClass = UnitClass("player")

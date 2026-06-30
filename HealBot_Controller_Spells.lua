@@ -3,6 +3,8 @@
 
 HealBot_CastingSpell  = nil;
 HealBot_CastingTarget = nil;
+HealBot_TargetRestorePending = nil;
+HealBot_TargetRestoreTimer = 0;
 
 local HealBot_Health60 = {
   ["DRUID"]   = 3500,
@@ -210,29 +212,26 @@ function HealBot_CheckCasting(unit)
 end
 
 function HealBot_CastSpellOnFriend(spell, target)
-  local old;
-  local ttype = "other";
   if (not spell or not target or not UnitName(target)) then
     return;
   end
-  if (UnitCanAttack("player", "target")) then
-    old = "enemy";
-  else
-    old = UnitName("target");
-    if UnitName("target") ~= UnitName(target) then
-      TargetUnit(target);
-    else
-      ttype = "direct";
-    end
+  local targetEnemy = UnitCanAttack("player", "target");
+  local oldTarget = UnitName("target");
+  
+  if oldTarget ~= UnitName(target) then
+    TargetUnit(target);
   end
-  HealBot_StartCasting(spell, target, ttype);
-  if (old == "enemy") then
-    TargetLastEnemy();
-  elseif (old) then
-    TargetByName(old);
-  else
-    ClearTarget();
+  
+  HealBot_StartCasting(spell, target, "direct");
+  
+  if targetEnemy then
+    HealBot_TargetRestorePending = { type = "enemy" };
+  elseif oldTarget and oldTarget ~= UnitName(target) then
+    HealBot_TargetRestorePending = { type = "friend" };
+  elseif not oldTarget then
+    HealBot_TargetRestorePending = { type = "clear" };
   end
+  HealBot_TargetRestoreTimer = 0;
 end
 
 function HealBot_SetItemDefaults(spell)
@@ -388,6 +387,13 @@ end
 
 function HealBot_RecalcParty()
   HealBot_Action_PartyChanged();
+  if HealBot_Action_HealButtons then
+    for _, button in ipairs(HealBot_Action_HealButtons) do
+      if button and button.unit then
+        HealBot_OnEvent_UnitAura(nil, button.unit);
+      end
+    end
+  end
   HealBot_Action_RefreshButtons();
 end
 

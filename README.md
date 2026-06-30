@@ -18,22 +18,37 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * `/hb options` - Toggles the HealBot options panel on and off
 * `/hb reset` - Resets the contents of the main HealBot panel
 
-### Option Changes from the original HealBot Continues
+### Key Features & Current Functionality
+* **MVC & Observer Architecture:** High-performance, reactive engine that updates frames dynamically on state changes, drastically reducing CPU and memory overhead compared to traditional polling.
+* **Native Hovercasting (Mouseover):** Cast configured spells on hovered unit frames using keybinds directly from your action bars, without losing your current target. (Toggleable in Options -> General).
+* **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
+* **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward).
+* **Mana Bars for Healers:** Enable and position mini-mana status bars next to unit frames, toggleable to display for healer classes only or all classes.
+* **Equipment Bonus Integration:** Automatically scans equipped gear (for classes capable of healing) to dynamically scale healing predictions.
+* **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic).
+* **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
 ### Change Log
 
 **v1.3**
+* **General Options Layout & Renaming:** Relabeled "Healing panel options" to "Mana bar options:", moved the "For Healers Only" checkbox side-by-side with "Show Mana Bars", and renamed "Enable mouse over action bar" to "Hovercasting".
+* **OnShow Empty Panel Bug Fix:** Solved the rendering issue where the options panel would load empty initially until another tab was clicked.
+* **Backdrop Alpha Reset Bug Fix:** Resolved a WoW API client quirk where showing the HealBot frame would reset the background color and alpha channel back to default white/transparent by calling `SetBackdropColor` after `SetBackdrop`.
+* **Default Party Frame Toggle:** Added a "Hide Default Party Frames" toggle option (fully localized in English, German, French, and Korean) to hide Blizzard's default party frames. Integrated immediate toggling on joining/leaving groups.
+* **Safety Guards & Crash Prevention:** Added safety guards to `HidePartyFrame` and `ShowPartyFrame` calls to prevent nil-value crashes when solo.
+* **Checkbox State Initialization Fixes:** Fixed options menu bugs where "Hide when Solo", "Show Mana Bars", and "For Healers Only" checkboxes failed to reflect their saved configuration value when opening the menu.
+* **CurrentPanel Nil Comparison Fix:** Fixed a startup Lua comparison crash by initializing `HealBot_Options_CurrentPanel` at the top of the main options file.
 * **Monolithic Code Modularization (Options):** Split the massive, single-file options system (`HealBot_Options.xml`/`HealBot_Options.lua`) into 7 dedicated, content-named panel subfiles (`General`, `Spells`, `Healing`, `CDC`, `Skins`, `Buffs`, and `Chat`) to improve codebase modularity and stability.
 * **Core Code Decoupling (MVC & Observer Pattern):** Modularized `HealBot.lua` and `HealBot_Action.lua` by decoupling them into dedicated service files: `Range`, `Comms`, `Aura`, `Spells`, `Events` controllers, and `Layout`, `Tooltip` views.
 * **Scope Resolution Fix:** Promoted `HealBot_Options_ComboButtons_Button` to global scope in the base options file to resolve a `nil` comparison error when loading spell settings.
 * **Global Scoping & Variable Promotion:** Promoted `CalcEquipBonus`, `HealBot_EquipChangeTimer`, `HealValue`, `InitSpells`, and `Delay_RecalcParty` to global scope in `HealBot.lua` to ensure cross-module visibility.
 * **CTRA Resurrection Cancel Bug Fix:** Fixed a nil table indexing crash in the CTRA `RESNO` message handler in `HealBot_Controller_Comms.lua`.
-* **Lua 5.1 Compatibility Update:** Forwarded observer parameters directly via vararg forwarding (`...`) in `HealBot_Model.lua` to avoid runtime errors with the deprecated `arg` table.
 * **Core Options Layout Correction:** Relocated the "Defaults" and "Close" buttons back into the parent options frame's container, ensuring they display consistently at the bottom of all configuration tabs.
-* **Skins Grid Alignment:** Fixed layout overlaps on the Skins panel by setting explicit width/height sizes (`123 x 17`) on the opacity sliders and reorganizing all 13 sliders into a clean, uniform 2-column grid.
+* **UI Layout & Skins Alignment:** Reorganized all 13 opacity sliders on the Skins panel into a clean, uniform 2-column grid with explicit width/height sizes (`123 x 17`) to resolve layout overlaps. Realigned Chat tab buttons to stay within window bounds and corrected Color Picker anchors.
 * **Startup Refresh Optimization:** Resolved initial loading lag where action bars would be missing by forcing an immediate UI refresh (`HealBot_RecalcSpells()`) once spell data loads.
-* **UI Layout Fixes:** Fixed slider width constraints in the Skin menu causing layout overlaps. Realigned Chat tab buttons to ensure they do not exceed the window bounds. Fixed Color Picker anchors.
 * **Menu Cleanup:** Fixed Options panel checkboxes overlapping due to incorrect vertical spacing offsets.
+* **Target Restoration Fix:** Fixed spell interruptions and "You don't have a target" errors when healing by implementing a 0.1-second delayed target restoration using `TargetLastEnemy` and `TargetLastTarget`.
+* **Buff Watch Initialization & Options Fix:** Fixed a bug where buff watch failed to display missing buffs on login/UI reload when the player had no active buffs. Enabled immediate buff/aura rescanning when modifying options in the Buff watch configuration tab.
 
 **v1.2.2**
 * **White background fix** Fixed issue where white background would persist while alpha channel got changes.

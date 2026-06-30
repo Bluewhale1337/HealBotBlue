@@ -737,8 +737,24 @@ function HealBot_Action_PartyChanged()
         end
 
         HealBot_Action_SetHeightWidth(OffsetX, MaxOffsetY + bpadding, bwidth);
+        if HealBot_Config.HideParty == 1 and HidePartyFrame then
+            HidePartyFrame();
+        end
     end
     HealBot_Action_RefreshButtons();
+    HealBot_Action_ShowFrame();
+end
+
+function HealBot_Action_ShowFrame()
+    if HealBot_Config.ActionVisible == 1 then
+        if HealBot_Config.HideSolo == 1 and GetNumPartyMembers() == 0 and GetNumRaidMembers() == 0 then
+            HealBot_Action.ProgrammaticHide = true;
+            HealBot_Action:Hide();
+            HealBot_Action.ProgrammaticHide = nil;
+        else
+            HealBot_Action:Show();
+        end
+    end
 end
 
 function HealBot_Action_Reset()
@@ -751,7 +767,9 @@ end
 function HealBot_Action_Refresh(unit)
     if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
         if HealBot_Config.AutoClose == 1 and HealBot_Config.ActionVisible ~= 0 then 
+            HealBot_Action.ProgrammaticHide = true;
             HealBot_Action:Hide(); 
+            HealBot_Action.ProgrammaticHide = nil;
         else
             HealBot_Action_RefreshButtons(unit);
         end
@@ -760,12 +778,14 @@ function HealBot_Action_Refresh(unit)
     HealBot_Action_RefreshButtons(unit);
     if not HealBot_IsFighting then
         if (HealBot_Action_MustHealSome()) then
-            HealBot_Action:Show();
+            HealBot_Action_ShowFrame();
         elseif HealBot_AbortButton == 0 then
-            HealBot_Action:Show();
+            HealBot_Action_ShowFrame();
         elseif (not HealBot_Action_ShouldHealSome()) then
             if HealBot_AbortButton == 1 and HealBot_Config.AutoClose == 1 and HealBot_Config.ActionVisible ~= 0 then 
+                HealBot_Action.ProgrammaticHide = true;
                 HealBot_Action:Hide();
+                HealBot_Action.ProgrammaticHide = nil;
             end
         end
     end

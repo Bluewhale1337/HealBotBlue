@@ -53,9 +53,9 @@ function HealBot_Options_CDCMonitor_Refresh(onselect)
   if not onselect then HealBot_Options_CDCMonitor_Initialize() end  -- or wrong menu may be used !
   UIDropDownMenu_SetSelectedID(HealBot_Options_CDCMonitor,HealBot_Config.CDCMonitor)
 end
-function HealBot_Options_CDCMonitor_OnLoad(this)
-  HealBot_Options_CDCMonitor_Initialize()
-  UIDropDownMenu_SetWidth(100)
+function HealBot_Options_CDCMonitor_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_CDCMonitor_DropDown)
+  UIDropDownMenu_SetWidth(100, this)
 end
 function HealBot_Options_CDCMonitor_OnSelect()
   HealBot_Config.CDCMonitor = this:GetID()
@@ -73,7 +73,7 @@ function HealBot_Options_CDCMonitor_Reset()
   HealBot_CDCInc[HEALBOT_SHAMAN] = 0;
   HealBot_CDCInc[HEALBOT_WARLOCK] = 0;
   HealBot_CDCInc[HEALBOT_WARRIOR] = 0;
-  if HealBot_Config.CDCMonitor==1 then
+  if HealBot_Config.CDCMonitor==2 then
     HealBot_CDCInc[HEALBOT_DRUID] = 1;
     HealBot_CDCInc[HEALBOT_HUNTER] = 1;
     HealBot_CDCInc[HEALBOT_MAGE] = 1;
@@ -83,25 +83,25 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = 1;
     HealBot_CDCInc[HEALBOT_WARLOCK] = 1;
     HealBot_CDCInc[HEALBOT_WARRIOR] = 1;
-  elseif HealBot_Config.CDCMonitor==2 then
-    HealBot_CDCInc[HEALBOT_DRUID] = 1;
   elseif HealBot_Config.CDCMonitor==3 then
-    HealBot_CDCInc[HEALBOT_HUNTER] = 1;
+    HealBot_CDCInc[HEALBOT_DRUID] = 1;
   elseif HealBot_Config.CDCMonitor==4 then
-    HealBot_CDCInc[HEALBOT_MAGE] = 1;
+    HealBot_CDCInc[HEALBOT_HUNTER] = 1;
   elseif HealBot_Config.CDCMonitor==5 then
-    HealBot_CDCInc[HEALBOT_PALADIN] = 1;
+    HealBot_CDCInc[HEALBOT_MAGE] = 1;
   elseif HealBot_Config.CDCMonitor==6 then
-    HealBot_CDCInc[HEALBOT_PRIEST] = 1;
+    HealBot_CDCInc[HEALBOT_PALADIN] = 1;
   elseif HealBot_Config.CDCMonitor==7 then
-    HealBot_CDCInc[HEALBOT_ROGUE] = 1;
+    HealBot_CDCInc[HEALBOT_PRIEST] = 1;
   elseif HealBot_Config.CDCMonitor==8 then
-    HealBot_CDCInc[HEALBOT_SHAMAN] = 1;
+    HealBot_CDCInc[HEALBOT_ROGUE] = 1;
   elseif HealBot_Config.CDCMonitor==9 then
-    HealBot_CDCInc[HEALBOT_WARLOCK] = 1;
+    HealBot_CDCInc[HEALBOT_SHAMAN] = 1;
   elseif HealBot_Config.CDCMonitor==10 then
-    HealBot_CDCInc[HEALBOT_WARRIOR] = 1;
+    HealBot_CDCInc[HEALBOT_WARLOCK] = 1;
   elseif HealBot_Config.CDCMonitor==11 then
+    HealBot_CDCInc[HEALBOT_WARRIOR] = 1;
+  elseif HealBot_Config.CDCMonitor==12 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncMelee[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncMelee[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncMelee[HEALBOT_MAGE];
@@ -111,7 +111,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncMelee[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncMelee[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncMelee[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==12 then
+  elseif HealBot_Config.CDCMonitor==13 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncRange[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncRange[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncRange[HEALBOT_MAGE];
@@ -121,7 +121,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncRange[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncRange[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncRange[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==13 then
+  elseif HealBot_Config.CDCMonitor==14 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncHealers[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncHealers[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncHealers[HEALBOT_MAGE];
@@ -131,7 +131,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncHealers[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncHealers[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncHealers[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==14 then
+  elseif HealBot_Config.CDCMonitor==15 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncCustom[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncCustom[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncCustom[HEALBOT_MAGE];
@@ -209,13 +209,13 @@ function HealBot_Options_CDCButRight_Refresh(onselect)
   set_id = HealBot_Config.Debuff_Right[class];
   UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight,set_id)
 end
-function HealBot_Options_CDCButLeft_OnLoad(this)
-  HealBot_Options_CDCButLeft_Initialize()
-  UIDropDownMenu_SetWidth(140)
+function HealBot_Options_CDCButLeft_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_CDCButLeft_DropDown)
+  UIDropDownMenu_SetWidth(140, this)
 end
-function HealBot_Options_CDCButRight_OnLoad(this)
-  HealBot_Options_CDCButRight_Initialize()
-  UIDropDownMenu_SetWidth(140)
+function HealBot_Options_CDCButRight_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_CDCButRight_DropDown)
+  UIDropDownMenu_SetWidth(140, this)
 end
 function HealBot_Options_CDCButLeft_OnSelect()
   local class=UnitClass("Player");

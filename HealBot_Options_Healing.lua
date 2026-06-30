@@ -111,9 +111,9 @@ function HealBot_Options_EmergencyFClass_Refresh(onselect)
   UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFClass,HealBot_Config.EmergencyFClass)
 end
 
-function HealBot_Options_EmergencyFClass_OnLoad(this)
-  HealBot_Options_EmergencyFClass_Initialize()
-  UIDropDownMenu_SetWidth(100)
+function HealBot_Options_EmergencyFClass_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_EmergencyFClass_DropDown)
+  UIDropDownMenu_SetWidth(100, this)
 end
 
 function HealBot_Options_EmergencyFClass_OnSelect()
@@ -194,9 +194,9 @@ function HealBot_Options_ExtraSort_Refresh(onselect)
   UIDropDownMenu_SetSelectedID(HealBot_Options_ExtraSort,HealBot_Config.ExtraOrder)
 end
 
-function HealBot_Options_ExtraSort_OnLoad(this)
-  HealBot_Options_ExtraSort_Initialize()
-  UIDropDownMenu_SetWidth(100)
+function HealBot_Options_ExtraSort_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_ExtraSort_DropDown)
+  UIDropDownMenu_SetWidth(100, this)
 end
 
 function HealBot_Options_ExtraSort_OnSelect()
@@ -229,9 +229,9 @@ function HealBot_Options_EmergencyFilter_Refresh(onselect)
 end
 
 
-function HealBot_Options_EmergencyFilter_OnLoad(this)
-  HealBot_Options_EmergencyFilter_Initialize()
-  UIDropDownMenu_SetWidth(100)
+function HealBot_Options_EmergencyFilter_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_EmergencyFilter_DropDown)
+  UIDropDownMenu_SetWidth(100, this)
 end
 
 

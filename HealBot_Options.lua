@@ -2,6 +2,7 @@
 -- Split from original HealBot_Options.lua
 
 HealBot_Options_ComboButtons_Button=1;
+HealBot_Options_CurrentPanel = 0;
 
 HealBot_ColourObjWaiting = nil
 
@@ -244,6 +245,8 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_AlertLevel:SetValue(HealBot_Config.AlertLevel);
   HealBot_Options_AutoShow:SetChecked(HealBot_Config.AutoClose);
   HealBot_Options_PanelSounds:SetChecked(HealBot_Config.PanelSounds);
+  HealBot_Options_ShowManaBars:SetChecked(HealBot_Config.ShowManaBars);
+  HealBot_Options_ManaBarsHealersOnly:SetChecked(HealBot_Config.ManaBarsHealersOnly);
   
   if HealBot_Config.ActionMouseover == nil then HealBot_Config.ActionMouseover = 1; end
   HealBot_Options_ActionMouseover:SetChecked(HealBot_Config.ActionMouseover);
@@ -269,6 +272,8 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_ShowTooltipSpellDetail:SetChecked(HealBot_Config.Tooltip_ShowSpellDetail);
   HealBot_Options_ShowTooltipInstant:SetChecked(HealBot_Config.Tooltip_Recommend);
   HealBot_Options_HideAbort:SetChecked(HealBot_Config.HideAbort);
+  HealBot_Options_HideParty:SetChecked(HealBot_Config.HideParty);
+  HealBot_Options_HideSolo:SetChecked(HealBot_Config.HideSolo);
   HealBot_WarningSound_OnClick(nil,HealBot_Config.SoundDebuffPlay)
   if HealBot_Config.SoundDebuffWarning>0 then
     HealBot_WarningSound1:Enable();
@@ -293,6 +298,7 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_ExtraSort_Refresh();
   HealBot_Options_TooltipPos_Refresh();
   HealBot_Options_SetChatMessages();
+  HealBot_Options_ShowPanel(this.selectedTab or 1);
 end
 function HealBot_Options_SetSkins()
   HealBot_Options_Skins_Refresh()
