@@ -640,3 +640,15 @@ function HealBot_Generic_Patten(matchStr, matchPattern)
   end
   return tmpTest, _HealsMin, _HealsMax;
 end
+
+function HealBot_GetShapeshiftForm()
+  local forms = GetNumShapeshiftForms();
+  if forms then
+    local i;
+    for i=1,forms do
+      local icon,name,active = GetShapeshiftFormInfo(i);
+      if active and not string.find(icon,"HumanoidForm") then return i; end
+    end
+  end
+  return nil;
+end
