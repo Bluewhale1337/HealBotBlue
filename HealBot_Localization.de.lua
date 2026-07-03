@@ -327,6 +327,7 @@ HEALBOT_OPTIONS_MONITORMELEE   = "Nahkampf";
 HEALBOT_OPTIONS_MONITORRANGE   = "Fernkampf";
 HEALBOT_OPTIONS_MONITORHEALERS = "Heiler";
 HEALBOT_OPTIONS_MONITORCUSTOM  = "Eigene";
+HEALBOT_OPTIONS_PETS           = "Begleiter";
 
 HEALBOT_OPTIONS_SHOWTOOLTIP     = "Zeige Tooltips"; 
 HEALBOT_OPTIONS_SHOWDETTOOLTIP  = "Zeige detaillierte Spruchinfos";
@@ -352,7 +353,6 @@ HEALBOT_WORDS_SEC               = "Sek";
 HEALBOT_WORDS_TO                = "zu";
 HEALBOT_WORDS_CAST              = "Zauber"
 HEALBOT_WORDS_FOR               = "f\195\188r";
-
 end
 
 

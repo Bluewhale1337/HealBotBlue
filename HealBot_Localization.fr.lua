@@ -266,6 +266,7 @@ HEALBOT_OPTIONS_MONITORMELEE   = "M\195\169l\195\169e";
 HEALBOT_OPTIONS_MONITORRANGE   = "\195\128 distance";
 HEALBOT_OPTIONS_MONITORHEALERS = "Soigneurs";
 HEALBOT_OPTIONS_MONITORCUSTOM  = "Personnalis\195\169";
+HEALBOT_OPTIONS_PETS           = "Familiers";
 
 HEALBOT_OPTIONS_BARALPHAINHEAL= "Incoming heal opacity";  -- ***************    needs French translation    ***************
 
@@ -333,7 +334,6 @@ HEALBOT_WORDS_SEC               = "sec";   -- ***************    needs translati
 HEALBOT_WORDS_TO                = "to";   -- ***************    needs translation    ***************
 HEALBOT_WORDS_CAST              = "Cast"   -- ***************    needs translation    ***************
 HEALBOT_WORDS_FOR               = "for";   -- ***************    needs translation    ***************
-
 end
 
 

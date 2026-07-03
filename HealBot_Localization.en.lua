@@ -365,6 +365,7 @@ HEALBOT_OPTIONS_MONITORMELEE   = "Melee";
 HEALBOT_OPTIONS_MONITORRANGE   = "Ranged";
 HEALBOT_OPTIONS_MONITORHEALERS = "Healers";
 HEALBOT_OPTIONS_MONITORCUSTOM  = "Custom";
+HEALBOT_OPTIONS_PETS           = "Pets";
 
 HEALBOT_OPTIONS_SHOWTOOLTIP     = "Show tooltips";
 HEALBOT_OPTIONS_SHOWDETTOOLTIP  = "Show detailed spell information";
@@ -385,11 +386,3 @@ HEALBOT_WORDS_SEC               = "sec";
 HEALBOT_WORDS_TO                = "to";
 HEALBOT_WORDS_CAST              = "Cast"
 HEALBOT_WORDS_FOR               = "for";
-
-
-
-
-
-
-
-

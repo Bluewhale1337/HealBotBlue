@@ -186,6 +186,7 @@ local HealBot_EventHandlers = {
     ["UNIT_INVENTORY_CHANGED"] = function(this, arg1) HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1) end,
     ["PET_BAR_SHOWGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["PET_BAR_HIDEGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
+    ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end
 }
 
@@ -256,6 +257,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("PARTY_MEMBER_ENABLE");
         this:RegisterEvent("PET_BAR_SHOWGRID");
         this:RegisterEvent("PET_BAR_HIDEGRID");
+        this:RegisterEvent("UNIT_PET");
         this:RegisterEvent("UNIT_HEALTH");
         this:RegisterEvent("UNIT_MANA");
         this:RegisterEvent("UNIT_RAGE");
