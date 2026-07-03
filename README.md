@@ -30,7 +30,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
-**1.3.1**
+**v1.4** 
+* **Extra Frame support for pets and familiars added** Togglable from healing tab - Extra frames option selected & pets selected from dropdown.
+
+**v1.3.1**
 * **Hotfix: missing helper function restored** Fixed issue with lua error for druids. 
 
 **v1.3**

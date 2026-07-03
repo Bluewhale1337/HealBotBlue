@@ -27,6 +27,13 @@ function HealBot_OnLoad(this)
     HealBot_Model:RegisterObserver("ROSTER_CHANGED", function()
         Delay_RecalcParty = 1
     end)
+    HealBot_Model:RegisterObserver("EQUIPMENT_CHANGED", function(unitID)
+        if unitID == "player" then
+            HealBot_BonusScanner:ScanEquipment()
+            CalcEquipBonus = true;
+            HealBot_RecalcSpells();
+        end
+    end)
 end
 
 function HealBot_RegisterThis(this)
@@ -182,8 +189,14 @@ local HealBot_EventHandlers = {
     ["PARTY_MEMBER_ENABLE"] = function(this, arg1) HealBot_OnEvent_PartyMemberEnable(this, arg1) end,
     ["CHAT_MSG_SYSTEM"] = function(this, arg1) HealBot_OnEvent_SystemMsg(this, arg1) end,
     ["ZONE_CHANGED_NEW_AREA"] = function(this) HealBot_OnEvent_ZoneChanged(this) end,
-    ["UPDATE_INVENTORY_ALERTS"] = function(this) HealBot_OnEvent_PlayerEquipmentChanged(this) end,
-    ["UNIT_INVENTORY_CHANGED"] = function(this, arg1) HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1) end,
+    ["UPDATE_INVENTORY_ALERTS"] = function(this)
+        HealBot_Model:NotifyObservers("EQUIPMENT_CHANGED", "player")
+        HealBot_OnEvent_PlayerEquipmentChanged(this)
+    end,
+    ["UNIT_INVENTORY_CHANGED"] = function(this, arg1)
+        HealBot_Model:NotifyObservers("EQUIPMENT_CHANGED", arg1)
+        HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1)
+    end,
     ["PET_BAR_SHOWGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["PET_BAR_HIDEGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
