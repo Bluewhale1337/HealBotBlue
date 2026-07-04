@@ -336,10 +336,16 @@ function HealBot_Options_SetSkins()
 end
 function HealBot_Options_ShowPanel(id)
   if HealBot_Options_CurrentPanel>0 then
-    getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel):Hide();
+    local panel = getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel);
+    if panel then
+      panel:Hide();
+    end
   end
   HealBot_Options_CurrentPanel = id;
   if HealBot_Options_CurrentPanel>0 then
-    getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel):Show();
+    local panel = getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel);
+    if panel then
+      panel:Show();
+    end
   end
 end
