@@ -56,6 +56,21 @@ function HealBot_SlashCmd(cmd)
     HealBot_TogglePanel(HealBot_Options);
     return
   end
+  if (cmd=="forms" or cmd=="form") then
+    local forms = GetNumShapeshiftForms();
+    if forms and forms > 0 then
+      HealBot_AddChat("HealBot: Available shapeshift forms:");
+      for i=1,forms do
+        local icon, name, active = GetShapeshiftFormInfo(i);
+        local actStr = "false"
+        if active then actStr = "true" end
+        HealBot_AddChat("  Form " .. i .. ": " .. (name or "nil") .. " | Icon: " .. (icon or "nil") .. " | Active: " .. actStr);
+      end
+    else
+      HealBot_AddChat("HealBot: No shapeshift forms found.");
+    end
+    return
+  end
 
   if (cmd=="reset" or cmd=="recalc" or cmd=="defaults") then
     InitSpells=2;

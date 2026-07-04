@@ -170,6 +170,9 @@ local HealBot_EventHandlers = {
     ["PLAYER_ENTERING_WORLD"] = function(this)
         HealBot_Model:RefreshUnit("player")
         HealBot_Model:RefreshUnit("pet")
+        if HealBot_UnitClass("player") == "DRUID" then
+            HealBot_UpdateShapeshiftForm()
+        end
         HealBot_OnEvent_PlayerEnteringWorld(this)
     end,
     ["VARIABLES_LOADED"] = function(this)
@@ -200,7 +203,9 @@ local HealBot_EventHandlers = {
     ["PET_BAR_SHOWGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["PET_BAR_HIDEGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
-    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end
+    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end,
+    ["UPDATE_SHAPESHIFT_FORM"] = function(this) HealBot_UpdateShapeshiftForm() end,
+    ["UPDATE_SHAPESHIFT_FORMS"] = function(this) HealBot_UpdateShapeshiftForm() end
 }
 
 function HealBot_OnEvent(this, event, arg1, arg2, arg3, arg4)
@@ -289,6 +294,11 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("CHAT_MSG_ADDON");
         this:RegisterEvent("CHAT_MSG_SYSTEM");
         this:RegisterEvent("PLAYER_ENTERING_WORLD");
+        if class == "DRUID" then
+            this:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
+            this:RegisterEvent("UPDATE_SHAPESHIFT_FORMS");
+            HealBot_UpdateShapeshiftForm();
+        end
         InitSpells = 2;
     end
 end

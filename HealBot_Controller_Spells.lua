@@ -218,6 +218,10 @@ function HealBot_CastSpellOnFriend(spell, target)
   local targetEnemy = UnitCanAttack("player", "target");
   local oldTarget = UnitName("target");
   
+  if HealBot_UnitClass("player") == "DRUID" and HealBot_ActiveShapeshiftStance and HealBot_Config.AutoUnshift == 1 then
+    CastShapeshiftForm(HealBot_ActiveShapeshiftStance);
+  end
+  
   if oldTarget ~= UnitName(target) then
     TargetUnit(target);
   end
@@ -365,7 +369,7 @@ function HealBot_GetHealSpell(unit, pattern)
   if UnitOnTaxi("player") then return nil end;
   if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
   if HealBot_UnitClass("player") == "DRUID" then
-    if HealBot_GetShapeshiftForm() then return nil end; 
+    if HealBot_ActiveShapeshiftStance and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
   end    
   local spell = HealBot_GetSpellName(HealBot_GetSpellId(pattern))
   local range = 40;
@@ -641,13 +645,24 @@ function HealBot_Generic_Patten(matchStr, matchPattern)
   return tmpTest, _HealsMin, _HealsMax;
 end
 
+HealBot_ActiveShapeshiftStance = nil;
+
+function HealBot_UpdateShapeshiftForm()
+  HealBot_ActiveShapeshiftStance = HealBot_GetShapeshiftForm();
+end
+
 function HealBot_GetShapeshiftForm()
   local forms = GetNumShapeshiftForms();
   if forms then
     local i;
     for i=1,forms do
       local icon,name,active = GetShapeshiftFormInfo(i);
-      if active and not string.find(icon,"HumanoidForm") then return i; end
+      if active then
+        local icon_lower = string.lower(icon);
+        if not string.find(icon_lower, "humanoidform") and not string.find(icon_lower, "treeoflife") and not string.find(icon_lower, "stoneclawtotem") then
+          return i;
+        end
+      end
     end
   end
   return nil;
