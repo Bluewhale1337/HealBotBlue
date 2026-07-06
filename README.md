@@ -30,6 +30,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**1.3.2**
+* **UIDropDownMenu Fixes:** Fixed client crash and button accumulation error on unopened dropdown menus in options.
+
 **1.3.1**
 * **Hotfix: missing helper function restored** Fixed issue with lua error for druids. 
 

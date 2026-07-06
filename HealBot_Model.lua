@@ -1,6 +1,110 @@
 -- HealBot_Model.lua
 -- Centralized Data Store and Observer System for HealBotBlue
 
+-- Fix legacy client UIDropDownMenu crash when setting value/id/refreshing while dropdown is not open
+if UIDropDownMenu_Refresh and not HealBot_UIDropDownMenu_Refresh_Fixed then
+  local orig_UIDropDownMenu_Refresh = UIDropDownMenu_Refresh
+  UIDropDownMenu_Refresh = function(frame, useValue, group)
+    local targetFrame = frame or this
+    if not targetFrame or type(targetFrame) ~= "table" then return end
+    if not UIDROPDOWNMENU_OPEN_MENU or (targetFrame.GetName and targetFrame:GetName() ~= UIDROPDOWNMENU_OPEN_MENU) then
+      return
+    end
+    orig_UIDropDownMenu_Refresh(targetFrame, useValue, group)
+  end
+  HealBot_UIDropDownMenu_Refresh_Fixed = true
+end
+
+if UIDropDownMenu_Initialize and not HealBot_UIDropDownMenu_Initialize_Fixed then
+  local orig_UIDropDownMenu_Initialize = UIDropDownMenu_Initialize
+  UIDropDownMenu_Initialize = function(frame, initFunction, displayMode, level)
+    local targetFrame = frame or this
+    if not targetFrame or type(targetFrame) ~= "table" then return end
+    
+    local name = targetFrame.GetName and targetFrame:GetName()
+    if UIDROPDOWNMENU_OPEN_MENU and name and name == UIDROPDOWNMENU_OPEN_MENU then
+      orig_UIDropDownMenu_Initialize(targetFrame, initFunction, displayMode, level)
+    else
+      local orig_AddButton = UIDropDownMenu_AddButton
+      UIDropDownMenu_AddButton = function(info, lvl)
+        -- Do nothing to prevent button accumulation in DropDownList1
+      end
+      orig_UIDropDownMenu_Initialize(targetFrame, initFunction, displayMode, level)
+      UIDropDownMenu_AddButton = orig_AddButton
+    end
+  end
+  HealBot_UIDropDownMenu_Initialize_Fixed = true
+end
+
+if UIDropDownMenu_SetSelectedID and not HealBot_UIDropDownMenu_SetSelectedID_Fixed then
+  local orig_UIDropDownMenu_SetSelectedID = UIDropDownMenu_SetSelectedID
+  UIDropDownMenu_SetSelectedID = function(frame, id, useValue)
+    local targetFrame = frame or this
+    if not targetFrame or type(targetFrame) ~= "table" then return end
+    
+    local name = targetFrame.GetName and targetFrame:GetName()
+    if UIDROPDOWNMENU_OPEN_MENU and name and name == UIDROPDOWNMENU_OPEN_MENU then
+      orig_UIDropDownMenu_SetSelectedID(targetFrame, id, useValue)
+    else
+      targetFrame.selectedID = id
+      targetFrame.selectedValue = nil
+      targetFrame.selectedName = nil
+      if targetFrame.initialize then
+        local buttons = {}
+        local orig_AddButton = UIDropDownMenu_AddButton
+        UIDropDownMenu_AddButton = function(info, level)
+          table.insert(buttons, info)
+        end
+        local temp_this = this
+        this = targetFrame
+        targetFrame.initialize(1)
+        this = temp_this
+        UIDropDownMenu_AddButton = orig_AddButton
+        if buttons[id] then
+          UIDropDownMenu_SetText(buttons[id].text, targetFrame)
+        end
+      end
+    end
+  end
+  HealBot_UIDropDownMenu_SetSelectedID_Fixed = true
+end
+
+if UIDropDownMenu_SetSelectedValue and not HealBot_UIDropDownMenu_SetSelectedValue_Fixed then
+  local orig_UIDropDownMenu_SetSelectedValue = UIDropDownMenu_SetSelectedValue
+  UIDropDownMenu_SetSelectedValue = function(frame, value, useValue)
+    local targetFrame = frame or this
+    if not targetFrame or type(targetFrame) ~= "table" then return end
+    
+    local name = targetFrame.GetName and targetFrame:GetName()
+    if UIDROPDOWNMENU_OPEN_MENU and name and name == UIDROPDOWNMENU_OPEN_MENU then
+      orig_UIDropDownMenu_SetSelectedValue(targetFrame, value, useValue)
+    else
+      targetFrame.selectedID = nil
+      targetFrame.selectedValue = value
+      targetFrame.selectedName = nil
+      if targetFrame.initialize then
+        local buttons = {}
+        local orig_AddButton = UIDropDownMenu_AddButton
+        UIDropDownMenu_AddButton = function(info, level)
+          table.insert(buttons, info)
+        end
+        local temp_this = this
+        this = targetFrame
+        targetFrame.initialize(1)
+        this = temp_this
+        UIDropDownMenu_AddButton = orig_AddButton
+        for _, btn in ipairs(buttons) do
+          if btn.value == value then
+            UIDropDownMenu_SetText(btn.text, targetFrame)
+            break
+          end
+        end
+      end
+    end
+  end
+  HealBot_UIDropDownMenu_SetSelectedValue_Fixed = true
+end
+
 HealBot_Model = {
     observers = {},
     units = {},
