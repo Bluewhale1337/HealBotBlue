@@ -28,6 +28,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic).
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
+### Known issues
+
+* **New spell rank bug** you may experience lua error spaming your chat frame after learning new healing spells. /reload will clear the issue. To be fixed next release
+
+
 ### Change Log
 
 **1.3.2**
