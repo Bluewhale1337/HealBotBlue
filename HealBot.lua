@@ -5,12 +5,12 @@
 ]]
 
 -- local _scale=0; -- moved to HealBot_Controller_Range.lua
-CalcEquipBonus=false;
+HealBot_CalcEquipBonus=false;
 HealBot_EquipChangeTimer = 0;
-HealValue=0;
-InitSpells=1;
+HealBot_HealValue=0;
+HealBot_SpellsInitFlag=1;
 local DebugDebuff=false;
-Delay_RecalcParty=0;
+HealBot_Delay_RecalcParty=0;
 
 
 -- Debugging and Error functions moved to HealBot_Controller_Comms.lua
@@ -73,7 +73,7 @@ function HealBot_SlashCmd(cmd)
   end
 
   if (cmd=="reset" or cmd=="recalc" or cmd=="defaults") then
-    InitSpells=2;
+    HealBot_SpellsInitFlag=2;
     HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults);
     return
   end
@@ -85,7 +85,7 @@ function HealBot_SlashCmd(cmd)
   	HealBot_RegisterThis(this);
   end
   if (cmd=="x") then
-    InitSpells=2;
+    HealBot_SpellsInitFlag=2;
 	NeedEquipUpdate=1
   	HealBot_RecalcSpells();
     return;

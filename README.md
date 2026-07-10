@@ -39,6 +39,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Customizable Health Text:** Added a new dropdown in the Healing Options tab that allows users to choose how health text is displayed on unit frames (`Name Only`, `Health Percentage`, `Real Health`, or `Health Deficit`). Includes a smart truncation algorithm to preserve critical health numbers even if the unit name is too long.
 * **Non-Mana Resource Tracking:** Added a new toggle in the General Options tab to track secondary resources (Energy, Rage, Focus) for non-mana classes. Bars are dynamically color-coded based on the resource type.
 * **Dropdown UI Initialization Fix:** Resolved a Vanilla API bug where dropdown menus sharing an ID (like the new Health Text dropdown) would temporarily inherit text from previously loaded dropdowns (e.g., "Modern Flat").
+* **Dynamic Modifier Tooltips:** Fixed a bug where the spell tooltip would not dynamically update its spells when pressing modifier keys (Shift/Ctrl/Alt) while hovering over a unit frame. Registered the `MODIFIER_STATE_CHANGED` event to instantly refresh the tooltip.
+* **Global Variable Namespace Refactoring:** Executed a codebase-wide refactoring to encapsulate all floating global variables inside the `HealBot_` or `HEALBOT_` namespace. This prevents HealBot from silently shadowing other addons or the native WoW API, ensuring strict adherence to Vanilla Lua best practices. (Also resolved a namespace collision with `InitSpells`).
 
 
 **1.3.3**

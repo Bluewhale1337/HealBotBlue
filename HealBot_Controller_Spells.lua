@@ -133,8 +133,8 @@ function HealBot_StartCasting(spell, target, ttype)
   end
   if ttype == "fired" and HealBot_Spells[spell] then
     if HealBot_Spells[spell].CastTime > 1 then
-      HealValue = HealBot_Spells[spell].HealsDur;
-      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(target) .. " <<=>> " .. HealValue .. " << ");
+      HealBot_HealValue = HealBot_Spells[spell].HealsDur;
+      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(target) .. " <<=>> " .. HealBot_HealValue .. " << ");
     end
   end
 end
@@ -142,9 +142,9 @@ end
 function HealBot_StopCasting()
   if HealBot_CastingTarget then
     if HealBot_HealsIn[UnitName(HealBot_CastingTarget)] then
-      if HealValue > 0 then
-        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(HealBot_CastingTarget) .. " <<=>> " .. 0 - HealValue .. " << ");
-        HealValue = 0;
+      if HealBot_HealValue > 0 then
+        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(HealBot_CastingTarget) .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+        HealBot_HealValue = 0;
       end
     end
   end
@@ -297,13 +297,13 @@ end
 
 function HealBot_FindHealSpells()
   local id = 1;
-  if InitSpells > 0 then NeedEquipUpdate = 1; return; end
+  if HealBot_SpellsInitFlag > 0 then NeedEquipUpdate = 1; return; end
 
   HealBot_Heals = { player = {}, pet = {}, party = {} };
   
   table.foreach(HealBot_CurrentSpells, function (index, spell)
     if (HealBot_Spells[spell]) then
-      if CalcEquipBonus then
+      if HealBot_CalcEquipBonus then
         local healingbonus_penalty = 1;
         if HealBot_Spells[spell].Level < 20 then
           healingbonus_penalty = (1 - ((20 - HealBot_Spells[spell].Level) * 0.0375));
@@ -358,10 +358,10 @@ function HealBot_FindHealSpells()
     HealBot_Heals["raidpet" .. i] = HealBot_Heals.party;
   end
 
-  if CalcEquipBonus then
+  if HealBot_CalcEquipBonus then
     HealBot_AddDebug("...Done Equip Bonus:" .. RealHealing);
   end
-  CalcEquipBonus = false;
+  HealBot_CalcEquipBonus = false;
 end
 
 function HealBot_CanCastSpell(spell, unit)
@@ -471,7 +471,7 @@ function HealBot_InitGetSpellData(spell, id, class)
   tmpText = getglobal("HealBot_ScanTooltipTextLeft2");
   if (tmpText:GetText()) then
     line = tmpText:GetText();
-    tmpTest, tmpTest, _mana = string.find(line, HB_TOOLTIP_MANA); 
+    tmpTest, tmpTest, _mana = string.find(line, HEALBOT_TOOLTIP_MANA); 
   else
     HealBot_Report_Error("================================");
     HealBot_Report_Error("ERROR: HealBot_ScanTooltip is lost");
@@ -481,7 +481,7 @@ function HealBot_InitGetSpellData(spell, id, class)
   tmpText = getglobal("HealBot_ScanTooltipTextRight2");
   if (tmpText:GetText()) then
     line = tmpText:GetText();
-    tmpTest, tmpTest, _range = string.find(line, HB_TOOLTIP_RANGE); 
+    tmpTest, tmpTest, _range = string.find(line, HEALBOT_TOOLTIP_RANGE); 
   else
     HealBot_Report_Error("================================");
     HealBot_Report_Error("ERROR: HealBot_ScanTooltip is lost");
@@ -492,12 +492,12 @@ function HealBot_InitGetSpellData(spell, id, class)
   _cast = nil;
   if (tmpText:GetText()) then
     line = tmpText:GetText();
-    if (line == HB_TOOLTIP_INSTANT_CAST) then
+    if (line == HEALBOT_TOOLTIP_INSTANT_CAST) then
       _cast = 0;
-    elseif line == HB_TOOLTIP_CHANNELED then
+    elseif line == HEALBOT_TOOLTIP_CHANNELED then
       _cast = 0;
     elseif (tmpText) then
-      tmpTest, tmpTest, _cast = string.find(line, HB_TOOLTIP_CAST_TIME); 
+      tmpTest, tmpTest, _cast = string.find(line, HEALBOT_TOOLTIP_CAST_TIME); 
     end
   else
     HealBot_Report_Error("================================");
@@ -511,58 +511,58 @@ function HealBot_InitGetSpellData(spell, id, class)
     line = tmpText:GetText();
     if class == "PRIEST" then
       if string.sub(spell, 1, 14) == string.sub(HEALBOT_POWER_WORD_SHIELD, 1, 14) then
-        tmpTest, tmpTest, _HealsMin, _shield = string.find(line, HB_SPELL_PATTERN_SHIELD);    
+        tmpTest, tmpTest, _HealsMin, _shield = string.find(line, HEALBOT_SPELL_PATTERN_SHIELD);    
         _HealsExt = 0;
         _HealsMax = _HealsMin;
       elseif string.sub(spell, 1, 4) == string.sub(HEALBOT_RENEW, 1, 4) then
-        tmpTest, tmpTest, _HealsExt, tmpTest, _duration = string.find(line, HB_SPELL_PATTERN_RENEW);  
+        tmpTest, tmpTest, _HealsExt, tmpTest, _duration = string.find(line, HEALBOT_SPELL_PATTERN_RENEW);  
         _HealsMin = 0;
         _HealsMax = 0;
         if (_HealsExt == nil) then
-          tmpTest, tmpTest, _HealsExt, _duration = string.find(line, HB_SPELL_PATTERN_RENEW1);
+          tmpTest, tmpTest, _HealsExt, _duration = string.find(line, HEALBOT_SPELL_PATTERN_RENEW1);
         end
         if (_HealsExt == nil) then
-          tmpTest, tmpTest, _duration, _HealsExt = string.find(line, HB_SPELL_PATTERN_RENEW2);
+          tmpTest, tmpTest, _duration, _HealsExt = string.find(line, HEALBOT_SPELL_PATTERN_RENEW2);
         end
         if (_HealsExt == nil) then
-          tmpTest, tmpTest, _duration, _HealsExt = string.find(line, HB_SPELL_PATTERN_RENEW3);
+          tmpTest, tmpTest, _duration, _HealsExt = string.find(line, HEALBOT_SPELL_PATTERN_RENEW3);
         end
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_LESSER_HEAL, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_LESSER_HEAL); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_LESSER_HEAL); 
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_GREATER_HEAL, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_GREATER_HEAL); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_GREATER_HEAL); 
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_FLASH_HEAL, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_FLASH_HEAL); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_FLASH_HEAL); 
       elseif string.sub(spell, 1, 4) == string.sub(HEALBOT_HEAL, 1, 4) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_HEAL); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_HEAL); 
       end
     elseif class == "DRUID" then
       if string.sub(spell, 1, 6) == string.sub(HEALBOT_REGROWTH, 1, 6) then
-        tmpTest, tmpTest, _HealsMin, _HealsMax, _HealsExt = string.find(line, HB_SPELL_PATTERN_REGROWTH);
+        tmpTest, tmpTest, _HealsMin, _HealsMax, _HealsExt = string.find(line, HEALBOT_SPELL_PATTERN_REGROWTH);
         if (tmpTest == nil) then
-          tmpTest, tmpTest, _HealsMin, _HealsMax, tmpTest, _HealsExt = string.find(line, HB_SPELL_PATTERN_REGROWTH1);
+          tmpTest, tmpTest, _HealsMin, _HealsMax, tmpTest, _HealsExt = string.find(line, HEALBOT_SPELL_PATTERN_REGROWTH1);
         end
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_REJUVENATION, 1, 9) then
-        tmpTest, tmpTest, _HealsExt, _duration = string.find(line, HB_SPELL_PATTERN_REJUVENATION);  
+        tmpTest, tmpTest, _HealsExt, _duration = string.find(line, HEALBOT_SPELL_PATTERN_REJUVENATION);  
         _HealsMin = 0;
         _HealsMax = 0;
         if (_HealsExt == nil) then
-          tmpTest, tmpTest, _HealsExt, tmpTest, _duration = string.find(line, HB_SPELL_PATTERN_REJUVENATION1);
+          tmpTest, tmpTest, _HealsExt, tmpTest, _duration = string.find(line, HEALBOT_SPELL_PATTERN_REJUVENATION1);
         end
       elseif string.sub(spell, 1, 7) == string.sub(HEALBOT_HEALING_TOUCH, 1, 7) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_HEALING_TOUCH); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_HEALING_TOUCH); 
       end
     elseif class == "PALADIN" then
       if string.sub(spell, 1, 9) == string.sub(HEALBOT_HOLY_LIGHT, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_HOLY_LIGHT); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_HOLY_LIGHT); 
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_FLASH_OF_LIGHT, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_FLASH_OF_LIGHT); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_FLASH_OF_LIGHT); 
       end
     elseif class == "SHAMAN" then
       if string.sub(spell, 1, 9) == string.sub(HEALBOT_HEALING_WAVE, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_HEALING_WAVE); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_HEALING_WAVE); 
       elseif string.sub(spell, 1, 9) == string.sub(HEALBOT_LESSER_HEALING_WAVE, 1, 9) then
-        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HB_SPELL_PATTERN_LESSER_HEALING_WAVE); 
+        tmpTest, _HealsMin, _HealsMax = HealBot_Generic_Patten(line, HEALBOT_SPELL_PATTERN_LESSER_HEALING_WAVE); 
       end
     end
   else
@@ -578,7 +578,7 @@ function HealBot_InitGetSpellData(spell, id, class)
     if HealBot_ScanTooltipTextLeft2:GetText() then
       HealBot_Report_Error("ERROR: Tooltip = >> " .. HealBot_ScanTooltipTextLeft2:GetText() .. " <<");
     end
-    HealBot_Report_Error("ERROR: Patten = >> " .. HB_TOOLTIP_MANA .. " <<");
+    HealBot_Report_Error("ERROR: Patten = >> " .. HEALBOT_TOOLTIP_MANA .. " <<");
   end
   if (_range == nil) then
     HealBot_Report_Error("================================");
@@ -587,7 +587,7 @@ function HealBot_InitGetSpellData(spell, id, class)
     if HealBot_ScanTooltipTextRight2:GetText() then
       HealBot_Report_Error("ERROR: Tooltip = >> " .. HealBot_ScanTooltipTextRight2:GetText() .. " <<");
     end
-    HealBot_Report_Error("ERROR: Patten = >> " .. HB_TOOLTIP_RANGE .. " <<");
+    HealBot_Report_Error("ERROR: Patten = >> " .. HEALBOT_TOOLTIP_RANGE .. " <<");
   end  
   if (_cast == nil) then
     HealBot_Report_Error("================================");
@@ -596,7 +596,7 @@ function HealBot_InitGetSpellData(spell, id, class)
     if HealBot_ScanTooltipTextLeft3:GetText() then
       HealBot_Report_Error("ERROR: Tooltip = >> " .. HealBot_ScanTooltipTextLeft3:GetText() .. " <<");
     end
-    HealBot_Report_Error("ERROR: Patten = >> " .. HB_TOOLTIP_CAST_TIME .. " <<");
+    HealBot_Report_Error("ERROR: Patten = >> " .. HEALBOT_TOOLTIP_CAST_TIME .. " <<");
   end  
   if (tmpTest == nil) then
     HealBot_Report_Error("================================");

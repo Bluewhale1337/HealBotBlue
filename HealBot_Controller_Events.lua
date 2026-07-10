@@ -6,6 +6,7 @@ local HealBot_Timer1, HealsIn_Timer = 0, 0;
 
 function HealBot_OnLoad(this)
     this:RegisterEvent("VARIABLES_LOADED");
+    this:RegisterEvent("MODIFIER_STATE_CHANGED");
     
     SLASH_HEALBOT1 = "/healbot";
     SLASH_HEALBOT2 = "/hb";
@@ -25,12 +26,12 @@ function HealBot_OnLoad(this)
         HealBot_View_DirtyUnits[unitID] = true
     end)
     HealBot_Model:RegisterObserver("ROSTER_CHANGED", function()
-        Delay_RecalcParty = 1
+        HealBot_Delay_RecalcParty = 1
     end)
     HealBot_Model:RegisterObserver("EQUIPMENT_CHANGED", function(unitID)
         if unitID == "player" then
             HealBot_BonusScanner:ScanEquipment()
-            CalcEquipBonus = true;
+            HealBot_CalcEquipBonus = true;
             HealBot_RecalcSpells();
         end
     end)
@@ -80,23 +81,23 @@ function HealBot_OnUpdate(this, arg1)
                 if HealBot_EquipChangeTimer <= 0 then
                     HealBot_EquipChangeTimer = 0
                     HealBot_BonusScanner:ScanEquipment()
-                    CalcEquipBonus = true;
+                    HealBot_CalcEquipBonus = true;
                     HealBot_RecalcSpells();
                 end
             end
             
-            if InitSpells > 1 then
-                InitSpells = InitSpells + 1;
-                if InitSpells > 2 then
+            if HealBot_SpellsInitFlag > 1 then
+                HealBot_SpellsInitFlag = HealBot_SpellsInitFlag + 1;
+                if HealBot_SpellsInitFlag > 2 then
                     local cnt = HealBot_InitSpells();
-                    InitSpells = 0;
+                    HealBot_SpellsInitFlag = 0;
                     HealBot_RecalcSpells();
                 end
             end
-            if Delay_RecalcParty > 0 then
-                Delay_RecalcParty = Delay_RecalcParty + 1
-                if Delay_RecalcParty > 1 then
-                    Delay_RecalcParty = 0;
+            if HealBot_Delay_RecalcParty > 0 then
+                HealBot_Delay_RecalcParty = HealBot_Delay_RecalcParty + 1
+                if HealBot_Delay_RecalcParty > 1 then
+                    HealBot_Delay_RecalcParty = 0;
                     HealBot_RecalcParty();
                 end
             end
@@ -177,6 +178,11 @@ local HealBot_EventHandlers = {
     end,
     ["VARIABLES_LOADED"] = function(this)
         HealBot_OnEvent_VariablesLoaded(this)
+    end,
+    ["MODIFIER_STATE_CHANGED"] = function(this, arg1, arg2)
+        if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
+            HealBot_Action_RefreshTooltip(HealBot_Action_TooltipUnit)
+        end
     end,
     -- Legacy pass-throughs
     ["CHAT_MSG_ADDON"] = function(this, arg1, arg2, arg3, arg4) HealBot_OnEvent_AddonMsg(this, arg1, arg2, arg3, arg4) end,
@@ -299,7 +305,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
             this:RegisterEvent("UPDATE_SHAPESHIFT_FORMS");
             HealBot_UpdateShapeshiftForm();
         end
-        InitSpells = 2;
+        HealBot_SpellsInitFlag = 2;
     end
 end
 
@@ -319,7 +325,7 @@ end
 
 function HealBot_OnEvent_ZoneChanged(this)
     HealBot_ResetRangeScale();
-    Delay_RecalcParty = 1;
+    HealBot_Delay_RecalcParty = 1;
 end
 
 function HealBot_OnEvent_PlayerRegenDisabled(this)
@@ -359,7 +365,7 @@ end
 
 function HealBot_OnEvent_PlayerRegenEnabled(this)
     HealBot_IsFighting = false;
-    Delay_RecalcParty = 1;
+    HealBot_Delay_RecalcParty = 1;
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(this)
@@ -367,7 +373,7 @@ function HealBot_OnEvent_PlayerTargetChanged(this)
 end
 
 function HealBot_OnEvent_PartyMembersChanged(this)
-    Delay_RecalcParty = 1;
+    HealBot_Delay_RecalcParty = 1;
 end
 
 function HealBot_OnEvent_PartyMemberDisable(this, unit)
@@ -376,9 +382,9 @@ end
 
 function HealBot_OnEvent_SystemMsg(this, msg)
     if type(msg) == "string" then
-        local tmpTest, tmpTest, deserter = string.find(msg, HB_HASLEFTRAID);
+        local tmpTest, tmpTest, deserter = string.find(msg, HEALBOT_HASLEFTRAID);
         if not deserter then
-            local tmpTest, tmpTest, deserter = string.find(msg, HB_HASLEFTPARTY);
+            local tmpTest, tmpTest, deserter = string.find(msg, HEALBOT_HASLEFTPARTY);
         end
         if deserter then
             if (HealBot_Healers[deserter]) then
@@ -394,8 +400,8 @@ function HealBot_OnEvent_SystemMsg(this, msg)
                     end
                 end
             end
-        elseif msg == HB_YOULEAVETHEGROUP or msg == HB_YOULEAVETHERAID then
-            Delay_RecalcParty = 1;
+        elseif msg == HEALBOT_YOULEAVETHEGROUP or msg == HEALBOT_YOULEAVETHERAID then
+            HealBot_Delay_RecalcParty = 1;
         end
     end
 end
@@ -417,7 +423,7 @@ end
 function HealBot_OnEvent_SpellsChanged(this, arg1)
     if arg1 then return; end
     HealBot_AddDebug("HB: SpellsChanged");
-    InitSpells = 2;
+    HealBot_SpellsInitFlag = 2;
 end
 
 function HealBot_OnEvent_TalentsChanged(this, arg1)

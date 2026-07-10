@@ -6,9 +6,9 @@
 -- http://www.curse-gaming.com/mod.php?addid=2384
 --------------------------------------------------
 
-HB_BONUSSCANNER_PATTERN_SETNAME = "^(.*) %(%d/%d%)$";
-HB_BONUSSCANNER_PATTERN_GENERIC_PREFIX = "^%+(%d+)%%?(.*)$";
-HB_BONUSSCANNER_PATTERN_GENERIC_SUFFIX = "^(.*)%+(%d+)%%?$";
+HEALBOT_BONUSSCANNER_PATTERN_SETNAME = "^(.*) %(%d/%d%)$";
+HEALBOT_BONUSSCANNER_PATTERN_GENERIC_PREFIX = "^%+(%d+)%%?(.*)$";
+HEALBOT_BONUSSCANNER_PATTERN_GENERIC_SUFFIX = "^(.*)%+(%d+)%%?$";
 
 HealBot_BonusScanner = {
 	bonuses = 0;
@@ -128,17 +128,17 @@ end;
 
 function HealBot_BonusScanner:ScanLine(line)
 	local tmpStr, found;
-	if(string.sub(line,0,string.len(HB_BONUSSCANNER_PREFIX_EQUIP)) == HB_BONUSSCANNER_PREFIX_EQUIP) then
-		tmpStr = string.sub(line,string.len(HB_BONUSSCANNER_PREFIX_EQUIP)+1);
+	if(string.sub(line,0,string.len(HEALBOT_BONUSSCANNER_PREFIX_EQUIP)) == HEALBOT_BONUSSCANNER_PREFIX_EQUIP) then
+		tmpStr = string.sub(line,string.len(HEALBOT_BONUSSCANNER_PREFIX_EQUIP)+1);
 		HealBot_BonusScanner:CheckPassive(tmpStr);
-	elseif(string.sub(line,0,string.len(HB_BONUSSCANNER_PREFIX_SET)) == HB_BONUSSCANNER_PREFIX_SET
+	elseif(string.sub(line,0,string.len(HEALBOT_BONUSSCANNER_PREFIX_SET)) == HEALBOT_BONUSSCANNER_PREFIX_SET
 		and HealBot_BonusScanner.temp.set ~= "" 
 		and not HealBot_BonusScanner.temp.sets[HealBot_BonusScanner.temp.set]) then
-		tmpStr = string.sub(line,string.len(HB_BONUSSCANNER_PREFIX_SET)+1);
+		tmpStr = string.sub(line,string.len(HEALBOT_BONUSSCANNER_PREFIX_SET)+1);
 		HealBot_BonusScanner.temp.slot = "Set";
 		HealBot_BonusScanner:CheckPassive(tmpStr);
 	else
-		_, _, tmpStr = string.find(line, HB_BONUSSCANNER_PATTERN_SETNAME);
+		_, _, tmpStr = string.find(line, HEALBOT_BONUSSCANNER_PATTERN_SETNAME);
 		if(tmpStr) then
 			HealBot_BonusScanner.temp.set = tmpStr;
 		else
@@ -154,7 +154,7 @@ function HealBot_BonusScanner:CheckPassive(line)
 	local i, p, value, found;
 
 	found = nil;
-	for i,p in HB_BONUSSCANNER_PATTERNS_PASSIVE do
+	for i,p in HEALBOT_BONUSSCANNER_PATTERNS_PASSIVE do
 		_, _, value = string.find(line, "^" .. p.pattern);
 		if(value) then
 			HealBot_BonusScanner:AddValue(p.effect, value)
@@ -183,9 +183,9 @@ function HealBot_BonusScanner:CheckGeneric(line)
    	    tmpStr = string.gsub( tmpStr, "%s+$", "" );
        	tmpStr = string.gsub( tmpStr, "%.$", "" );
 
-		_, _, value, token = string.find(tmpStr, HB_BONUSSCANNER_PATTERN_GENERIC_PREFIX);
+		_, _, value, token = string.find(tmpStr, HEALBOT_BONUSSCANNER_PATTERN_GENERIC_PREFIX);
 		if(not value) then
-			_, _,  token, value = string.find(tmpStr, HB_BONUSSCANNER_PATTERN_GENERIC_SUFFIX);
+			_, _,  token, value = string.find(tmpStr, HEALBOT_BONUSSCANNER_PATTERN_GENERIC_SUFFIX);
 		end
 		if(token and value) then
 		    token = string.gsub( token, "^%s+", "" );
@@ -202,8 +202,8 @@ end
 function HealBot_BonusScanner:CheckToken(token, value)
 	local i, p, s1, s2;
 	
-	if(HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP[token]) then
-		HealBot_BonusScanner:AddValue(HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP[token], value);
+	if(HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP[token]) then
+		HealBot_BonusScanner:AddValue(HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP[token], value);
 		return true;
 	end
 	return false;
@@ -212,7 +212,7 @@ end
 function HealBot_BonusScanner:CheckOther(line)
 	local i, p, value, start, found;
 
-	for i,p in HB_BONUSSCANNER_PATTERNS_OTHER do
+	for i,p in HEALBOT_BONUSSCANNER_PATTERNS_OTHER do
 		start, _, value = string.find(line, "^" .. p.pattern);
 		if(start) then
 			if(p.value) then

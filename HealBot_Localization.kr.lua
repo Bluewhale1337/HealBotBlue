@@ -97,20 +97,20 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 	HEALBOT_LIBRARY_INCHEAL		= "모든 주문 및 효과에 의한 치유량이 최대 (%d+)만큼 증가합니다%.";
 	HEALBOT_LIBRARY_INCDAMHEAL		= "모든 주문 및 효과에 의한 피해와 치유량이 최대 (%d+)만큼 증가합니다%.";
 
-	HB_BONUSSCANNER_NAMES = {	
+	HEALBOT_BONUSSCANNER_NAMES = {	
 		HEAL 		= "치유량",
 	};
 
-	HB_BONUSSCANNER_PREFIX_EQUIP	= "착용 효과: ";
-	HB_BONUSSCANNER_PREFIX_SET	= "세트 효과: ";
+	HEALBOT_BONUSSCANNER_PREFIX_EQUIP	= "착용 효과: ";
+	HEALBOT_BONUSSCANNER_PREFIX_SET	= "세트 효과: ";
 
-	HB_BONUSSCANNER_PATTERNS_PASSIVE = {
+	HEALBOT_BONUSSCANNER_PATTERNS_PASSIVE = {
 		{ pattern = "모든 주문 및 효과에 의한 치유량이 최대 (%d+)만큼 증가합니다%.", effect = "HEAL" },
 		{ pattern = "주문과 효과에 의한 치유량이 최대 (%d+)만큼 증가합니다%.", effect = "HEAL" },
 		{ pattern = "모든 주문 및 효과에 의한 피해와 치유량이 최대 (%d+)만큼 증가합니다%.", effect = {"HEAL", "DMG"} },
 	};
 
-	HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
+	HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
 		["치유 주문"] 		= "HEAL",
 		["치유량 증가"] 	= "HEAL",
 		["치유 효과 증가"]	= "HEAL",
@@ -120,7 +120,7 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 		["치유 및 공격 주문 위력"] = {"HEAL", "DMG"},
 	};	
 
-	HB_BONUSSCANNER_PATTERNS_OTHER = {
+	HEALBOT_BONUSSCANNER_PATTERNS_OTHER = {
 		{ pattern = "잔달라 모조의 인장", effect = {"DMG", "HEAL"}, value = 18 },
 		{ pattern = "잔달라 평온의 인장", effect = "HEAL", value = 33 },
 		
@@ -132,33 +132,33 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 		{ pattern = "반짝이는 마나 오일", effect = { "MANAREG", "HEAL"}, value = {12, 25} },
 	};
 
-	HB_SPELL_PATTERN_LESSER_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_HEAL			= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_GREATER_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_FLASH_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_RENEW		= "(%d+)초에 걸쳐 대상의 생명력을 총 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_RENEW1		= "(%d+)초에 걸쳐 대상의 생명력을 총 (%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_SHIELD		= "(%d+)의 피해를 흡수합니다. (%d+)초 동안 지속됩니다.";
-	HB_SPELL_PATTERN_HEALING_TOUCH		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";    
-	HB_SPELL_PATTERN_REGROWTH		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시키고 추가로 (%d+)초에 걸쳐 총 (%d+)의 생명력을 회복시킵니다";
-	HB_SPELL_PATTERN_REGROWTH1		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시키고 추가로 (%d+)초에 걸쳐 총 (%d+)~(%d+)의 생명력을 회복시킵니다";    
-	HB_SPELL_PATTERN_HOLY_LIGHT		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_FLASH_OF_LIGHT	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_HEALING_WAVE		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_LESSER_HEALING_WAVE		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
-	HB_SPELL_PATTERN_REJUVENATION				= "(%d+)에 걸쳐 (%d+)의 생명력을 회복시킵니다";
-	HB_SPELL_PATTERN_REJUVENATION1				= "(%d+)에 걸쳐 (%d+)~(%d+)의 생명력을 회복시킵니다";
-	HB_SPELL_PATTERN_MEND_PET					= "야수에 정신을 집중하는 동안 매초마다 (%d+)의 생명력을 치료합니다";
+	HEALBOT_SPELL_PATTERN_LESSER_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_HEAL			= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_GREATER_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_FLASH_HEAL	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_RENEW		= "(%d+)초에 걸쳐 대상의 생명력을 총 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_RENEW1		= "(%d+)초에 걸쳐 대상의 생명력을 총 (%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_SHIELD		= "(%d+)의 피해를 흡수합니다. (%d+)초 동안 지속됩니다.";
+	HEALBOT_SPELL_PATTERN_HEALING_TOUCH		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";    
+	HEALBOT_SPELL_PATTERN_REGROWTH		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시키고 추가로 (%d+)초에 걸쳐 총 (%d+)의 생명력을 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_REGROWTH1		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시키고 추가로 (%d+)초에 걸쳐 총 (%d+)~(%d+)의 생명력을 회복시킵니다";    
+	HEALBOT_SPELL_PATTERN_HOLY_LIGHT		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_FLASH_OF_LIGHT	= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_HEALING_WAVE		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_LESSER_HEALING_WAVE		= "대상의 생명력을 (%d+)~(%d+)만큼 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_REJUVENATION				= "(%d+)에 걸쳐 (%d+)의 생명력을 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_REJUVENATION1				= "(%d+)에 걸쳐 (%d+)~(%d+)의 생명력을 회복시킵니다";
+	HEALBOT_SPELL_PATTERN_MEND_PET					= "야수에 정신을 집중하는 동안 매초마다 (%d+)의 생명력을 치료합니다";
 
-	HB_TOOLTIP_MANA			= "^마나 (%d+)$";
-	HB_TOOLTIP_RANGE			= "(%d+)미터";
-	HB_TOOLTIP_INSTANT_CAST	= "즉시 시전";
-	HB_TOOLTIP_CAST_TIME		= "(%d+.?%d*)초";
-	HB_TOOLTIP_CHANNELED		= "채널링";
-	HB_HASLEFTRAID			= "^([^%s]+)님이 공격대를 떠났습니다$";
-	HB_HASLEFTPARTY			= "^([^%s]+)님이 파티를 떠났습니다$";
-	HB_YOULEAVETHEGROUP		= "당신은 파티를 떠났습니다"
-	HB_YOULEAVETHERAID		= "공격대를 떠났습니다"
+	HEALBOT_TOOLTIP_MANA			= "^마나 (%d+)$";
+	HEALBOT_TOOLTIP_RANGE			= "(%d+)미터";
+	HEALBOT_TOOLTIP_INSTANT_CAST	= "즉시 시전";
+	HEALBOT_TOOLTIP_CAST_TIME		= "(%d+.?%d*)초";
+	HEALBOT_TOOLTIP_CHANNELED		= "채널링";
+	HEALBOT_HASLEFTRAID			= "^([^%s]+)님이 공격대를 떠났습니다$";
+	HEALBOT_HASLEFTPARTY			= "^([^%s]+)님이 파티를 떠났습니다$";
+	HEALBOT_YOULEAVETHEGROUP		= "당신은 파티를 떠났습니다"
+	HEALBOT_YOULEAVETHERAID		= "공격대를 떠났습니다"
 
 	-----------------
 	-- Translation --

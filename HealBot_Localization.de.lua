@@ -113,25 +113,25 @@ HEALBOT_RANK_11             = " (Rang 11)";
 HEALBOT_LIBRARY_INCHEAL    = "Erh\195\182ht durch Zauber und Effekte verursachte Heilung um bis zu (%d+)%.";
 HEALBOT_LIBRARY_INCDAMHEAL = "Erh\195\182ht durch Zauber und magische Effekte zugef\195\188gten Schaden und Heilung um bis zu (%d+)%.";
 
-HB_BONUSSCANNER_NAMES = {	
+HEALBOT_BONUSSCANNER_NAMES = {	
 	HEAL 		= "Heilung",
 }
 
-HB_BONUSSCANNER_PREFIX_EQUIP = "Anlegen: ";
-HB_BONUSSCANNER_PREFIX_SET = "Set: ";
+HEALBOT_BONUSSCANNER_PREFIX_EQUIP = "Anlegen: ";
+HEALBOT_BONUSSCANNER_PREFIX_SET = "Set: ";
 
-HB_BONUSSCANNER_PATTERNS_PASSIVE = {
+HEALBOT_BONUSSCANNER_PATTERNS_PASSIVE = {
 	{ pattern = "Erh\195\182ht durch Zauber und magische Effekte zugef\195\188gten Schaden und Heilung um bis zu (%d+)%.", effect = {"HEAL","DMG"} },
 	{ pattern = "Erh\195\182ht durch Zauber und Effekte verursachte Heilung um bis zu (%d+)%.", effect = "HEAL" },
 	{ pattern = "Erh\195\182ht die durch Zauber und Effekte verursachte Heilung um bis zu (%d+)%.", effect = "HEAL" },
 };
 
-HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
+HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
 	["Heilzauber"] 			= "HEAL",
 	["Heilung und Zauberschaden"] = {"HEAL","DMG"},
 };
 
-HB_BONUSSCANNER_PATTERNS_OTHER = {
+HEALBOT_BONUSSCANNER_PATTERNS_OTHER = {
 	{ pattern = "Zandalarianisches Siegel des Mojo", effect = {"DMG", "HEAL"}, value = 18 },
 	{ pattern = "Zandalarianisches Siegel der Inneren Ruhe", effect = "HEAL", value = 33 },
 	
@@ -154,32 +154,32 @@ HEALBOT_DEBUFF_WEAKENED_SOUL     = "Interface\\Icons\\Spell_Holy_AshesToAshes";
 HEALBOT_DEBUFF_RECENTLY_BANDAGED = "Interface\\Icons\\INV_Misc_Bandage_08";
 
 
-HB_SPELL_PATTERN_LESSER_HEAL         = "Euer Ziel um (%d+) bis (%d+) Punkt%(e%) heilen";
-HB_SPELL_PATTERN_HEAL                = "Euer Ziel um (%d+) bis (%d+) Punkt%(e%) heilen";
-HB_SPELL_PATTERN_GREATER_HEAL        = "Ein langsam zu wirkender Zauber, der ein einzelnes Ziel um (%d+) bis (%d+) Punkt%(e%) heilt";
-HB_SPELL_PATTERN_FLASH_HEAL          = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_RENEW2              = "Heilt das Ziel (%d+) Sek. lang um (%d+) bis (%d+) Schadenspunk";
-HB_SPELL_PATTERN_RENEW3              = "Heilt das Ziel (%d+) Sek. lang um (%d+) Schadenspunk";
-HB_SPELL_PATTERN_SHIELD              = "absorbiert dabei (%d+) Punkt%(e%) Schaden. H\195\164lt (%d+) Sek";
-HB_SPELL_PATTERN_HEALING_TOUCH       = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_REGROWTH            = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) und \195\188ber (%d+) Sek%. um weitere (%d+)";
-HB_SPELL_PATTERN_REGROWTH1           = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) und \195\188ber (%d+) Sek%. um weitere (%d+) bis (%d+)";
-HB_SPELL_PATTERN_HOLY_LIGHT          = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_FLASH_OF_LIGHT      = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_HEALING_WAVE        = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_LESSER_HEALING_WAVE = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
-HB_SPELL_PATTERN_REJUVENATION        = "Heilt das Ziel von (%d+) \195\188ber (%d+) Sek";
-HB_SPELL_PATTERN_REJUVENATION1       = "Heilt das Ziel von (%d+) bis (%d+) \195\188ber (%d+) Sek";
+HEALBOT_SPELL_PATTERN_LESSER_HEAL         = "Euer Ziel um (%d+) bis (%d+) Punkt%(e%) heilen";
+HEALBOT_SPELL_PATTERN_HEAL                = "Euer Ziel um (%d+) bis (%d+) Punkt%(e%) heilen";
+HEALBOT_SPELL_PATTERN_GREATER_HEAL        = "Ein langsam zu wirkender Zauber, der ein einzelnes Ziel um (%d+) bis (%d+) Punkt%(e%) heilt";
+HEALBOT_SPELL_PATTERN_FLASH_HEAL          = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_RENEW2              = "Heilt das Ziel (%d+) Sek. lang um (%d+) bis (%d+) Schadenspunk";
+HEALBOT_SPELL_PATTERN_RENEW3              = "Heilt das Ziel (%d+) Sek. lang um (%d+) Schadenspunk";
+HEALBOT_SPELL_PATTERN_SHIELD              = "absorbiert dabei (%d+) Punkt%(e%) Schaden. H\195\164lt (%d+) Sek";
+HEALBOT_SPELL_PATTERN_HEALING_TOUCH       = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_REGROWTH            = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) und \195\188ber (%d+) Sek%. um weitere (%d+)";
+HEALBOT_SPELL_PATTERN_REGROWTH1           = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) und \195\188ber (%d+) Sek%. um weitere (%d+) bis (%d+)";
+HEALBOT_SPELL_PATTERN_HOLY_LIGHT          = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_FLASH_OF_LIGHT      = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_HEALING_WAVE        = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_LESSER_HEALING_WAVE = "Heilt ein befreundetes Ziel um (%d+) bis (%d+) Punkt%(e%)";
+HEALBOT_SPELL_PATTERN_REJUVENATION        = "Heilt das Ziel von (%d+) \195\188ber (%d+) Sek";
+HEALBOT_SPELL_PATTERN_REJUVENATION1       = "Heilt das Ziel von (%d+) bis (%d+) \195\188ber (%d+) Sek";
 
-HB_TOOLTIP_MANA                      = "^(%d+) Mana$";
-HB_TOOLTIP_RANGE                     = "(%d+) m";
-HB_TOOLTIP_INSTANT_CAST              = "Spontanzauber";
-HB_TOOLTIP_CAST_TIME                 = "(%d+.?%d*) Sek";
-HB_TOOLTIP_CHANNELED                 = "Abgebrochen"; 
-HB_HASLEFTRAID                       = "^([^%s]+) hat die \195\131\197\147berfallgruppe verlassen%.$";
-HB_HASLEFTPARTY                      = "^([^%s]+) hat die Gruppe verlassen"; 
-HB_YOULEAVETHEGROUP                  = "Du hast die Gruppe verlassen"  
-HB_YOULEAVETHERAID                   = "Du hast den Schlachtzug verlassen" 
+HEALBOT_TOOLTIP_MANA                      = "^(%d+) Mana$";
+HEALBOT_TOOLTIP_RANGE                     = "(%d+) m";
+HEALBOT_TOOLTIP_INSTANT_CAST              = "Spontanzauber";
+HEALBOT_TOOLTIP_CAST_TIME                 = "(%d+.?%d*) Sek";
+HEALBOT_TOOLTIP_CHANNELED                 = "Abgebrochen"; 
+HEALBOT_HASLEFTRAID                       = "^([^%s]+) hat die \195\131\197\147berfallgruppe verlassen%.$";
+HEALBOT_HASLEFTPARTY                      = "^([^%s]+) hat die Gruppe verlassen"; 
+HEALBOT_YOULEAVETHEGROUP                  = "Du hast die Gruppe verlassen"  
+HEALBOT_YOULEAVETHERAID                   = "Du hast den Schlachtzug verlassen" 
 
 -----------------
 -- Translation --
