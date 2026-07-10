@@ -5,7 +5,8 @@ function HealBot_Options_ShowHeaders_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_SHOWHEADERS);
 end
 function HealBot_Options_ShowHeaders_OnClick(this)
-  HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] = this:GetChecked();
+  local isChecked = this:GetChecked()
+  HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] = isChecked and 1 or 0;
   HealBot_Action_ResetSkin()
 end
 function HealBot_Options_BarTextureS_OnValueChanged(this)

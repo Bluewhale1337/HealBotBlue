@@ -62,7 +62,7 @@ end
 function HealBot_Options_TooltipPos_Refresh(onselect)
   if not HealBot_Config.TooltipPos then return end
   if not onselect then HealBot_Options_TooltipPos_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_TooltipPos,HealBot_Config.TooltipPos)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_TooltipPos,HealBot_Config.TooltipPos)
 end
 
 function HealBot_Options_TooltipPos_OnLoad()

@@ -28,12 +28,22 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic).
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
+### Known issues
+
+* **New spell rank bug** you may experience lua error spaming your chat frame after learning new healing spells. /reload will clear the issue. To be fixed next release
+
+
 ### Change Log
 
-**v1.4** 
-* **Extra Frame support for pets and familiars added** Togglable from healing tab - Extra frames option selected & pets selected from dropdown.
+**1.3.3**
+* **Chat Panel Refactor:** Completely replaced the spell selection dropdowns in the Chat tab with manual text input boxes, allowing users to type exact spell names (with or without ranks) directly, matching the behavior of the key-bindings configuration. Fixed a string matching bug caused by Vanilla WoW's hidden trailing spaces when comparing spell names, ensuring that both rankless (e.g. `Flash Heal`) and ranked inputs trigger correctly. 
+* **Chat Layout Stack:** Restructured the Chat Options XML layout to correctly stack the inputs into neat rows, preventing horizontal overlap and providing more space for typing long announce messages.
+* **UI Persistence Bug Fixes:** Fixed a Vanilla WoW API quirk where unchecking the "Show Headers" or "Self Only" (Buffs) checkboxes caused the UI to either visually re-check itself or overwrite the setting with defaults upon a `/reload`.
 
-**v1.3.1**
+**1.3.2**
+* **UIDropDownMenu Fixes:** Resolved native client crash (`UIDROPDOWNMENU_OPEN_MENU` nil concatenation) when setting values on closed dropdowns.
+
+**1.3.1**
 * **Hotfix: missing helper function restored** Fixed issue with lua error for druids. 
 
 **v1.3**

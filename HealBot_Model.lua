@@ -1,6 +1,32 @@
 -- HealBot_Model.lua
 -- Centralized Data Store and Observer System for HealBotBlue
 
+-- Safe local wrappers to prevent native UIDropDownMenu concatenation crashes
+-- when setting selected values on closed dropdowns during initialization.
+function HealBot_UIDropDownMenu_SetSelectedID(frame, id, useValue)
+    local wasNil = false
+    if not UIDROPDOWNMENU_OPEN_MENU then
+        UIDROPDOWNMENU_OPEN_MENU = "DropDownList1"
+        wasNil = true
+    end
+    UIDropDownMenu_SetSelectedID(frame, id, useValue)
+    if wasNil then
+        UIDROPDOWNMENU_OPEN_MENU = nil
+    end
+end
+
+function HealBot_UIDropDownMenu_SetSelectedValue(frame, value, useValue)
+    local wasNil = false
+    if not UIDROPDOWNMENU_OPEN_MENU then
+        UIDROPDOWNMENU_OPEN_MENU = "DropDownList1"
+        wasNil = true
+    end
+    UIDropDownMenu_SetSelectedValue(frame, value, useValue)
+    if wasNil then
+        UIDROPDOWNMENU_OPEN_MENU = nil
+    end
+end
+
 HealBot_Model = {
     observers = {},
     units = {},

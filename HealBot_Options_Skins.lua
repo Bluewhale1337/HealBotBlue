@@ -112,7 +112,7 @@ end
 function HealBot_Options_Skins_Refresh(onselect)
   if not HealBot_Config.Skin_ID then return end
   if not onselect then HealBot_Options_Skins_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_Skins,HealBot_Config.Skin_ID)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_Skins,HealBot_Config.Skin_ID)
 end
 function HealBot_Options_Skins_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_Skins_DropDown)

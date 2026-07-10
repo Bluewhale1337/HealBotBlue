@@ -95,13 +95,26 @@ function HealBot_StartCasting(spell, target, ttype)
     if target == "target" then tName = HealBot_TargetName() or "target" else tName = UnitName(target) end
     if not tName then tName = target end
     local baseSpell = spell
-    local parenIndex = string.find(spell, "%(")
+    local parenIndex = string.find(spell, " %(")
     if parenIndex then
       baseSpell = string.sub(spell, 1, parenIndex - 1)
+    else
+      parenIndex = string.find(spell, "%(")
+      if parenIndex then
+        baseSpell = string.sub(spell, 1, parenIndex - 1)
+      end
     end
+    
+    -- Strip trailing spaces from base spell
+    baseSpell = string.gsub(baseSpell, "%s+$", "")
+
     for i = 1, 5 do
       local msgConf = HealBot_Config.ChatMessages[i]
-      if msgConf and msgConf.Spell == baseSpell and msgConf.Channel ~= "None" then
+      local configSpell = msgConf and msgConf.Spell or ""
+      -- Strip trailing spaces from config spell just in case
+      configSpell = string.gsub(configSpell, "%s+$", "")
+      
+      if msgConf and configSpell ~= "" and msgConf.Channel ~= "None" and (configSpell == spell or configSpell == baseSpell) then
         local msg = msgConf.Message or ""
         msg = string.gsub(msg, "#Spell#", spell)
         msg = string.gsub(msg, "#Target#", tName)

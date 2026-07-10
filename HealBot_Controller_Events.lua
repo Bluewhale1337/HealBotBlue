@@ -440,6 +440,10 @@ end
 
 function HealBot_OnEvent_PlayerEnteringWorld(this)
     HealBot_IsFighting = false;
+    -- Re-apply the refresh hook late in case another addon overrode it during load
+    if HealBot_ApplyRefreshHook then
+        HealBot_ApplyRefreshHook()
+    end
 end
 
 function HealBot_OnEvent_SpellcastStart(this, spell, duration)

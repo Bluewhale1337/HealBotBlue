@@ -51,7 +51,7 @@ end
 function HealBot_Options_CDCMonitor_Refresh(onselect)
   if not HealBot_Config.CDCMonitor then return end
   if not onselect then HealBot_Options_CDCMonitor_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_CDCMonitor,HealBot_Config.CDCMonitor)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCMonitor,HealBot_Config.CDCMonitor)
 end
 function HealBot_Options_CDCMonitor_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCMonitor_DropDown)
@@ -200,14 +200,14 @@ function HealBot_Options_CDCButLeft_Refresh(onselect)
   local class=UnitClass("Player");
   if not onselect then HealBot_Options_CDCButLeft_Initialize() end 
   set_id = HealBot_Config.Debuff_Left[class];
-  UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButLeft,set_id)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButLeft,set_id)
 end
 function HealBot_Options_CDCButRight_Refresh(onselect)
   local set_id;
   local class=UnitClass("Player");
   if not onselect then HealBot_Options_CDCButRight_Initialize() end 
   set_id = HealBot_Config.Debuff_Right[class];
-  UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight,set_id)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight,set_id)
 end
 function HealBot_Options_CDCButLeft_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCButLeft_DropDown)
