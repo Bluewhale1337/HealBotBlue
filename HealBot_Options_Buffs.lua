@@ -21,9 +21,10 @@ function HealBot_Options_BuffSelf_OnLoad(self)
   getglobal(this:GetName().."Text"):SetText("Self Only")
   local id = this:GetID()
   if HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[id] then
-    this:SetChecked(HealBot_Config.BuffWatchSelf[id])
+    local isSelf = (HealBot_Config.BuffWatchSelf[id] == 1)
+    this:SetChecked(isSelf and 1 or nil)
   else
-    this:SetChecked(0)
+    this:SetChecked(nil)
   end
 end
 function HealBot_Options_BuffSelf_OnClick(self)
@@ -77,7 +78,7 @@ function HealBot_Options_Buff_OnClick()
     text = HealBot_Buff_Spells[myClass][this.value]
   end
   
-  UIDropDownMenu_SetSelectedID(frame, this.value + 1)
+  HealBot_UIDropDownMenu_SetSelectedID(frame, this.value + 1)
   UIDropDownMenu_SetText(text, frame)
   HealBot_RecalcParty();
 end
@@ -101,15 +102,16 @@ function HealBot_Options_SetBuffs()
     if dropDown then
       local val = HealBot_Config.BuffDropDowns[myClass][i] or 0
       UIDropDownMenu_Initialize(dropDown, HealBot_Options_Buff_Initialize)
-      UIDropDownMenu_SetSelectedID(dropDown, val + 1)
+      HealBot_UIDropDownMenu_SetSelectedID(dropDown, val + 1)
     end
     
     local selfCheck = getglobal("HealBot_Options_BuffSelf" .. i)
     if selfCheck then
       if HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[i] then
-        selfCheck:SetChecked(HealBot_Config.BuffWatchSelf[i])
+        local isSelf = (HealBot_Config.BuffWatchSelf[i] == 1)
+        selfCheck:SetChecked(isSelf and 1 or nil)
       else
-        selfCheck:SetChecked(0)
+        selfCheck:SetChecked(nil)
       end
     end
   end

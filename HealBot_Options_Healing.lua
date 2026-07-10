@@ -108,7 +108,7 @@ end
 function HealBot_Options_EmergencyFClass_Refresh(onselect)
   if not HealBot_Config.EmergencyFClass then return end
   if not onselect then HealBot_Options_EmergencyFClass_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFClass,HealBot_Config.EmergencyFClass)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFClass,HealBot_Config.EmergencyFClass)
 end
 
 function HealBot_Options_EmergencyFClass_OnLoad()
@@ -191,7 +191,7 @@ end
 function HealBot_Options_ExtraSort_Refresh(onselect)
   if not HealBot_Config.ExtraOrder then return end
   if not onselect then HealBot_Options_ExtraSort_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_ExtraSort,HealBot_Config.ExtraOrder)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_ExtraSort,HealBot_Config.ExtraOrder)
 end
 
 function HealBot_Options_ExtraSort_OnLoad()
@@ -225,7 +225,7 @@ end
 function HealBot_Options_EmergencyFilter_Refresh(onselect)
   if not HealBot_Config.EmergIncMonitor then return end
   if not onselect then HealBot_Options_EmergencyFilter_Initialize() end  -- or wrong menu may be used !
-  UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFilter,HealBot_Config.EmergIncMonitor)
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFilter,HealBot_Config.EmergIncMonitor)
 end
 
 

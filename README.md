@@ -30,8 +30,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**1.3.3**
+* **Chat Panel Refactor:** Completely replaced the spell selection dropdowns in the Chat tab with manual text input boxes, allowing users to type exact spell names (with or without ranks) directly, matching the behavior of the key-bindings configuration. Fixed a string matching bug caused by Vanilla WoW's hidden trailing spaces when comparing spell names, ensuring that both rankless (e.g. `Flash Heal`) and ranked inputs trigger correctly. 
+* **Chat Layout Stack:** Restructured the Chat Options XML layout to correctly stack the inputs into neat rows, preventing horizontal overlap and providing more space for typing long announce messages.
+* **UI Persistence Bug Fixes:** Fixed a Vanilla WoW API quirk where unchecking the "Show Headers" or "Self Only" (Buffs) checkboxes caused the UI to either visually re-check itself or overwrite the setting with defaults upon a `/reload`.
+
 **1.3.2**
-* **UIDropDownMenu Fixes:** Fixed client crash and button accumulation error on unopened dropdown menus in options.
+* **UIDropDownMenu Fixes:** Resolved native client crash (`UIDROPDOWNMENU_OPEN_MENU` nil concatenation) when setting values on closed dropdowns.
 
 **1.3.1**
 * **Hotfix: missing helper function restored** Fixed issue with lua error for druids. 
