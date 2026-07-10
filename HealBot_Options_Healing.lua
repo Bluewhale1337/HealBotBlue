@@ -85,6 +85,33 @@ function HealBot_Options_EFClass_OnClick(this)
      HealBot_Action_PartyChanged();
   end
 end
+HealBot_Options_HealthText_List = {
+  "Name Only",
+  "Health Percentage",
+  "Real Health",
+  "Health Deficit",
+}
+
+function HealBot_Options_HealthText_DropDown()
+  for i=1, getn(HealBot_Options_HealthText_List), 1 do
+    local info = {};
+    info.text = HealBot_Options_HealthText_List[i];
+    info.func = HealBot_Options_HealthText_OnSelect;
+    UIDropDownMenu_AddButton(info);
+  end
+end
+
+function HealBot_Options_HealthText_OnLoad(this)
+  UIDropDownMenu_Initialize(this, HealBot_Options_HealthText_DropDown);
+  UIDropDownMenu_SetWidth(110, this);
+end
+
+function HealBot_Options_HealthText_OnSelect()
+  HealBot_Config.ShowHealthText = this:GetID() - 1;
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_HealthText, this:GetID())
+  HealBot_Action_RefreshButtons();
+end
+
 local HealBot_Options_EmergencyFClass_List = {
   HEALBOT_CLASSES_MELEE,
   HEALBOT_CLASSES_RANGES,

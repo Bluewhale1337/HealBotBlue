@@ -102,7 +102,7 @@
           </OnLoad>
         </Scripts>
         <Size>
-          <AbsDimension y="70"/>
+          <AbsDimension y="95"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT">
@@ -156,7 +156,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="200" y="0" /> 
+                  <AbsDimension x="180" y="0" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -169,6 +169,28 @@
                   HealBot_Config.ManaBarsHealersOnly = 1;
                 else
                   HealBot_Config.ManaBarsHealersOnly = 0;
+                end
+                HealBot_Action_Refresh();
+              </OnClick> 
+            </Scripts>
+          </CheckButton>
+          <CheckButton name="HealBot_Options_ShowNonManaBars" inherits="OptionsCheckButtonTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="BOTTOMLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-2" /> 
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnLoad>
+                getglobal(this:GetName().."Text"):SetText("Track Non-Mana Resources");
+              </OnLoad> 
+              <OnClick>
+                if (this:GetChecked()) then
+                  HealBot_Config.ShowNonManaBars = 1;
+                else
+                  HealBot_Config.ShowNonManaBars = 0;
                 end
                 HealBot_Action_Refresh();
               </OnClick> 

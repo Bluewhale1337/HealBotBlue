@@ -132,16 +132,25 @@ function HealBot_Action_EnableButton(button)
     local pt = state.powerType
     
     local showMana = false
-    if HealBot_Config.ShowManaBars == 1 and state.maxMana > 0 and pt == 0 then
-        if HealBot_Config.ManaBarsHealersOnly == 1 then
-            if isHealer then showMana = true end
-        else
+    local pr, pg, pb = 0, 0, 1 -- Default Blue for Mana
+    
+    if HealBot_Config.ShowManaBars == 1 and state.maxMana > 0 then
+        if pt == 0 then
+            if HealBot_Config.ManaBarsHealersOnly == 1 then
+                if isHealer then showMana = true end
+            else
+                showMana = true
+            end
+        elseif HealBot_Config.ShowNonManaBars == 1 then
             showMana = true
+            if pt == 1 then pr, pg, pb = 1, 0, 0 -- Rage (Red)
+            elseif pt == 3 then pr, pg, pb = 1, 1, 0 -- Energy (Yellow)
+            elseif pt == 2 then pr, pg, pb = 1, 0.5, 0 -- Focus (Orange)
+            end
         end
     end
 
     if showMana then
-        local pr, pg, pb = 0, 0, 1
         if bar3 then
             bar3:SetMinMaxValues(0, state.maxMana)
             bar3:SetValue(state.mana)
@@ -193,10 +202,36 @@ function HealBot_Action_EnableButton(button)
         bar:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
         bar2:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
     end
-    if string.len(name) > textlen then
-        name = string.sub(name, 1, textlen - 3) .. '...';
+    local healthTextOpt = HealBot_Config.ShowHealthText or 0
+    local displayText = name
+    if healthTextOpt == 1 then
+        local pct = 0
+        if maxhlth > 0 then pct = math.floor((hlth / maxhlth) * 100) end
+        displayText = name .. " - " .. pct .. "%"
+    elseif healthTextOpt == 2 then
+        displayText = name .. " - " .. hlth .. "/" .. maxhlth
+    elseif healthTextOpt == 3 then
+        local deficit = maxhlth - hlth
+        if deficit > 0 then
+            displayText = name .. " - -" .. deficit
+        end
     end
-    bar.txt:SetText(name);
+
+    if string.len(displayText) > textlen then
+        if healthTextOpt > 0 then
+            -- If we have numbers, just truncate the name part so the numbers still show.
+            -- Find where " - " starts.
+            local dashIndex = string.find(displayText, " %- ")
+            if dashIndex then
+                local numbersPart = string.sub(displayText, dashIndex)
+                local namePart = string.sub(name, 1, math.max(1, textlen - string.len(numbersPart) - 3)) .. "..."
+                displayText = namePart .. numbersPart
+            end
+        else
+            displayText = string.sub(name, 1, textlen - 3) .. '...';
+        end
+    end
+    bar.txt:SetText(displayText);
     bar.txt:SetTextColor(sr, sg, sb, sa);
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0

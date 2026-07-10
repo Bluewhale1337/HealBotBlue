@@ -183,6 +183,34 @@
 	</Scripts>
       </Frame>
 
+      <Frame name="HealBot_Options_HealthText" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="155" y="-271" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Health Text">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="-110" y="-7"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+	<Scripts>
+          <OnLoad>
+             HealBot_Options_HealthText_OnLoad(this)
+          </OnLoad>
+	</Scripts>
+      </Frame>
+
       <Frame name="HealBot_Options_EmergLFrame" inherits="OptionFrameBoxTemplate">
         <Scripts>
           <OnLoad>
@@ -196,7 +224,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="21" y="-275"/>
+              <AbsDimension x="21" y="-308"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT">
