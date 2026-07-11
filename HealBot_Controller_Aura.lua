@@ -129,6 +129,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
             ["Interface\\Icons\\Spell_Holy_PowerWordShield"] = true,
             ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
             ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
+            ["Interface\\Icons\\btnholyscriptures"] = true,
         }
         
         local i = 1;

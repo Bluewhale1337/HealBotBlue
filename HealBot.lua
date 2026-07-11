@@ -5,12 +5,12 @@
 ]]
 
 -- local _scale=0; -- moved to HealBot_Controller_Range.lua
-CalcEquipBonus=false;
+HealBot_CalcEquipBonus=false;
 HealBot_EquipChangeTimer = 0;
-HealValue=0;
-InitSpells=1;
+HealBot_HealValue=0;
+HealBot_SpellsInitFlag=1;
 local DebugDebuff=false;
-Delay_RecalcParty=0;
+HealBot_Delay_RecalcParty=0;
 
 
 -- Debugging and Error functions moved to HealBot_Controller_Comms.lua
@@ -56,9 +56,24 @@ function HealBot_SlashCmd(cmd)
     HealBot_TogglePanel(HealBot_Options);
     return
   end
+  if (cmd=="forms" or cmd=="form") then
+    local forms = GetNumShapeshiftForms();
+    if forms and forms > 0 then
+      HealBot_AddChat("HealBot: Available shapeshift forms:");
+      for i=1,forms do
+        local icon, name, active = GetShapeshiftFormInfo(i);
+        local actStr = "false"
+        if active then actStr = "true" end
+        HealBot_AddChat("  Form " .. i .. ": " .. (name or "nil") .. " | Icon: " .. (icon or "nil") .. " | Active: " .. actStr);
+      end
+    else
+      HealBot_AddChat("HealBot: No shapeshift forms found.");
+    end
+    return
+  end
 
   if (cmd=="reset" or cmd=="recalc" or cmd=="defaults") then
-    InitSpells=2;
+    HealBot_SpellsInitFlag=2;
     HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults);
     return
   end
@@ -70,7 +85,7 @@ function HealBot_SlashCmd(cmd)
   	HealBot_RegisterThis(this);
   end
   if (cmd=="x") then
-    InitSpells=2;
+    HealBot_SpellsInitFlag=2;
 	NeedEquipUpdate=1
   	HealBot_RecalcSpells();
     return;
@@ -261,9 +276,21 @@ do
         do
           local autoSelfCast = GetCVar("autoSelfCast")
           SetCVar("autoSelfCast", "0") -- Ensure disabled
+          
+          local spellName = nil
+          if not GetActionText(slot) then
+            HealBot_ScanTooltip:SetOwner(HealBot_ScanTooltip, "ANCHOR_NONE")
+            HealBot_ScanTooltip:SetAction(slot)
+            spellName = HealBot_ScanTooltipTextLeft1 and HealBot_ScanTooltipTextLeft1:GetText()
+          end
+          
           orig(slot, checkCursor, onSelf)
           if autoSelfCast then
             SetCVar("autoSelfCast", autoSelfCast)
+          end
+          
+          if spellName and HealBot_AnnounceCast then
+             HealBot_AnnounceCast(spellName, mouseover)
           end
         end
         

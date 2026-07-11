@@ -85,6 +85,33 @@ function HealBot_Options_EFClass_OnClick(this)
      HealBot_Action_PartyChanged();
   end
 end
+HealBot_Options_HealthText_List = {
+  "Name Only",
+  "Health Percentage",
+  "Real Health",
+  "Health Deficit",
+}
+
+function HealBot_Options_HealthText_DropDown()
+  for i=1, getn(HealBot_Options_HealthText_List), 1 do
+    local info = {};
+    info.text = HealBot_Options_HealthText_List[i];
+    info.func = HealBot_Options_HealthText_OnSelect;
+    UIDropDownMenu_AddButton(info);
+  end
+end
+
+function HealBot_Options_HealthText_OnLoad(this)
+  UIDropDownMenu_Initialize(this, HealBot_Options_HealthText_DropDown);
+  UIDropDownMenu_SetWidth(110, this);
+end
+
+function HealBot_Options_HealthText_OnSelect()
+  HealBot_Config.ShowHealthText = this:GetID() - 1;
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_HealthText, this:GetID())
+  HealBot_Action_RefreshButtons();
+end
+
 local HealBot_Options_EmergencyFClass_List = {
   HEALBOT_CLASSES_MELEE,
   HEALBOT_CLASSES_RANGES,
@@ -252,7 +279,7 @@ function HealBot_Options_EmergencyFilter_Reset()
   HealBot_EmergInc[HEALBOT_SHAMAN] = 0;
   HealBot_EmergInc[HEALBOT_WARLOCK] = 0;
   HealBot_EmergInc[HEALBOT_WARRIOR] = 0;
-  if HealBot_Config.EmergIncMonitor==1 then
+  if HealBot_Config.EmergIncMonitor==2 then
     HealBot_EmergInc[HEALBOT_DRUID] = 1;
     HealBot_EmergInc[HEALBOT_HUNTER] = 1;
     HealBot_EmergInc[HEALBOT_MAGE] = 1;
@@ -262,25 +289,27 @@ function HealBot_Options_EmergencyFilter_Reset()
     HealBot_EmergInc[HEALBOT_SHAMAN] = 1;
     HealBot_EmergInc[HEALBOT_WARLOCK] = 1;
     HealBot_EmergInc[HEALBOT_WARRIOR] = 1;
-  elseif HealBot_Config.EmergIncMonitor==2 then
-    HealBot_EmergInc[HEALBOT_DRUID] = 1;
   elseif HealBot_Config.EmergIncMonitor==3 then
-    HealBot_EmergInc[HEALBOT_HUNTER] = 1;
+    HealBot_EmergInc[HEALBOT_DRUID] = 1;
   elseif HealBot_Config.EmergIncMonitor==4 then
-    HealBot_EmergInc[HEALBOT_MAGE] = 1;
+    HealBot_EmergInc[HEALBOT_HUNTER] = 1;
   elseif HealBot_Config.EmergIncMonitor==5 then
-    HealBot_EmergInc[HEALBOT_PALADIN] = 1;
+    HealBot_EmergInc[HEALBOT_MAGE] = 1;
   elseif HealBot_Config.EmergIncMonitor==6 then
-    HealBot_EmergInc[HEALBOT_PRIEST] = 1;
+    HealBot_EmergInc[HEALBOT_PALADIN] = 1;
   elseif HealBot_Config.EmergIncMonitor==7 then
-    HealBot_EmergInc[HEALBOT_ROGUE] = 1;
+    HealBot_EmergInc[HEALBOT_PRIEST] = 1;
   elseif HealBot_Config.EmergIncMonitor==8 then
-    HealBot_EmergInc[HEALBOT_SHAMAN] = 1;
+    HealBot_EmergInc[HEALBOT_ROGUE] = 1;
   elseif HealBot_Config.EmergIncMonitor==9 then
-    HealBot_EmergInc[HEALBOT_WARLOCK] = 1;
+    HealBot_EmergInc[HEALBOT_SHAMAN] = 1;
   elseif HealBot_Config.EmergIncMonitor==10 then
-    HealBot_EmergInc[HEALBOT_WARRIOR] = 1;
+    HealBot_EmergInc[HEALBOT_WARLOCK] = 1;
   elseif HealBot_Config.EmergIncMonitor==11 then
+    HealBot_EmergInc[HEALBOT_WARRIOR] = 1;
+  elseif HealBot_Config.EmergIncMonitor==12 then
+    -- Pets: no player classes enabled (handled separately in layout)
+  elseif HealBot_Config.EmergIncMonitor==13 then
     HealBot_EmergInc[HEALBOT_DRUID] = HealBot_Config.EmergIncMelee[HEALBOT_DRUID];
     HealBot_EmergInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncMelee[HEALBOT_HUNTER];
     HealBot_EmergInc[HEALBOT_MAGE] = HealBot_Config.EmergIncMelee[HEALBOT_MAGE];
@@ -290,7 +319,7 @@ function HealBot_Options_EmergencyFilter_Reset()
     HealBot_EmergInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncMelee[HEALBOT_SHAMAN];
     HealBot_EmergInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncMelee[HEALBOT_WARLOCK];
     HealBot_EmergInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncMelee[HEALBOT_WARRIOR];
-  elseif HealBot_Config.EmergIncMonitor==12 then
+  elseif HealBot_Config.EmergIncMonitor==14 then
     HealBot_EmergInc[HEALBOT_DRUID] = HealBot_Config.EmergIncRange[HEALBOT_DRUID];
     HealBot_EmergInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncRange[HEALBOT_HUNTER];
     HealBot_EmergInc[HEALBOT_MAGE] = HealBot_Config.EmergIncRange[HEALBOT_MAGE];
@@ -300,7 +329,7 @@ function HealBot_Options_EmergencyFilter_Reset()
     HealBot_EmergInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncRange[HEALBOT_SHAMAN];
     HealBot_EmergInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncRange[HEALBOT_WARLOCK];
     HealBot_EmergInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncRange[HEALBOT_WARRIOR];
-  elseif HealBot_Config.EmergIncMonitor==13 then
+  elseif HealBot_Config.EmergIncMonitor==15 then
     HealBot_EmergInc[HEALBOT_DRUID] = HealBot_Config.EmergIncHealers[HEALBOT_DRUID];
     HealBot_EmergInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncHealers[HEALBOT_HUNTER];
     HealBot_EmergInc[HEALBOT_MAGE] = HealBot_Config.EmergIncHealers[HEALBOT_MAGE];
@@ -310,7 +339,7 @@ function HealBot_Options_EmergencyFilter_Reset()
     HealBot_EmergInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncHealers[HEALBOT_SHAMAN];
     HealBot_EmergInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncHealers[HEALBOT_WARLOCK];
     HealBot_EmergInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncHealers[HEALBOT_WARRIOR];
-  elseif HealBot_Config.EmergIncMonitor==14 then
+  elseif HealBot_Config.EmergIncMonitor==16 then
     HealBot_EmergInc[HEALBOT_DRUID] = HealBot_Config.EmergIncCustom[HEALBOT_DRUID];
     HealBot_EmergInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncCustom[HEALBOT_HUNTER];
     HealBot_EmergInc[HEALBOT_MAGE] = HealBot_Config.EmergIncCustom[HEALBOT_MAGE];

@@ -1,4 +1,4 @@
-HEALBOT_VERSION = "1.3.2";
+HEALBOT_VERSION = "1.4";
 
 -------------
 -- ENGLISH --
@@ -93,6 +93,7 @@ HEALBOT_THORNS                = "Thorns";
 HEALBOT_OMEN_OF_CLARITY       = "Omen of Clarity";
 HEALBOT_INNER_FIRE            = "Inner Fire";
 HEALBOT_FEAR_WARD             = "Fear Ward";
+HEALBOT_ENLIGHTEN             = "Enlighten";
 
 HEALBOT_RESURRECTION       = "Resurrection";
 HEALBOT_REDEMPTION         = "Redemption";
@@ -131,19 +132,19 @@ HEALBOT_RANK_11             = " (Rank 11)";
 HEALBOT_LIBRARY_INCHEAL    = "Increases healing done by spells and effects by up to (%d+)%.";
 HEALBOT_LIBRARY_INCDAMHEAL = "Increases damage and healing done by magical spells and effects by up to (%d+)%.";
 
-HB_BONUSSCANNER_NAMES = {	
+HEALBOT_BONUSSCANNER_NAMES = {	
 	HEAL 		= "Healing",
 };
 
-HB_BONUSSCANNER_PREFIX_EQUIP = "Equip: ";
-HB_BONUSSCANNER_PREFIX_SET = "Set: ";
+HEALBOT_BONUSSCANNER_PREFIX_EQUIP = "Equip: ";
+HEALBOT_BONUSSCANNER_PREFIX_SET = "Set: ";
 
-HB_BONUSSCANNER_PATTERNS_PASSIVE = {
+HEALBOT_BONUSSCANNER_PATTERNS_PASSIVE = {
 	{ pattern = "Increases healing done by spells and effects by up to (%d+)%.", effect = "HEAL" },
 	{ pattern = "Increases damage and healing done by magical spells and effects by up to (%d+)%.", effect = {"HEAL", "DMG"} },
 };
 
-HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
+HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
 	["Healing Spells"] 		= "HEAL",
 	["Increases Healing"] 	= "HEAL",
 	["Healing and Spell Damage"] = {"HEAL", "DMG"},
@@ -151,7 +152,7 @@ HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
 	["Spell Damage and Healing"] = {"HEAL", "DMG"},	
 };	
 
-HB_BONUSSCANNER_PATTERNS_OTHER = {
+HEALBOT_BONUSSCANNER_PATTERNS_OTHER = {
 	{ pattern = "Zandalar Signet of Mojo", effect = {"DMG", "HEAL"}, value = 18 },
 	{ pattern = "Zandalar Signet of Serenity", effect = "HEAL", value = 33 },
 	
@@ -173,35 +174,35 @@ HEALBOT_DEBUFF_WEAKENED_SOUL     = "Interface\\Icons\\Spell_Holy_AshesToAshes";
 HEALBOT_DEBUFF_RECENTLY_BANDAGED = "Interface\\Icons\\INV_Misc_Bandage_08";
 
 
-HB_SPELL_PATTERN_LESSER_HEAL         = "Heal your target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_HEAL                = "Heal your target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_GREATER_HEAL        = "A slow casting spell that heals a single target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_FLASH_HEAL          = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_RENEW               = "Heals the target of (%d+) to (%d+) damage over (%d+) sec";
-HB_SPELL_PATTERN_RENEW1              = "Heals the target of (%d+) damage over (%d+) sec";
-HB_SPELL_PATTERN_RENEW2              = "Not needed for en";
-HB_SPELL_PATTERN_RENEW3              = "Not needed for en";
-HB_SPELL_PATTERN_SHIELD              = "absorbing (%d+) damage.  Lasts (%d+) sec.";
-HB_SPELL_PATTERN_HEALING_TOUCH       = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_REGROWTH            = "Heals a friendly target for (%d+) to (%d+) and another (%d+) over (%d+) sec";
-HB_SPELL_PATTERN_REGROWTH1           = "Heals a friendly target for (%d+) to (%d+) and another (%d+) to (%d+) over (%d+) sec";
-HB_SPELL_PATTERN_HOLY_LIGHT          = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_FLASH_OF_LIGHT      = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_HEALING_WAVE        = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_LESSER_HEALING_WAVE = "Heals a friendly target for (%d+) to (%d+)";
-HB_SPELL_PATTERN_REJUVENATION        = "Heals the target for (%d+) over (%d+) sec";
-HB_SPELL_PATTERN_REJUVENATION1       = "Heals the target for (%d+) to (%d+) over (%d+) sec";
-HB_SPELL_PATTERN_MEND_PET            = "Heals your pet (%d+) health every second while you focus.  Lasts (%d+) sec";
+HEALBOT_SPELL_PATTERN_LESSER_HEAL         = "Heal your target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_HEAL                = "Heal your target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_GREATER_HEAL        = "A slow casting spell that heals a single target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_FLASH_HEAL          = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_RENEW               = "Heals the target of (%d+) to (%d+) damage over (%d+) sec";
+HEALBOT_SPELL_PATTERN_RENEW1              = "Heals the target of (%d+) damage over (%d+) sec";
+HEALBOT_SPELL_PATTERN_RENEW2              = "Not needed for en";
+HEALBOT_SPELL_PATTERN_RENEW3              = "Not needed for en";
+HEALBOT_SPELL_PATTERN_SHIELD              = "absorbing (%d+) damage.  Lasts (%d+) sec.";
+HEALBOT_SPELL_PATTERN_HEALING_TOUCH       = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_REGROWTH            = "Heals a friendly target for (%d+) to (%d+) and another (%d+) over (%d+) sec";
+HEALBOT_SPELL_PATTERN_REGROWTH1           = "Heals a friendly target for (%d+) to (%d+) and another (%d+) to (%d+) over (%d+) sec";
+HEALBOT_SPELL_PATTERN_HOLY_LIGHT          = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_FLASH_OF_LIGHT      = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_HEALING_WAVE        = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_LESSER_HEALING_WAVE = "Heals a friendly target for (%d+) to (%d+)";
+HEALBOT_SPELL_PATTERN_REJUVENATION        = "Heals the target for (%d+) over (%d+) sec";
+HEALBOT_SPELL_PATTERN_REJUVENATION1       = "Heals the target for (%d+) to (%d+) over (%d+) sec";
+HEALBOT_SPELL_PATTERN_MEND_PET            = "Heals your pet (%d+) health every second while you focus.  Lasts (%d+) sec";
 
-HB_TOOLTIP_MANA                    = "^(%d+) Mana$";
-HB_TOOLTIP_RANGE                   = "(%d+) yd range";
-HB_TOOLTIP_INSTANT_CAST            = "Instant cast";
-HB_TOOLTIP_CAST_TIME               = "(%d+.?%d*) sec cast";
-HB_TOOLTIP_CHANNELED               = "Channeled";
-HB_HASLEFTRAID                     = "^([^%s]+) has left the raid group$";
-HB_HASLEFTPARTY                    = "^([^%s]+) leaves the party$";
-HB_YOULEAVETHEGROUP                = "You leave the group."
-HB_YOULEAVETHERAID                 = "You have left the raid group"
+HEALBOT_TOOLTIP_MANA                    = "^(%d+) Mana$";
+HEALBOT_TOOLTIP_RANGE                   = "(%d+) yd range";
+HEALBOT_TOOLTIP_INSTANT_CAST            = "Instant cast";
+HEALBOT_TOOLTIP_CAST_TIME               = "(%d+.?%d*) sec cast";
+HEALBOT_TOOLTIP_CHANNELED               = "Channeled";
+HEALBOT_HASLEFTRAID                     = "^([^%s]+) has left the raid group$";
+HEALBOT_HASLEFTPARTY                    = "^([^%s]+) leaves the party$";
+HEALBOT_YOULEAVETHEGROUP                = "You leave the group."
+HEALBOT_YOULEAVETHERAID                 = "You have left the raid group"
 
 
 -----------------
@@ -365,6 +366,7 @@ HEALBOT_OPTIONS_MONITORMELEE   = "Melee";
 HEALBOT_OPTIONS_MONITORRANGE   = "Ranged";
 HEALBOT_OPTIONS_MONITORHEALERS = "Healers";
 HEALBOT_OPTIONS_MONITORCUSTOM  = "Custom";
+HEALBOT_OPTIONS_PETS           = "Pets";
 
 HEALBOT_OPTIONS_SHOWTOOLTIP     = "Show tooltips";
 HEALBOT_OPTIONS_SHOWDETTOOLTIP  = "Show detailed spell information";
@@ -385,11 +387,3 @@ HEALBOT_WORDS_SEC               = "sec";
 HEALBOT_WORDS_TO                = "to";
 HEALBOT_WORDS_CAST              = "Cast"
 HEALBOT_WORDS_FOR               = "for";
-
-
-
-
-
-
-
-

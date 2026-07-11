@@ -14,6 +14,7 @@ HealBot_ConfigDefaults = {
   HideSolo = 0,
   OverHeal = 0.25,
   CastNotify = 1,
+  AutoUnshift = 1,
   ChatMessages = {
     [1] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
     [2] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
@@ -24,6 +25,7 @@ HealBot_ConfigDefaults = {
   HideOptions = 0,
   HideAbort = 1,
   ShowTooltip = 1,
+  ShowHealthText = 0,
   GrowUpwards = 0,
   ProtectPvP = 1,
   QualityRange = 0,
@@ -171,7 +173,9 @@ HealBot_ConfigDefaults = {
     },
   },
   EnableHealthy = 0,
+  ShowNonManaBars = 0,
   ActionVisible = 0,
+  ActionMouseover = 1,
   CDCLeftText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None",},
   CDCRightText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None",},
   Current_Skin = "Modern Flat",
@@ -510,6 +514,7 @@ HealBot_Buff_Spells = {
     HEALBOT_PRAYER_OF_SHADOW_PROTECTION,
     HEALBOT_INNER_FIRE,
     HEALBOT_FEAR_WARD,
+    HEALBOT_ENLIGHTEN,
   },
   [HEALBOT_MAGE] = {
     HEALBOT_ARCANE_INTELLECT,

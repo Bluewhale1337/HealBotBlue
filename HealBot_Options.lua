@@ -18,6 +18,7 @@ HealBot_Options_EmergencyFilter_List = {
     HEALBOT_SHAMAN,
     HEALBOT_WARLOCK,
     HEALBOT_WARRIOR,
+    HEALBOT_OPTIONS_PETS,
     HEALBOT_OPTIONS_MONITORMELEE,
     HEALBOT_OPTIONS_MONITORRANGE,
     HEALBOT_OPTIONS_MONITORHEALERS,
@@ -247,6 +248,8 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_PanelSounds:SetChecked(HealBot_Config.PanelSounds);
   HealBot_Options_ShowManaBars:SetChecked(HealBot_Config.ShowManaBars);
   HealBot_Options_ManaBarsHealersOnly:SetChecked(HealBot_Config.ManaBarsHealersOnly);
+  if HealBot_Config.ShowNonManaBars == nil then HealBot_Config.ShowNonManaBars = 0; end
+  HealBot_Options_ShowNonManaBars:SetChecked(HealBot_Config.ShowNonManaBars);
   
   if HealBot_Config.ActionMouseover == nil then HealBot_Config.ActionMouseover = 1; end
   HealBot_Options_ActionMouseover:SetChecked(HealBot_Config.ActionMouseover);
@@ -260,6 +263,9 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_TargetHeals:SetChecked(HealBot_Config.TargetHeals);
   HealBot_Options_EmergencyHeals:SetChecked(HealBot_Config.EmergencyHeals);
   HealBot_Options_OverHeal:SetValue(HealBot_Config.OverHeal);
+  if HealBot_Config.ShowHealthText == nil then HealBot_Config.ShowHealthText = 0; end
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_HealthText, HealBot_Config.ShowHealthText + 1);
+  UIDropDownMenu_SetText(HealBot_Options_HealthText_List[HealBot_Config.ShowHealthText + 1], HealBot_Options_HealthText);
   HealBot_Options_CastNotify_OnClick(nil,HealBot_Config.CastNotify);
   HealBot_Options_SetBuffs();
   HealBot_Options_HideOptions:SetChecked(HealBot_Config.HideOptions);
@@ -336,10 +342,16 @@ function HealBot_Options_SetSkins()
 end
 function HealBot_Options_ShowPanel(id)
   if HealBot_Options_CurrentPanel>0 then
-    getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel):Hide();
+    local panel = getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel);
+    if panel then
+      panel:Hide();
+    end
   end
   HealBot_Options_CurrentPanel = id;
   if HealBot_Options_CurrentPanel>0 then
-    getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel):Show();
+    local panel = getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel);
+    if panel then
+      panel:Show();
+    end
   end
 end

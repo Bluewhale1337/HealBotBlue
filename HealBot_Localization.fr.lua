@@ -61,6 +61,9 @@ HEALBOT_FLASH_HEAL          = "Soins rapides";
 HEALBOT_FLASH_OF_LIGHT      = "Eclair lumineux";
 HEALBOT_HOLY_SHOCK			= "Holy Shock";
 HEALBOT_GREATER_HEAL        = "Soins sup\195\169rieurs";
+HEALBOT_INNER_FIRE            = "Feu int\195\169rieur";
+HEALBOT_FEAR_WARD             = "Gardien de peur";
+HEALBOT_ENLIGHTEN             = "Enlighten";
 HEALBOT_HEALING_TOUCH       = "Toucher gu\195\169risseur";
 HEALBOT_HEAL                = "Soins";
 HEALBOT_HEALING_WAVE        = "Vague de soins";
@@ -112,14 +115,14 @@ HEALBOT_RANK_11             = " (Rang 11)";
 HEALBOT_LIBRARY_INCHEAL    = "Increases healing done by spells and effects by up to (%d+)%.";  -- ***************    needs French translation    ***************
 HEALBOT_LIBRARY_INCDAMHEAL = "Increases damage and healing done by magical spells and effects by up to (%d+)%.";  -- ***************    needs French translation    ***************
 
-HB_BONUSSCANNER_NAMES = {	
+HEALBOT_BONUSSCANNER_NAMES = {	
 	HEAL 		= "Soins",
 };
 
-HB_BONUSSCANNER_PREFIX_EQUIP = "Equip\195\169 : ";
-HB_BONUSSCANNER_PREFIX_SET = "Complet : ";
+HEALBOT_BONUSSCANNER_PREFIX_EQUIP = "Equip\195\169 : ";
+HEALBOT_BONUSSCANNER_PREFIX_SET = "Complet : ";
 
-HB_BONUSSCANNER_PATTERNS_PASSIVE = {
+HEALBOT_BONUSSCANNER_PATTERNS_PASSIVE = {
 	{ pattern = "Augmente les effets des sorts de soins de (%d+)% au maximum.", effect = "HEAL" },
 	{ pattern = "Augmente les soins prodigu\195\169s par les sorts et effets de (%d+)% au maximum.", effect = "HEAL"},
 	{ pattern = "Augmente les d\195\169g\195\162ts et les soins prodigu\195\169s par les sortsfalseles effets magiques de (%d+)% au maximum.", effect = "HEAL" },
@@ -127,39 +130,39 @@ HB_BONUSSCANNER_PATTERNS_PASSIVE = {
 };
 
 
-HB_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
+HEALBOT_BONUSSCANNER_PATTERNS_GENERIC_LOOKUP = {
 	["Sorts de Soins"] = "HEAL",
 	["D\195\169g\195\162ts et soins "] = {"HEAL", "DMG"},
 };
 
-HB_SPELL_PATTERN_LESSER_HEAL         = "Soigne la cible de (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_HEAL                = "Soigne la cible de (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_GREATER_HEAL        = "Une longue incantation qui rend (%d+) \195\160 (%d+) points de vie \195\160 une cible unique";
-HB_SPELL_PATTERN_FLASH_HEAL          = "Rend (%d+) \195\160 (%d+) points de vie";  
-HB_SPELL_PATTERN_RENEW               = "Rend (%d+) \195\160 (%d+) points de vie \195\160 la cible en (%d+) sec";
-HB_SPELL_PATTERN_RENEW1              = "Rend (%d+) points de vie \195\160 la cible en (%d+) sec";
-HB_SPELL_PATTERN_HEALING_TOUCH       = "Rend (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_REGROWTH            = "Soigne une cible amie pour (%d+) \195\160 (%d+) puis pour (%d+) points suppl.+mentaires pendant (%d+) sec";
-HB_SPELL_PATTERN_REGROWTH1           = "Soigne une cible amie pour (%d+) \195\160 (%d+) puis pour (%d+) \195\160 (%d+) points suppl.+mentaires pendant (%d+) sec";
-HB_SPELL_PATTERN_HOLY_LIGHT          = "Rend (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_FLASH_OF_LIGHT      = "Rend (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_HEALING_WAVE        = "Rend (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_LESSER_HEALING_WAVE = "Rend (%d+) \195\160 (%d+) points de vie";
-HB_SPELL_PATTERN_REJUVENATION        = "Soigne la cible de (%d+) durant (%d+) sec";
-HB_SPELL_PATTERN_REJUVENATION1       = "Soigne la cible de (%d+) a (%d+) durant (%d+) sec";
-HB_SPELL_PATTERN_SHIELD              = "absorbe (%d+) points de d\195\169g\195\162ts. Dure (%d+) sec";
-HB_SPELL_PATTERN_MEND_PET            = "Soigne votre compagnon de (%d+) points de vie chaques secondes que vous le ciblez. Dure (%d+) sec"
+HEALBOT_SPELL_PATTERN_LESSER_HEAL         = "Soigne la cible de (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_HEAL                = "Soigne la cible de (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_GREATER_HEAL        = "Une longue incantation qui rend (%d+) \195\160 (%d+) points de vie \195\160 une cible unique";
+HEALBOT_SPELL_PATTERN_FLASH_HEAL          = "Rend (%d+) \195\160 (%d+) points de vie";  
+HEALBOT_SPELL_PATTERN_RENEW               = "Rend (%d+) \195\160 (%d+) points de vie \195\160 la cible en (%d+) sec";
+HEALBOT_SPELL_PATTERN_RENEW1              = "Rend (%d+) points de vie \195\160 la cible en (%d+) sec";
+HEALBOT_SPELL_PATTERN_HEALING_TOUCH       = "Rend (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_REGROWTH            = "Soigne une cible amie pour (%d+) \195\160 (%d+) puis pour (%d+) points suppl.+mentaires pendant (%d+) sec";
+HEALBOT_SPELL_PATTERN_REGROWTH1           = "Soigne une cible amie pour (%d+) \195\160 (%d+) puis pour (%d+) \195\160 (%d+) points suppl.+mentaires pendant (%d+) sec";
+HEALBOT_SPELL_PATTERN_HOLY_LIGHT          = "Rend (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_FLASH_OF_LIGHT      = "Rend (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_HEALING_WAVE        = "Rend (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_LESSER_HEALING_WAVE = "Rend (%d+) \195\160 (%d+) points de vie";
+HEALBOT_SPELL_PATTERN_REJUVENATION        = "Soigne la cible de (%d+) durant (%d+) sec";
+HEALBOT_SPELL_PATTERN_REJUVENATION1       = "Soigne la cible de (%d+) a (%d+) durant (%d+) sec";
+HEALBOT_SPELL_PATTERN_SHIELD              = "absorbe (%d+) points de d\195\169g\195\162ts. Dure (%d+) sec";
+HEALBOT_SPELL_PATTERN_MEND_PET            = "Soigne votre compagnon de (%d+) points de vie chaques secondes que vous le ciblez. Dure (%d+) sec"
 
-HB_TOOLTIP_MANA                      = "^Mana : (%d+)$";
-HB_TOOLTIP_INSTANT_CAST              = 'Incantation imm\195\169diate';
-HB_TOOLTIP_CAST_TIME                 = '(%d+.?%d*) sec';
+HEALBOT_TOOLTIP_MANA                      = "^Mana : (%d+)$";
+HEALBOT_TOOLTIP_INSTANT_CAST              = 'Incantation imm\195\169diate';
+HEALBOT_TOOLTIP_CAST_TIME                 = '(%d+.?%d*) sec';
 
-HB_TOOLTIP_RANGE                     = "de (%d+) m"
-HB_TOOLTIP_CHANNELED                 = "Focaliser"
-HB_HASLEFTRAID                       = "^([^%s]+) a quitt\195\131\194\169 le groupe de raid$";
-HB_HASLEFTPARTY                      = "^([^%s]+) has left the party$";  -- ***************    needs French translation    ***************
-HB_YOULEAVETHEGROUP                  = "You leave the group"  -- ***************    needs translation    ***************
-HB_YOULEAVETHERAID                   = "You have left the raid group"  -- ***************    needs translation    ***************
+HEALBOT_TOOLTIP_RANGE                     = "de (%d+) m"
+HEALBOT_TOOLTIP_CHANNELED                 = "Focaliser"
+HEALBOT_HASLEFTRAID                       = "^([^%s]+) a quitt\195\131\194\169 le groupe de raid$";
+HEALBOT_HASLEFTPARTY                      = "^([^%s]+) has left the party$";  -- ***************    needs French translation    ***************
+HEALBOT_YOULEAVETHEGROUP                  = "You leave the group"  -- ***************    needs translation    ***************
+HEALBOT_YOULEAVETHERAID                   = "You have left the raid group"  -- ***************    needs translation    ***************
 
 -----------------
 -- Translation --
@@ -266,6 +269,7 @@ HEALBOT_OPTIONS_MONITORMELEE   = "M\195\169l\195\169e";
 HEALBOT_OPTIONS_MONITORRANGE   = "\195\128 distance";
 HEALBOT_OPTIONS_MONITORHEALERS = "Soigneurs";
 HEALBOT_OPTIONS_MONITORCUSTOM  = "Personnalis\195\169";
+HEALBOT_OPTIONS_PETS           = "Familiers";
 
 HEALBOT_OPTIONS_BARALPHAINHEAL= "Incoming heal opacity";  -- ***************    needs French translation    ***************
 
@@ -333,7 +337,6 @@ HEALBOT_WORDS_SEC               = "sec";   -- ***************    needs translati
 HEALBOT_WORDS_TO                = "to";   -- ***************    needs translation    ***************
 HEALBOT_WORDS_CAST              = "Cast"   -- ***************    needs translation    ***************
 HEALBOT_WORDS_FOR               = "for";   -- ***************    needs translation    ***************
-
 end
 
 

@@ -132,16 +132,25 @@ function HealBot_Action_EnableButton(button)
     local pt = state.powerType
     
     local showMana = false
-    if HealBot_Config.ShowManaBars == 1 and state.maxMana > 0 and pt == 0 then
-        if HealBot_Config.ManaBarsHealersOnly == 1 then
-            if isHealer then showMana = true end
-        else
+    local pr, pg, pb = 0, 0, 1 -- Default Blue for Mana
+    
+    if HealBot_Config.ShowManaBars == 1 and state.maxMana > 0 then
+        if pt == 0 then
+            if HealBot_Config.ManaBarsHealersOnly == 1 then
+                if isHealer then showMana = true end
+            else
+                showMana = true
+            end
+        elseif HealBot_Config.ShowNonManaBars == 1 then
             showMana = true
+            if pt == 1 then pr, pg, pb = 1, 0, 0 -- Rage (Red)
+            elseif pt == 3 then pr, pg, pb = 1, 1, 0 -- Energy (Yellow)
+            elseif pt == 2 then pr, pg, pb = 1, 0.5, 0 -- Focus (Orange)
+            end
         end
     end
 
     if showMana then
-        local pr, pg, pb = 0, 0, 1
         if bar3 then
             bar3:SetMinMaxValues(0, state.maxMana)
             bar3:SetValue(state.mana)
@@ -193,10 +202,36 @@ function HealBot_Action_EnableButton(button)
         bar:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
         bar2:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
     end
-    if string.len(name) > textlen then
-        name = string.sub(name, 1, textlen - 3) .. '...';
+    local healthTextOpt = HealBot_Config.ShowHealthText or 0
+    local displayText = name
+    if healthTextOpt == 1 then
+        local pct = 0
+        if maxhlth > 0 then pct = math.floor((hlth / maxhlth) * 100) end
+        displayText = name .. " - " .. pct .. "%"
+    elseif healthTextOpt == 2 then
+        displayText = name .. " - " .. hlth .. "/" .. maxhlth
+    elseif healthTextOpt == 3 then
+        local deficit = maxhlth - hlth
+        if deficit > 0 then
+            displayText = name .. " - -" .. deficit
+        end
     end
-    bar.txt:SetText(name);
+
+    if string.len(displayText) > textlen then
+        if healthTextOpt > 0 then
+            -- If we have numbers, just truncate the name part so the numbers still show.
+            -- Find where " - " starts.
+            local dashIndex = string.find(displayText, " %- ")
+            if dashIndex then
+                local numbersPart = string.sub(displayText, dashIndex)
+                local namePart = string.sub(name, 1, math.max(1, textlen - string.len(numbersPart) - 3)) .. "..."
+                displayText = namePart .. numbersPart
+            end
+        else
+            displayText = string.sub(name, 1, textlen - 3) .. '...';
+        end
+    end
+    bar.txt:SetText(displayText);
     bar.txt:SetTextColor(sr, sg, sb, sa);
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
@@ -495,7 +530,7 @@ function HealBot_Action_PartyChanged()
                 numBars = numBars + 1;
                 numHeaders = numHeaders + 1;
             end
-            if HealBot_Config.EmergIncMonitor == 1 then
+            if HealBot_Config.EmergIncMonitor == 2 then
                 if GetNumRaidMembers() > 0 then
                     for j = 1, 40 do
                         local PossibleEmerg = 1;
@@ -534,6 +569,50 @@ function HealBot_Action_PartyChanged()
                                 order[unit] = class;
                             elseif HealBot_Config.ExtraOrder == 3 then
                                 order[unit] = subgroup;
+                            else
+                                order[unit] = 0 - UnitHealthMax(unit);
+                                if UnitHealthMax(unit) > TempMaxH then TempMaxH = UnitHealthMax(unit); end
+                            end
+                            table.insert(units, unit);
+                            numBars = numBars + 1;
+                        end
+                    end
+                end
+            elseif HealBot_Config.EmergIncMonitor == 12 then
+                if GetNumRaidMembers() > 0 then
+                    for j = 1, 40 do
+                        local unit = "raidpet" .. j;
+                        if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local ownerIndex = j;
+                            local name = UnitName(unit) or "Pet";
+                            local _, _, subgroup = GetRaidRosterInfo(ownerIndex);
+                            subgroup = subgroup or 1;
+                            
+                            if HealBot_Config.ExtraOrder == 1 then
+                                order[unit] = name;
+                            elseif HealBot_Config.ExtraOrder == 2 then
+                                order[unit] = HEALBOT_OPTIONS_PETS;
+                            elseif HealBot_Config.ExtraOrder == 3 then
+                                order[unit] = subgroup;
+                            else
+                                order[unit] = 0 - UnitHealthMax(unit);
+                                if UnitHealthMax(unit) > TempMaxH then TempMaxH = UnitHealthMax(unit); end
+                            end
+                            table.insert(units, unit);
+                            numBars = numBars + 1;
+                        end
+                    end
+                else
+                    local petUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
+                    for _, unit in ipairs(petUnits) do
+                        if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local name = UnitName(unit) or "Pet";
+                            if HealBot_Config.ExtraOrder == 1 then
+                                order[unit] = name;
+                            elseif HealBot_Config.ExtraOrder == 2 then
+                                order[unit] = HEALBOT_OPTIONS_PETS;
+                            elseif HealBot_Config.ExtraOrder == 3 then
+                                order[unit] = 1;
                             else
                                 order[unit] = 0 - UnitHealthMax(unit);
                                 if UnitHealthMax(unit) > TempMaxH then TempMaxH = UnitHealthMax(unit); end
@@ -606,10 +685,26 @@ function HealBot_Action_PartyChanged()
             local TempSort = "init"
             TempMaxH = math.ceil(TempMaxH / 1000) * 1000;
             
-            if GetNumRaidMembers() > 0 then
+            if GetNumRaidMembers() > 0 or HealBot_Config.EmergIncMonitor == 12 then
                 for j = 1, 40 do
                     if not units[j] then break end
-                    local name, rank, subgroup, level, class, fileName, zone, online, isDead = GetRaidRosterInfo(string.sub(units[j], 5));
+                    local name, rank, subgroup, level, class, fileName, zone, online, isDead;
+                    local ownerIndex = nil;
+                    if string.sub(units[j], 1, 7) == "raidpet" then
+                        ownerIndex = tonumber(string.sub(units[j], 8));
+                    elseif string.sub(units[j], 1, 4) == "raid" then
+                        ownerIndex = tonumber(string.sub(units[j], 5));
+                    end
+                    if ownerIndex then
+                        name, rank, subgroup, level, class, fileName, zone, online, isDead = GetRaidRosterInfo(ownerIndex);
+                    end
+                    
+                    if string.sub(units[j], 1, 7) == "raidpet" or string.sub(units[j], 1, 8) == "partypet" or units[j] == "pet" then
+                        name = UnitName(units[j]) or "Pet";
+                        class = HEALBOT_OPTIONS_PETS;
+                        subgroup = subgroup or 1;
+                    end
+                    
                     if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 and HealBot_Config.ExtraOrder == 2 and TempSort ~= class then 
                         TempSort = class
                         HeaderPos[i + 1] = class
