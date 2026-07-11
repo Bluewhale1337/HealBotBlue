@@ -61,6 +61,9 @@ HEALBOT_PRAYER_OF_HEALING       = "치유의 기원";
 HEALBOT_CHAIN_HEAL              = "연쇄 치유";
 
 HEALBOT_POWER_WORD_FORTITUDE          = "신의 권능: 인내";
+HEALBOT_INNER_FIRE            = "내면의 열정";
+HEALBOT_FEAR_WARD             = "공포의 결계";
+HEALBOT_ENLIGHTEN             = "Enlighten";
 HEALBOT_MARK_OF_THE_WILD              = "야생의 징표";
 HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 

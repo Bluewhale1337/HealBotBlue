@@ -93,6 +93,7 @@ HEALBOT_THORNS                = "Thorns";
 HEALBOT_OMEN_OF_CLARITY       = "Omen of Clarity";
 HEALBOT_INNER_FIRE            = "Inner Fire";
 HEALBOT_FEAR_WARD             = "Fear Ward";
+HEALBOT_ENLIGHTEN             = "Enlighten";
 
 HEALBOT_RESURRECTION       = "Resurrection";
 HEALBOT_REDEMPTION         = "Redemption";
