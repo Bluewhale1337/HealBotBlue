@@ -74,20 +74,14 @@ function HealBot_CastSpellByName(spell)
   CastSpell(id, BOOKTYPE_SPELL);
 end
 
-function HealBot_StartCasting(spell, target, ttype)
-  HealBot_CastSpellByName(spell);
-  HealBot_CastingSpell  = spell;
-  HealBot_CastingTarget = target;
-  if ( SpellCanTargetUnit(target) ) then 
-    SpellTargetUnit(target);
-    ttype = "fired";
-  elseif SpellIsTargeting() then
-    SpellTargetUnit(target);
-    SpellStopTargeting()
-  elseif ttype == "direct" then
-    if ( CheckInteractDistance(target, 4) ) then
-      ttype = "fired";
-    end
+function HealBot_AnnounceCast(spell, target)
+  if not spell or not target then return end
+
+  if UnitIsDeadOrGhost(target) then
+      local spellLower = string.lower(spell)
+      if not (string.find(spellLower, "resurrection") or string.find(spellLower, "ancestral spirit") or string.find(spellLower, "redemption") or string.find(spellLower, "rebirth")) then
+          return
+      end
   end
 
   if HealBot_Config.ChatMessages then
@@ -131,6 +125,26 @@ function HealBot_StartCasting(spell, target, ttype)
       end
     end
   end
+end
+
+function HealBot_StartCasting(spell, target, ttype)
+  HealBot_CastSpellByName(spell);
+  HealBot_CastingSpell  = spell;
+  HealBot_CastingTarget = target;
+  if ( SpellCanTargetUnit(target) ) then 
+    SpellTargetUnit(target);
+    ttype = "fired";
+  elseif SpellIsTargeting() then
+    SpellTargetUnit(target);
+    SpellStopTargeting()
+  elseif ttype == "direct" then
+    if ( CheckInteractDistance(target, 4) ) then
+      ttype = "fired";
+    end
+  end
+
+  HealBot_AnnounceCast(spell, target)
+
   if ttype == "fired" and HealBot_Spells[spell] then
     if HealBot_Spells[spell].CastTime > 1 then
       HealBot_HealValue = HealBot_Spells[spell].HealsDur;

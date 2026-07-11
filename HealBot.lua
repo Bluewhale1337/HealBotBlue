@@ -276,9 +276,21 @@ do
         do
           local autoSelfCast = GetCVar("autoSelfCast")
           SetCVar("autoSelfCast", "0") -- Ensure disabled
+          
+          local spellName = nil
+          if not GetActionText(slot) then
+            HealBot_ScanTooltip:SetOwner(HealBot_ScanTooltip, "ANCHOR_NONE")
+            HealBot_ScanTooltip:SetAction(slot)
+            spellName = HealBot_ScanTooltipTextLeft1 and HealBot_ScanTooltipTextLeft1:GetText()
+          end
+          
           orig(slot, checkCursor, onSelf)
           if autoSelfCast then
             SetCVar("autoSelfCast", autoSelfCast)
+          end
+          
+          if spellName and HealBot_AnnounceCast then
+             HealBot_AnnounceCast(spellName, mouseover)
           end
         end
         
