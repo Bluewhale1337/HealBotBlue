@@ -3,10 +3,10 @@
 
 HealBot_View_DirtyUnits = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
+HealBot_LastModState = ""
 
 function HealBot_OnLoad(this)
     this:RegisterEvent("VARIABLES_LOADED");
-    this:RegisterEvent("MODIFIER_STATE_CHANGED");
     
     SLASH_HEALBOT1 = "/healbot";
     SLASH_HEALBOT2 = "/hb";
@@ -42,6 +42,20 @@ function HealBot_RegisterThis(this)
 end 
 
 function HealBot_OnUpdate(this, arg1)
+    if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
+        local currentModState = ""
+        if IsShiftKeyDown() then currentModState = currentModState .. "S" end
+        if IsControlKeyDown() then currentModState = currentModState .. "C" end
+        if IsAltKeyDown() then currentModState = currentModState .. "A" end
+        
+        if HealBot_LastModState ~= currentModState then
+            HealBot_LastModState = currentModState
+            HealBot_Action_RefreshTooltip(HealBot_Action_TooltipUnit)
+        end
+    else
+        HealBot_LastModState = ""
+    end
+
     if HealBot_TargetRestorePending then
         HealBot_TargetRestoreTimer = HealBot_TargetRestoreTimer + arg1;
         if HealBot_TargetRestoreTimer >= 0.1 then
@@ -179,17 +193,12 @@ local HealBot_EventHandlers = {
     ["VARIABLES_LOADED"] = function(this)
         HealBot_OnEvent_VariablesLoaded(this)
     end,
-    ["MODIFIER_STATE_CHANGED"] = function(this, arg1, arg2)
-        if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
-            HealBot_Action_RefreshTooltip(HealBot_Action_TooltipUnit)
-        end
-    end,
     -- Legacy pass-throughs
     ["CHAT_MSG_ADDON"] = function(this, arg1, arg2, arg3, arg4) HealBot_OnEvent_AddonMsg(this, arg1, arg2, arg3, arg4) end,
     ["SPELLCAST_START"] = function(this, arg1, arg2) HealBot_OnEvent_SpellcastStart(this, arg1, arg2) end,
-    ["SPELLCAST_STOP"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
-    ["SPELLCAST_INTERRUPTED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
-    ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
+    ["SPELLCAST_STOP"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_STOP") end,
+    ["SPELLCAST_INTERRUPTED"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_INTERRUPTED") end,
+    ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_FAILED") end,
     ["PLAYER_REGEN_DISABLED"] = function(this) HealBot_OnEvent_PlayerRegenDisabled(this) end,
     ["PLAYER_REGEN_ENABLED"] = function(this) HealBot_OnEvent_PlayerRegenEnabled(this) end,
     ["BAG_UPDATE_COOLDOWN"] = function(this, arg1) HealBot_OnEvent_BagUpdateCooldown(this, arg1) end,
@@ -464,8 +473,11 @@ function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     end
 end
 
-function HealBot_OnEvent_SpellcastStop(this)
+function HealBot_OnEvent_SpellcastStop(this, eventName)
     HealBot_IsCasting = false;
+    if eventName == "SPELLCAST_FAILED" then
+        HealBot_CastFailed = true;
+    end
     HealBot_StopCasting();
     HealBot_RecalcHeals();
     if HealBot_IamRessing then

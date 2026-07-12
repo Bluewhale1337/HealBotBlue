@@ -127,10 +127,45 @@ function HealBot_AnnounceCast(spell, target)
   end
 end
 
+function HealBot_Process_HealValue(spell, target)
+  if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime > 1 then
+    HealBot_HealValue = HealBot_Spells[spell].HealsDur;
+    
+    -- Apply dynamic Preservation bonus
+    if HEALBOT_REGROWTH and string.find(spell, HEALBOT_REGROWTH) then
+      local presRank = HealBot_GetTalentRank("Preservation")
+      if presRank > 0 then
+        local hasRejuv = false
+        for i=1,32 do
+          local buff = UnitBuff(target, i)
+          if not buff then break end
+          if string.find(buff, "Spell_Nature_Rejuvenation") then
+            hasRejuv = true
+            break
+          end
+        end
+        if hasRejuv then
+           local extHeal = HealBot_Spells[spell].HealsExt or 0
+           local bonus = extHeal * (presRank * 0.10)
+           HealBot_HealValue = HealBot_HealValue + math.floor(bonus)
+        end
+      end
+    end
+    local uname = UnitName(target)
+    if uname then
+      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ");
+      if not HealBot_HealsIn[uname] then
+          HealBot_HealsIn[uname] = 0;
+      end
+      HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue;
+      HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+    end
+  end
+end
+
 function HealBot_StartCasting(spell, target, ttype)
+  HealBot_CastFailed = false;
   HealBot_CastSpellByName(spell);
-  HealBot_CastingSpell  = spell;
-  HealBot_CastingTarget = target;
   if ( SpellCanTargetUnit(target) ) then 
     SpellTargetUnit(target);
     ttype = "fired";
@@ -138,28 +173,36 @@ function HealBot_StartCasting(spell, target, ttype)
     SpellTargetUnit(target);
     SpellStopTargeting()
   elseif ttype == "direct" then
-    if ( CheckInteractDistance(target, 4) ) then
+    if ( UnitIsUnit(target, "player") or CheckInteractDistance(target, 4) ) then
       ttype = "fired";
     end
   end
 
-  HealBot_AnnounceCast(spell, target)
-
   if ttype == "fired" and HealBot_Spells[spell] then
-    if HealBot_Spells[spell].CastTime > 1 then
-      HealBot_HealValue = HealBot_Spells[spell].HealsDur;
-      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(target) .. " <<=>> " .. HealBot_HealValue .. " << ");
+    if not HealBot_CastFailed then
+      HealBot_CastingSpell  = spell;
+      HealBot_CastingTarget = target;
+      HealBot_Process_HealValue(spell, target);
+      HealBot_AnnounceCast(spell, target);
     end
   end
 end
 
 function HealBot_StopCasting()
   if HealBot_CastingTarget then
-    if HealBot_HealsIn[UnitName(HealBot_CastingTarget)] then
-      if HealBot_HealValue > 0 then
-        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(HealBot_CastingTarget) .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
-        HealBot_HealValue = 0;
+    if HealBot_HealValue > 0 then
+      local uname = UnitName(HealBot_CastingTarget)
+      if uname then
+        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+        if HealBot_HealsIn[uname] then
+           HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
+           if HealBot_HealsIn[uname] < 0 then
+               HealBot_HealsIn[uname] = 0;
+           end
+           HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+        end
       end
+      HealBot_HealValue = 0;
     end
   end
   HealBot_CastingSpell  = nil;
@@ -298,7 +341,46 @@ function HealBot_SetItemDefaults(spell)
 end
 
 function HealBot_SetSpellDefaults(spell)
-  HealBot_Spells[spell].HealsDur = math.floor((HealBot_Spells[spell].HealsCast + HealBot_Spells[spell].HealsExt) + HealBot_Spells[spell].RealHealing);
+  local baseHeal = HealBot_Spells[spell].HealsCast or 0
+  local extHeal = HealBot_Spells[spell].HealsExt or 0
+  local realHeal = HealBot_Spells[spell].RealHealing or 0
+
+  local _, class = UnitClass("player")
+  if class == "DRUID" then
+     local giftRank = HealBot_GetTalentRank("Gift of Nature")
+     local genRank = HealBot_GetTalentRank("Genesis")
+     
+     local mult = 1 + (giftRank * 0.02)
+     baseHeal = baseHeal * mult
+     extHeal = extHeal * mult
+     realHeal = realHeal * mult
+     
+     if genRank > 0 then
+       extHeal = extHeal * (1 + (genRank * 0.05))
+     end
+  elseif class == "PRIEST" then
+     local spiritRank = HealBot_GetTalentRank("Spiritual Healing")
+     local mult = 1 + (spiritRank * 0.06)
+     baseHeal = baseHeal * mult
+     extHeal = extHeal * mult
+     realHeal = realHeal * mult
+     
+     if HEALBOT_RENEW and string.find(spell, HEALBOT_RENEW) then
+       local renewRank = HealBot_GetTalentRank("Improved Renew")
+       extHeal = extHeal * (1 + (renewRank * 0.05))
+     end
+  elseif class == "PALADIN" then
+     local hlRank = HealBot_GetTalentRank("Healing Light")
+     if (HEALBOT_HOLY_LIGHT and string.find(spell, HEALBOT_HOLY_LIGHT)) or 
+        (HEALBOT_FLASH_OF_LIGHT and string.find(spell, HEALBOT_FLASH_OF_LIGHT)) or 
+        (HEALBOT_HOLY_SHOCK and string.find(spell, HEALBOT_HOLY_SHOCK)) then
+        local mult = 1 + (hlRank * 0.04)
+        baseHeal = baseHeal * mult
+        realHeal = realHeal * mult
+     end
+  end
+
+  HealBot_Spells[spell].HealsDur = math.floor(baseHeal + extHeal + realHeal);
 end
 
 function HealBot_AddHeal(spell)
@@ -433,17 +515,38 @@ function HealBot_RecalcSpells()
   HealBot_RecalcParty();
 end
 
+function HealBot_GetTalentRank(talentName)
+  for t = 1, GetNumTalentTabs() do
+    for i = 1, GetNumTalents(t) do
+      local nameTalent, icon, tier, column, currRank, maxRank = GetTalentInfo(t, i);
+      if nameTalent == talentName then
+        return currRank;
+      end
+    end
+  end
+  return 0;
+end
+
 function HealBot_SpiBonus(spell)
   local heals_modifer = 0;
   local base, stat, posBuff, negBuff = UnitStat("player", 5);
-  nameTalent, icon, tier, column, currRank, maxRank = GetTalentInfo(2, 14); -- Spiritual guidance
-  spiGuideBonus = stat * 0.05;
-  heals_modifer = heals_modifer + (currRank * spiGuideBonus);
+  local currRank = HealBot_GetTalentRank("Spiritual Guidance")
+  if currRank > 0 then
+    local spiGuideBonus = stat * 0.05;
+    heals_modifer = heals_modifer + (currRank * spiGuideBonus);
+  end
   return heals_modifer;
 end
 
 function HealBot_GetBonus()
-  local HealBonus = HealBot_BonusScanner:GetBonus();
+  local HealBonus = HealBot_BonusScanner:GetBonus() or 0;
+  if UnitClass("player") == "PALADIN" then
+    local ironRank = HealBot_GetTalentRank("Ironclad")
+    if ironRank > 0 then
+      local base, effectiveArmor = UnitArmor("player")
+      HealBonus = HealBonus + (effectiveArmor * (ironRank * 0.01))
+    end
+  end
   return HealBonus;
 end
 

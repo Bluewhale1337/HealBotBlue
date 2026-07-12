@@ -284,12 +284,16 @@ do
             spellName = HealBot_ScanTooltipTextLeft1 and HealBot_ScanTooltipTextLeft1:GetText()
           end
           
+          HealBot_CastFailed = false
           orig(slot, checkCursor, onSelf)
           if autoSelfCast then
             SetCVar("autoSelfCast", autoSelfCast)
           end
           
-          if spellName and HealBot_AnnounceCast then
+          if spellName and not HealBot_CastFailed then
+             HealBot_CastingSpell = spellName
+             HealBot_CastingTarget = mouseover
+             HealBot_Process_HealValue(spellName, mouseover)
              HealBot_AnnounceCast(spellName, mouseover)
           end
         end

@@ -70,6 +70,7 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
         local tmpTest, unitname, heal_val
         tmpTest, tmpTest, unitname, heal_val = string.find(inc_msg, ">> (%a+) <<=>> (.%d+) <<" );
         if heal_val then
+            if sender_id == UnitName("player") then return end
             if not HealBot_HealsIn[unitname] then
                 HealBot_HealsIn[unitname] = 0;
             end

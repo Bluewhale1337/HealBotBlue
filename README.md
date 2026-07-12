@@ -37,6 +37,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 
 ### Change Log
+**v1.4.1**
+* **Talent-based Healing Calculations:** Implemented dynamic spell healing calculations for Druid, Priest, and Paladin classes based on talents.
+* **Modifier Key Polling:** Replaced MODIFIER_STATE_CHANGED event with polling in HealBot_OnUpdate to track modifier keys reliably.
+* **Incoming Heals Fix:** Fixed a bug where incoming heals failed to broadcast or show on the UI due to synchronous GCD fails and `CheckInteractDistance` limitations in the 1.12 API.
+* **Hovercast Incoming Heals:** Added full support for processing and displaying incoming heals when using action bar hovercasting.
+* **Zero-latency Self-Heals:** Incoming heals for the local player now process instantly with zero latency and no network reliance, ensuring they function even when playing solo.
+
 **v1.4** 
 * **Extra Frame support for pets and familiars added:** Togglable from healing tab - Extra frames option selected & pets selected from dropdown.
 * **Customizable Health Text:** Added a new dropdown in the Healing Options tab that allows users to choose how health text is displayed on unit frames (`Name Only`, `Health Percentage`, `Real Health`, or `Health Deficit`). Includes a smart truncation algorithm to preserve critical health numbers even if the unit name is too long.
