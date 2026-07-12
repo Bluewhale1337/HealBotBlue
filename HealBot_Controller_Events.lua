@@ -196,9 +196,9 @@ local HealBot_EventHandlers = {
     -- Legacy pass-throughs
     ["CHAT_MSG_ADDON"] = function(this, arg1, arg2, arg3, arg4) HealBot_OnEvent_AddonMsg(this, arg1, arg2, arg3, arg4) end,
     ["SPELLCAST_START"] = function(this, arg1, arg2) HealBot_OnEvent_SpellcastStart(this, arg1, arg2) end,
-    ["SPELLCAST_STOP"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
-    ["SPELLCAST_INTERRUPTED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
-    ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this) end,
+    ["SPELLCAST_STOP"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_STOP") end,
+    ["SPELLCAST_INTERRUPTED"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_INTERRUPTED") end,
+    ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_FAILED") end,
     ["PLAYER_REGEN_DISABLED"] = function(this) HealBot_OnEvent_PlayerRegenDisabled(this) end,
     ["PLAYER_REGEN_ENABLED"] = function(this) HealBot_OnEvent_PlayerRegenEnabled(this) end,
     ["BAG_UPDATE_COOLDOWN"] = function(this, arg1) HealBot_OnEvent_BagUpdateCooldown(this, arg1) end,
@@ -473,8 +473,11 @@ function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     end
 end
 
-function HealBot_OnEvent_SpellcastStop(this)
+function HealBot_OnEvent_SpellcastStop(this, eventName)
     HealBot_IsCasting = false;
+    if eventName == "SPELLCAST_FAILED" then
+        HealBot_CastFailed = true;
+    end
     HealBot_StopCasting();
     HealBot_RecalcHeals();
     if HealBot_IamRessing then

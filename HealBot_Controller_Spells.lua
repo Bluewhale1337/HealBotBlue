@@ -127,10 +127,45 @@ function HealBot_AnnounceCast(spell, target)
   end
 end
 
+function HealBot_Process_HealValue(spell, target)
+  if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime > 1 then
+    HealBot_HealValue = HealBot_Spells[spell].HealsDur;
+    
+    -- Apply dynamic Preservation bonus
+    if HEALBOT_REGROWTH and string.find(spell, HEALBOT_REGROWTH) then
+      local presRank = HealBot_GetTalentRank("Preservation")
+      if presRank > 0 then
+        local hasRejuv = false
+        for i=1,32 do
+          local buff = UnitBuff(target, i)
+          if not buff then break end
+          if string.find(buff, "Spell_Nature_Rejuvenation") then
+            hasRejuv = true
+            break
+          end
+        end
+        if hasRejuv then
+           local extHeal = HealBot_Spells[spell].HealsExt or 0
+           local bonus = extHeal * (presRank * 0.10)
+           HealBot_HealValue = HealBot_HealValue + math.floor(bonus)
+        end
+      end
+    end
+    local uname = UnitName(target)
+    if uname then
+      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ");
+      if not HealBot_HealsIn[uname] then
+          HealBot_HealsIn[uname] = 0;
+      end
+      HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue;
+      HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+    end
+  end
+end
+
 function HealBot_StartCasting(spell, target, ttype)
+  HealBot_CastFailed = false;
   HealBot_CastSpellByName(spell);
-  HealBot_CastingSpell  = spell;
-  HealBot_CastingTarget = target;
   if ( SpellCanTargetUnit(target) ) then 
     SpellTargetUnit(target);
     ttype = "fired";
@@ -138,50 +173,36 @@ function HealBot_StartCasting(spell, target, ttype)
     SpellTargetUnit(target);
     SpellStopTargeting()
   elseif ttype == "direct" then
-    if ( CheckInteractDistance(target, 4) ) then
+    if ( UnitIsUnit(target, "player") or CheckInteractDistance(target, 4) ) then
       ttype = "fired";
     end
   end
 
-  HealBot_AnnounceCast(spell, target)
-
   if ttype == "fired" and HealBot_Spells[spell] then
-    if HealBot_Spells[spell].CastTime > 1 then
-      HealBot_HealValue = HealBot_Spells[spell].HealsDur;
-      
-      -- Apply dynamic Preservation bonus
-      if HEALBOT_REGROWTH and string.find(spell, HEALBOT_REGROWTH) then
-        local presRank = HealBot_GetTalentRank("Preservation")
-        if presRank > 0 then
-          local hasRejuv = false
-          for i=1,32 do
-            local buff = UnitBuff(target, i)
-            if not buff then break end
-            if string.find(buff, "Spell_Nature_Rejuvenation") then
-              hasRejuv = true
-              break
-            end
-          end
-          if hasRejuv then
-             local extHeal = HealBot_Spells[spell].HealsExt or 0
-             local bonus = extHeal * (presRank * 0.10)
-             HealBot_HealValue = HealBot_HealValue + math.floor(bonus)
-          end
-        end
-      end
-
-      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(target) .. " <<=>> " .. HealBot_HealValue .. " << ");
+    if not HealBot_CastFailed then
+      HealBot_CastingSpell  = spell;
+      HealBot_CastingTarget = target;
+      HealBot_Process_HealValue(spell, target);
+      HealBot_AnnounceCast(spell, target);
     end
   end
 end
 
 function HealBot_StopCasting()
   if HealBot_CastingTarget then
-    if HealBot_HealsIn[UnitName(HealBot_CastingTarget)] then
-      if HealBot_HealValue > 0 then
-        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. UnitName(HealBot_CastingTarget) .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
-        HealBot_HealValue = 0;
+    if HealBot_HealValue > 0 then
+      local uname = UnitName(HealBot_CastingTarget)
+      if uname then
+        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+        if HealBot_HealsIn[uname] then
+           HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
+           if HealBot_HealsIn[uname] < 0 then
+               HealBot_HealsIn[uname] = 0;
+           end
+           HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+        end
       end
+      HealBot_HealValue = 0;
     end
   end
   HealBot_CastingSpell  = nil;
