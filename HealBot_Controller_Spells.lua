@@ -475,19 +475,43 @@ end
 
 function HealBot_GetHealSpell(unit, pattern)
   if (not UnitName(unit)) then return nil end;
+  if not pattern then return nil end;
   if UnitOnTaxi("player") then return nil end;
   if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
   if HealBot_UnitClass("player") == "DRUID" then
     if HealBot_ActiveShapeshiftStance and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
-  end    
-  local spell = HealBot_GetSpellName(HealBot_GetSpellId(pattern))
-  local range = 40;
-  if HealBot_Spells[spell] then
-    if not HealBot_CanCastSpell(spell, unit) then return nil end;
-    range = HealBot_Spells[spell].range;
   end
-  if HealBot_Range_Check(unit, range) == 0 then return nil end;
-  return spell;
+  
+  -- Handle Inline Scripts
+  if string.sub(pattern, 1, 1) == "/" then
+      return pattern;
+  end
+
+  -- Handle Spells
+  if HealBot_Spells[pattern] or HealBot_GetSpellId(pattern) then
+    local spell = HealBot_GetSpellName(HealBot_GetSpellId(pattern)) or pattern
+    local range = 40;
+    if HealBot_Spells[spell] then
+      if not HealBot_CanCastSpell(spell, unit) then return nil end;
+      range = HealBot_Spells[spell].range or 40;
+    end
+    if HealBot_Range_Check(unit, range) == 0 then return nil end;
+    return spell;
+  end
+
+  -- Handle Named Macros
+  if GetMacroIndexByName(pattern) ~= 0 then
+      return pattern;
+  end
+
+  -- Handle Items
+  local bag, slot = HealBot_FindBagSlot(pattern)
+  if bag then
+      -- optionally check item range, but skipping for now as it's complex in vanilla
+      return pattern;
+  end
+  
+  return nil;
 end
 
 function HealBot_HealUnit(unit, pattern)
