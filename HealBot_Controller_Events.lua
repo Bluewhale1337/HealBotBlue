@@ -378,7 +378,10 @@ function HealBot_OnEvent_PlayerRegenEnabled(this)
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(this)
-    HealBot_RecalcParty();
+    if HealBot_Action_UnitButtons and HealBot_Action_UnitButtons["target"] then
+        HealBot_Action_RefreshButtons("target");
+        HealBot_OnEvent_UnitAura(nil, "target");
+    end
 end
 
 function HealBot_OnEvent_PartyMembersChanged(this)

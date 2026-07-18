@@ -87,13 +87,17 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
 end
 
 function HealBot_Action_HealthBar(button)
-    local name = button:GetName();
-    return getglobal(name .. "Bar");
+    if not button.bar then
+        button.bar = getglobal(button:GetName() .. "Bar")
+    end
+    return button.bar;
 end
 
 function HealBot_Action_HealthBar2(button)
-    local name = button:GetName();
-    return getglobal(name .. "Bar2");
+    if not button.bar2 then
+        button.bar2 = getglobal(button:GetName() .. "Bar2")
+    end
+    return button.bar2;
 end
 
 function HealBot_Action_EnableButton(button)
@@ -108,7 +112,8 @@ function HealBot_Action_EnableButton(button)
 
     local bar = HealBot_Action_HealthBar(button);
     local bar2 = HealBot_Action_HealthBar2(button);
-    local bar3 = getglobal(button:GetName() .. "Bar3");
+    if not button.bar3 then button.bar3 = getglobal(button:GetName() .. "Bar3") end
+    local bar3 = button.bar3;
     local btexture = HealBot_Config.btexture[HealBot_Config.Current_Skin];
     local bheight = HealBot_Config.bheight[HealBot_Config.Current_Skin];
     local sr = HealBot_Config.btextenabledcolr[HealBot_Config.Current_Skin];
@@ -175,7 +180,7 @@ function HealBot_Action_EnableButton(button)
     else
         bar2:SetValue(0);
     end
-    bar.txt = getglobal(bar:GetName() .. "_text");
+    if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
     if (not HealBot_IsCasting and (HealBot_CanHeal(unit) or HealBot_MissingBuffs[unit])) then
         button:Enable();
         if HealBot_UnitDebuff[unit] then

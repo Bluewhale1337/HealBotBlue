@@ -246,7 +246,7 @@ function HealBot_CheckCasting(unit)
   local ag = HealBot_Config.babortcolg[HealBot_Config.Current_Skin] or 0.1;
   local ab = HealBot_Config.babortcolb[HealBot_Config.Current_Skin] or 0.5;
   local aa = HealBot_Config.babortcola[HealBot_Config.Current_Skin] or 1;
-  bar.txt = getglobal(bar:GetName() .. "_text");  
+  if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
   
   if HealBot_IsCasting == false and HealBot_AbortButton == 0 then
     bar:SetStatusBarColor(ar, ag, ab, 0);
