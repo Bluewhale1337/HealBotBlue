@@ -1,4 +1,4 @@
-HEALBOT_VERSION = "1.5";
+HEALBOT_VERSION = GetAddOnMetadata("HealBotBlue", "Version") or "Unknown";
 
 -------------
 -- ENGLISH --
