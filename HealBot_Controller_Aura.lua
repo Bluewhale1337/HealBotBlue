@@ -91,7 +91,7 @@ function HealBot_CheckBuffs(unit)
             local val = HealBot_Config.BuffDropDowns[myClass][j]
             if val and val > 0 then
                 local isSelfOnly = (HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[j] == 1)
-                if not (isSelfOnly and unit ~= "player") then
+                if not (isSelfOnly and not UnitIsUnit(unit, "player")) then
                     local spellName = HealBot_Buff_Spells[myClass][val]
                     
                     local hasIt = hasBuff[spellName]
@@ -100,7 +100,7 @@ function HealBot_CheckBuffs(unit)
                     end
                     
                     if not hasIt then
-                        if myClass == "SHAMAN" and unit == "player" and string.find(spellName, " Weapon") then
+                        if myClass == "SHAMAN" and UnitIsUnit(unit, "player") and string.find(spellName, " Weapon") then
                             hasIt = HealBot_CheckShamanWeaponBuff(spellName)
                         end
                     end
