@@ -559,3 +559,23 @@ HealBot_SpamCnt=0;
 HealBot_Action_TooltipUnit=nil;
 HealBot_Ressing = {};
 HealBot_IamRessing = false;
+
+-- Table Recycling Pool (Puppeteer-inspired)
+local tablePool = {}
+function HealBot_GetTable()
+    local t = table.remove(tablePool)
+    if not t then
+        t = {}
+    end
+    return t
+end
+
+function HealBot_ReleaseTable(t)
+    if type(t) == "table" then
+        for k in pairs(t) do
+            t[k] = nil
+        end
+        table.insert(tablePool, t)
+    end
+end
+

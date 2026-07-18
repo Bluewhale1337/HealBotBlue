@@ -117,11 +117,107 @@ function HealBot_Action_HealUnit_OnLeave(this)
   HealBot_Action_HideTooltip(this);
 end
 
+--------------------------------------------------------------------------------------------------
+-- Puppeteer Utility Ports for Macro and Item Execution
+--------------------------------------------------------------------------------------------------
+
+function HealBot_SplitString(str, delimiter)
+    local result = {}
+    local start_pos = 1
+    while true do
+        local end_pos = string.find(str, delimiter, start_pos, true)
+        if not end_pos then
+            table.insert(result, string.sub(str, start_pos))
+            break
+        end
+        table.insert(result, string.sub(str, start_pos, end_pos - 1))
+        start_pos = end_pos + string.len(delimiter)
+    end
+    return result
+end
+
+function HealBot_RunMacroText(body)
+    local commands = HealBot_SplitString(body, "\n")
+    for i = 1, table.getn(commands) do
+        ChatFrameEditBox:SetText(commands[i])
+        ChatEdit_SendText(ChatFrameEditBox)
+    end
+end
+
+function HealBot_RunMacro(name)
+    if GetMacroIndexByName(name) == 0 then return end
+    local _, _, body = GetMacroInfo(GetMacroIndexByName(name))
+    HealBot_RunMacroText(body)
+end
+
+function HealBot_GetBagSlotInfo(bag, slot)
+    local link = GetContainerItemLink(bag, slot)
+    if not link then return end
+    local _, _, name = string.find(link, "%[(.*)%]")
+    local _, count = GetContainerItemInfo(bag, slot)
+    return name, count
+end
+
+function HealBot_FindBagSlot(itemName)
+    local bestBag, bestSlot, lowestStackSize
+    for bag = 0, NUM_BAG_FRAMES do
+        for slot = 1, GetContainerNumSlots(bag) do
+            local name, count = HealBot_GetBagSlotInfo(bag, slot)
+            if itemName == name then
+                if not lowestStackSize or lowestStackSize > count then
+                    bestBag = bag
+                    bestSlot = slot
+                    lowestStackSize = count
+                end
+            end
+        end
+    end
+    return bestBag, bestSlot
+end
+
+function HealBot_UseItem(itemName)
+    local bag, slot = HealBot_FindBagSlot(itemName)
+    if not bag then return false end
+    UseContainerItem(bag, slot)
+    return true
+end
+
 function HealBot_Action_HealUnit_OnClick(this,button)
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
     
-    -- Resurrection override on dead target
+    if not pattern then return end
+    
+    -- Buff casting override (Spells only)
+    if HealBot_Config.BuffWatch == 1 then
+      local inCombat = UnitAffectingCombat("player")
+      if (not inCombat) or (HealBot_Config.BuffWatchInCombat == 1) then
+        if HealBot_MissingBuffs[this.unit] then
+          local missingBuff = HealBot_MissingBuffs[this.unit]
+          if decode_button == "Left" or decode_button == "Right" then
+            HealBot_CastSpellOnFriend(missingBuff, this.unit)
+            return
+          end
+        end
+      end
+    end
+
+    -- Priority 1: Inline Scripts (starts with /)
+    if string.sub(pattern, 1, 1) == "/" then
+        local oldTarget = nil
+        if UnitExists("target") then oldTarget = UnitName("target") end
+        TargetUnit(this.unit)
+        HealBot_RunMacroText(pattern)
+        if oldTarget then
+            TargetByName(oldTarget)
+        else
+            ClearTarget()
+        end
+        return
+    end
+    
+    -- Priority 2: Spells
+    -- Resurrection override on dead target first
     if UnitIsDeadOrGhost(this.unit) then
       local rezSpell = HealBot_GetRezSpellForClass();
       if rezSpell then
@@ -129,24 +225,41 @@ function HealBot_Action_HealUnit_OnClick(this,button)
         return
       end
     end
-    
-    -- Buff casting override
-    if HealBot_Config.BuffWatch == 1 then
-      local inCombat = UnitAffectingCombat("player")
-        if (not inCombat) or (HealBot_Config.BuffWatchInCombat == 1) then
-          local myClass = UnitClass("player")
-          if HealBot_MissingBuffs[this.unit] then
-            local missingBuff = HealBot_MissingBuffs[this.unit]
-            if decode_button == "Left" or decode_button == "Right" then
-              HealBot_CastSpellOnFriend(missingBuff, this.unit)
-              return
-            end
-          end
+
+    if HealBot_Spells[pattern] or HealBot_GetSpellId(pattern) then
+        HealBot_HealUnit(this.unit, pattern);
+        return
+    end
+
+    -- Priority 3: Named Macros
+    if GetMacroIndexByName(pattern) ~= 0 then
+        local oldTarget = nil
+        if UnitExists("target") then oldTarget = UnitName("target") end
+        TargetUnit(this.unit)
+        HealBot_RunMacro(pattern)
+        if oldTarget then
+            TargetByName(oldTarget)
+        else
+            ClearTarget()
         end
-      end
+        return
+    end
+
+    -- Priority 4: Items
+    local bag, slot = HealBot_FindBagSlot(pattern)
+    if bag then
+        local oldTarget = nil
+        if UnitExists("target") then oldTarget = UnitName("target") end
+        TargetUnit(this.unit)
+        UseContainerItem(bag, slot)
+        if SpellIsTargeting() then SpellTargetUnit(this.unit) end
+        if oldTarget then TargetByName(oldTarget) else ClearTarget() end
+        return
+    end
     
-    HealBot_HealUnit(this.unit,pattern);
-  end
+    -- Fallback attempt
+    HealBot_HealUnit(this.unit, pattern);
+end
 
 function HealBot_Action_HealUnitCheck_OnClick(this)
   if not this.unit then return end

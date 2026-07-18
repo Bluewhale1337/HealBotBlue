@@ -31,6 +31,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Non-Mana Resource Tracking:** Track Rage, Energy, and Focus for non-mana classes.
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
+### To be implemented
+- **GUID-based frame mapping:** Migrate internal state to use lightweight GUID tracking to resolve bugs when targets switch or duplicate names appear (e.g., enemy mobs, warlock pets).
+- **Mod Integration Optimization:** Add conditional SuperWoW/UnitXP SP3 integration to reduce GC spikes and improve frame rendering accuracy.
+
 ### Known issues
 
 * **New spell rank bug** you may experience lua error spaming your chat frame after learning new healing spells. /reload will clear the issue. To be fixed next release
@@ -38,9 +42,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+
+**v1.5**
+* **Macro, Item, and Script Bindings:** Support for binding named macros, inventory items, and inline scripts (e.g. `/target`) directly to mouse clicks in the Spells tab. All of these now natively support implicit `@mouseover` targeting on the unit frame you click, without losing your current target.
+* **Modifier-Aware Tooltips & Resource Costs:** The tooltip dynamically updates to show exactly what action is bound when holding down Shift, Ctrl, or Alt over a frame. Spells also show their required mana cost, turning red if you do not have enough mana to cast them.
+* **Memory Recycling Pool:** Added a local table recycling pool in the data layer to greatly reduce Lua garbage collection (GC) spikes, improving overall client frame rates during intense combat.
 **v1.4.2**
 * **Memory Optimization:** Fixed a significant memory leak where tracking tables were being repeatedly allocated every tick during aura scanning, and replaced `table.foreach` with pairs loops to avoid GC spikes during combat.
-
 **v1.4.1**
 * **Talent-based Healing Calculations:** Implemented dynamic spell healing calculations for Druid, Priest, and Paladin classes based on talents.
 * **Modifier Key Polling:** Replaced MODIFIER_STATE_CHANGED event with polling in HealBot_OnUpdate to track modifier keys reliably.

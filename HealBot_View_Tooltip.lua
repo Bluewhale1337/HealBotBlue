@@ -3,6 +3,16 @@
 
 HealBot_Action_TooltipUnit = nil
 
+function HealBot_Tooltip_GetSpellColor(spell)
+    local r, g, b = 1, 1, 0 -- default yellow
+    if spell and HealBot_Spells and HealBot_Spells[spell] and HealBot_Spells[spell].Mana then
+        if UnitMana("player") < HealBot_Spells[spell].Mana then
+            r, g, b = 1, 0, 0 -- red if not enough mana
+        end
+    end
+    return r, g, b
+end
+
 function HealBot_Action_RefreshTooltip(unit)
   if HealBot_Config.ShowTooltip==0 then return end
   if not unit then unit = HealBot_Action_TooltipUnit end
@@ -33,53 +43,63 @@ function HealBot_Action_RefreshTooltip(unit)
   if HealBot_Config.Tooltip_ShowSpellDetail==1 then
     if spellLeft then
       linenum=linenum+2
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONLEFT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellLeft,1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellLeft)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONLEFT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellLeft,sr,sg,sb,linenum) 
       linenum=HealBot_Action_Tooltip_SpellInfo(spellLeft,linenum);
     end
     if spellMiddle then
       linenum=linenum+2
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONMIDDLE.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellMiddle,1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellMiddle)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONMIDDLE.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellMiddle,sr,sg,sb,linenum) 
       linenum=HealBot_Action_Tooltip_SpellInfo(spellMiddle,linenum);
     end
     if spellRight then
       linenum=linenum+2
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONRIGHT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellRight,1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellRight)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONRIGHT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellRight,sr,sg,sb,linenum) 
       linenum=HealBot_Action_Tooltip_SpellInfo(spellRight,linenum);
     end
     if spellButton4 then
       linenum=linenum+2
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON4.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellButton4,1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellButton4)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON4.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellButton4,sr,sg,sb,linenum) 
       linenum=HealBot_Action_Tooltip_SpellInfo(spellButton4,linenum);
     end
     if spellButton5 then
       linenum=linenum+2
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON5.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellButton5,1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellButton5)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON5.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..spellButton5,sr,sg,sb,linenum) 
       linenum=HealBot_Action_Tooltip_SpellInfo(spellButton5,linenum);
     end
   else
     if spellLeft then 
       linenum=linenum+1
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONLEFT..":",1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellLeft)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONLEFT..":",sr,sg,sb,linenum) 
       HealBot_Action_Tooltip_SetLineRight(HealBot_Action_Tooltip_SpellSummary(spellLeft),1,1,1,linenum) 
     end
     if spellMiddle then 
       linenum=linenum+1
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONMIDDLE..":",1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellMiddle)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONMIDDLE..":",sr,sg,sb,linenum) 
       HealBot_Action_Tooltip_SetLineRight(HealBot_Action_Tooltip_SpellSummary(spellMiddle),1,1,1,linenum) 
     end
     if spellRight then 
       linenum=linenum+1
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellRight)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTONRIGHT..":",sr,sg,sb,linenum) 
       HealBot_Action_Tooltip_SetLineRight(HealBot_Action_Tooltip_SpellSummary(spellRight),1,1,1,linenum) 
     end
     if spellButton4 then 
       linenum=linenum+1
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON4..":",1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellButton4)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON4..":",sr,sg,sb,linenum) 
       HealBot_Action_Tooltip_SetLineRight(HealBot_Action_Tooltip_SpellSummary(spellButton4),1,1,1,linenum) 
     end
     if spellButton5 then 
       linenum=linenum+1
-      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON5..":",1,1,0,linenum) 
+      local sr, sg, sb = HealBot_Tooltip_GetSpellColor(spellButton5)
+      HealBot_Action_Tooltip_SetLineLeft(HEALBOT_OPTIONS_BUTTON5..":",sr,sg,sb,linenum) 
       HealBot_Action_Tooltip_SetLineRight(HealBot_Action_Tooltip_SpellSummary(spellButton5),1,1,1,linenum) 
     end
   end      
