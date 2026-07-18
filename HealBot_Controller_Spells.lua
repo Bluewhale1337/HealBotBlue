@@ -462,7 +462,8 @@ end
 
 function HealBot_CanCastSpell(spell, unit)
   local this = HealBot_Spells[spell];
-  if this.Mana > UnitMana("player") then return false end;
+  -- Removed manual mana check so WoW can properly handle 0-cost buffs (Clearcasting/Inner Focus)
+  -- and so tooltips can render in red instead of disappearing.
   if this.BagSlot then
     local bag, slot = HealBot_UnpackBagSlot(this.BagSlot);
     local start, duration, enable = GetContainerItemCooldown(bag, slot);
