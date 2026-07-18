@@ -37,6 +37,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 
 ### Change Log
+
+**v1.4.2**
+* **Memory Optimization:** Fixed a significant memory leak where tracking tables were being repeatedly allocated every tick during aura scanning, and replaced `table.foreach` with pairs loops to avoid GC spikes during combat.
+
 **v1.4.1**
 * **Talent-based Healing Calculations:** Implemented dynamic spell healing calculations for Druid, Priest, and Paladin classes based on talents.
 * **Modifier Key Polling:** Replaced MODIFIER_STATE_CHANGED event with polling in HealBot_OnUpdate to track modifier keys reliably.
