@@ -43,6 +43,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 
+**v1.5.1**
+* **Memory Optimization:** Fixed severe Lua garbage collection spikes during UI reloads by preventing full party layout rebuilds on `PLAYER_TARGET_CHANGED`, and cached dynamic string concatenations directly to unit frames to eliminate memory leakage on high frequency UI refreshes.
+* **Mana Validation Fix:** Removed artificial spell mana gating, fixing an issue where low-mana spells disappeared from tooltips and couldn't be cast. WoW's native mana validation now correctly processes 0-cost buffs (e.g. Clearcasting, Inner Focus) while turning low-mana tooltip spells red.
+* **Self-Buff Tracking:** Fixed a bug where "Self Only" buff tracking incorrectly excluded the player when represented by party or raid frames instead of the standard "player" unit ID.
+
 **v1.5**
 * **Macro, Item, and Script Bindings:** Support for binding named macros, inventory items, and inline scripts (e.g. `/target`) directly to mouse clicks in the Spells tab. All of these now natively support implicit `@mouseover` targeting on the unit frame you click, without losing your current target.
 * **Modifier-Aware Tooltips & Resource Costs:** The tooltip dynamically updates to show exactly what action is bound when holding down Shift, Ctrl, or Alt over a frame. Spells also show their required mana cost, turning red if you do not have enough mana to cast them.
