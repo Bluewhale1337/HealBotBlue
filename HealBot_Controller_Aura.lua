@@ -2,6 +2,7 @@
 -- Handles tracking buffs/debuffs (auras) on group/raid units
 
 HealBot_MissingBuffs = {}
+local StaticHasBuff = {}
 
 function HealBot_UnitAffected(unit, effect)
     if not effect then return nil; end
@@ -68,7 +69,10 @@ function HealBot_CheckBuffs(unit)
     }
     
     -- Gather buffs on unit
-    local hasBuff = {}
+    local hasBuff = StaticHasBuff
+    for k in pairs(hasBuff) do
+        hasBuff[k] = nil
+    end
     local i = 1
     while true do
         local buffTexture = UnitBuff(unit, i)

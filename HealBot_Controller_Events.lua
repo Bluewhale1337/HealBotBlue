@@ -85,8 +85,8 @@ function HealBot_OnUpdate(this, arg1)
         if not HealBot_IsFighting then
             HealsIn_Timer = HealsIn_Timer + 1;
             if HealsIn_Timer >= 10 then
-                HealBot_HealsIn = {};
-                HealBot_Healers = {};
+                for k in pairs(HealBot_HealsIn) do HealBot_HealsIn[k] = nil end
+                for k in pairs(HealBot_Healers) do HealBot_Healers[k] = nil end
                 HealsIn_Timer = 0;
             end
             
@@ -338,7 +338,7 @@ function HealBot_OnEvent_ZoneChanged(this)
 end
 
 function HealBot_OnEvent_PlayerRegenDisabled(this)
-  HealBot_RecalcParty();
+  -- Removed HealBot_RecalcParty();
   if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
     if HealBot_Config.AutoClose==1 and HealBot_Config.ActionVisible~=0 then 
       HealBot_Action.ProgrammaticHide = true;
@@ -374,7 +374,7 @@ end
 
 function HealBot_OnEvent_PlayerRegenEnabled(this)
     HealBot_IsFighting = false;
-    HealBot_Delay_RecalcParty = 1;
+    -- Removed HealBot_Delay_RecalcParty = 1;
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(this)
