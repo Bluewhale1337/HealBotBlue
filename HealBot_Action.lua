@@ -22,9 +22,9 @@ function HealBot_ShouldHeal(unit)
 end
 
 function HealBot_Action_ShouldHealSome()
-  return table.foreach(HealBot_Action_HealButtons, function (index,button)
+  for index, button in pairs(HealBot_Action_HealButtons) do
     if (HealBot_ShouldHeal(button.unit)) then return button.unit; end
-  end);
+  end
 end
 
 function HealBot_MustHeal(unit)
@@ -32,9 +32,9 @@ function HealBot_MustHeal(unit)
 end
 
 function HealBot_Action_MustHealSome()
-  return table.foreach(HealBot_Action_HealButtons, function (index,button)
+  for index, button in pairs(HealBot_Action_HealButtons) do
     if (HealBot_MustHeal(button.unit)) then return button.unit; end
-  end);
+  end
 end
 
 function HealBot_GetRezSpellForClass()

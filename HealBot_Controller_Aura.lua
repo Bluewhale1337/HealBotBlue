@@ -115,23 +115,27 @@ function HealBot_CheckBuffs(unit)
     end
 end
 
+local HealBot_TrackedHoTs = {
+    ["Interface\\Icons\\Spell_Holy_Renew"] = true,
+    ["Interface\\Icons\\Spell_Nature_Rejuvenation"] = true,
+    ["Interface\\Icons\\Spell_Nature_ResistNature"] = true,
+    ["Interface\\Icons\\Spell_Holy_PowerWordShield"] = true,
+    ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
+    ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
+    ["Interface\\Icons\\btnholyscriptures"] = true,
+}
+
 function HealBot_OnEvent_UnitAura(this, unit)
     local DebuffType;
     
     if HealBot_Heals[unit] and unit ~= "target" then
-        HealBot_UnitIcons[unit] = {}
+        if not HealBot_UnitIcons[unit] then
+            HealBot_UnitIcons[unit] = {}
+        end
+        for j = 1, 5 do
+            HealBot_UnitIcons[unit][j] = nil
+        end
         local iconCount = 0
-        
-        local HealBot_TrackedHoTs = {
-            ["Interface\\Icons\\Spell_Holy_Renew"] = true,
-            ["Interface\\Icons\\Spell_Nature_Rejuvenation"] = true,
-            ["Interface\\Icons\\Spell_Nature_ResistNature"] = true,
-            ["Interface\\Icons\\Spell_Holy_PowerWordShield"] = true,
-            ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
-            ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
-            ["Interface\\Icons\\btnholyscriptures"] = true,
-        }
-        
         local i = 1;
         while true do
             local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)

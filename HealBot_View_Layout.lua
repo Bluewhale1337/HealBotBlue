@@ -255,9 +255,9 @@ function HealBot_Action_EnableButton(button)
 end
 
 function HealBot_Action_EnableButtons()
-    table.foreach(HealBot_Action_HealButtons, function (index, button)
-        HealBot_Action_EnableButton(button);
-    end);
+    for index, button in pairs(HealBot_Action_HealButtons) do
+        HealBot_Action_EnableButton(button)
+    end
 end
   
 function HealBot_Action_RefreshButton(button)
@@ -285,13 +285,13 @@ end
 
 function HealBot_Action_RefreshButtons(unit)
     if unit and HealBot_Action_UnitButtons[unit] then
-        table.foreach(HealBot_Action_UnitButtons[unit], function (index, button)
-            HealBot_Action_RefreshButton(button);
-        end);
+        for index, button in pairs(HealBot_Action_UnitButtons[unit]) do
+            HealBot_Action_RefreshButton(button)
+        end
     else
-        table.foreach(HealBot_Action_HealButtons, function (index, button)
-            HealBot_Action_RefreshButton(button);
-        end);
+        for index, button in pairs(HealBot_Action_HealButtons) do
+            HealBot_Action_RefreshButton(button)
+        end
     end
 end
 
@@ -748,7 +748,7 @@ function HealBot_Action_PartyChanged()
         local i = 0;
         local z = 1;
         
-        table.foreach(HealBot_Action_HealButtons, function (index, button)
+        for index, button in pairs(HealBot_Action_HealButtons) do
             i = i + 1;
             local checked = false;
             local header;
@@ -787,7 +787,7 @@ function HealBot_Action_PartyChanged()
             bar:SetScale(barScale);
             bar2:SetHeight(bheight);
             HealBot_Action_SetTexture(bar2, btexture);
-        end);
+        end
 
         if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
 
