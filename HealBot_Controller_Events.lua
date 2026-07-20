@@ -43,17 +43,20 @@ end
 
 function HealBot_OnUpdate(this, arg1)
     if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
-        local currentModState = ""
-        if IsShiftKeyDown() then currentModState = currentModState .. "S" end
-        if IsControlKeyDown() then currentModState = currentModState .. "C" end
-        if IsAltKeyDown() then currentModState = currentModState .. "A" end
+        local s = IsShiftKeyDown() and true or false
+        local c = IsControlKeyDown() and true or false
+        local a = IsAltKeyDown() and true or false
         
-        if HealBot_LastModState ~= currentModState then
-            HealBot_LastModState = currentModState
+        if HealBot_LastModS ~= s or HealBot_LastModC ~= c or HealBot_LastModA ~= a then
+            HealBot_LastModS = s
+            HealBot_LastModC = c
+            HealBot_LastModA = a
             HealBot_Action_RefreshTooltip(HealBot_Action_TooltipUnit)
         end
     else
-        HealBot_LastModState = ""
+        HealBot_LastModS = false
+        HealBot_LastModC = false
+        HealBot_LastModA = false
     end
 
     if HealBot_TargetRestorePending then
@@ -131,6 +134,7 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_UnitHealth(this, arg1)
     end,
     ["UNIT_MANA"] = function(this, arg1)
+        if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
@@ -138,6 +142,7 @@ local HealBot_EventHandlers = {
         HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_RAGE"] = function(this, arg1)
+        if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
@@ -145,6 +150,7 @@ local HealBot_EventHandlers = {
         HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_ENERGY"] = function(this, arg1)
+        if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
@@ -152,6 +158,7 @@ local HealBot_EventHandlers = {
         HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_DISPLAYPOWER"] = function(this, arg1)
+        if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
@@ -201,8 +208,6 @@ local HealBot_EventHandlers = {
     ["SPELLCAST_FAILED"] = function(this) HealBot_OnEvent_SpellcastStop(this, "SPELLCAST_FAILED") end,
     ["PLAYER_REGEN_DISABLED"] = function(this) HealBot_OnEvent_PlayerRegenDisabled(this) end,
     ["PLAYER_REGEN_ENABLED"] = function(this) HealBot_OnEvent_PlayerRegenEnabled(this) end,
-    ["BAG_UPDATE_COOLDOWN"] = function(this, arg1) HealBot_OnEvent_BagUpdateCooldown(this, arg1) end,
-    ["BAG_UPDATE"] = function(this, arg1) HealBot_OnEvent_BagUpdate(this, arg1) end,
     ["PARTY_MEMBER_DISABLE"] = function(this, arg1) HealBot_OnEvent_PartyMemberDisable(this, arg1) end,
     ["PARTY_MEMBER_ENABLE"] = function(this, arg1) HealBot_OnEvent_PartyMemberEnable(this, arg1) end,
     ["CHAT_MSG_SYSTEM"] = function(this, arg1) HealBot_OnEvent_SystemMsg(this, arg1) end,
@@ -212,11 +217,10 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PlayerEquipmentChanged(this)
     end,
     ["UNIT_INVENTORY_CHANGED"] = function(this, arg1)
+        if arg1 ~= "player" then return end
         HealBot_Model:NotifyObservers("EQUIPMENT_CHANGED", arg1)
         HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1)
     end,
-    ["PET_BAR_SHOWGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
-    ["PET_BAR_HIDEGRID"] = function(this) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
     ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end,
     ["UPDATE_SHAPESHIFT_FORM"] = function(this) HealBot_UpdateShapeshiftForm() end,
@@ -288,8 +292,6 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("PARTY_MEMBERS_CHANGED");
         this:RegisterEvent("PARTY_MEMBER_DISABLE");
         this:RegisterEvent("PARTY_MEMBER_ENABLE");
-        this:RegisterEvent("PET_BAR_SHOWGRID");
-        this:RegisterEvent("PET_BAR_HIDEGRID");
         this:RegisterEvent("UNIT_PET");
         this:RegisterEvent("UNIT_HEALTH");
         this:RegisterEvent("UNIT_MANA");
@@ -301,8 +303,6 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("SPELLCAST_STOP");
         this:RegisterEvent("SPELLCAST_INTERRUPTED");
         this:RegisterEvent("SPELLCAST_FAILED");
-        this:RegisterEvent("BAG_UPDATE");
-        this:RegisterEvent("BAG_UPDATE_COOLDOWN");
         this:RegisterEvent("UNIT_AURA");
         this:RegisterEvent("UPDATE_INVENTORY_ALERTS");
         this:RegisterEvent("UNIT_INVENTORY_CHANGED");
@@ -440,20 +440,6 @@ end
 
 function HealBot_OnEvent_TalentsChanged(this, arg1)
     HealBot_AddDebug("HB: TalentsChanged");
-end
-
-function HealBot_OnEvent_BagUpdate(this, bag)
-    if HealBot_EquipChangeTimer == 0 then
-        HealBot_RecalcSpells();
-    end
-end
-
-function HealBot_OnEvent_BagUpdateCooldown(this, bag)
-    if not bag then 
-        bag = "undef"
-    elseif HealBot_EquipChangeTimer == 0 then
-        HealBot_RecalcSpells();
-    end
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(this)

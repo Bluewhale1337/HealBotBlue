@@ -149,7 +149,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     iconCount = iconCount + 1
                     HealBot_UnitIcons[unit][iconCount] = debuff
                 end
-                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] == "YES" then
+                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] then
                     HealBot_UnitDebuff[unit] = debuff_type
                     DebuffType = debuff_type;
                     if HealBot_DebuffPriority[debuff_type] then

@@ -545,7 +545,7 @@ HealBot_Debuff_Types = {
 HealBot_IsFighting = false;
 
 HealBot_DebuffPriority = {"none"};
-HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]="NO", [HEALBOT_MAGIC_en]="NO", [HEALBOT_POISON_en]="NO", [HEALBOT_CURSE_en]="NO"};
+HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]=false, [HEALBOT_MAGIC_en]=false, [HEALBOT_POISON_en]=false, [HEALBOT_CURSE_en]=false};
 
 HealBot_Heals = {};
 
