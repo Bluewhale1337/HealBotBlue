@@ -127,6 +127,7 @@ local HealBot_TrackedHoTs = {
     ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
     ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
     ["Interface\\Icons\\btnholyscriptures"] = true,
+    ["Interface\\Icons\\Spell_Holy_AshesToAshes"] = true,
 }
 
 function HealBot_OnEvent_UnitAura(this, unit)
@@ -171,6 +172,17 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
             b = b + 1
+        end
+
+        local d = 1
+        while true do
+            local debuff = UnitDebuff(unit, d)
+            if not debuff then break end
+            if HealBot_TrackedHoTs[debuff] and iconCount < 5 then
+                iconCount = iconCount + 1
+                HealBot_UnitIcons[unit][iconCount] = debuff
+            end
+            d = d + 1
         end
         
         if HealBot_UnitDebuff[unit] then
