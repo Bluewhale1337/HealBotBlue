@@ -3,7 +3,7 @@
 ## Version: 1.5.1
 ## Author: Bluewhale
 ## Notes: Adds panel with skinable bars for healing and decursive
-## SavedVariables:  HealBot_Config
+## SavedVariablesPerCharacter:  HealBot_Config
 ..\..\FrameXML\Fonts.xml
 ..\..\FrameXML\OptionsFrameTemplates.xml
 ..\..\FrameXML\UIPanelTemplates.xml
@@ -27,3 +27,4 @@ HealBot_Options_CDC.xml
 HealBot_Options_Skins.xml
 HealBot_Options_Buffs.xml
 HealBot_Options_Chat.xml
+HealBot_Options_Auto.xml

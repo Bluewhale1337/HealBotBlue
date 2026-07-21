@@ -94,7 +94,7 @@
   <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG" 
       movable="true" parent="UIParent" enableMouse="true" hidden="true">
     <Size>
-      <AbsDimension x="420" y="455"/>
+      <AbsDimension x="480" y="455"/>
     </Size>
     <Anchors>
       <Anchor point="CENTER">
@@ -206,38 +206,16 @@
           </Anchor>
         </Anchors>
       </Button>
-      <Button name="HealBot_Options_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEFAULTS">
-        <Size>
-          <AbsDimension x="80" y="22"/>
-        </Size>
+      <Button name="HealBot_OptionsTab8" inherits="HealBot_Options_Tab" id="8" text="Auto">
         <Anchors>
-          <Anchor point="BOTTOM" relativePoint="BOTTOM">
+          <Anchor point="LEFT" relativeTo="HealBot_OptionsTab7" relativePoint="RIGHT">
             <Offset>
-              <AbsDimension x="-50" y="15"/>
+              <AbsDimension x="-14" y="0" /> 
             </Offset>
           </Anchor>
         </Anchors>
-        <Scripts>
-          <OnClick>HealBot_Options_Defaults_OnClick(this)</OnClick> 
-        </Scripts>
       </Button>
-      <Button name="HealBot_Options_CloseButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CLOSE">
-        <Size>
-          <AbsDimension x="80" y="22"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="BOTTOM">
-            <Offset>
-              <AbsDimension x="50" y="15"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnClick>
-            HideUIPanel(this:GetParent());
-          </OnClick>
-        </Scripts>
-      </Button>
+
     </Frames>
     <Scripts>
        <OnLoad>HealBot_Options_OnLoad(this);</OnLoad>

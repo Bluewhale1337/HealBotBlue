@@ -265,8 +265,38 @@
         </Scripts>
       </CheckButton>
 
-      
-      
+      <Button name="HealBot_Options_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEFAULTS">
+        <Size>
+          <AbsDimension x="80" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM" relativePoint="BOTTOM">
+            <Offset>
+              <AbsDimension x="-50" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_Defaults_OnClick(this)</OnClick> 
+        </Scripts>
+      </Button>
+      <Button name="HealBot_Options_CloseButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CLOSE">
+        <Size>
+          <AbsDimension x="80" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="BOTTOM" relativePoint="BOTTOM">
+            <Offset>
+              <AbsDimension x="50" y="15"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            HideUIPanel(this:GetParent():GetParent());
+          </OnClick>
+        </Scripts>
+      </Button>
         </Frames>
       </Frame>
 

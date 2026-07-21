@@ -87,13 +87,17 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
 end
 
 function HealBot_Action_HealthBar(button)
-    local name = button:GetName();
-    return getglobal(name .. "Bar");
+    if not button.bar then
+        button.bar = getglobal(button:GetName() .. "Bar")
+    end
+    return button.bar;
 end
 
 function HealBot_Action_HealthBar2(button)
-    local name = button:GetName();
-    return getglobal(name .. "Bar2");
+    if not button.bar2 then
+        button.bar2 = getglobal(button:GetName() .. "Bar2")
+    end
+    return button.bar2;
 end
 
 function HealBot_Action_EnableButton(button)
@@ -108,7 +112,8 @@ function HealBot_Action_EnableButton(button)
 
     local bar = HealBot_Action_HealthBar(button);
     local bar2 = HealBot_Action_HealthBar2(button);
-    local bar3 = getglobal(button:GetName() .. "Bar3");
+    if not button.bar3 then button.bar3 = getglobal(button:GetName() .. "Bar3") end
+    local bar3 = button.bar3;
     local btexture = HealBot_Config.btexture[HealBot_Config.Current_Skin];
     local bheight = HealBot_Config.bheight[HealBot_Config.Current_Skin];
     local sr = HealBot_Config.btextenabledcolr[HealBot_Config.Current_Skin];
@@ -175,7 +180,7 @@ function HealBot_Action_EnableButton(button)
     else
         bar2:SetValue(0);
     end
-    bar.txt = getglobal(bar:GetName() .. "_text");
+    if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
     if (not HealBot_IsCasting and (HealBot_CanHeal(unit) or HealBot_MissingBuffs[unit])) then
         button:Enable();
         if HealBot_UnitDebuff[unit] then
@@ -330,6 +335,41 @@ function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, ch
     return OsetY;
 end
 
+function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, bheight, checked, header)
+    local bcspace = HealBot_Config.bcspace[HealBot_Config.Current_Skin] or 3;
+    if header then
+        headerno = headerno + 1;
+        local headerobj = getglobal("HealBot_Action_Header" .. headerno);
+        headerobj:SetText(header)
+        headerobj:Show();
+        headerobj:ClearAllPoints();
+        headerobj:SetHeight(bheight);
+        headerobj:SetWidth(bwidth);
+        headerobj:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX, -OsetY);
+        headerobj:Disable();
+        OsetX = OsetX + bwidth + bcspace;
+    else
+        local unit = button.unit;
+        button:SetText(" ");
+        if (HealBot_MayHeal(unit)) then
+            button:Show();
+            button:ClearAllPoints();
+            button:SetHeight(bheight);
+            if checked then
+                button:SetWidth(bwidth - 14);
+                button:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX + 14, -OsetY);
+            else
+                button:SetWidth(bwidth);
+                button:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX, -OsetY);
+            end
+            OsetX = OsetX + bwidth + bcspace;
+        else
+            button:Hide();
+        end
+    end
+    return OsetX;
+end
+
 function HealBot_Action_SetHeightWidth(width, height, bwidth)
     if HealBot_ActionHeight then
         HealBot_Action:SetHeight(HealBot_ActionHeight);
@@ -379,6 +419,31 @@ function HealBot_Action_PartyChanged()
         local numHeaders = 0;
         local TempMaxH = 0;
         local HeaderPos = {};
+        
+        if HealBot_Config.AutoSwap_Enabled == 1 then
+            local totalMembers = GetNumRaidMembers()
+            if totalMembers == 0 then totalMembers = GetNumPartyMembers() end
+            
+            local threshold = 1
+            if totalMembers == 0 then
+                threshold = 1 -- Solo
+            elseif totalMembers > 0 and totalMembers <= 5 then
+                threshold = 2 -- Party
+            elseif totalMembers > 5 and totalMembers <= 15 then
+                threshold = 3 -- Raid15
+            elseif totalMembers > 15 and totalMembers <= 25 then
+                threshold = 4 -- Raid25
+            else
+                threshold = 5 -- Raid40
+            end
+            
+            if not HealBot_Config.AutoSwap_Profiles then HealBot_Config.AutoSwap_Profiles = {} end
+            local swapSkin = HealBot_Config.AutoSwap_Profiles[threshold]
+            if swapSkin and swapSkin ~= HealBot_Config.Current_Skin then
+                HealBot_Config.Current_Skin = swapSkin
+                HealBot_Options_SetSkins()
+            end
+        end
         
         for j = 1, 15 do
             local headerobj = getglobal("HealBot_Action_Header" .. j);
@@ -738,8 +803,12 @@ function HealBot_Action_PartyChanged()
         local OffsetY = bpadding;
         local OffsetX = bpadding;
         local MaxOffsetY = 0;
+        local MaxOffsetX = 0;
         
-        if cols > (numBars - numHeaders) then
+        local maxRows = (HealBot_Config.bmaxrows and HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]) or 0
+        local orientation = (HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) or 1
+        
+        if cols > (numBars - numHeaders) and maxRows == 0 then
             cols = numBars - numHeaders;
         end
         if cols <= 0 then cols = 1 end
@@ -747,6 +816,15 @@ function HealBot_Action_PartyChanged()
         local h = 1;
         local i = 0;
         local z = 1;
+        local brspace = HealBot_Config.brspace[HealBot_Config.Current_Skin] or 3;
+        local bcspace = HealBot_Config.bcspace[HealBot_Config.Current_Skin] or 3;
+        
+        local limit = math.ceil((numBars) / cols)
+        if orientation == 1 and maxRows > 0 then
+            limit = maxRows
+        elseif orientation == 2 then
+            limit = cols
+        end
         
         for index, button in pairs(HealBot_Action_HealButtons) do
             i = i + 1;
@@ -755,25 +833,47 @@ function HealBot_Action_PartyChanged()
 
             if HeaderPos[i] then
                 header = HeaderPos[i];
-                OffsetY = HealBot_Action_PositionButton(nil, OffsetX, OffsetY, bwidth, bheight, checked, header);
-                if h == math.ceil((numBars) / cols) and z < numBars then
-                    h = 0;
-                    if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
-                    OffsetY = bpadding;
-                    OffsetX = OffsetX + bwidth + bcspace; 
+                if orientation == 1 then
+                    OffsetY = HealBot_Action_PositionButton(nil, OffsetX, OffsetY, bwidth, bheight, checked, header);
+                    if h == limit and z < numBars then
+                        h = 0;
+                        if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
+                        OffsetY = bpadding;
+                        OffsetX = OffsetX + bwidth + bcspace; 
+                    end
+                else
+                    OffsetX = HealBot_Action_PositionButtonHorizontal(nil, OffsetX, OffsetY, bwidth, bheight, checked, header);
+                    if h == limit and z < numBars then
+                        h = 0;
+                        if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
+                        OffsetX = bpadding;
+                        OffsetY = OffsetY + bheight + brspace;
+                    end
                 end
                 h = h + 1;
                 z = z + 1;
             end
 
             if checked_start <= i and checked_end >= i then checked = true; end
-            OffsetY = HealBot_Action_PositionButton(button, OffsetX, OffsetY, bwidth, bheight, checked, nil);
-            if h == math.ceil((numBars) / cols) and z < numBars then
-                h = 0;
-                if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
-                OffsetY = bpadding;
-                OffsetX = OffsetX + bwidth + bcspace; 
+            
+            if orientation == 1 then
+                OffsetY = HealBot_Action_PositionButton(button, OffsetX, OffsetY, bwidth, bheight, checked, nil);
+                if h == limit and z < numBars then
+                    h = 0;
+                    if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
+                    OffsetY = bpadding;
+                    OffsetX = OffsetX + bwidth + bcspace; 
+                end
+            else
+                OffsetX = HealBot_Action_PositionButtonHorizontal(button, OffsetX, OffsetY, bwidth, bheight, checked, nil);
+                if h == limit and z < numBars then
+                    h = 0;
+                    if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
+                    OffsetX = bpadding;
+                    OffsetY = OffsetY + bheight + brspace; 
+                end
             end
+            
             z = z + 1;
             h = h + 1;
             local bar = HealBot_Action_HealthBar(button);
@@ -789,7 +889,17 @@ function HealBot_Action_PartyChanged()
             HealBot_Action_SetTexture(bar2, btexture);
         end
 
-        if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
+        if orientation == 1 then
+            if MaxOffsetY < OffsetY then MaxOffsetY = OffsetY; end
+        else
+            if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
+            -- In horizontal mode, OffsetY represents the active row. We need to measure total height.
+            MaxOffsetY = OffsetY + bheight + brspace
+            OffsetX = MaxOffsetX
+            if numBars > 0 then
+                OffsetX = OffsetX - bwidth - bcspace
+            end
+        end
 
         if HealBot_Config.HideOptions == 1 then
             HealBot_Action_OptionsButton:Hide();
