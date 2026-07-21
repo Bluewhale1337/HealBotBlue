@@ -1,10 +1,11 @@
 **HealBotBlue**
 By Bluewhale.
 
+> **NOTE:** For HealBot to work correctly, the **Selfcast** feature in WoW options needs to be disabled.
+
 Original HealBot, while being a staple healing addon in Wrath and later expansions, was in its infancy during Vanilla WoW. It was a memory and CPU hog that ate up resources, featured a clunky UI, and offered limited functions. To fix all of the above while still using it as a base framework, I refactored the entire codebase. The monolithic code structure was split to follow a more modern approach (MVC design pattern), making it more stable and easily editable. Additionally, the inefficient AURA scanning was replaced with lightweight (Observer Pattern) reactive programming. It now updates only what is necessary when a trigger fires, rather than performing clumsy, continuous scans of a 40-man raid. By doing so, I managed to throttle down CPU and memory usage significantly, placing it on par with modern addons. Additional functionalities are being added over time to provide a holistic, healer-centered raid frame.
 
-
-> **NOTE:** For HealBot to work correctly, the **Selfcast** feature in WoW options needs to be disabled.
+> **Performance First:** The raidframe is not library reliant - unlike popular raidframe replacement addons it doesn't rely at all on external frameworks. While this makes my work a bit harder this allows complete control over garbage collection and CPU use which makes it multiple times more stable and lightweight.
 
 ### Reporting Errors
 Major errors will pop up a frame with error information. Take a screenshot and post comments.
@@ -19,12 +20,15 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * `/hb reset` - Resets the contents of the main HealBot panel
 
 ### Key Features & Current Functionality
-* **MVC & Observer Architecture:** High-performance, reactive engine that updates frames dynamically on state changes, drastically reducing CPU and memory overhead compared to traditional polling.
+* **MVC & Observer Architecture:** High-performance, reactive engine that updates frames dynamically on state changes, drastically reducing CPU and memory overhead. Features memory recycling pool and event loop decoupling for zero-stutter combat.
 * **Native Hovercasting (Mouseover):** Cast configured spells on hovered unit frames using keybinds directly from your action bars, without losing your current target. (Toggleable in Options -> General).
+* **Macro, Item, & Script Bindings:** Bind named macros, inventory items, and scripts directly to mouse clicks. Supports implicit `@mouseover` targeting natively.
+* **Zero-Latency Self-Heals:** Incoming heals for the local player process instantly with zero latency, independent of network lag.
+* **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions - currently only TurtleWoW patch 1.18 supported.
+* **Modifier-Aware Tooltips:** Tooltips dynamically update to show exact bound actions (Shift/Ctrl/Alt) and required mana costs (turns red if insufficient mana).
 * **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
 * **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward).
 * **Mana Bars for Healers:** Enable and position mini-mana status bars next to unit frames, toggleable to display for healer classes only or all classes.
-* **Equipment Bonus Integration:** Automatically scans equipped gear (for classes capable of healing) to dynamically scale healing predictions.
 * **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic).
 * **Pet & Familiar Frames:** Dedicated, toggleable frames for tracking and healing player pets.
 * **Customizable Health Text:** Dynamic unit health display (Name Only, Percentage, Real Health, or Health Deficit).
@@ -37,11 +41,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Known issues
 
-* **New spell rank bug** you may experience lua error spaming your chat frame after learning new healing spells. /reload will clear the issue. To be fixed next release
+* **New spell rank bug** you may experience lua error spaming your chat frame after learning new healing spells. /reload will clear the issue.
 
 
 ### Change Log
 
+**v1.6.1**
+* **Hotfix** - With class colours toggled extra frames for player pets were given some classy mint colour.
 
 **v1.6**
 * **Event Loop Decoupling:** Ripped out redundant synchronous UI redraws that were bypassed by the new MVC architecture. High-frequency events (mana regen, health ticks) now fully rely on the `HealBot_OnUpdate` dirty queue, severely reducing CPU bottlenecks.
