@@ -402,6 +402,7 @@ function HealBot_Action_PartyChanged()
                 threshold = 5 -- Raid40
             end
             
+            if not HealBot_Config.AutoSwap_Profiles then HealBot_Config.AutoSwap_Profiles = {} end
             local swapSkin = HealBot_Config.AutoSwap_Profiles[threshold]
             if swapSkin and swapSkin ~= HealBot_Config.Current_Skin then
                 HealBot_Config.Current_Skin = swapSkin
@@ -769,8 +770,8 @@ function HealBot_Action_PartyChanged()
         local MaxOffsetY = 0;
         local MaxOffsetX = 0;
         
-        local maxRows = HealBot_Config.bmaxrows[HealBot_Config.Current_Skin] or 0
-        local orientation = HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] or 1
+        local maxRows = (HealBot_Config.bmaxrows and HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]) or 0
+        local orientation = (HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) or 1
         
         if cols > (numBars - numHeaders) and maxRows == 0 then
             cols = numBars - numHeaders;

@@ -2,6 +2,20 @@ HealBot_ConfigDefaults = {
   ShowManaBars=0,
   ManaBarsHealersOnly=0,
   Version = HEALBOT_VERSION,
+  AutoSwap_Enabled = 0,
+  AutoSwap_Profiles = {
+    [1] = HEALBOT_SKINS_STD,
+    [2] = HEALBOT_SKINS_STD,
+    [3] = HEALBOT_SKINS_STD,
+    [4] = HEALBOT_SKINS_STD,
+    [5] = HEALBOT_SKINS_STD,
+  },
+  bmaxrows = {
+    [HEALBOT_SKINS_STD] = 0,
+  },
+  GridOrientation = {
+    [HEALBOT_SKINS_STD] = 1,
+  },
   AlertLevel = 0.95,
   AutoClose = 1,
   PanelSounds = 1,

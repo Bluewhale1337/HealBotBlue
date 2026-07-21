@@ -2,11 +2,13 @@
 -- Split from original HealBot_Options.lua
 
 function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
+  if not HealBot_Config.bmaxrows then HealBot_Config.bmaxrows = {} end
   HealBot_Config.bmaxrows[HealBot_Config.Current_Skin] = this:GetValue()
   HealBot_Action_PartyChanged()
 end
 
 function HealBot_Options_GridOrientation_OnClick(this)
+  if not HealBot_Config.GridOrientation then HealBot_Config.GridOrientation = {} end
   if this:GetChecked() then
     HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = 2 -- Horizontal
   else
@@ -25,8 +27,10 @@ function HealBot_Options_NewSkin_OnTextChanged(this)
 end
 function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Config.numcols[HealBot_Options_NewSkin:GetText()] = HealBot_Config.numcols[HealBot_Config.Current_Skin]
-  HealBot_Config.bmaxrows[HealBot_Options_NewSkin:GetText()] = HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]
-  HealBot_Config.GridOrientation[HealBot_Options_NewSkin:GetText()] = HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]
+  if not HealBot_Config.bmaxrows then HealBot_Config.bmaxrows = {} end
+  if not HealBot_Config.GridOrientation then HealBot_Config.GridOrientation = {} end
+  HealBot_Config.bmaxrows[HealBot_Options_NewSkin:GetText()] = HealBot_Config.bmaxrows[HealBot_Config.Current_Skin] or 0
+  HealBot_Config.GridOrientation[HealBot_Options_NewSkin:GetText()] = HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] or 1
   HealBot_Config.btexture[HealBot_Options_NewSkin:GetText()] = HealBot_Config.btexture[HealBot_Config.Current_Skin]
   HealBot_Config.bcspace[HealBot_Options_NewSkin:GetText()] = HealBot_Config.bcspace[HealBot_Config.Current_Skin]
   HealBot_Config.brspace[HealBot_Options_NewSkin:GetText()] = HealBot_Config.brspace[HealBot_Config.Current_Skin]
@@ -72,8 +76,8 @@ end
 function HealBot_Options_DeleteSkin_OnClick(this)
   if HealBot_Config.Current_Skin~=HEALBOT_SKINS_STD then
     HealBot_Config.numcols[HealBot_Options_SkinsText:GetText()] = nil
-    HealBot_Config.bmaxrows[HealBot_Options_SkinsText:GetText()] = nil
-    HealBot_Config.GridOrientation[HealBot_Options_SkinsText:GetText()] = nil
+    if HealBot_Config.bmaxrows then HealBot_Config.bmaxrows[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.GridOrientation then HealBot_Config.GridOrientation[HealBot_Options_SkinsText:GetText()] = nil end
     HealBot_Config.btexture[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.bcspace[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.brspace[HealBot_Options_SkinsText:GetText()] = nil

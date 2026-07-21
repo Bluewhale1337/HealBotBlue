@@ -20,6 +20,7 @@ function HealBot_Options_Auto_Initialize()
     info.text = HealBot_Config.Skins[i]
     info.func = HealBot_Options_Auto_OnSelect
     info.value = id
+    if not HealBot_Config.AutoSwap_Profiles then HealBot_Config.AutoSwap_Profiles = {} end
     if HealBot_Config.AutoSwap_Profiles[id] == HealBot_Config.Skins[i] then
       info.checked = 1
     else
@@ -34,6 +35,7 @@ function HealBot_Options_Auto_OnSelect()
   local id = this.value
   if not id or not skin then return end
   
+  if not HealBot_Config.AutoSwap_Profiles then HealBot_Config.AutoSwap_Profiles = {} end
   HealBot_Config.AutoSwap_Profiles[id] = skin
   
   local dropdowns = {
@@ -45,7 +47,7 @@ function HealBot_Options_Auto_OnSelect()
   }
   local dropdownName = dropdowns[id]
   local dropdownFrame = getglobal(dropdownName)
-  UIDropDownMenu_SetSelectedValue(dropdownFrame, skin)
+  HealBot_UIDropDownMenu_SetSelectedValue(dropdownFrame, skin)
   UIDropDownMenu_SetText(skin, dropdownFrame)
   
   HealBot_Action_PartyChanged()
@@ -69,9 +71,10 @@ function HealBot_Options_Auto_OnShow(this)
     local dropdownFrame = getglobal(name)
     if dropdownFrame then
         UIDropDownMenu_SetWidth(150, dropdownFrame)
+        if not HealBot_Config.AutoSwap_Profiles then HealBot_Config.AutoSwap_Profiles = {} end
         local skin = HealBot_Config.AutoSwap_Profiles[id]
         if skin then
-            UIDropDownMenu_SetSelectedValue(dropdownFrame, skin)
+            HealBot_UIDropDownMenu_SetSelectedValue(dropdownFrame, skin)
             UIDropDownMenu_SetText(skin, dropdownFrame)
         end
     end
