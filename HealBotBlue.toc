@@ -27,3 +27,4 @@ HealBot_Options_CDC.xml
 HealBot_Options_Skins.xml
 HealBot_Options_Buffs.xml
 HealBot_Options_Chat.xml
+HealBot_Options_Auto.xml

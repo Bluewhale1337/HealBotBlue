@@ -1,0 +1,152 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Auto.lua" />
+  <Frame name="HealBot_Options_Panel8" parent="HealBot_Options" hidden="true" setAllPoints="true">
+    <Frames>
+      <CheckButton name="HealBot_Options_AutoSwap" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="25" y="-30" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable Auto-Swap");
+          </OnLoad>
+          <OnClick>
+            HealBot_Options_AutoSwap_OnClick(this);
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <Frame name="HealBot_Options_Auto_Solo" inherits="UIDropDownMenuTemplate" id="1">
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" text="Solo Skin:" inherits="GameFontNormalSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="30" y="-80" /></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(this, HealBot_Options_Auto_Initialize);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+      <Frame name="HealBot_Options_Auto_Party" inherits="UIDropDownMenuTemplate" id="2">
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" text="Party Skin:" inherits="GameFontNormalSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="30" y="-130" /></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(this, HealBot_Options_Auto_Initialize);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+      <Frame name="HealBot_Options_Auto_Raid15" inherits="UIDropDownMenuTemplate" id="3">
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" text="Raid 15 Skin:" inherits="GameFontNormalSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="30" y="-180" /></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(this, HealBot_Options_Auto_Initialize);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+      <Frame name="HealBot_Options_Auto_Raid25" inherits="UIDropDownMenuTemplate" id="4">
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" text="Raid 25 Skin:" inherits="GameFontNormalSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="30" y="-230" /></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(this, HealBot_Options_Auto_Initialize);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+      <Frame name="HealBot_Options_Auto_Raid40" inherits="UIDropDownMenuTemplate" id="5">
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" text="Raid 40 Skin:" inherits="GameFontNormalSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="30" y="-280" /></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_Initialize(this, HealBot_Options_Auto_Initialize);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+    </Frames>
+    <Scripts>
+      <OnShow>
+        HealBot_Options_Auto_OnShow(this);
+      </OnShow>
+    </Scripts>
+  </Frame>
+</Ui>

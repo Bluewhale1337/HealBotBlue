@@ -181,7 +181,17 @@ HealBot_ConfigDefaults = {
   Current_Skin = "Modern Flat",
   Skin_ID = 1,
   Skins = {"Modern Flat", HEALBOT_SKINS_STD, "HealBot Party", "HealBot Raid", "Alteric Valley"},
+  AutoSwap_Enabled = 0,
+  AutoSwap_Profiles = {
+    [1] = "Modern Flat",   -- Solo
+    [2] = "HealBot Party", -- Party (2-5)
+    [3] = "HealBot Raid",  -- Raid 15 (6-15)
+    [4] = "HealBot Raid",  -- Raid 25 (16-25)
+    [5] = "HealBot Raid",  -- Raid 40 (26-40)
+  },
   numcols = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 4, ["Alteric Valley"] = 2, ["Modern Flat"] = 1},
+  bmaxrows = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  GridOrientation = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
   btexture = {[HEALBOT_SKINS_STD] = 8,["HealBot Party"] = 6, ["HealBot Raid"] = 7, ["Alteric Valley"] = 9, ["Modern Flat"] = 10},
   bcspace = {[HEALBOT_SKINS_STD] = 4, ["HealBot Party"] = 4, ["HealBot Raid"] = 2, ["Alteric Valley"] = 2, ["Modern Flat"] = 4},
   brspace = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 2, ["HealBot Raid"] = 2, ["Alteric Valley"] = 1, ["Modern Flat"] = 2},

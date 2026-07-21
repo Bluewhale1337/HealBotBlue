@@ -206,6 +206,15 @@
           </Anchor>
         </Anchors>
       </Button>
+      <Button name="HealBot_OptionsTab8" inherits="HealBot_Options_Tab" id="8" text="Auto">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="HealBot_OptionsTab7" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-14" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </Button>
       <Button name="HealBot_Options_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEFAULTS">
         <Size>
           <AbsDimension x="80" y="22"/>

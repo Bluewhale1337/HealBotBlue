@@ -1,6 +1,20 @@
 -- HealBot Options panel file: HealBot_Options_Skins.lua
 -- Split from original HealBot_Options.lua
 
+function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
+  HealBot_Config.bmaxrows[HealBot_Config.Current_Skin] = this:GetValue()
+  HealBot_Action_PartyChanged()
+end
+
+function HealBot_Options_GridOrientation_OnClick(this)
+  if this:GetChecked() then
+    HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = 2 -- Horizontal
+  else
+    HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = 1 -- Vertical
+  end
+  HealBot_Action_PartyChanged()
+end
+
 function HealBot_Options_NewSkin_OnTextChanged(this)
   local text= this:GetText()
   if string.len(text)>0 then
@@ -11,6 +25,8 @@ function HealBot_Options_NewSkin_OnTextChanged(this)
 end
 function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Config.numcols[HealBot_Options_NewSkin:GetText()] = HealBot_Config.numcols[HealBot_Config.Current_Skin]
+  HealBot_Config.bmaxrows[HealBot_Options_NewSkin:GetText()] = HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]
+  HealBot_Config.GridOrientation[HealBot_Options_NewSkin:GetText()] = HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]
   HealBot_Config.btexture[HealBot_Options_NewSkin:GetText()] = HealBot_Config.btexture[HealBot_Config.Current_Skin]
   HealBot_Config.bcspace[HealBot_Options_NewSkin:GetText()] = HealBot_Config.bcspace[HealBot_Config.Current_Skin]
   HealBot_Config.brspace[HealBot_Options_NewSkin:GetText()] = HealBot_Config.brspace[HealBot_Config.Current_Skin]
@@ -56,6 +72,8 @@ end
 function HealBot_Options_DeleteSkin_OnClick(this)
   if HealBot_Config.Current_Skin~=HEALBOT_SKINS_STD then
     HealBot_Config.numcols[HealBot_Options_SkinsText:GetText()] = nil
+    HealBot_Config.bmaxrows[HealBot_Options_SkinsText:GetText()] = nil
+    HealBot_Config.GridOrientation[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.btexture[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.bcspace[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.brspace[HealBot_Options_SkinsText:GetText()] = nil
