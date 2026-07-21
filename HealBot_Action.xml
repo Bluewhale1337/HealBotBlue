@@ -232,6 +232,15 @@
       <Button name="HealBot_Action_HealUnit39" inherits="HealingButtonTemplate" text="Unit not set"/>
       <Button name="HealBot_Action_HealUnit40" inherits="HealingButtonTemplate" text="Unit not set"/>
       <Button name="HealBot_Action_HealUnit41" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit42" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit43" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit44" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit45" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit46" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit47" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit48" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit49" inherits="HealingButtonTemplate" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit50" inherits="HealingButtonTemplate" text="Unit not set"/>
       
       <Button name="HealBot_Action_HealUnit51" inherits="HealingButtonTemplate2" text="Unit not set"/>
       <Button name="HealBot_Action_HealUnit52" inherits="HealingButtonTemplate2" text="Unit not set"/>
@@ -243,6 +252,46 @@
       <Button name="HealBot_Action_HealUnit58" inherits="HealingButtonTemplate2" text="Unit not set"/>
       <Button name="HealBot_Action_HealUnit59" inherits="HealingButtonTemplate2" text="Unit not set"/>
       <Button name="HealBot_Action_HealUnit60" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit61" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit62" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit63" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit64" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit65" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit66" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit67" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit68" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit69" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit70" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit71" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit72" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit73" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit74" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit75" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit76" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit77" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit78" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit79" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit80" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit81" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit82" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit83" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit84" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit85" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit86" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit87" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit88" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit89" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit90" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit91" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit92" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit93" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit94" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit95" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit96" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit97" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit98" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit99" inherits="HealingButtonTemplate2" text="Unit not set"/>
+      <Button name="HealBot_Action_HealUnit100" inherits="HealingButtonTemplate2" text="Unit not set"/>
       
       <Button name="HealBot_Action_Header1" inherits="HealingButtonTemplate4" text="Unit not set"/>
       <Button name="HealBot_Action_Header2" inherits="HealingButtonTemplate4" text="Unit not set"/>

@@ -402,6 +402,7 @@ function HealBot_Action_SetHealButton(index, unit)
         return nil
     end
     local button = getglobal("HealBot_Action_HealUnit" .. index);
+    if not button then return nil end
     button.unit = unit;
     if unit then
         table.insert(HealBot_Action_HealButtons, button);
@@ -466,10 +467,7 @@ function HealBot_Action_PartyChanged()
         local checked_end = 0;
         headerno = 0;
         
-        for j = 1, 41 do
-            HealBot_Action_SetHealButton(j, nil);
-        end
-        for j = 51, 60 do
+        for j = 1, 100 do
             HealBot_Action_SetHealButton(j, nil);
         end
         HealBot_Action_SetHealButton();
