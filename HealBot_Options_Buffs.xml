@@ -123,7 +123,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -160,7 +160,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -197,7 +197,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -271,7 +271,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -308,7 +308,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -345,7 +345,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-20" /> 
+                  <AbsDimension x="0" y="-35" /> 
                 </Offset>
               </Anchor>
             </Anchors>

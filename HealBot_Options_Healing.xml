@@ -52,7 +52,7 @@
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnLoad>HealBot_Options_GroupHeals_OnLoad(this,HEALBOT_OPTIONS_GROUPHEALS)</OnLoad> 
+          <OnLoad>HealBot_Options_GroupHeals_OnLoad(this,HEALBOT_OPTIONS_GROUPHEALS_LABEL)</OnLoad> 
           <OnClick>HealBot_Options_GroupHeals_OnClick(this)</OnClick> 
         </Scripts>
       </CheckButton>
