@@ -593,9 +593,7 @@ function HealBot_InitSpells()
     end
     id = id + 1;
   end
-  if class == "PRIEST" or class == "DRUID" or class == "PALADIN" or class == "SHAMAN" then
-    HealBot_AddChat("Initiated HealBot_CurrentSpells with " .. cnt .. " Spells");
-  end
+
   return cnt;
 end
 

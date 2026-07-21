@@ -335,6 +335,41 @@ function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, ch
     return OsetY;
 end
 
+function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, bheight, checked, header)
+    local bcspace = HealBot_Config.bcspace[HealBot_Config.Current_Skin] or 3;
+    if header then
+        headerno = headerno + 1;
+        local headerobj = getglobal("HealBot_Action_Header" .. headerno);
+        headerobj:SetText(header)
+        headerobj:Show();
+        headerobj:ClearAllPoints();
+        headerobj:SetHeight(bheight);
+        headerobj:SetWidth(bwidth);
+        headerobj:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX, -OsetY);
+        headerobj:Disable();
+        OsetX = OsetX + bwidth + bcspace;
+    else
+        local unit = button.unit;
+        button:SetText(" ");
+        if (HealBot_MayHeal(unit)) then
+            button:Show();
+            button:ClearAllPoints();
+            button:SetHeight(bheight);
+            if checked then
+                button:SetWidth(bwidth - 14);
+                button:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX + 14, -OsetY);
+            else
+                button:SetWidth(bwidth);
+                button:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OsetX, -OsetY);
+            end
+            OsetX = OsetX + bwidth + bcspace;
+        else
+            button:Hide();
+        end
+    end
+    return OsetX;
+end
+
 function HealBot_Action_SetHeightWidth(width, height, bwidth)
     if HealBot_ActionHeight then
         HealBot_Action:SetHeight(HealBot_ActionHeight);
@@ -781,6 +816,8 @@ function HealBot_Action_PartyChanged()
         local h = 1;
         local i = 0;
         local z = 1;
+        local brspace = HealBot_Config.brspace[HealBot_Config.Current_Skin] or 3;
+        local bcspace = HealBot_Config.bcspace[HealBot_Config.Current_Skin] or 3;
         
         local limit = math.ceil((numBars) / cols)
         if orientation == 1 and maxRows > 0 then
@@ -805,12 +842,12 @@ function HealBot_Action_PartyChanged()
                         OffsetX = OffsetX + bwidth + bcspace; 
                     end
                 else
-                    OffsetY = HealBot_Action_PositionButton(nil, OffsetX, OffsetY, bwidth, bheight, checked, header);
+                    OffsetX = HealBot_Action_PositionButtonHorizontal(nil, OffsetX, OffsetY, bwidth, bheight, checked, header);
                     if h == limit and z < numBars then
                         h = 0;
                         if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
                         OffsetX = bpadding;
-                        OffsetY = OffsetY + bheight + bcspace;
+                        OffsetY = OffsetY + bheight + brspace;
                     end
                 end
                 h = h + 1;
@@ -828,13 +865,12 @@ function HealBot_Action_PartyChanged()
                     OffsetX = OffsetX + bwidth + bcspace; 
                 end
             else
-                button:SetPoint("TOPLEFT", "HealBot_Action", "TOPLEFT", OffsetX, -OffsetY);
-                OffsetX = OffsetX + bwidth + bcspace;
+                OffsetX = HealBot_Action_PositionButtonHorizontal(button, OffsetX, OffsetY, bwidth, bheight, checked, nil);
                 if h == limit and z < numBars then
                     h = 0;
                     if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
                     OffsetX = bpadding;
-                    OffsetY = OffsetY + bheight + bcspace; 
+                    OffsetY = OffsetY + bheight + brspace; 
                 end
             end
             
@@ -858,8 +894,11 @@ function HealBot_Action_PartyChanged()
         else
             if MaxOffsetX < OffsetX then MaxOffsetX = OffsetX; end
             -- In horizontal mode, OffsetY represents the active row. We need to measure total height.
-            MaxOffsetY = OffsetY + bheight + bcspace
-            OffsetX = MaxOffsetX -- For setting the final width
+            MaxOffsetY = OffsetY + bheight + brspace
+            OffsetX = MaxOffsetX
+            if numBars > 0 then
+                OffsetX = OffsetX - bwidth - bcspace
+            end
         end
 
         if HealBot_Config.HideOptions == 1 then

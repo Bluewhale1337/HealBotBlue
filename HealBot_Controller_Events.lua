@@ -30,9 +30,7 @@ function HealBot_OnLoad(this)
     end)
     HealBot_Model:RegisterObserver("EQUIPMENT_CHANGED", function(unitID)
         if unitID == "player" then
-            HealBot_BonusScanner:ScanEquipment()
-            HealBot_CalcEquipBonus = true;
-            HealBot_RecalcSpells();
+            HealBot_EquipChangeTimer = 1
         end
     end)
 end
@@ -76,10 +74,20 @@ function HealBot_OnUpdate(this, arg1)
     end
 
     -- Process Dirty Queue for MVC View
-    if next(HealBot_View_DirtyUnits) ~= nil then
-        for unitID in pairs(HealBot_View_DirtyUnits) do
-            HealBot_Action_RefreshButtons(unitID)
-            HealBot_View_DirtyUnits[unitID] = nil
+    local unitID, _ = next(HealBot_View_DirtyUnits)
+    while unitID do
+        HealBot_Action_RefreshButtons(unitID)
+        HealBot_View_DirtyUnits[unitID] = nil
+        unitID, _ = next(HealBot_View_DirtyUnits)
+    end
+    
+    if HealBot_EquipChangeTimer > 0 then
+        HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
+        if HealBot_EquipChangeTimer <= 0 then
+            HealBot_EquipChangeTimer = 0
+            HealBot_BonusScanner:ScanEquipment()
+            HealBot_CalcEquipBonus = true;
+            HealBot_RecalcSpells();
         end
     end
 
@@ -93,15 +101,7 @@ function HealBot_OnUpdate(this, arg1)
                 HealsIn_Timer = 0;
             end
             
-            if HealBot_EquipChangeTimer > 0 then
-                HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
-                if HealBot_EquipChangeTimer <= 0 then
-                    HealBot_EquipChangeTimer = 0
-                    HealBot_BonusScanner:ScanEquipment()
-                    HealBot_CalcEquipBonus = true;
-                    HealBot_RecalcSpells();
-                end
-            end
+
             
             if HealBot_SpellsInitFlag > 1 then
                 HealBot_SpellsInitFlag = HealBot_SpellsInitFlag + 1;
@@ -138,32 +138,24 @@ local HealBot_EventHandlers = {
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
-        if (arg1 == "player") then HealBot_RecalcHeals(); end
-        HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_RAGE"] = function(this, arg1)
         if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
-        if (arg1 == "player") then HealBot_RecalcHeals(); end
-        HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_ENERGY"] = function(this, arg1)
         if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
-        if (arg1 == "player") then HealBot_RecalcHeals(); end
-        HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_DISPLAYPOWER"] = function(this, arg1)
         if arg1 ~= "player" and HealBot_Config.ShowManaBars == 0 then return end
         if HealBot_Model:UpdateUnitPower(arg1) then
             HealBot_Model:NotifyObservers("UNIT_POWER_CHANGED", arg1)
         end
-        if (arg1 == "player") then HealBot_RecalcHeals(); end
-        HealBot_Action_RefreshButtons(arg1);
     end,
     ["UNIT_AURA"] = function(this, arg1)
         HealBot_Model:MarkAuraChanged(arg1)
@@ -321,7 +313,6 @@ end
 function HealBot_OnEvent_UnitHealth(this, unit)
     if (not HealBot_Heals[unit]) then return end
     HealBot_CheckCasting(unit);
-    HealBot_RecalcHeals(unit);
     if unit == HealBot_Action_TooltipUnit then
         HealBot_Action_RefreshTooltip(HealBot_Action_TooltipUnit);
     end
@@ -379,7 +370,7 @@ end
 
 function HealBot_OnEvent_PlayerTargetChanged(this)
     if HealBot_Action_UnitButtons and HealBot_Action_UnitButtons["target"] then
-        HealBot_Action_RefreshButtons("target");
+        HealBot_View_DirtyUnits["target"] = true
         HealBot_OnEvent_UnitAura(nil, "target");
     end
 end

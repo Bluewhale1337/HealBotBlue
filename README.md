@@ -44,6 +44,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 
 **v1.5.1**
+* **Event Loop Decoupling:** Ripped out redundant synchronous UI redraws that were bypassed by the new MVC architecture. High-frequency events (mana regen, health ticks) now fully rely on the `HealBot_OnUpdate` dirty queue, severely reducing CPU bottlenecks.
+* **Combat UI Optimizations:** Removed unnecessary full spell recalculations when dropping combat, preventing client stutter after every mob kill.
 * **Memory Optimization:** Fixed severe Lua garbage collection spikes during UI reloads by preventing full party layout rebuilds on `PLAYER_TARGET_CHANGED`, and cached dynamic string concatenations directly to unit frames to eliminate memory leakage on high frequency UI refreshes.
 * **Mana Validation Fix:** Removed artificial spell mana gating, fixing an issue where low-mana spells disappeared from tooltips and couldn't be cast. WoW's native mana validation now correctly processes 0-cost buffs (e.g. Clearcasting, Inner Focus) while turning low-mana tooltip spells red.
 * **Self-Buff Tracking:** Fixed a bug where "Self Only" buff tracking incorrectly excluded the player when represented by party or raid frames instead of the standard "player" unit ID.
