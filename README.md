@@ -43,7 +43,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 
-**v1.5.1**
+**v1.6**
 * **Event Loop Decoupling:** Ripped out redundant synchronous UI redraws that were bypassed by the new MVC architecture. High-frequency events (mana regen, health ticks) now fully rely on the `HealBot_OnUpdate` dirty queue, severely reducing CPU bottlenecks.
 * **Combat UI Optimizations:** Removed unnecessary full spell recalculations when dropping combat, preventing client stutter after every mob kill.
 * **Memory Optimization:** Fixed severe Lua garbage collection spikes during UI reloads by preventing full party layout rebuilds on `PLAYER_TARGET_CHANGED`, and cached dynamic string concatenations directly to unit frames to eliminate memory leakage on high frequency UI refreshes.
