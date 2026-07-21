@@ -234,7 +234,7 @@ function HealBot_Options_OnLoad(this)
   table.insert(UISpecialFrames,this:GetName());
 
   -- Tabs
-  PanelTemplates_SetNumTabs(this,7);
+  PanelTemplates_SetNumTabs(this,8);
   this.selectedTab = 1; 
   PanelTemplates_UpdateTabs(this);
   HealBot_Options_ShowPanel(this.selectedTab);
@@ -314,6 +314,8 @@ function HealBot_Options_SetSkins()
   HealBot_Options_BarHeightS:SetValue(HealBot_Config.bheight[HealBot_Config.Current_Skin])
   HealBot_Options_BarWidthS:SetValue(HealBot_Config.bwidth[HealBot_Config.Current_Skin])
   HealBot_Options_BarNumColsS:SetValue(HealBot_Config.numcols[HealBot_Config.Current_Skin])
+  HealBot_Options_BarMaxRowsS:SetValue((HealBot_Config.bmaxrows and HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]) or 0)
+  HealBot_Options_GridOrientation:SetChecked(((HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) == 2) and 1 or nil)
   HealBot_Options_BarBRSpaceS:SetValue(HealBot_Config.brspace[HealBot_Config.Current_Skin])
   HealBot_Options_BarBCSpaceS:SetValue(HealBot_Config.bcspace[HealBot_Config.Current_Skin])
   HealBot_Options_FramePaddingS:SetValue((HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10)

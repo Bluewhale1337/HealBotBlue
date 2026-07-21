@@ -2,6 +2,7 @@
 -- Handles tracking buffs/debuffs (auras) on group/raid units
 
 HealBot_MissingBuffs = {}
+local StaticHasBuff = {}
 
 function HealBot_UnitAffected(unit, effect)
     if not effect then return nil; end
@@ -68,7 +69,10 @@ function HealBot_CheckBuffs(unit)
     }
     
     -- Gather buffs on unit
-    local hasBuff = {}
+    local hasBuff = StaticHasBuff
+    for k in pairs(hasBuff) do
+        hasBuff[k] = nil
+    end
     local i = 1
     while true do
         local buffTexture = UnitBuff(unit, i)
@@ -91,7 +95,7 @@ function HealBot_CheckBuffs(unit)
             local val = HealBot_Config.BuffDropDowns[myClass][j]
             if val and val > 0 then
                 local isSelfOnly = (HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[j] == 1)
-                if not (isSelfOnly and unit ~= "player") then
+                if not (isSelfOnly and not UnitIsUnit(unit, "player")) then
                     local spellName = HealBot_Buff_Spells[myClass][val]
                     
                     local hasIt = hasBuff[spellName]
@@ -100,7 +104,7 @@ function HealBot_CheckBuffs(unit)
                     end
                     
                     if not hasIt then
-                        if myClass == "SHAMAN" and unit == "player" and string.find(spellName, " Weapon") then
+                        if myClass == "SHAMAN" and UnitIsUnit(unit, "player") and string.find(spellName, " Weapon") then
                             hasIt = HealBot_CheckShamanWeaponBuff(spellName)
                         end
                     end
@@ -123,6 +127,7 @@ local HealBot_TrackedHoTs = {
     ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
     ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
     ["Interface\\Icons\\btnholyscriptures"] = true,
+    ["Interface\\Icons\\Spell_Holy_AshesToAshes"] = true,
 }
 
 function HealBot_OnEvent_UnitAura(this, unit)
@@ -144,7 +149,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     iconCount = iconCount + 1
                     HealBot_UnitIcons[unit][iconCount] = debuff
                 end
-                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] == "YES" then
+                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] then
                     HealBot_UnitDebuff[unit] = debuff_type
                     DebuffType = debuff_type;
                     if HealBot_DebuffPriority[debuff_type] then
@@ -167,6 +172,17 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
             b = b + 1
+        end
+
+        local d = 1
+        while true do
+            local debuff = UnitDebuff(unit, d)
+            if not debuff then break end
+            if HealBot_TrackedHoTs[debuff] and iconCount < 5 then
+                iconCount = iconCount + 1
+                HealBot_UnitIcons[unit][iconCount] = debuff
+            end
+            d = d + 1
         end
         
         if HealBot_UnitDebuff[unit] then

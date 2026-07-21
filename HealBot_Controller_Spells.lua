@@ -246,7 +246,7 @@ function HealBot_CheckCasting(unit)
   local ag = HealBot_Config.babortcolg[HealBot_Config.Current_Skin] or 0.1;
   local ab = HealBot_Config.babortcolb[HealBot_Config.Current_Skin] or 0.5;
   local aa = HealBot_Config.babortcola[HealBot_Config.Current_Skin] or 1;
-  bar.txt = getglobal(bar:GetName() .. "_text");  
+  if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
   
   if HealBot_IsCasting == false and HealBot_AbortButton == 0 then
     bar:SetStatusBarColor(ar, ag, ab, 0);
@@ -462,7 +462,8 @@ end
 
 function HealBot_CanCastSpell(spell, unit)
   local this = HealBot_Spells[spell];
-  if this.Mana > UnitMana("player") then return false end;
+  -- Removed manual mana check so WoW can properly handle 0-cost buffs (Clearcasting/Inner Focus)
+  -- and so tooltips can render in red instead of disappearing.
   if this.BagSlot then
     local bag, slot = HealBot_UnpackBagSlot(this.BagSlot);
     local start, duration, enable = GetContainerItemCooldown(bag, slot);
@@ -592,9 +593,7 @@ function HealBot_InitSpells()
     end
     id = id + 1;
   end
-  if class == "PRIEST" or class == "DRUID" or class == "PALADIN" or class == "SHAMAN" then
-    HealBot_AddChat("Initiated HealBot_CurrentSpells with " .. cnt .. " Spells");
-  end
+
   return cnt;
 end
 
