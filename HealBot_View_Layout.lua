@@ -70,13 +70,13 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
     end
 
     local colorMode = HealBot_Config.bcolormode[HealBot_Config.Current_Skin] or 1
-    if colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass then
+    if colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass and RAID_CLASS_COLORS and RAID_CLASS_COLORS[HealBot_Model.units[unit].englishClass] then
         local engClass = HealBot_Model.units[unit].englishClass
-        if RAID_CLASS_COLORS and RAID_CLASS_COLORS[engClass] then
-            r = RAID_CLASS_COLORS[engClass].r
-            g = RAID_CLASS_COLORS[engClass].g
-            b = RAID_CLASS_COLORS[engClass].b
-        end
+        r = RAID_CLASS_COLORS[engClass].r
+        g = RAID_CLASS_COLORS[engClass].g
+        b = RAID_CLASS_COLORS[engClass].b
+    elseif colorMode == 2 and string.find(unit, "pet") then
+        r, g, b = 0.4, 0.9, 0.6 -- Mint color
     else
         if pct >= 0.98 then r = 0.0; end
         if pct < 0.98 and pct >= 0.65 then r = 2.94 - (pct * 3); end 
