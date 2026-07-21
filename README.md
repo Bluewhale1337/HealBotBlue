@@ -47,7 +47,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Macro, Item, and Script Bindings:** Support for binding named macros, inventory items, and inline scripts (e.g. `/target`) directly to mouse clicks in the Spells tab. All of these now natively support implicit `@mouseover` targeting on the unit frame you click, without losing your current target.
 * **Modifier-Aware Tooltips & Resource Costs:** The tooltip dynamically updates to show exactly what action is bound when holding down Shift, Ctrl, or Alt over a frame. Spells also show their required mana cost, turning red if you do not have enough mana to cast them.
 * **Memory Recycling Pool:** Added a local table recycling pool in the data layer to greatly reduce Lua garbage collection (GC) spikes, improving overall client frame rates during intense combat.
-* 
+
 **v1.4.2**
 * **Memory Optimization:** Fixed a significant memory leak where tracking tables were being repeatedly allocated every tick during aura scanning, and replaced `table.foreach` with pairs loops to avoid GC spikes during combat.
 
