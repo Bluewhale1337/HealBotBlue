@@ -962,7 +962,6 @@ function HealBot_Action_PartyChanged()
         if HealBot_Config.HideParty == 1 and HidePartyFrame then
             HidePartyFrame();
         end
-    end
     HealBot_Action_RefreshButtons();
     HealBot_Action_ShowFrame();
 end
