@@ -376,7 +376,7 @@ end
 
 function HealBot_OnEvent_PlayerRegenEnabled(this)
     HealBot_IsFighting = false;
-    -- Removed HealBot_Delay_RecalcParty = 1;
+    HealBot_Delay_RecalcParty = 1;
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(this)
