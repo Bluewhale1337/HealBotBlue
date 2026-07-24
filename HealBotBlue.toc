@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: HealBotBlue
-## Version: 1.6.0
+## Version: 1.6.1
 ## Author: Bluewhale
 ## Notes: Adds panel with skinable bars for healing and decursive
 ## SavedVariablesPerCharacter:  HealBot_Config

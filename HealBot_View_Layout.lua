@@ -635,6 +635,9 @@ function HealBot_Action_PartyChanged()
                 else
                     for _, unit in ipairs(HealBot_Action_HealGroup) do
                         if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local name = UnitName(unit) or "not known"
+                            local class = UnitClass(unit) or "not known"
+                            local subgroup = 1
                             if HealBot_Config.ExtraOrder == 1 then
                                 order[unit] = name;
                             elseif HealBot_Config.ExtraOrder == 2 then
@@ -733,6 +736,9 @@ function HealBot_Action_PartyChanged()
                 else
                     for _, unit in ipairs(HealBot_Action_HealGroup) do
                         if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local name = UnitName(unit) or "not known"
+                            local class = UnitClass(unit) or "not known"
+                            local subgroup = 1
                             if HealBot_Config.ExtraOrder == 1 then
                                 order[unit] = name;
                             elseif HealBot_Config.ExtraOrder == 2 then
