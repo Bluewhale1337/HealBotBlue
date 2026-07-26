@@ -47,7 +47,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.6.1**
-* **Hotfix** - With class colours toggled extra frames for player pets were given some classy mint colour.
+* **Hotfix - pet frames** - With class colours toggled extra frames for player pets were given some classy mint colour.
+* **Hotfi - raidframes in combat** - Modfied how frames behave when player leaves during combat.
 
 **v1.6**
 * **Event Loop Decoupling:** Ripped out redundant synchronous UI redraws that were bypassed by the new MVC architecture. High-frequency events (mana regen, health ticks) now fully rely on the `HealBot_OnUpdate` dirty queue, severely reducing CPU bottlenecks.

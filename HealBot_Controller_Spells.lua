@@ -608,47 +608,47 @@ function HealBot_InitGetSpellData(spell, id, class)
 
   HealBot_ScanTooltip:SetOwner(HealBot_ScanTooltip, "ANCHOR_NONE")
   HealBot_ScanTooltip:SetSpell(id, BOOKTYPE_SPELL);
-  tmpText = getglobal("HealBot_ScanTooltipTextLeft2");
-  if (tmpText:GetText()) then
-    line = tmpText:GetText();
-    tmpTest, tmpTest, _mana = string.find(line, HEALBOT_TOOLTIP_MANA); 
-  else
-    HealBot_Report_Error("================================");
-    HealBot_Report_Error("ERROR: HealBot_ScanTooltip is lost");
-    HealBot_Report_Error("ERROR: If BonusScanner is used, try disabling BonusScanner");
+  _mana = 0;
+  _range = 40;
+  _cast = 0;
+  line = nil;
+  
+  for lineNum = 2, 6 do
+    local lText = getglobal("HealBot_ScanTooltipTextLeft"..lineNum);
+    if lText and lText:IsVisible() and lText:GetText() then
+      local txt = lText:GetText();
+      local t1, t2, match;
+      t1, t2, match = string.find(txt, HEALBOT_TOOLTIP_MANA);
+      if match then _mana = match; end
+      
+      if txt == HEALBOT_TOOLTIP_INSTANT_CAST or txt == "Instant" then
+        _cast = 0;
+      elseif txt == HEALBOT_TOOLTIP_CHANNELED then
+        _cast = 0;
+      else
+        t1, t2, match = string.find(txt, HEALBOT_TOOLTIP_CAST_TIME);
+        if match then _cast = match; end
+      end
+
+      t1, t2, match = string.find(txt, HEALBOT_TOOLTIP_RANGE);
+      if match then _range = match; end
+      
+      if not string.find(txt, HEALBOT_TOOLTIP_MANA) and txt ~= HEALBOT_TOOLTIP_INSTANT_CAST and txt ~= "Instant" and txt ~= HEALBOT_TOOLTIP_CHANNELED and not string.find(txt, HEALBOT_TOOLTIP_CAST_TIME) and not string.find(txt, HEALBOT_TOOLTIP_RANGE) then
+         if not line then line = txt; end
+      end
+    end
+    
+    local rText = getglobal("HealBot_ScanTooltipTextRight"..lineNum);
+    if rText and rText:IsVisible() and rText:GetText() then
+      local txt = rText:GetText();
+      local t1, t2, match;
+      t1, t2, match = string.find(txt, HEALBOT_TOOLTIP_RANGE);
+      if match then _range = match; end
+    end
   end
 
-  tmpText = getglobal("HealBot_ScanTooltipTextRight2");
-  if (tmpText:GetText()) then
-    line = tmpText:GetText();
-    tmpTest, tmpTest, _range = string.find(line, HEALBOT_TOOLTIP_RANGE); 
-  else
-    HealBot_Report_Error("================================");
-    HealBot_Report_Error("ERROR: HealBot_ScanTooltip is lost");
-    HealBot_Report_Error("ERROR: If BonusScanner is used, try disabling BonusScanner");
-  end  
-
-  tmpText = getglobal("HealBot_ScanTooltipTextLeft3");
-  _cast = nil;
-  if (tmpText:GetText()) then
-    line = tmpText:GetText();
-    if (line == HEALBOT_TOOLTIP_INSTANT_CAST) then
-      _cast = 0;
-    elseif line == HEALBOT_TOOLTIP_CHANNELED then
-      _cast = 0;
-    elseif (tmpText) then
-      tmpTest, tmpTest, _cast = string.find(line, HEALBOT_TOOLTIP_CAST_TIME); 
-    end
-  else
-    HealBot_Report_Error("================================");
-    HealBot_Report_Error("ERROR: HealBot_ScanTooltip is lost");
-    HealBot_Report_Error("ERROR: If BonusScanner is used, try disabling BonusScanner");
-  end  
-
-  tmpText = getglobal("HealBot_ScanTooltipTextLeft4");
   tmpTest = nil;
-  if (tmpText:GetText()) then
-    line = tmpText:GetText();
+  if line then
     if class == "PRIEST" then
       if string.sub(spell, 1, 14) == string.sub(HEALBOT_POWER_WORD_SHIELD, 1, 14) then
         tmpTest, tmpTest, _HealsMin, _shield = string.find(line, HEALBOT_SPELL_PATTERN_SHIELD);    

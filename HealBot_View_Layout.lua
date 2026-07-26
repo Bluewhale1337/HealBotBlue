@@ -109,6 +109,11 @@ function HealBot_Action_EnableButton(button)
     local maxhlth = state.maxHealth
     local name = state.name
     if not name then name = UnitName(unit) end -- fallback
+    
+    if not name or name == "Unknown" then
+        button:Hide()
+        return
+    end
 
     local bar = HealBot_Action_HealthBar(button);
     local bar2 = HealBot_Action_HealthBar2(button);
@@ -402,6 +407,7 @@ function HealBot_Action_SetHealButton(index, unit)
         return nil
     end
     local button = getglobal("HealBot_Action_HealUnit" .. index);
+    if not button then return nil end
     button.unit = unit;
     if unit then
         table.insert(HealBot_Action_HealButtons, button);
@@ -414,8 +420,12 @@ function HealBot_Action_SetHealButton(index, unit)
 end
 
 function HealBot_Action_PartyChanged()
-    if not HealBot_IsFighting then
-        local numBars = 0;
+    if HealBot_IsFighting then
+        HealBot_Action_AppendNewUnits()
+        return
+    end
+    
+    local numBars = 0;
         local numHeaders = 0;
         local TempMaxH = 0;
         local HeaderPos = {};
@@ -466,10 +476,7 @@ function HealBot_Action_PartyChanged()
         local checked_end = 0;
         headerno = 0;
         
-        for j = 1, 41 do
-            HealBot_Action_SetHealButton(j, nil);
-        end
-        for j = 51, 60 do
+        for j = 1, 100 do
             HealBot_Action_SetHealButton(j, nil);
         end
         HealBot_Action_SetHealButton();
@@ -628,6 +635,9 @@ function HealBot_Action_PartyChanged()
                 else
                     for _, unit in ipairs(HealBot_Action_HealGroup) do
                         if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local name = UnitName(unit) or "not known"
+                            local class = UnitClass(unit) or "not known"
+                            local subgroup = 1
                             if HealBot_Config.ExtraOrder == 1 then
                                 order[unit] = name;
                             elseif HealBot_Config.ExtraOrder == 2 then
@@ -726,6 +736,9 @@ function HealBot_Action_PartyChanged()
                 else
                     for _, unit in ipairs(HealBot_Action_HealGroup) do
                         if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                            local name = UnitName(unit) or "not known"
+                            local class = UnitClass(unit) or "not known"
+                            local subgroup = 1
                             if HealBot_Config.ExtraOrder == 1 then
                                 order[unit] = name;
                             elseif HealBot_Config.ExtraOrder == 2 then
@@ -901,6 +914,16 @@ function HealBot_Action_PartyChanged()
             end
         end
 
+        HealBot_Grid_LastI = i;
+        HealBot_Grid_LastH = h;
+        HealBot_Grid_LastZ = z;
+        HealBot_Grid_OffsetX = OffsetX;
+        HealBot_Grid_OffsetY = OffsetY;
+        HealBot_Grid_MaxOffsetX = MaxOffsetX;
+        HealBot_Grid_MaxOffsetY = MaxOffsetY;
+        HealBot_Grid_Limit = limit;
+        HealBot_Grid_NumBars = numBars;
+
         if HealBot_Config.HideOptions == 1 then
             HealBot_Action_OptionsButton:Hide();
         else
@@ -945,7 +968,6 @@ function HealBot_Action_PartyChanged()
         if HealBot_Config.HideParty == 1 and HidePartyFrame then
             HidePartyFrame();
         end
-    end
     HealBot_Action_RefreshButtons();
     HealBot_Action_ShowFrame();
 end
@@ -992,6 +1014,132 @@ function HealBot_Action_Refresh(unit)
                 HealBot_Action:Hide();
                 HealBot_Action.ProgrammaticHide = nil;
             end
+        end
+    end
+end
+function HealBot_Action_AppendUnit(unit)
+    if not HealBot_Grid_LastI then return end
+    if HealBot_Grid_LastI >= 100 then return end
+    
+    HealBot_Grid_LastI = HealBot_Grid_LastI + 1
+    HealBot_Grid_NumBars = HealBot_Grid_NumBars + 1
+    
+    local button = HealBot_Action_SetHealButton(HealBot_Grid_LastI, unit)
+    if not button then return end
+    
+    local orientation = (HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) or 1
+    local bwidth = (HealBot_Config.bwidth and HealBot_Config.bwidth[HealBot_Config.Current_Skin]) or 85
+    local bheight = (HealBot_Config.bheight and HealBot_Config.bheight[HealBot_Config.Current_Skin]) or 18
+    local bcspace = (HealBot_Config.bcspace and HealBot_Config.bcspace[HealBot_Config.Current_Skin]) or 3
+    local brspace = (HealBot_Config.brspace and HealBot_Config.brspace[HealBot_Config.Current_Skin]) or 3
+    local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
+    
+    if orientation == 1 then
+        HealBot_Grid_OffsetY = HealBot_Action_PositionButton(button, HealBot_Grid_OffsetX, HealBot_Grid_OffsetY, bwidth, bheight, false, nil)
+        if HealBot_Grid_LastH == HealBot_Grid_Limit then
+            HealBot_Grid_LastH = 0
+            if HealBot_Grid_MaxOffsetY < HealBot_Grid_OffsetY then HealBot_Grid_MaxOffsetY = HealBot_Grid_OffsetY end
+            HealBot_Grid_OffsetY = bpadding
+            HealBot_Grid_OffsetX = HealBot_Grid_OffsetX + bwidth + bcspace
+        end
+    else
+        HealBot_Grid_OffsetX = HealBot_Action_PositionButtonHorizontal(button, HealBot_Grid_OffsetX, HealBot_Grid_OffsetY, bwidth, bheight, false, nil)
+        if HealBot_Grid_LastH == HealBot_Grid_Limit then
+            HealBot_Grid_LastH = 0
+            if HealBot_Grid_MaxOffsetX < HealBot_Grid_OffsetX then HealBot_Grid_MaxOffsetX = HealBot_Grid_OffsetX end
+            HealBot_Grid_OffsetX = bpadding
+            HealBot_Grid_OffsetY = HealBot_Grid_OffsetY + bheight + brspace
+        end
+    end
+    
+    HealBot_Grid_LastH = HealBot_Grid_LastH + 1
+    HealBot_Grid_LastZ = HealBot_Grid_LastZ + 1
+    
+    local bar = HealBot_Action_HealthBar(button)
+    local bar2 = HealBot_Action_HealthBar2(button)
+    bar.txt = getglobal(bar:GetName() .. "_text")
+    bar:SetHeight(bheight)
+    local btexture = (HealBot_Config.btexture and HealBot_Config.btexture[HealBot_Config.Current_Skin]) or 5
+    HealBot_Action_SetTexture(bar, btexture)
+    local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+    bar.txt:SetTextHeight(btextheight)
+    bar2:SetHeight(bheight)
+    HealBot_Action_SetTexture(bar2, btexture)
+    
+    local totalOffsetX = HealBot_Grid_OffsetX
+    local totalOffsetY = HealBot_Grid_OffsetY
+    if orientation == 1 then
+        if HealBot_Grid_MaxOffsetY < totalOffsetY then HealBot_Grid_MaxOffsetY = totalOffsetY end
+        totalOffsetY = HealBot_Grid_MaxOffsetY
+    else
+        if HealBot_Grid_MaxOffsetX < totalOffsetX then HealBot_Grid_MaxOffsetX = totalOffsetX end
+        totalOffsetX = HealBot_Grid_MaxOffsetX
+        totalOffsetY = totalOffsetY + bheight + brspace
+    end
+    
+    HealBot_Action_SetHeightWidth(totalOffsetX, totalOffsetY + bpadding, bwidth)
+end
+function HealBot_Action_AppendNewUnits()
+    if not HealBot_Grid_LastI then return end
+    
+    local unitsToCheck = {}
+    
+    -- Gather units based on config, similar to PartyChanged
+    if HealBot_Config.GroupHeals == 1 then
+        for _, unit in ipairs(HealBot_Action_HealGroup) do
+            table.insert(unitsToCheck, unit)
+        end
+    end
+    
+    if HealBot_Config.TankHeals == 1 and GetNumRaidMembers() > 0 and CT_RA_MainTanks then
+        for j = 1, 10 do
+            if CT_RA_MainTanks[j] then
+                for k = 1, GetNumRaidMembers() do
+                    local unit = "raid" .. k
+                    if UnitName(unit) == CT_RA_MainTanks[j] then
+                        table.insert(unitsToCheck, unit)
+                    end
+                end
+            end
+        end
+    end
+    
+    if HealBot_Config.TargetHeals == 1 then
+        for _, unit in ipairs(HealBot_Action_HealTarget) do
+            table.insert(unitsToCheck, unit)
+        end
+        table.insert(unitsToCheck, "target")
+    end
+    
+    if HealBot_Config.EmergencyHeals == 1 then
+        if GetNumRaidMembers() > 0 then
+            for j = 1, 40 do
+                table.insert(unitsToCheck, "raid" .. j)
+            end
+        else
+            for j = 1, 4 do
+                table.insert(unitsToCheck, "party" .. j)
+            end
+            table.insert(unitsToCheck, "player")
+        end
+    end
+    
+    if HealBot_Config.PetHeals == 1 then
+        if GetNumRaidMembers() > 0 then
+            for j = 1, 40 do
+                table.insert(unitsToCheck, "raidpet" .. j)
+            end
+        else
+            for j = 1, 4 do
+                table.insert(unitsToCheck, "partypet" .. j)
+            end
+            table.insert(unitsToCheck, "pet")
+        end
+    end
+    
+    for _, unit in ipairs(unitsToCheck) do
+        if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+            HealBot_Action_AppendUnit(unit)
         end
     end
 end
