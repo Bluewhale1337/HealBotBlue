@@ -7,6 +7,9 @@ Original HealBot, while being a staple healing addon in Wrath and later expansio
 
 > **Performance First:** The raidframe is not library reliant - unlike popular raidframe replacement addons it doesn't rely at all on external frameworks. While this makes my work a bit harder this allows complete control over garbage collection and CPU use which makes it multiple times more stable and lightweight.
 
+### Development version
+There is dev branch available, it might be slightly more unstabl but most of time it does have more features present. It's only merged into main when major feature set is implemented and stabilised.
+
 ### Reporting Errors
 Major errors will pop up a frame with error information. Take a screenshot and post comments.
 
