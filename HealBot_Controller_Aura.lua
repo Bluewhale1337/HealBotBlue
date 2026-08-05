@@ -35,6 +35,9 @@ function HealBot_CheckShamanWeaponBuff(spellName)
     local hasMainHandEnchant, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
     if not (hasMainHandEnchant or hasOffHandEnchant) then return false end
     
+    local firstWord = string.match(spellName, "^(%w+)")
+    if not firstWord then return false end
+
     HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
     local slots = {}
     if hasMainHandEnchant then table.insert(slots, 16) end
@@ -47,7 +50,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
             local textObj = getglobal("HealBot_ScanTooltipTextLeft" .. i)
             if textObj then
                 local text = textObj:GetText()
-                if text and string.find(text, spellName) then
+                if text and string.find(text, firstWord) then
                     HealBot_ScanTooltip:Hide()
                     return true
                 end
