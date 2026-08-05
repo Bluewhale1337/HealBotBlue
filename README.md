@@ -46,6 +46,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.6.2**
+* **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.
+* **UI Update - Raid & Pets Split** - Split the "Raid / Extra" toggle into separate "Raid" and "Pets" toggles. Simplified the raid bars filter dropdown to core options (All, Melee, Ranged, Heals, Custom).
+
 **v1.6.1**
 * **Hotfix - pet frames** - With class colours toggled extra frames for player pets were given some classy mint colour.
 * **Hotfi - raidframes in combat** - Modfied how frames behave when player leaves during combat.
