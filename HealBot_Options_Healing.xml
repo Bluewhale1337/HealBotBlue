@@ -95,6 +95,19 @@
           <OnClick>HealBot_Options_EmergencyHeals_OnClick(this)</OnClick> 
         </Scripts>
       </CheckButton>
+      <CheckButton name="HealBot_Options_PetHeals" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GroupHeals" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="244" y="5" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_PetHeals_OnLoad(this,HEALBOT_OPTIONS_PETHEALS)</OnLoad> 
+          <OnClick>HealBot_Options_PetHeals_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
 
         </Frames>
       </Frame>
