@@ -1096,7 +1096,11 @@ function HealBot_Action_AppendNewUnits()
             if CT_RA_MainTanks[j] then
                 for k = 1, GetNumRaidMembers() do
                     local unit = "raid" .. k
-                    if UnitName(unit) == CT_RA_MainTanks[j] then
+                    local skip = false
+                    if UnitInParty(unit) and HealBot_Config.GroupHeals == 1 and not UnitIsUnit(unit, "player") then
+                        skip = true
+                    end
+                    if not skip and UnitName(unit) == CT_RA_MainTanks[j] then
                         table.insert(unitsToCheck, unit)
                     end
                 end
@@ -1114,7 +1118,10 @@ function HealBot_Action_AppendNewUnits()
     if HealBot_Config.EmergencyHeals == 1 then
         if GetNumRaidMembers() > 0 then
             for j = 1, 40 do
-                table.insert(unitsToCheck, "raid" .. j)
+                local unit = "raid" .. j
+                if not (UnitInParty(unit) and HealBot_Config.GroupHeals == 1) then
+                    table.insert(unitsToCheck, unit)
+                end
             end
         else
             for j = 1, 4 do
