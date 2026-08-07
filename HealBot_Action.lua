@@ -123,6 +123,9 @@ end
 
 function HealBot_SplitString(str, delimiter)
     local result = {}
+    if not delimiter or delimiter == "" then
+        return {str}
+    end
     local start_pos = 1
     while true do
         local end_pos = string.find(str, delimiter, start_pos, true)
