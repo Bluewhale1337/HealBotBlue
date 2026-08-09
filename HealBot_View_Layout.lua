@@ -251,11 +251,14 @@ function HealBot_Action_EnableButton(button)
         bar.txt:SetFont(fontName, fontHeight, "")
     end
       
-    for i = 1, 5 do
+    local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
+    for i = 1, 10 do
         local icon = getglobal(button:GetName() .. "BarIcon" .. i)
         if icon then
             if HealBot_UnitIcons and HealBot_UnitIcons[unit] and HealBot_UnitIcons[unit][i] then
                 icon:SetTexture(HealBot_UnitIcons[unit][i])
+                icon:SetWidth(iconSize)
+                icon:SetHeight(iconSize)
                 icon:Show()
             else
                 icon:Hide()

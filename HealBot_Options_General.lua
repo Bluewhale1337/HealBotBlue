@@ -44,6 +44,11 @@ function HealBot_Options_FontHeight_OnValueChanged(this)
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+function HealBot_Options_IconSizeS_OnValueChanged(this)
+  HealBot_Config.biconsize[HealBot_Config.Current_Skin] = this:GetValue();
+  getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
+  HealBot_Action_ResetSkin()
+end
 function HealBot_Options_AbortBarSize_OnValueChanged(this)
   HealBot_Config.abortsize[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());

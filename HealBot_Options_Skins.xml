@@ -360,6 +360,22 @@
           <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider> 
+      <Slider name="HealBot_Options_IconSizeS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="123" y="17" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontHeight" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="10" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Icon size",5,30)</OnLoad> 
+          <OnValueChanged>HealBot_Options_IconSizeS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
       
       <Slider name="HealBot_Options_BorderThicknessS" inherits="HealBot_Options_SliderTemplate">
         <Size>

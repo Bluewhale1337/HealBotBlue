@@ -246,6 +246,7 @@ HealBot_ConfigDefaults = {
   bpadding = {[HEALBOT_SKINS_STD] = 10, ["HealBot Party"] = 10, ["HealBot Raid"] = 10, ["Alteric Valley"] = 10, ["Modern Flat"] = 10},
   bboffset = {[HEALBOT_SKINS_STD] = 16, ["HealBot Party"] = 16, ["HealBot Raid"] = 16, ["Alteric Valley"] = 16, ["Modern Flat"] = 3},
   bfontoutline = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 1},
+  biconsize = {[HEALBOT_SKINS_STD] = 12, ["HealBot Party"] = 12, ["HealBot Raid"] = 12, ["Alteric Valley"] = 12, ["Modern Flat"] = 12},
   ShowTooltip = 1,
   ShowManaBars = 0,
   ManaBarsHealersOnly = 0,
@@ -273,18 +274,6 @@ HealBot_ResetHealsInFlag=true;
 HEALBOT_ADDON_ID="HealBot_Heals"
 
 HealBot_AbortButton=1;
-
-HealBot_Groups = {
-  ["ITEMS"] = {
-    HEALBOT_BANDAGES,
-    HEALBOT_HEALING_POTIONS,
-    HEALBOT_HEALTHSTONES,
-  },
-  ["PALADIN"] = {
-    HEALBOT_HOLY_LIGHT,
-    HEALBOT_FLASH_OF_LIGHT,
-  },
-}
 
 HealBot_Spells = {
 -- Cast     = secs until effect starts
@@ -584,7 +573,7 @@ HealBot_Action_TooltipUnit=nil;
 HealBot_Ressing = {};
 HealBot_IamRessing = false;
 
--- Table Recycling Pool (Puppeteer-inspired)
+-- Table Recycling Pool
 local tablePool = {}
 function HealBot_GetTable()
     local t = table.remove(tablePool)
