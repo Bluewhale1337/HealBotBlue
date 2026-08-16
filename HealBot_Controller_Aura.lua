@@ -160,7 +160,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         if not HealBot_UnitIcons[unit] then
             HealBot_UnitIcons[unit] = {}
         end
-        for j = 1, 5 do
+        for j = 1, 10 do
             HealBot_UnitIcons[unit][j] = nil
         end
         local iconCount = 0
@@ -168,7 +168,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         while true do
             local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
             if debuff then
-                if iconCount < 5 then
+                if iconCount < 10 then
                     iconCount = iconCount + 1
                     HealBot_UnitIcons[unit][iconCount] = debuff
                 end
@@ -190,7 +190,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         while true do
             local buff = UnitBuff(unit, b)
             if not buff then break end
-            if HealBot_TrackedHoTs[buff] and iconCount < 5 then
+            if HealBot_TrackedHoTs[buff] and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
@@ -201,7 +201,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         while true do
             local debuff = UnitDebuff(unit, d)
             if not debuff then break end
-            if HealBot_TrackedHoTs[debuff] and iconCount < 5 then
+            if HealBot_TrackedHoTs[debuff] and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = debuff
             end

@@ -49,6 +49,12 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.6.3** 
+* **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.
+* **UI Update - Icon Limit** - Increased maximum tracked buffs/debuffs per unit from 5 to 10.
+* **UI Update - Customizable icon size** - Added an option to change size of HoT icons (default to 12px).
+* **Cleanup** - Removed dead code `HealBot_Groups` table.
+
 **v1.6.2**
 * **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.
 * **UI Update - Raid & Pets Split** - Split the "Raid / Extra" toggle into separate "Raid" and "Pets" toggles. Simplified the raid bars filter dropdown to core options (All, Melee, Ranged, Heals, Custom).

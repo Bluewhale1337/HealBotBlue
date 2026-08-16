@@ -73,6 +73,46 @@
                 </Anchor>
               </Anchors>
             </Texture>
+            <Texture name="$parentIcon6" hidden="true">
+              <Size><AbsDimension x="12" y="12"/></Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentIcon5" relativePoint="RIGHT">
+                  <Offset><AbsDimension x="1" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIcon7" hidden="true">
+              <Size><AbsDimension x="12" y="12"/></Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentIcon6" relativePoint="RIGHT">
+                  <Offset><AbsDimension x="1" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIcon8" hidden="true">
+              <Size><AbsDimension x="12" y="12"/></Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentIcon7" relativePoint="RIGHT">
+                  <Offset><AbsDimension x="1" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIcon9" hidden="true">
+              <Size><AbsDimension x="12" y="12"/></Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentIcon8" relativePoint="RIGHT">
+                  <Offset><AbsDimension x="1" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIcon10" hidden="true">
+              <Size><AbsDimension x="12" y="12"/></Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentIcon9" relativePoint="RIGHT">
+                  <Offset><AbsDimension x="1" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
           </Layer>
         </Layers>
       </StatusBar>
