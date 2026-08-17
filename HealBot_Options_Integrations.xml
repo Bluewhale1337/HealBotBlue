@@ -1,0 +1,52 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Integrations.lua" />
+  <Frame name="HealBot_Options_Panel9" hidden="true" parent="HealBot_Options" setAllPoints="true">
+    <Frames>
+      <CheckButton name="HealBot_Options_Integrations_UnitXP" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="31" y="-40"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable UnitXP_SP3 Integration (Distance/LoS)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_UnitXP = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <CheckButton name="HealBot_Options_Integrations_Nampower" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_UnitXP" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable nampower Integration (Buffs/Heals)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_Nampower = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+    </Frames>
+    <Scripts>
+      <OnShow>
+        HealBot_Options_Integrations_OnShow(this);
+      </OnShow>
+    </Scripts>
+  </Frame>
+</Ui>

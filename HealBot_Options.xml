@@ -94,7 +94,7 @@
   <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG" 
       movable="true" parent="UIParent" enableMouse="true" hidden="true">
     <Size>
-      <AbsDimension x="480" y="455"/>
+      <AbsDimension x="540" y="455"/>
     </Size>
     <Anchors>
       <Anchor point="CENTER">
@@ -121,7 +121,7 @@
         <Texture name="HealBot_Options_Header"
             file="Interface\DialogFrame\UI-DialogBox-Header">
           <Size>
-            <AbsDimension x="400" y="64"/>
+            <AbsDimension x="450" y="64"/>
           </Size>
           <Anchors>
             <Anchor point="TOP">
@@ -209,6 +209,15 @@
       <Button name="HealBot_OptionsTab8" inherits="HealBot_Options_Tab" id="8" text="Auto">
         <Anchors>
           <Anchor point="LEFT" relativeTo="HealBot_OptionsTab7" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-14" y="0" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </Button>
+      <Button name="HealBot_OptionsTab9" inherits="HealBot_Options_Tab" id="9" text="Extras">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="HealBot_OptionsTab8" relativePoint="RIGHT">
             <Offset>
               <AbsDimension x="-14" y="0" /> 
             </Offset>

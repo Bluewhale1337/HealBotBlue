@@ -201,6 +201,7 @@ local HealBot_EventHandlers = {
     end,
     ["VARIABLES_LOADED"] = function(this)
         HealBot_OnEvent_VariablesLoaded(this)
+        HealBot_Integrations_Toggle()
     end,
     -- Legacy pass-throughs
     ["CHAT_MSG_ADDON"] = function(this, arg1, arg2, arg3, arg4) HealBot_OnEvent_AddonMsg(this, arg1, arg2, arg3, arg4) end,

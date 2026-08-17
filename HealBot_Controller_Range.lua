@@ -14,6 +14,11 @@ function HealBot_Range_Check(unit, range)
     end
     if ( unit == "player" ) then 
         return_val = 1;
+    elseif HealBot_Integrations_UnitXP_Active then
+        local dist = UnitXP("distanceBetween", "player", unit, "Gaussian")
+        if dist and dist <= range then
+            return_val = 1;
+        end
     elseif ( UnitIsVisible(unit) == 1 ) then
         local tx, ty = GetPlayerMapPosition(unit)
         local dist

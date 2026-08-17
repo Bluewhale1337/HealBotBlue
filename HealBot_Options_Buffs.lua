@@ -105,7 +105,7 @@ function HealBot_Options_SetBuffs()
       HealBot_UIDropDownMenu_SetSelectedID(dropDown, val + 1)
     end
     
-    local selfCheck = getglobal("HealBot_Options_BuffSelf" .. i)
+    local selfCheck = getglobal("HealBot_Options_Buff" .. i .. "Self")
     if selfCheck then
       if HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[i] then
         local isSelf = (HealBot_Config.BuffWatchSelf[i] == 1)

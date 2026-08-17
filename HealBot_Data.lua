@@ -255,6 +255,8 @@ HealBot_ConfigDefaults = {
   Tooltip_Recommend = 1,
   TooltipPos = 1,  
   HideParty = 0,
+  HealBot_Integrations_UnitXP = 0,
+  HealBot_Integrations_Nampower = 0,
 };
 
 HealBot_Config = {};

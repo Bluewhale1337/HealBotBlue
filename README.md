@@ -49,11 +49,16 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.0**
+* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks) and `nampower` (for accurate real-time heal/buff tracking).
+* **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
+
 **v1.6.3** 
 * **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.
 * **UI Update - Icon Limit** - Increased maximum tracked buffs/debuffs per unit from 5 to 10.
 * **UI Update - Customizable icon size** - Added an option to change size of HoT icons (default to 12px).
 * **Cleanup** - Removed dead code `HealBot_Groups` table.
+* **Bug Fix - Buff Watch Self** - Fixed an issue where the "Self Only" toggle for watched buffs failed to load visually across sessions.
 
 **v1.6.2**
 * **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.

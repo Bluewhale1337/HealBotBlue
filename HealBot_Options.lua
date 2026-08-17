@@ -223,7 +223,7 @@ function HealBot_Options_OnLoad(this)
   table.insert(UISpecialFrames,this:GetName());
 
   -- Tabs
-  PanelTemplates_SetNumTabs(this,8);
+  PanelTemplates_SetNumTabs(this,9);
   this.selectedTab = 1; 
   PanelTemplates_UpdateTabs(this);
   HealBot_Options_ShowPanel(this.selectedTab);

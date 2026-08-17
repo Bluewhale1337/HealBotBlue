@@ -27,24 +27,19 @@ end
 
 function HealBot_HealthColor(unit, hlth, maxhlth)
     if HealBot_UnitDebuff[unit] then
-        local debuff, tmp, debuff_type = UnitDebuff(unit, 1, 1)
-        if not debuff then
-            HealBot_UnitDebuff[unit] = nil;
-            HealBot_UnitDebuff[unit .. "_debuff_texture"] = nil
-        else
-            local dr = HealBot_Config.CDCBarColour[debuff_type].R
-            local dg = HealBot_Config.CDCBarColour[debuff_type].G
-            local db = HealBot_Config.CDCBarColour[debuff_type].B
-            if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
-                dr = dr * 4
-                dg = dg * 4
-                db = db * 4
-                if dr > 1 then dr = 1 end
-                if dg > 1 then dg = 1 end
-                if db > 1 then db = 1 end
-            end
-            return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
+        local debuff_type = HealBot_UnitDebuff[unit]
+        local dr = HealBot_Config.CDCBarColour[debuff_type].R
+        local dg = HealBot_Config.CDCBarColour[debuff_type].G
+        local db = HealBot_Config.CDCBarColour[debuff_type].B
+        if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
+            dr = dr * 4
+            dg = dg * 4
+            db = db * 4
+            if dr > 1 then dr = 1 end
+            if dg > 1 then dg = 1 end
+            if db > 1 then db = 1 end
         end
+        return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
     
     local text = UnitName(unit);
@@ -431,7 +426,7 @@ function HealBot_Action_PartyChanged()
     local numBars = 0;
         local numHeaders = 0;
         local TempMaxH = 0;
-        local HeaderPos = {};
+        local HeaderPos = HealBot_GetTable();
         
         if HealBot_Config.AutoSwap_Enabled == 1 then
             local totalMembers = GetNumRaidMembers()
@@ -598,8 +593,8 @@ function HealBot_Action_PartyChanged()
         last = last + 40
         local ExtraValid = numBars;
         if HealBot_Config.EmergencyHeals == 1 then
-            local order = {};
-            local units = {};
+            local order = HealBot_GetTable();
+            local units = HealBot_GetTable();
             if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 and HealBot_Config.ExtraOrder == 1 then
                 HeaderPos[i + 1] = HEALBOT_OPTIONS_EMERGENCYHEALS
                 numBars = numBars + 1;
@@ -804,6 +799,8 @@ function HealBot_Action_PartyChanged()
                     if i == last then break end
                 end
             end
+            HealBot_ReleaseTable(order);
+            HealBot_ReleaseTable(units);
         end
         if numBars == PetsValid + 1 and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
             HeaderPos[PetsValid + 1] = nil;
@@ -968,6 +965,7 @@ function HealBot_Action_PartyChanged()
             HidePartyFrame();
         end
     HealBot_Action_RefreshButtons();
+    HealBot_ReleaseTable(HeaderPos);
     HealBot_Action_ShowFrame();
 end
 

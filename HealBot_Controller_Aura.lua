@@ -39,7 +39,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
     if not firstWord then return false end
 
     HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
-    local slots = {}
+    local slots = HealBot_GetTable()
     if hasMainHandEnchant then table.insert(slots, 16) end
     if hasOffHandEnchant then table.insert(slots, 17) end
     
@@ -52,6 +52,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
                 local text = textObj:GetText()
                 if text and string.find(text, firstWord) then
                     HealBot_ScanTooltip:Hide()
+                    HealBot_ReleaseTable(slots)
                     return true
                 end
             end
@@ -59,6 +60,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
     end
     
     HealBot_ScanTooltip:Hide()
+    HealBot_ReleaseTable(slots)
     return false
 end
 
@@ -165,6 +167,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         end
         local iconCount = 0
         local i = 1;
+        HealBot_UnitDebuff[unit] = nil;
         while true do
             local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
             if debuff then
@@ -172,7 +175,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     iconCount = iconCount + 1
                     HealBot_UnitIcons[unit][iconCount] = debuff
                 end
-                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] then
+                if HealBot_CDCInc[UnitClass(unit)] == 1 and debuff_type and HealBot_DebuffWatch[debuff_type] then
                     HealBot_UnitDebuff[unit] = debuff_type
                     DebuffType = debuff_type;
                     if HealBot_DebuffPriority[debuff_type] then
@@ -181,7 +184,6 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 end
                 i = i + 1;
             else
-                if i == 1 then HealBot_UnitDebuff[unit] = nil; end
                 break
             end 
         end
