@@ -42,6 +42,25 @@
         </Scripts>
       </CheckButton>
 
+      <CheckButton name="HealBot_Options_Integrations_SuperWoW" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_Nampower" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable SuperWoW Integration (GUID Tracking)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_SuperWoW = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
     </Frames>
     <Scripts>
       <OnShow>

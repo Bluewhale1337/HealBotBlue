@@ -35,7 +35,11 @@ HealBot_Model = {
     partyMembers = {},
     raidMembers = {},
     playerPet = nil,
-    target = nil
+    target = nil,
+    
+    -- Integration maps
+    unitGUIDs = {}, -- unit -> GUID
+    guidUnits = {}  -- GUID -> unit
 }
 
 --------------------------------------------------------------------------------
@@ -131,16 +135,103 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     if not self.units[unit] then return false end
     
     local oldName = self.units[unit].name
+    local oldEnglishClass = self.units[unit].englishClass
     local name = UnitName(unit)
     local _, englishClass = UnitClass(unit)
     
-    if oldName ~= name then
+    if oldName ~= name or oldEnglishClass ~= englishClass then
         self.units[unit].name = name
         self.units[unit].englishClass = englishClass
         self.units[unit].class = UnitClass(unit)
+        
+        if HealBot_Integrations_SuperWoW_Active and GetUnitGUID then
+            local guid = GetUnitGUID(unit)
+            if guid then
+                self.unitGUIDs[unit] = guid
+                self.guidUnits[guid] = unit
+            end
+        end
         return true -- Identity changed
     end
     return false
+end
+
+function HealBot_Model:GetUnitByGUID(guid)
+    if not guid then return nil end
+    return self.guidUnits[guid]
+end
+
+function HealBot_Model:GetUnitIDByName(name)
+    if not name then return nil end
+    for unit, data in pairs(self.units) do
+        if data.name == name then return unit end
+    end
+    return nil
+end
+
+function HealBot_Model:PreserveStateByGUID()
+    if not HealBot_Integrations_SuperWoW_Active or not GetUnitGUID then return end
+    
+    local oldGUIDs = {}
+    for unit, guid in pairs(self.unitGUIDs) do
+        oldGUIDs[unit] = guid
+    end
+    
+    local newUnitForGUID = {}
+    -- Scan the new roster
+    for _, unit in ipairs(self.partyMembers) do
+        local guid = GetUnitGUID(unit)
+        if guid then 
+            newUnitForGUID[guid] = unit 
+            self.unitGUIDs[unit] = guid
+            self.guidUnits[guid] = unit
+        end
+    end
+    for _, unit in ipairs(self.raidMembers) do
+        local guid = GetUnitGUID(unit)
+        if guid then 
+            newUnitForGUID[guid] = unit 
+            self.unitGUIDs[unit] = guid
+            self.guidUnits[guid] = unit
+        end
+    end
+    
+    local stateSwaps = {}
+    local iconSwaps = {}
+    local missingBuffSwaps = {}
+    local debuffSwaps = {}
+    
+    for oldUnit, guid in pairs(oldGUIDs) do
+        local newUnit = newUnitForGUID[guid]
+        if newUnit and newUnit ~= oldUnit then
+            stateSwaps[newUnit] = self.units[oldUnit]
+            
+            -- Preserve external global tables if they exist
+            if HealBot_UnitIcons and HealBot_UnitIcons[oldUnit] then
+                iconSwaps[newUnit] = HealBot_UnitIcons[oldUnit]
+            end
+            if HealBot_MissingBuffs and HealBot_MissingBuffs[oldUnit] ~= nil then
+                missingBuffSwaps[newUnit] = HealBot_MissingBuffs[oldUnit]
+            end
+            if HealBot_UnitDebuff and HealBot_UnitDebuff[oldUnit] ~= nil then
+                debuffSwaps[newUnit] = HealBot_UnitDebuff[oldUnit]
+            end
+        end
+    end
+    
+    for targetUnit, stateData in pairs(stateSwaps) do
+        self.units[targetUnit] = stateData
+        
+        if HealBot_UnitIcons then
+            HealBot_UnitIcons[targetUnit] = iconSwaps[targetUnit]
+        end
+        if HealBot_MissingBuffs then
+            HealBot_MissingBuffs[targetUnit] = missingBuffSwaps[targetUnit]
+        end
+        if HealBot_UnitDebuff then
+            HealBot_UnitDebuff[targetUnit] = debuffSwaps[targetUnit]
+        end
+    end
 end
 
 -- Updates health/maxHealth values. Returns true if changed.

@@ -388,6 +388,11 @@ function HealBot_OnEvent_PlayerTargetChanged(this)
 end
 
 function HealBot_OnEvent_PartyMembersChanged(this)
+    HealBot_Model:PreserveStateByGUID()
+    HealBot_Integrations_PruneNampower()
+    if HealBot_IsFighting then
+        HealBot_Action_PartyChanged()
+    end
     HealBot_Delay_RecalcParty = 1;
 end
 

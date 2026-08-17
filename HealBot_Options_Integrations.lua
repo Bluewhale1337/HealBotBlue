@@ -1,4 +1,5 @@
 function HealBot_Options_Integrations_OnShow(this)
   HealBot_Options_Integrations_UnitXP:SetChecked(HealBot_Config.HealBot_Integrations_UnitXP);
   HealBot_Options_Integrations_Nampower:SetChecked(HealBot_Config.HealBot_Integrations_Nampower);
+  HealBot_Options_Integrations_SuperWoW:SetChecked(HealBot_Config.HealBot_Integrations_SuperWoW);
 end

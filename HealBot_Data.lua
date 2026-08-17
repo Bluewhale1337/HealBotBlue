@@ -257,6 +257,7 @@ HealBot_ConfigDefaults = {
   HideParty = 0,
   HealBot_Integrations_UnitXP = 0,
   HealBot_Integrations_Nampower = 0,
+  HealBot_Integrations_SuperWoW = 0,
 };
 
 HealBot_Config = {};

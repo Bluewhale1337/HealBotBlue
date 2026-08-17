@@ -39,8 +39,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
 
 ### To be implemented
-- **GUID-based frame mapping:** Migrate internal state to use lightweight GUID tracking to resolve bugs when targets switch or duplicate names appear (e.g., enemy mobs, warlock pets).
-- **Mod Integration Optimization:** Add conditional SuperWoW/UnitXP SP3 integration to reduce GC spikes and improve frame rendering accuracy.
+- **Strategy Pattern / Code Tree Splits:** Migrate heavy mod integrations (like Nampower aura tracking and SuperWoW UI rendering) into isolated code trees (e.g., `HealBot_Model_SuperWoW.lua`). This will allow dynamic overwriting of global functions at startup, eliminating the CPU overhead of running `if integration then` branch checks inside high-frequency update loops on Vanilla clients.
 
 ### Known issues
 
@@ -50,8 +49,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.0**
-* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks) and `nampower` (for accurate real-time heal/buff tracking).
+* **Integrations UI** - Added a new 'Extras' tab in the Options menu to easily toggle external mod integrations.
+* **UnitXP_SP3 Integration** - Added optional support for UnitXP's API to provide ultra-precise 3D range finding and strict Line of Sight (LoS) checks. This completely bypasses the limitations of Vanilla's 2D map coordinate distance checks.
+* **Nampower Integration** - Implemented background aura tracking to map explicit HoT expiration timestamps directly from nampower. This allows for accurate real-time heal and buff tracking instead of estimating based on cast times.
+* **SuperWoW Integration** - Added robust GUID-based state tracking leveraging SuperWoW's enhanced API. This tracks players by their unique IDs rather than volatile unit strings.
 * **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
+* **Bug Fix - Class Colors** - Fixed a bug where class colors failed to apply to new units due to a delayed server response.
+* **Bug Fix - Combat Updates** - Fixed an issue where new party members joining mid-combat failed to append to the grid without dropping combat.
+* **Bug Fix - Target Swaps** - Implemented optional SuperWoW GUID-based state preservation to prevent UI tracking bugs when group members are rearranged during combat.
 
 **v1.6.3** 
 * **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.
