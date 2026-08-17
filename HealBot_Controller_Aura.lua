@@ -165,6 +165,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         end
         local iconCount = 0
         local i = 1;
+        HealBot_UnitDebuff[unit] = nil;
         while true do
             local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
             if debuff then
@@ -172,7 +173,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     iconCount = iconCount + 1
                     HealBot_UnitIcons[unit][iconCount] = debuff
                 end
-                if HealBot_CDCInc[UnitClass(unit)] == 1 and HealBot_DebuffWatch[debuff_type] then
+                if HealBot_CDCInc[UnitClass(unit)] == 1 and debuff_type and HealBot_DebuffWatch[debuff_type] then
                     HealBot_UnitDebuff[unit] = debuff_type
                     DebuffType = debuff_type;
                     if HealBot_DebuffPriority[debuff_type] then
@@ -181,7 +182,6 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 end
                 i = i + 1;
             else
-                if i == 1 then HealBot_UnitDebuff[unit] = nil; end
                 break
             end 
         end

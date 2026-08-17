@@ -18,6 +18,20 @@
       <OnClick>HealBot_Action_HealUnit_OnClick(this,arg1);</OnClick>
     </Scripts>
     <Frames>
+      <StatusBar name="$parentBar2" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
       <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
         <Anchors>
           <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
@@ -115,20 +129,6 @@
             </Texture>
           </Layer>
         </Layers>
-      </StatusBar>
-      <StatusBar name="$parentBar2" inherits="HealBot_StatusBar">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
       </StatusBar>
       <StatusBar name="$parentBar3" inherits="HealBot_StatusBar" hidden="true">
         <Anchors>

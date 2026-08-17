@@ -49,6 +49,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.6.4**
+* **Bug Fix - UI Opacity** - Fixed a rendering layering bug where incoming heals drew on top of actual health, causing the semi-transparent incoming heal bar to wash out the solid health bar.
+* **Bug Fix - CDC Colors** - Fixed health bar debuff coloring (CDC) by stopping `HealBot_HealthColor` from incorrectly querying debuffs directly, relying instead on cached debuff types.
+
+
 **v1.6.3** 
 * **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.
 * **UI Update - Icon Limit** - Increased maximum tracked buffs/debuffs per unit from 5 to 10.
