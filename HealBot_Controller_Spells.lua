@@ -564,7 +564,12 @@ function HealBot_SpiBonus(spell)
 end
 
 function HealBot_GetBonus()
-  local HealBonus = HealBot_BonusScanner:GetBonus() or 0;
+  local HealBonus = 0;
+  if HealBot_Integrations_ClassicAPI_Active and GetSpellBonusHealing then
+    HealBonus = GetSpellBonusHealing() or 0;
+  else
+    HealBonus = HealBot_BonusScanner:GetBonus() or 0;
+  end
   if UnitClass("player") == "PALADIN" then
     local ironRank = HealBot_GetTalentRank("Ironclad")
     if ironRank > 0 then

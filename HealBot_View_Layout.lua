@@ -12,7 +12,9 @@ HealBot_Action_HealGroup = {
   "party4",
 };
 
+HealBot_Action_HealGroup = {};
 HealBot_Action_HealTarget = {};
+HealBot_Action_HealFocus = {};
 HealBot_Action_HealButtons = {};
 HealBot_Action_UnitButtons = {};
 
@@ -589,6 +591,32 @@ function HealBot_Action_PartyChanged()
             numBars = numBars + 1;
             numHeaders = numHeaders + 1;
         end
+        
+        -- Focus
+        local FocusValid = numBars;
+        if HealBot_Integrations_ClassicAPI_Active and FocusUnit then
+            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+                HeaderPos[i + 1] = "Focus"
+            end
+            if HealBot_MayHeal("focus") then
+                i = i + 1;
+                h = h + 1;
+                if h < 61 then
+                    HealBot_Action_SetHealButton(h, "focus");
+                    local check = getglobal("HealBot_Action_HealUnit" .. h .. "Check");
+                    check:SetChecked(0);
+                    check.unit = "focus";
+                    check:Show();
+                else
+                    HealBot_Action_SetHealButton(i, "focus");
+                end
+                numBars = numBars + 1;
+            end
+        end
+        if numBars > FocusValid and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+            numBars = numBars + 1;
+            numHeaders = numHeaders + 1;
+        end
 
         last = last + 40
         local ExtraValid = numBars;
@@ -985,6 +1013,7 @@ function HealBot_Action_Reset()
     HealBot_Action:ClearAllPoints();
     HealBot_Action:SetPoint("TOP", "MinimapCluster", "BOTTOM", 7, 10);
     HealBot_Action_HealTarget = {};
+    HealBot_Action_HealFocus = {};
     HealBot_Action_PartyChanged();
 end
 

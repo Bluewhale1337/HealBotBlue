@@ -53,6 +53,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UnitXP_SP3 Integration** - Added optional support for UnitXP's API to provide ultra-precise 3D range finding and strict Line of Sight (LoS) checks. This completely bypasses the limitations of Vanilla's 2D map coordinate distance checks.
 * **Nampower Integration** - Implemented background aura tracking to map explicit HoT expiration timestamps directly from nampower. This allows for accurate real-time heal and buff tracking instead of estimating based on cast times.
 * **SuperWoW Integration** - Added robust GUID-based state tracking leveraging SuperWoW's enhanced API. This tracks players by their unique IDs rather than volatile unit strings.
+* **ClassicAPI Integration** - Added support for ClassicAPI to natively inject accurate +Healing bonuses, ultra-fast 3D distance checks (`UnitDistanceSquared`), and a dedicated Focus frame for pinning Main Tanks without requiring additional memory-heavy addons.
 * **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
 * **Bug Fix - Class Colors** - Fixed a bug where class colors failed to apply to new units due to a delayed server response.
 * **Bug Fix - Combat Updates** - Fixed an issue where new party members joining mid-combat failed to append to the grid without dropping combat.

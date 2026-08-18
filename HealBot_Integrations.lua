@@ -1,5 +1,17 @@
 HealBot_Integrations_UnitXP_Active = false;
 HealBot_Integrations_Nampower_Active = false;
+HealBot_Integrations_SuperWoW_Active = false;
+HealBot_Integrations_ClassicAPI_Active = false;
+
+function HealBot_GetUnitGUID(unit)
+    if not unit then return nil end
+    if HealBot_Integrations_ClassicAPI_Active and UnitGUID then
+        return UnitGUID(unit)
+    elseif HealBot_Integrations_SuperWoW_Active and GetUnitGUID then
+        return GetUnitGUID(unit)
+    end
+    return nil
+end
 
 function HealBot_Integrations_Toggle()
   -- UnitXP
@@ -93,5 +105,19 @@ end
   else
     HealBot_Integrations_SuperWoW_Active = false;
     HealBot_AddDebug("SuperWoW Integration: DISABLED");
+  end
+
+  -- ClassicAPI
+  if HealBot_Config.HealBot_Integrations_ClassicAPI == 1 then
+    if UnitGUID then 
+        HealBot_Integrations_ClassicAPI_Active = true;
+        HealBot_AddDebug("ClassicAPI Integration: ENABLED");
+    else
+        HealBot_Integrations_ClassicAPI_Active = false;
+        HealBot_AddDebug("ClassicAPI Integration: DISABLED (Mod Not Found)");
+    end
+  else
+    HealBot_Integrations_ClassicAPI_Active = false;
+    HealBot_AddDebug("ClassicAPI Integration: DISABLED");
   end
 end

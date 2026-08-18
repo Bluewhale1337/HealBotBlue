@@ -144,8 +144,8 @@ function HealBot_Model:UpdateUnitIdentity(unit)
         self.units[unit].englishClass = englishClass
         self.units[unit].class = UnitClass(unit)
         
-        if HealBot_Integrations_SuperWoW_Active and GetUnitGUID then
-            local guid = GetUnitGUID(unit)
+        if (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) and HealBot_GetUnitGUID then
+            local guid = HealBot_GetUnitGUID(unit)
             if guid then
                 self.unitGUIDs[unit] = guid
                 self.guidUnits[guid] = unit
@@ -170,7 +170,7 @@ function HealBot_Model:GetUnitIDByName(name)
 end
 
 function HealBot_Model:PreserveStateByGUID()
-    if not HealBot_Integrations_SuperWoW_Active or not GetUnitGUID then return end
+    if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) or not HealBot_GetUnitGUID then return end
     
     local oldGUIDs = {}
     for unit, guid in pairs(self.unitGUIDs) do
@@ -180,7 +180,7 @@ function HealBot_Model:PreserveStateByGUID()
     local newUnitForGUID = {}
     -- Scan the new roster
     for _, unit in ipairs(self.partyMembers) do
-        local guid = GetUnitGUID(unit)
+        local guid = HealBot_GetUnitGUID(unit)
         if guid then 
             newUnitForGUID[guid] = unit 
             self.unitGUIDs[unit] = guid
@@ -188,7 +188,7 @@ function HealBot_Model:PreserveStateByGUID()
         end
     end
     for _, unit in ipairs(self.raidMembers) do
-        local guid = GetUnitGUID(unit)
+        local guid = HealBot_GetUnitGUID(unit)
         if guid then 
             newUnitForGUID[guid] = unit 
             self.unitGUIDs[unit] = guid

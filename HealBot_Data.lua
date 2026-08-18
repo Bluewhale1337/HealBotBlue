@@ -258,6 +258,7 @@ HealBot_ConfigDefaults = {
   HealBot_Integrations_UnitXP = 0,
   HealBot_Integrations_Nampower = 0,
   HealBot_Integrations_SuperWoW = 0,
+  HealBot_Integrations_ClassicAPI = 0,
 };
 
 HealBot_Config = {};

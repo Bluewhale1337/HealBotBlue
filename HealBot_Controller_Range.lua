@@ -14,6 +14,14 @@ function HealBot_Range_Check(unit, range)
     end
     if ( unit == "player" ) then 
         return_val = 1;
+    elseif HealBot_Integrations_ClassicAPI_Active and UnitDistanceSquared and UnitInLineOfSight then
+        local inSight = UnitInLineOfSight("player", unit)
+        if inSight then
+            local distSq = UnitDistanceSquared(unit)
+            if distSq and distSq <= (range * range) then
+                return_val = 1;
+            end
+        end
     elseif HealBot_Integrations_UnitXP_Active then
         local inSight = UnitXP("inSight", "player", unit)
         if inSight then

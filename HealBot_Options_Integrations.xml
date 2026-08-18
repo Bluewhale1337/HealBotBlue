@@ -61,6 +61,25 @@
         </Scripts>
       </CheckButton>
 
+      <CheckButton name="HealBot_Options_Integrations_ClassicAPI" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_SuperWoW" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable ClassicAPI Integration (+Healing/Focus/Distance)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_ClassicAPI = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
     </Frames>
     <Scripts>
       <OnShow>
