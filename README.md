@@ -49,15 +49,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.0**
-* **Integrations UI** - Added a new 'Extras' tab in the Options menu to easily toggle external mod integrations.
-* **UnitXP_SP3 Integration** - Added optional support for UnitXP's API to provide ultra-precise 3D range finding and strict Line of Sight (LoS) checks. This completely bypasses the limitations of Vanilla's 2D map coordinate distance checks.
-* **Nampower Integration** - Implemented background aura tracking to map explicit HoT expiration timestamps directly from nampower. This allows for accurate real-time heal and buff tracking instead of estimating based on cast times.
-* **SuperWoW Integration** - Added robust GUID-based state tracking leveraging SuperWoW's enhanced API. This tracks players by their unique IDs rather than volatile unit strings.
-* **ClassicAPI Integration** - Added support for ClassicAPI to natively inject accurate +Healing bonuses, ultra-fast 3D distance checks (`UnitDistanceSquared`), and a dedicated Focus frame for pinning Main Tanks without requiring additional memory-heavy addons.
+* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks) and `nampower` (for accurate real-time heal/buff tracking).
 * **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
-* **Bug Fix - Class Colors** - Fixed a bug where class colors failed to apply to new units due to a delayed server response.
-* **Bug Fix - Combat Updates** - Fixed an issue where new party members joining mid-combat failed to append to the grid without dropping combat.
-* **Bug Fix - Target Swaps** - Implemented optional SuperWoW GUID-based state preservation to prevent UI tracking bugs when group members are rearranged during combat.
+* **Bug Fix - Rendering Crash** - Fixed a critical UI issue where unrecognized debuff types would crash the rendering loop, causing unit frames to disappear.
+* **Bug Fix - Missing Group Frames** - Fixed a layout initialization bug where the group unit array was accidentally cleared, causing the panel to draw 0 bars and shrink to a floating "Options" button.
+* **Bug Fix - Target State Aliasing** - Fixed a bug in `PreserveStateByGUID` where targeting a party member caused their frame to alias the target's state table in memory. This previously caused party frames to adopt enemy mob names and lose their class colors when changing targets.
+* **Bug Fix - Group Aliasing** - Fixed a bug where roster updates caused frames to share memory references, causing the UI to display the same player across multiple group slots.
+* **Bug Fix - Slow Client Init** - Fixed missing class colors after `/reload` by adding lazy-load identity fetches directly into the render pipeline for when `UnitClass` data is delayed by the server.
+* **Bug Fix - Debuff Tracking** - HealBot now automatically tracks all curable debuffs for the player's class out of the box. Previously, users had to manually assign a cure spell to a click binding to enable CDC debuff tracking.
 
 **v1.6.3** 
 * **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.

@@ -205,6 +205,12 @@ function HealBot_Action_HealUnit_OnClick(this,button)
       end
     end
 
+    -- Special cases for targeting
+    if string.lower(pattern) == "target" or string.lower(pattern) == "/target" then
+        TargetUnit(this.unit)
+        return
+    end
+
     -- Priority 1: Inline Scripts (starts with /)
     if string.sub(pattern, 1, 1) == "/" then
         local oldTarget = nil

@@ -12,7 +12,6 @@ HealBot_Action_HealGroup = {
   "party4",
 };
 
-HealBot_Action_HealGroup = {};
 HealBot_Action_HealTarget = {};
 HealBot_Action_HealFocus = {};
 HealBot_Action_HealButtons = {};
@@ -30,18 +29,21 @@ end
 function HealBot_HealthColor(unit, hlth, maxhlth)
     if HealBot_UnitDebuff[unit] then
         local debuff_type = HealBot_UnitDebuff[unit]
-        local dr = HealBot_Config.CDCBarColour[debuff_type].R
-        local dg = HealBot_Config.CDCBarColour[debuff_type].G
-        local db = HealBot_Config.CDCBarColour[debuff_type].B
-        if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
-            dr = dr * 4
-            dg = dg * 4
-            db = db * 4
-            if dr > 1 then dr = 1 end
-            if dg > 1 then dg = 1 end
-            if db > 1 then db = 1 end
+        local color = HealBot_Config.CDCBarColour[debuff_type]
+        if color then
+            local dr = color.R
+            local dg = color.G
+            local db = color.B
+            if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
+                dr = dr * 4
+                dg = dg * 4
+                db = db * 4
+                if dr > 1 then dr = 1 end
+                if dg > 1 then dg = 1 end
+                if db > 1 then db = 1 end
+            end
+            return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
         end
-        return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
     
     local text = UnitName(unit);
@@ -101,6 +103,10 @@ function HealBot_Action_EnableButton(button)
     local unit = button.unit;
     local state = HealBot_Model.units[unit]
     if not state then return end
+    
+    if not state.englishClass then
+        HealBot_Model:UpdateUnitIdentity(unit)
+    end
     
     local hlth = state.health
     local maxhlth = state.maxHealth
@@ -301,6 +307,21 @@ function HealBot_Action_RefreshButtons(unit)
     else
         for index, button in pairs(HealBot_Action_HealButtons) do
             HealBot_Action_RefreshButton(button)
+        end
+    end
+end
+
+function HealBot_Action_RefreshPower(unit)
+    if not unit or not HealBot_Action_UnitButtons[unit] then return end
+    local state = HealBot_Model.units[unit]
+    if not state then return end
+    
+    for index, button in pairs(HealBot_Action_UnitButtons[unit]) do
+        if not button.bar3 then button.bar3 = getglobal(button:GetName() .. "Bar3") end
+        local bar3 = button.bar3
+        if bar3 and bar3:IsVisible() then
+            bar3:SetMinMaxValues(0, state.maxMana)
+            bar3:SetValue(state.mana)
         end
     end
 end

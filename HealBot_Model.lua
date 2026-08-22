@@ -146,7 +146,7 @@ function HealBot_Model:UpdateUnitIdentity(unit)
         
         if (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) and HealBot_GetUnitGUID then
             local guid = HealBot_GetUnitGUID(unit)
-            if guid then
+            if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
                 self.unitGUIDs[unit] = guid
                 self.guidUnits[guid] = unit
             end
@@ -174,14 +174,16 @@ function HealBot_Model:PreserveStateByGUID()
     
     local oldGUIDs = {}
     for unit, guid in pairs(self.unitGUIDs) do
-        oldGUIDs[unit] = guid
+        if string.find(unit, "^party") or string.find(unit, "^raid") or unit == "player" or unit == "pet" then
+            oldGUIDs[unit] = guid
+        end
     end
     
     local newUnitForGUID = {}
     -- Scan the new roster
     for _, unit in ipairs(self.partyMembers) do
         local guid = HealBot_GetUnitGUID(unit)
-        if guid then 
+        if guid and guid ~= "0" and guid ~= "0x0000000000000000" then 
             newUnitForGUID[guid] = unit 
             self.unitGUIDs[unit] = guid
             self.guidUnits[guid] = unit
@@ -189,7 +191,7 @@ function HealBot_Model:PreserveStateByGUID()
     end
     for _, unit in ipairs(self.raidMembers) do
         local guid = HealBot_GetUnitGUID(unit)
-        if guid then 
+        if guid and guid ~= "0" and guid ~= "0x0000000000000000" then 
             newUnitForGUID[guid] = unit 
             self.unitGUIDs[unit] = guid
             self.guidUnits[guid] = unit
@@ -220,10 +222,18 @@ function HealBot_Model:PreserveStateByGUID()
     end
     
     for targetUnit, stateData in pairs(stateSwaps) do
-        self.units[targetUnit] = stateData
-        
-        if HealBot_UnitIcons then
-            HealBot_UnitIcons[targetUnit] = iconSwaps[targetUnit]
+        -- Deep copy to prevent memory aliasing
+        self.units[targetUnit] = {}
+        for k, v in pairs(stateData) do
+            self.units[targetUnit][k] = v
+        end
+        self.units[targetUnit].icons = {}
+
+        if HealBot_UnitIcons and iconSwaps[targetUnit] then
+            if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = {} end
+            for j=1, 10 do
+                HealBot_UnitIcons[targetUnit][j] = iconSwaps[targetUnit][j]
+            end
         end
         if HealBot_MissingBuffs then
             HealBot_MissingBuffs[targetUnit] = missingBuffSwaps[targetUnit]

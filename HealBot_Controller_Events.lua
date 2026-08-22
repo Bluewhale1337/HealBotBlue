@@ -2,6 +2,7 @@
 -- Manages WoW Frame events and periodic updates, routing to respective services
 
 HealBot_View_DirtyUnits = {}
+HealBot_View_DirtyPower = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
 HealBot_LastModState = ""
 
@@ -20,7 +21,7 @@ function HealBot_OnLoad(this)
         HealBot_View_DirtyUnits[unitID] = true
     end)
     HealBot_Model:RegisterObserver("UNIT_POWER_CHANGED", function(unitID)
-        HealBot_View_DirtyUnits[unitID] = true
+        HealBot_View_DirtyPower[unitID] = true
     end)
     HealBot_Model:RegisterObserver("UNIT_AURA_CHANGED", function(unitID)
         HealBot_View_DirtyUnits[unitID] = true
@@ -74,11 +75,23 @@ function HealBot_OnUpdate(this, arg1)
     end
 
     -- Process Dirty Queue for MVC View
-    local unitID, _ = next(HealBot_View_DirtyUnits)
-    while unitID do
-        HealBot_Action_RefreshButtons(unitID)
+    local unitsToRefresh = {}
+    for unitID in pairs(HealBot_View_DirtyUnits) do
+        unitsToRefresh[unitID] = true
         HealBot_View_DirtyUnits[unitID] = nil
-        unitID, _ = next(HealBot_View_DirtyUnits)
+        HealBot_View_DirtyPower[unitID] = nil -- No need to do power-only if full refresh is queued
+    end
+    for unitID in pairs(unitsToRefresh) do
+        HealBot_Action_Refresh(unitID)
+    end
+    
+    local powerToRefresh = {}
+    for unitID in pairs(HealBot_View_DirtyPower) do
+        powerToRefresh[unitID] = true
+        HealBot_View_DirtyPower[unitID] = nil
+    end
+    for unitID in pairs(powerToRefresh) do
+        HealBot_Action_RefreshPower(unitID)
     end
     
     if HealBot_EquipChangeTimer > 0 then
