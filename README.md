@@ -49,7 +49,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.0**
-* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks) and `nampower` (for accurate real-time heal/buff tracking).
+* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).
 * **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
 * **Bug Fix - Rendering Crash** - Fixed a critical UI issue where unrecognized debuff types would crash the rendering loop, causing unit frames to disappear.
 * **Bug Fix - Missing Group Frames** - Fixed a layout initialization bug where the group unit array was accidentally cleared, causing the panel to draw 0 bars and shrink to a floating "Options" button.
