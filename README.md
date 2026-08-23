@@ -49,6 +49,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.6.5**
+* **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This massive optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.
+
 **v1.6.4**
 * **Bug Fix - UI Opacity** - Fixed a rendering layering bug where incoming heals drew on top of actual health, causing the semi-transparent incoming heal bar to wash out the solid health bar.
 * **Bug Fix - CDC Colors** - Fixed health bar debuff coloring (CDC) by stopping `HealBot_HealthColor` from incorrectly querying debuffs directly, relying instead on cached debuff types.

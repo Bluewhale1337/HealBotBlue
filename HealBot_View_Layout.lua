@@ -303,6 +303,21 @@ function HealBot_Action_RefreshButtons(unit)
     end
 end
 
+function HealBot_Action_RefreshPower(unit)
+    if not unit or not HealBot_Action_UnitButtons[unit] then return end
+    local state = HealBot_Model.units[unit]
+    if not state then return end
+    
+    for index, button in pairs(HealBot_Action_UnitButtons[unit]) do
+        if not button.bar3 then button.bar3 = getglobal(button:GetName() .. "Bar3") end
+        local bar3 = button.bar3
+        if bar3 and bar3:IsVisible() then
+            bar3:SetMinMaxValues(0, state.maxMana)
+            bar3:SetValue(state.mana)
+        end
+    end
+end
+
 function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, checked, header)
     local brspace = HealBot_Config.brspace[HealBot_Config.Current_Skin] or 3;
     if header then

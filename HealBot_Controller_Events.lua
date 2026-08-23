@@ -2,6 +2,7 @@
 -- Manages WoW Frame events and periodic updates, routing to respective services
 
 HealBot_View_DirtyUnits = {}
+HealBot_View_DirtyPower = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
 HealBot_LastModState = ""
 
@@ -20,7 +21,7 @@ function HealBot_OnLoad(this)
         HealBot_View_DirtyUnits[unitID] = true
     end)
     HealBot_Model:RegisterObserver("UNIT_POWER_CHANGED", function(unitID)
-        HealBot_View_DirtyUnits[unitID] = true
+        HealBot_View_DirtyPower[unitID] = true
     end)
     HealBot_Model:RegisterObserver("UNIT_AURA_CHANGED", function(unitID)
         HealBot_View_DirtyUnits[unitID] = true
@@ -78,7 +79,15 @@ function HealBot_OnUpdate(this, arg1)
     while unitID do
         HealBot_Action_RefreshButtons(unitID)
         HealBot_View_DirtyUnits[unitID] = nil
+        HealBot_View_DirtyPower[unitID] = nil -- Skip fast path if doing full refresh
         unitID, _ = next(HealBot_View_DirtyUnits)
+    end
+    
+    local powerID, _ = next(HealBot_View_DirtyPower)
+    while powerID do
+        HealBot_Action_RefreshPower(powerID)
+        HealBot_View_DirtyPower[powerID] = nil
+        powerID, _ = next(HealBot_View_DirtyPower)
     end
     
     if HealBot_EquipChangeTimer > 0 then
