@@ -238,6 +238,18 @@ function HealBot_Options_CDCButRight_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCButRight_DropDown)
   UIDropDownMenu_SetWidth(140, this)
 end
+-- HealBot_Options_CDCToggle_OnClick: UI handler for OnClick event.
+function HealBot_Options_CDCToggle_OnClick(spell, button, class)
+  local spellID = HealBot_GetSpellId(spell)
+  local spellName = HealBot_GetSpellName(spellID)
+  
+  if HealBot_Config.CDCLeftText[class]==spellName then
+    HealBot_Config.CDCLeftText[class]="None"
+  elseif HealBot_Config.CDCRightText[class]==spellName then
+    HealBot_Config.CDCRightText[class]="None"
+  end
+  HealBot_Options_CDC_SetCombo(spell, button, class)
+end
 -- HealBot_Options_CDCButLeft_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_CDCButLeft_OnSelect()
   local class=UnitClass("Player");

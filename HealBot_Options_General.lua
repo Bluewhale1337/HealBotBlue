@@ -291,7 +291,6 @@ end
 -- HealBot_Options_QualityRange_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_QualityRange_OnClick(this)
   HealBot_Config.QualityRange = this:GetChecked() or 0;
-  HealBot_Action_PartyChanged();
 end
 -- HealBot_Options_ProtectPvP_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ProtectPvP_OnLoad(this,text)
@@ -300,7 +299,6 @@ end
 -- HealBot_Options_ProtectPvP_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ProtectPvP_OnClick(this)
   HealBot_Config.ProtectPvP = this:GetChecked() or 0;
-  HealBot_Action_Refresh();
 end
 -- HealBot_Options_FramePaddingS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_FramePaddingS_OnValueChanged(this)

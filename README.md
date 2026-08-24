@@ -37,6 +37,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Customizable Health Text:** Dynamic unit health display (Name Only, Percentage, Real Health, or Health Deficit).
 * **Non-Mana Resource Tracking:** Track Rage, Energy, and Focus for non-mana classes.
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
+* **Additional Mods Integration:** Navigate to 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).
 
 ### To be implemented
 - **Strategy Pattern / Code Tree Splits:** Migrate heavy mod integrations (like Nampower aura tracking and SuperWoW UI rendering) into isolated code trees (e.g., `HealBot_Model_SuperWoW.lua`). This will allow dynamic overwriting of global functions at startup, eliminating the CPU overhead of running `if integration then` branch checks inside high-frequency update loops on Vanilla clients.
