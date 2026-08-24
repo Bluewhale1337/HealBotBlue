@@ -1,6 +1,7 @@
 -- HealBot_Controller_Comms.lua
 -- Handles network sync (addon messaging), errors, and chat debugging
 
+-- HealBot_Get_DebugChan: Internal utility: HealBot_Get_DebugChan
 function HealBot_Get_DebugChan()
     local index = GetChannelName("HBmsg");
     if (index > 0) then
@@ -10,6 +11,7 @@ function HealBot_Get_DebugChan()
     end
 end
 
+-- HealBot_AddChat: Prints standard messages to default chat frame.
 function HealBot_AddChat(msg)
     local chanid = HealBot_Get_DebugChan();
     if chanid and HealBot_SpamCnt < 3 then
@@ -28,6 +30,7 @@ function HealBot_AddChat(msg)
     end
 end
 
+-- HealBot_AddDebug: Prints debug messages to internal chat channel.
 function HealBot_AddDebug(msg)
     local chanid = HealBot_Get_DebugChan();
     if chanid and HealBot_SpamCnt < 3 then
@@ -44,6 +47,7 @@ function HealBot_AddDebug(msg)
     end
 end
 
+-- HealBot_Report_Error: Formats and prints error logs.
 function HealBot_Report_Error(msg)
     if HealBot_ErrorCnt < 28 then
         HealBot_ErrorCnt = HealBot_ErrorCnt + 1;
@@ -52,11 +56,13 @@ function HealBot_Report_Error(msg)
     end
 end
 
+-- HealBot_AddError: Displays error text in the UI frame.
 function HealBot_AddError(msg)
     UIErrorsFrame:AddMessage(msg, 1.0, 1.0, 1.0, 1.0, UIERRORS_HOLD_TIME);
     HealBot_AddDebug(msg);
 end
 
+-- HealBot_SendAddonMessage: Broadcasts data to party/raid channels.
 function HealBot_SendAddonMessage(prefix, text)
     if GetNumRaidMembers() > 0 then
         SendAddonMessage(prefix, text, "RAID")
@@ -65,6 +71,7 @@ function HealBot_SendAddonMessage(prefix, text)
     end
 end
 
+-- HealBot_OnEvent_AddonMsg: Parses incoming heal data from other clients.
 function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_id)
     if addon_id == HEALBOT_ADDON_ID then
         local tmpTest, unitname, heal_val

@@ -1,75 +1,91 @@
 -- HealBot Options panel file: HealBot_Options_General.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_ShowHeaders_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ShowHeaders_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_SHOWHEADERS);
 end
+-- HealBot_Options_ShowHeaders_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ShowHeaders_OnClick(this)
   local isChecked = this:GetChecked()
   HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] = isChecked and 1 or 0;
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarTextureS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarTextureS_OnValueChanged(this)
   HealBot_Config.btexture[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarHeightS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarHeightS_OnValueChanged(this)
   HealBot_Config.bheight[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarWidthS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarWidthS_OnValueChanged(this)
   HealBot_Config.bwidth[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarNumColsS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarNumColsS_OnValueChanged(this)
   HealBot_Config.numcols[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarBRSpaceS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarBRSpaceS_OnValueChanged(this)
   HealBot_Config.brspace[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarBCSpaceS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarBCSpaceS_OnValueChanged(this)
   HealBot_Config.bcspace[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_FontHeight_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_FontHeight_OnValueChanged(this)
   HealBot_Config.btextheight[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_IconSizeS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_IconSizeS_OnValueChanged(this)
   HealBot_Config.biconsize[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_AbortBarSize_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_AbortBarSize_OnValueChanged(this)
   HealBot_Config.abortsize[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_ActionAlpha_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_ActionAlpha_OnValueChanged(this)
   HealBot_Config.backcola[HealBot_Config.Current_Skin] = HealBot_Options_Pct_OnValueChanged(this);
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarAlpha_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarAlpha_OnValueChanged(this)
   HealBot_Config.Barcola[HealBot_Config.Current_Skin] = HealBot_Options_Pct_OnValueChanged(this);
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarAlphaInHeal_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarAlphaInHeal_OnValueChanged(this)
   HealBot_Config.BarcolaInHeal[HealBot_Config.Current_Skin] = HealBot_Options_Pct_OnValueChanged(this);
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BarAlphaDis_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarAlphaDis_OnValueChanged(this)
   HealBot_Config.bardisa[HealBot_Config.Current_Skin] = HealBot_Options_Pct_OnValueChanged(this);
   HealBot_Action_ResetSkin()
 end
+-- HealBot_SkinColorpick_OnClick: Opens color picker for skin customization.
 function HealBot_SkinColorpick_OnClick(SkinType)
   HealBot_ColourObjWaiting=SkinType;
 
@@ -105,6 +121,7 @@ function HealBot_SkinColorpick_OnClick(SkinType)
                           HealBot_Config.babortcola[HealBot_Config.Current_Skin])
   end
 end
+-- HealBot_SetSkinColours: Applies skin configuration to UI elements.
 function HealBot_SetSkinColours()
   -- Cache the current skin configuration for performance and readability
   local skin = HealBot_Config.Current_Skin
@@ -202,76 +219,97 @@ function HealBot_SetSkinColours()
      
   HealBot_Action_PartyChanged()
 end
+-- HealBot_Options_AlertLevel_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_AlertLevel_OnValueChanged(this)
   HealBot_Config.AlertLevel = HealBot_Options_Pct_OnValueChanged(this);
   HealBot_Action_Refresh();
 end
+-- HealBot_Options_AutoShow_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_AutoShow_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_AUTOSHOW);
 end
+-- HealBot_Options_AutoShow_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_AutoShow_OnClick(this)
   HealBot_Config.AutoClose = this:GetChecked() or 0;
   HealBot_Action_Refresh();
 end
+-- HealBot_Options_PanelSounds_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_PanelSounds_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_PANELSOUNDS);
 end
+-- HealBot_Options_PanelSounds_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_PanelSounds_OnClick(this)
   HealBot_Config.PanelSounds = this:GetChecked() or 0;
 end
+-- HealBot_Options_ActionMouseover_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ActionMouseover_OnLoad(this, text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_ActionMouseover_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ActionMouseover_OnClick(this)
   HealBot_Config.ActionMouseover = this:GetChecked() or 0;
 end
+-- HealBot_Options_ActionLocked_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ActionLocked_OnLoad(this)
   getglobal(this:GetName().."Text"):SetText(HEALBOT_OPTIONS_ACTIONLOCKED);
 end
+-- HealBot_Options_ActionLocked_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ActionLocked_OnClick(this)
   HealBot_Config.ActionLocked = this:GetChecked() or 0;
 end
+-- HealBot_Options_HideOptions_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_HideOptions_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_HideOptions_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_HideOptions_OnClick(this)
   HealBot_Config.HideOptions = this:GetChecked() or 0;
   HealBot_Action_PartyChanged();
 end
+-- HealBot_Options_HideAbort_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_HideAbort_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_HideAbort_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_HideAbort_OnClick(this)
   HealBot_Config.HideAbort = this:GetChecked() or 0;
   HealBot_Action_PartyChanged();
 end
+-- HealBot_Options_GrowUpwards_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_GrowUpwards_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_GrowUpwards_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_GrowUpwards_OnClick(this)
   HealBot_Config.GrowUpwards = this:GetChecked() or 0;
   HealBot_Action_PartyChanged();
 end
+-- HealBot_Options_QualityRange_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_QualityRange_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_QualityRange_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_QualityRange_OnClick(this)
   HealBot_Config.QualityRange = this:GetChecked() or 0;
   HealBot_Action_PartyChanged();
 end
+-- HealBot_Options_ProtectPvP_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ProtectPvP_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_ProtectPvP_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ProtectPvP_OnClick(this)
   HealBot_Config.ProtectPvP = this:GetChecked() or 0;
   HealBot_Action_Refresh();
 end
+-- HealBot_Options_FramePaddingS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_FramePaddingS_OnValueChanged(this)
   if not HealBot_Config.bpadding then HealBot_Config.bpadding = {} end
   HealBot_Config.bpadding[HealBot_Config.Current_Skin] = this:GetValue();
   getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue());
   HealBot_Action_ResetSkin()
 end
+-- HealBot_Options_BorderThicknessS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BorderThicknessS_OnValueChanged(this)
   if not HealBot_Config.bboffset then HealBot_Config.bboffset = {} end
   HealBot_Config.bboffset[HealBot_Config.Current_Skin] = this:GetValue();
@@ -279,15 +317,18 @@ function HealBot_Options_BorderThicknessS_OnValueChanged(this)
   HealBot_Action_ResetSkin()
 end
 
+-- HealBot_Options_HideParty_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_HideParty_OnLoad(this, text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
 
+-- HealBot_Options_HideParty_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_HideParty_OnClick(this)
   HealBot_Config.HideParty = this:GetChecked() or 0;
   HealBot_Options_TogglePartyFrames();
 end
 
+-- HealBot_Options_TogglePartyFrames: UI handler for TogglePartyFrames options panel.
 function HealBot_Options_TogglePartyFrames()
   if HealBot_Config.HideParty == 1 then
     if HidePartyFrame then HidePartyFrame(); end

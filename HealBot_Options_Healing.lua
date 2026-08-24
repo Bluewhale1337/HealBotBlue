@@ -1,52 +1,65 @@
 -- HealBot Options panel file: HealBot_Options_Healing.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_GroupHeals_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_GroupHeals_OnLoad(this,text)
   this.text = text
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_GroupHeals_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_GroupHeals_OnClick(this)
   HealBot_Config.GroupHeals = this:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_TankHeals_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_TankHeals_OnLoad(this,text)
   this.text = text
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_TankHeals_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_TankHeals_OnClick(this)
   HealBot_Config.TankHeals = this:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_TargetHeals_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_TargetHeals_OnLoad(this,text)
   this.text = text
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_TargetHeals_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_TargetHeals_OnClick(this)
   HealBot_Config.TargetHeals = this:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_EmergencyHeals_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_EmergencyHeals_OnLoad(this,text)
   this.text = text
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_EmergencyHeals_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_EmergencyHeals_OnClick(this)
   HealBot_Config.EmergencyHeals = this:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_PetHeals_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_PetHeals_OnLoad(this,text)
   this.text = text
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_PetHeals_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_PetHeals_OnClick(this)
   HealBot_Config.PetHeals = this:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_OverHeal_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_OverHeal_OnValueChanged(this)
   HealBot_Config.OverHeal = HealBot_Options_Pct_OnValueChanged(this);
 end
+-- HealBot_Options_EFClass_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_EFClass_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_EFClass_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_EFClass_OnClick(this)
     if HealBot_Config.EmergencyFClass==1 then
       HealBot_Config.EmergIncMelee[HEALBOT_DRUID] = HealBot_Options_EFClassDruid:GetChecked() or 0;
@@ -100,6 +113,7 @@ HealBot_Options_HealthText_List = {
   "Health Deficit",
 }
 
+-- HealBot_Options_HealthText_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_HealthText_DropDown()
   for i=1, getn(HealBot_Options_HealthText_List), 1 do
     local info = {};
@@ -109,11 +123,13 @@ function HealBot_Options_HealthText_DropDown()
   end
 end
 
+-- HealBot_Options_HealthText_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_HealthText_OnLoad(this)
   UIDropDownMenu_Initialize(this, HealBot_Options_HealthText_DropDown);
   UIDropDownMenu_SetWidth(110, this);
 end
 
+-- HealBot_Options_HealthText_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_HealthText_OnSelect()
   HealBot_Config.ShowHealthText = this:GetID() - 1;
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_HealthText, this:GetID())
@@ -127,6 +143,7 @@ local HealBot_Options_EmergencyFClass_List = {
   HEALBOT_CLASSES_CUSTOM,
 }
 
+-- HealBot_Options_EmergencyFClass_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_EmergencyFClass_DropDown()
   for i=1, getn(HealBot_Options_EmergencyFClass_List), 1 do
     local info = {};
@@ -136,27 +153,32 @@ function HealBot_Options_EmergencyFClass_DropDown()
   end
 end
 
+-- HealBot_Options_EmergencyFClass_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_EmergencyFClass_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_EmergencyFClass,HealBot_Options_EmergencyFClass_DropDown)
 end
 
+-- HealBot_Options_EmergencyFClass_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_EmergencyFClass_Refresh(onselect)
   if not HealBot_Config.EmergencyFClass then return end
   if not onselect then HealBot_Options_EmergencyFClass_Initialize() end  -- or wrong menu may be used !
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_EmergencyFClass,HealBot_Config.EmergencyFClass)
 end
 
+-- HealBot_Options_EmergencyFClass_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_EmergencyFClass_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_EmergencyFClass_DropDown)
   UIDropDownMenu_SetWidth(100, this)
 end
 
+-- HealBot_Options_EmergencyFClass_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_EmergencyFClass_OnSelect()
   HealBot_Config.EmergencyFClass = this:GetID()
   HealBot_Options_EmergencyFClass_Refresh(true)
   HealBot_Options_EFClass_Reset()
 end
 
+-- HealBot_Options_EFClass_Reset: UI handler for Reset options panel.
 function HealBot_Options_EFClass_Reset()
   if HealBot_Config.EmergencyFClass==1 then
     HealBot_Options_EFClassDruid:SetChecked(HealBot_Config.EmergIncMelee[HEALBOT_DRUID]);
@@ -210,6 +232,7 @@ local HealBot_Options_ExtraSort_List = {
   HEALBOT_SORTBY_MAXHEALTH,
 }
 
+-- HealBot_Options_ExtraSort_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_ExtraSort_DropDown()
   for i=1, getn(HealBot_Options_ExtraSort_List), 1 do
     local info = {};
@@ -219,21 +242,25 @@ function HealBot_Options_ExtraSort_DropDown()
   end
 end
 
+-- HealBot_Options_ExtraSort_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_ExtraSort_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_ExtraSort,HealBot_Options_ExtraSort_DropDown)
 end
 
+-- HealBot_Options_ExtraSort_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_ExtraSort_Refresh(onselect)
   if not HealBot_Config.ExtraOrder then return end
   if not onselect then HealBot_Options_ExtraSort_Initialize() end  -- or wrong menu may be used !
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_ExtraSort,HealBot_Config.ExtraOrder)
 end
 
+-- HealBot_Options_ExtraSort_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ExtraSort_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_ExtraSort_DropDown)
   UIDropDownMenu_SetWidth(100, this)
 end
 
+-- HealBot_Options_ExtraSort_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_ExtraSort_OnSelect()
   HealBot_Config.ExtraOrder = this:GetID()
   HealBot_Options_ExtraSort_Refresh(true)
@@ -242,6 +269,7 @@ end
 
 --------------------------------------------------------------------------------
 
+-- HealBot_Options_EmergencyFilter_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_EmergencyFilter_DropDown()
   for i=1, getn(HealBot_Options_EmergencyFilter_List), 1 do
     local info = {};
@@ -252,11 +280,13 @@ function HealBot_Options_EmergencyFilter_DropDown()
 end
 
 
+-- HealBot_Options_EmergencyFilter_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_EmergencyFilter_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_EmergencyFilter,HealBot_Options_EmergencyFilter_DropDown)
 end
 
 
+-- HealBot_Options_EmergencyFilter_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_EmergencyFilter_Refresh(onselect)
   if not HealBot_Config.EmergIncMonitor then return end
   if not onselect then HealBot_Options_EmergencyFilter_Initialize() end  -- or wrong menu may be used !
@@ -264,18 +294,21 @@ function HealBot_Options_EmergencyFilter_Refresh(onselect)
 end
 
 
+-- HealBot_Options_EmergencyFilter_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_EmergencyFilter_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_EmergencyFilter_DropDown)
   UIDropDownMenu_SetWidth(100, this)
 end
 
 
+-- HealBot_Options_EmergencyFilter_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_EmergencyFilter_OnSelect()
   HealBot_Config.EmergIncMonitor = this:GetID()
   HealBot_Options_EmergencyFilter_Refresh(true)
   HealBot_Options_EmergencyFilter_Reset()
 end
 
+-- HealBot_Options_EmergencyFilter_Reset: UI handler for Reset options panel.
 function HealBot_Options_EmergencyFilter_Reset()
   
   HealBot_EmergInc[HEALBOT_DRUID] = 0;
@@ -341,15 +374,3 @@ function HealBot_Options_EmergencyFilter_Reset()
 
   HealBot_Action_PartyChanged()
 end
-
-
-
---------------------------------------------------------------------------------
-
-
-
-
-
-
---------------------------------------------------------------------------------
-

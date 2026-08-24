@@ -1,3 +1,4 @@
+-- HealBot_Options_Integrations_OnShow: UI handler for OnShow options panel.
 function HealBot_Options_Integrations_OnShow(this)
   HealBot_Options_Integrations_UnitXP:SetChecked(HealBot_Config.HealBot_Integrations_UnitXP);
   HealBot_Options_Integrations_Nampower:SetChecked(HealBot_Config.HealBot_Integrations_Nampower);

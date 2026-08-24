@@ -3,10 +3,12 @@
 
 local _scale = 0
 
+-- HealBot_ResetRangeScale: Resets map range scaling on zone change.
 function HealBot_ResetRangeScale()
     _scale = 0
 end
 
+-- HealBot_Range_Check: Checks if unit is in range via map distance or API.
 function HealBot_Range_Check(unit, range)
     local return_val = 0;
     if not range then 

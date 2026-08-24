@@ -15,6 +15,7 @@ function HealBot_UIDropDownMenu_SetSelectedID(frame, id, useValue)
     end
 end
 
+-- HealBot_UIDropDownMenu_SetSelectedValue: Internal utility: HealBot_UIDropDownMenu_SetSelectedValue
 function HealBot_UIDropDownMenu_SetSelectedValue(frame, value, useValue)
     local wasNil = false
     if not UIDROPDOWNMENU_OPEN_MENU then
@@ -55,6 +56,7 @@ HealBot_Model = {
 -- "EQUIPMENT_CHANGED"
 -- "INCOMING_HEAL_CHANGED"
 
+-- HealBot_Model:RegisterObserver: Registers an observer callback for an event.
 function HealBot_Model:RegisterObserver(event, callback)
     if not self.observers[event] then
         self.observers[event] = {}
@@ -62,6 +64,7 @@ function HealBot_Model:RegisterObserver(event, callback)
     table.insert(self.observers[event], callback)
 end
 
+-- HealBot_Model:NotifyObservers: Fires all registered callbacks for an event.
 function HealBot_Model:NotifyObservers(event, unitID, arg1, arg2)
     if self.observers[event] then
         local len = table.getn(self.observers[event])
@@ -75,6 +78,7 @@ end
 -- Model Initialization
 --------------------------------------------------------------------------------
 
+-- HealBot_Model:Initialize: Pre-allocates the unit state dictionary.
 function HealBot_Model:Initialize()
     self:InitUnitState("player")
     self:InitUnitState("target")
@@ -93,6 +97,7 @@ function HealBot_Model:Initialize()
     end
 end
 
+-- HealBot_Model:InitUnitState: Internal utility: HealBot_Model:InitUnitState
 function HealBot_Model:InitUnitState(unit)
     if not self.units[unit] then
         self.units[unit] = {
@@ -156,11 +161,13 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     return false
 end
 
+-- HealBot_Model:GetUnitByGUID: Internal utility: HealBot_Model:GetUnitByGUID
 function HealBot_Model:GetUnitByGUID(guid)
     if not guid then return nil end
     return self.guidUnits[guid]
 end
 
+-- HealBot_Model:GetUnitIDByName: Looks up a group unit token by player name.
 function HealBot_Model:GetUnitIDByName(name)
     if not name then return nil end
     for unit, data in pairs(self.units) do
@@ -169,6 +176,7 @@ function HealBot_Model:GetUnitIDByName(name)
     return nil
 end
 
+-- HealBot_Model:PreserveStateByGUID: Preserves icon and debuff state when group indices shift during combat.
 function HealBot_Model:PreserveStateByGUID()
     if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) or not HealBot_GetUnitGUID then return end
     

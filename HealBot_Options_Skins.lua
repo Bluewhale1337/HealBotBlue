@@ -1,12 +1,14 @@
 -- HealBot Options panel file: HealBot_Options_Skins.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_BarMaxRowsS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
   if not HealBot_Config.bmaxrows then HealBot_Config.bmaxrows = {} end
   HealBot_Config.bmaxrows[HealBot_Config.Current_Skin] = this:GetValue()
   HealBot_Action_PartyChanged()
 end
 
+-- HealBot_Options_GridOrientation_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_GridOrientation_OnClick(this)
   if not HealBot_Config.GridOrientation then HealBot_Config.GridOrientation = {} end
   if this:GetChecked() then
@@ -17,6 +19,7 @@ function HealBot_Options_GridOrientation_OnClick(this)
   HealBot_Action_PartyChanged()
 end
 
+-- HealBot_Options_NewSkin_OnTextChanged: UI handler for OnTextChanged options panel.
 function HealBot_Options_NewSkin_OnTextChanged(this)
   local text= this:GetText()
   if string.len(text)>0 then
@@ -25,6 +28,7 @@ function HealBot_Options_NewSkin_OnTextChanged(this)
     HealBot_Options_NewSkinb:Disable();
   end
 end
+-- HealBot_Options_NewSkinb_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Config.numcols[HealBot_Options_NewSkin:GetText()] = HealBot_Config.numcols[HealBot_Config.Current_Skin]
   if not HealBot_Config.bmaxrows then HealBot_Config.bmaxrows = {} end
@@ -73,6 +77,7 @@ function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Options_SetSkins()
   HealBot_Options_NewSkin:SetText("")
 end
+-- HealBot_Options_DeleteSkin_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_DeleteSkin_OnClick(this)
   if HealBot_Config.Current_Skin~=HEALBOT_SKINS_STD then
     HealBot_Config.numcols[HealBot_Options_SkinsText:GetText()] = nil
@@ -120,6 +125,7 @@ function HealBot_Options_DeleteSkin_OnClick(this)
     HealBot_Options_SetSkins()
   end
 end
+-- HealBot_Options_Skins_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_Skins_DropDown()
   for i=1, getn(HealBot_Skins), 1 do
     local info = {};
@@ -128,18 +134,22 @@ function HealBot_Options_Skins_DropDown()
     UIDropDownMenu_AddButton(info);
   end
 end
+-- HealBot_Options_Skins_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_Skins_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_Skins,HealBot_Options_Skins_DropDown)
 end
+-- HealBot_Options_Skins_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_Skins_Refresh(onselect)
   if not HealBot_Config.Skin_ID then return end
   if not onselect then HealBot_Options_Skins_Initialize() end  -- or wrong menu may be used !
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_Skins,HealBot_Config.Skin_ID)
 end
+-- HealBot_Options_Skins_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_Skins_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_Skins_DropDown)
   UIDropDownMenu_SetWidth(100, this)
 end
+-- HealBot_Options_Skins_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_Skins_OnSelect()
   HealBot_Config.Skin_ID = this:GetID()
   HealBot_Options_Skins_Refresh(true)

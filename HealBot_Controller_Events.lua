@@ -6,6 +6,7 @@ HealBot_View_DirtyPower = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
 HealBot_LastModState = ""
 
+-- HealBot_OnLoad: Registers core events and observers on addon load.
 function HealBot_OnLoad(this)
     this:RegisterEvent("VARIABLES_LOADED");
     
@@ -36,10 +37,12 @@ function HealBot_OnLoad(this)
     end)
 end
 
+-- HealBot_RegisterThis: Internal utility: HealBot_RegisterThis
 function HealBot_RegisterThis(this)
     -- Deprecated / not used
 end 
 
+-- HealBot_OnUpdate: Main loop: processes dirty queues and timers.
 function HealBot_OnUpdate(this, arg1)
     if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
         local s = IsShiftKeyDown() and true or false
@@ -243,6 +246,7 @@ local HealBot_EventHandlers = {
     ["UPDATE_SHAPESHIFT_FORMS"] = function(this) HealBot_UpdateShapeshiftForm() end
 }
 
+-- HealBot_OnEvent: Event dispatcher for WoW UI events.
 function HealBot_OnEvent(this, event, arg1, arg2, arg3, arg4)
     local handler = HealBot_EventHandlers[event]
     if handler then
@@ -252,6 +256,7 @@ function HealBot_OnEvent(this, event, arg1, arg2, arg3, arg4)
     end
 end
 
+-- HealBot_OnEvent_VariablesLoaded: Applies config defaults and initializes state.
 function HealBot_OnEvent_VariablesLoaded(this)
     local class = HealBot_UnitClass("player")
 
@@ -335,6 +340,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
     end
 end
 
+-- HealBot_OnEvent_UnitHealth: Internal utility: HealBot_OnEvent_UnitHealth
 function HealBot_OnEvent_UnitHealth(this, unit)
     if (not HealBot_Heals[unit]) then return end
     HealBot_CheckCasting(unit);
@@ -343,16 +349,19 @@ function HealBot_OnEvent_UnitHealth(this, unit)
     end
 end
 
+-- HealBot_OnEvent_UnitMana: Internal utility: HealBot_OnEvent_UnitMana
 function HealBot_OnEvent_UnitMana(this, unit)
     if (unit ~= "player") then return end
     HealBot_RecalcHeals();
 end
 
+-- HealBot_OnEvent_ZoneChanged: Internal utility: HealBot_OnEvent_ZoneChanged
 function HealBot_OnEvent_ZoneChanged(this)
     HealBot_ResetRangeScale();
     HealBot_Delay_RecalcParty = 1;
 end
 
+-- HealBot_OnEvent_PlayerRegenDisabled: Internal utility: HealBot_OnEvent_PlayerRegenDisabled
 function HealBot_OnEvent_PlayerRegenDisabled(this)
   -- Removed HealBot_RecalcParty();
   if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
@@ -388,11 +397,13 @@ function HealBot_OnEvent_PlayerRegenDisabled(this)
 --  HealBot_RecalcHeals();
 end
 
+-- HealBot_OnEvent_PlayerRegenEnabled: Internal utility: HealBot_OnEvent_PlayerRegenEnabled
 function HealBot_OnEvent_PlayerRegenEnabled(this)
     HealBot_IsFighting = false;
     HealBot_Delay_RecalcParty = 1;
 end
 
+-- HealBot_OnEvent_PlayerTargetChanged: Internal utility: HealBot_OnEvent_PlayerTargetChanged
 function HealBot_OnEvent_PlayerTargetChanged(this)
     if HealBot_Action_UnitButtons and HealBot_Action_UnitButtons["target"] then
         HealBot_View_DirtyUnits["target"] = true
@@ -400,6 +411,7 @@ function HealBot_OnEvent_PlayerTargetChanged(this)
     end
 end
 
+-- HealBot_OnEvent_PartyMembersChanged: Internal utility: HealBot_OnEvent_PartyMembersChanged
 function HealBot_OnEvent_PartyMembersChanged(this)
     HealBot_Model:PreserveStateByGUID()
     HealBot_Integrations_PruneNampower()
@@ -409,10 +421,12 @@ function HealBot_OnEvent_PartyMembersChanged(this)
     HealBot_Delay_RecalcParty = 1;
 end
 
+-- HealBot_OnEvent_PartyMemberDisable: Internal utility: HealBot_OnEvent_PartyMemberDisable
 function HealBot_OnEvent_PartyMemberDisable(this, unit)
     HealBot_RecalcHeals();  
 end
 
+-- HealBot_OnEvent_SystemMsg: Internal utility: HealBot_OnEvent_SystemMsg
 function HealBot_OnEvent_SystemMsg(this, msg)
     if type(msg) == "string" then
         local tmpTest, tmpTest, deserter = string.find(msg, HEALBOT_HASLEFTRAID);
@@ -439,30 +453,36 @@ function HealBot_OnEvent_SystemMsg(this, msg)
     end
 end
 
+-- HealBot_OnEvent_PartyMemberEnable: Internal utility: HealBot_OnEvent_PartyMemberEnable
 function HealBot_OnEvent_PartyMemberEnable(this, unit)
     HealBot_RecalcHeals();
 end
 
+-- HealBot_OnEvent_PlayerEquipmentChanged: Internal utility: HealBot_OnEvent_PlayerEquipmentChanged
 function HealBot_OnEvent_PlayerEquipmentChanged(this)
     HealBot_EquipChangeTimer = 1;
 end
 
+-- HealBot_OnEvent_PlayerEquipmentChanged2: Internal utility: HealBot_OnEvent_PlayerEquipmentChanged2
 function HealBot_OnEvent_PlayerEquipmentChanged2(this, unit)
     if unit == "player" then
         HealBot_EquipChangeTimer = 1;
     end
 end
 
+-- HealBot_OnEvent_SpellsChanged: Internal utility: HealBot_OnEvent_SpellsChanged
 function HealBot_OnEvent_SpellsChanged(this, arg1)
     if arg1 then return; end
     HealBot_AddDebug("HB: SpellsChanged");
     HealBot_SpellsInitFlag = 2;
 end
 
+-- HealBot_OnEvent_TalentsChanged: Internal utility: HealBot_OnEvent_TalentsChanged
 function HealBot_OnEvent_TalentsChanged(this, arg1)
     HealBot_AddDebug("HB: TalentsChanged");
 end
 
+-- HealBot_OnEvent_PlayerEnteringWorld: Internal utility: HealBot_OnEvent_PlayerEnteringWorld
 function HealBot_OnEvent_PlayerEnteringWorld(this)
     HealBot_IsFighting = false;
     -- Re-apply the refresh hook late in case another addon overrode it during load
@@ -471,6 +491,7 @@ function HealBot_OnEvent_PlayerEnteringWorld(this)
     end
 end
 
+-- HealBot_OnEvent_SpellcastStart: Internal utility: HealBot_OnEvent_SpellcastStart
 function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     HealBot_IsCasting = true;
     HealBot_RecalcHeals();
@@ -483,6 +504,7 @@ function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     end
 end
 
+-- HealBot_OnEvent_SpellcastStop: Internal utility: HealBot_OnEvent_SpellcastStop
 function HealBot_OnEvent_SpellcastStop(this, eventName)
     HealBot_IsCasting = false;
     if eventName == "SPELLCAST_FAILED" then

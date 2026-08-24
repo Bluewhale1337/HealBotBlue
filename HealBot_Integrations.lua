@@ -3,6 +3,7 @@ HealBot_Integrations_Nampower_Active = false;
 HealBot_Integrations_SuperWoW_Active = false;
 HealBot_Integrations_ClassicAPI_Active = false;
 
+-- HealBot_GetUnitGUID: Internal utility: HealBot_GetUnitGUID
 function HealBot_GetUnitGUID(unit)
     if not unit then return nil end
     if HealBot_Integrations_ClassicAPI_Active and UnitGUID then
@@ -13,6 +14,7 @@ function HealBot_GetUnitGUID(unit)
     return nil
 end
 
+-- HealBot_Integrations_Toggle: Enables or disables external addon APIs on load/click.
 function HealBot_Integrations_Toggle()
   -- UnitXP
   if HealBot_Config.HealBot_Integrations_UnitXP == 1 and UnitXP ~= nil then

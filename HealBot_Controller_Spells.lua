@@ -18,6 +18,7 @@ local HealBot_Health60 = {
   ["WARRIOR"] = 5000,
 }
 
+-- HealBot_GetSpellName: Internal utility: HealBot_GetSpellName
 function HealBot_GetSpellName(id)
   if (not id) then
     return nil;
@@ -32,6 +33,7 @@ function HealBot_GetSpellName(id)
   return spellName .. " (" .. subSpellName .. ")";
 end
 
+-- HealBot_GetSpellId: Internal utility: HealBot_GetSpellId
 function HealBot_GetSpellId(spell)
   local id, idd = 1, 0; 
   while true do 
@@ -55,6 +57,7 @@ function HealBot_GetSpellId(spell)
   end
 end
 
+-- HealBot_CastSpellByName: Internal utility: HealBot_CastSpellByName
 function HealBot_CastSpellByName(spell)
   if (HealBot_Spells[spell] and HealBot_Spells[spell].BagSlot) then
     HealBot_UseItem(spell);
@@ -74,6 +77,7 @@ function HealBot_CastSpellByName(spell)
   CastSpell(id, BOOKTYPE_SPELL);
 end
 
+-- HealBot_AnnounceCast: Internal utility: HealBot_AnnounceCast
 function HealBot_AnnounceCast(spell, target)
   if not spell or not target then return end
 
@@ -127,6 +131,7 @@ function HealBot_AnnounceCast(spell, target)
   end
 end
 
+-- HealBot_Process_HealValue: Internal utility: HealBot_Process_HealValue
 function HealBot_Process_HealValue(spell, target)
   if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime > 1 then
     HealBot_HealValue = HealBot_Spells[spell].HealsDur;
@@ -163,6 +168,7 @@ function HealBot_Process_HealValue(spell, target)
   end
 end
 
+-- HealBot_StartCasting: Initiates spell cast and broadcasts incoming heal.
 function HealBot_StartCasting(spell, target, ttype)
   HealBot_CastFailed = false;
   HealBot_CastSpellByName(spell);
@@ -188,6 +194,7 @@ function HealBot_StartCasting(spell, target, ttype)
   end
 end
 
+-- HealBot_StopCasting: Internal utility: HealBot_StopCasting
 function HealBot_StopCasting()
   if HealBot_CastingTarget then
     if HealBot_HealValue > 0 then
@@ -221,6 +228,7 @@ function HealBot_StopCasting()
   bar.txt:SetTextColor(sr, sg, sb, sa);
 end
 
+-- HealBot_UnitHealth: Internal utility: HealBot_UnitHealth
 function HealBot_UnitHealth(unit)
   local Current, Desired = UnitHealth(unit), UnitHealthMax(unit);
   if unit == 'target' and Desired == 100 then
@@ -235,6 +243,7 @@ function HealBot_UnitHealth(unit)
   return Current, Desired;
 end
 
+-- HealBot_CheckCasting: Internal utility: HealBot_CheckCasting
 function HealBot_CheckCasting(unit)
   if not HealBot_CastingSpell or HealBot_AlwaysHeal() then return nil end
   if not HealBot_Spells[HealBot_CastingSpell] then return nil end
@@ -281,6 +290,7 @@ function HealBot_CheckCasting(unit)
   end
 end
 
+-- HealBot_CastSpellOnFriend: Target-safe wrapper for casting spells on allies.
 function HealBot_CastSpellOnFriend(spell, target)
   if (not spell or not target or not UnitName(target)) then
     return;
@@ -308,6 +318,7 @@ function HealBot_CastSpellOnFriend(spell, target)
   HealBot_TargetRestoreTimer = 0;
 end
 
+-- HealBot_SetItemDefaults: Internal utility: HealBot_SetItemDefaults
 function HealBot_SetItemDefaults(spell)
   if not HealBot_Spells[spell].Target then
     HealBot_Spells[spell].Target = {"player", "party", "pet"};
@@ -340,6 +351,7 @@ function HealBot_SetItemDefaults(spell)
   end
 end
 
+-- HealBot_SetSpellDefaults: Internal utility: HealBot_SetSpellDefaults
 function HealBot_SetSpellDefaults(spell)
   local baseHeal = HealBot_Spells[spell].HealsCast or 0
   local extHeal = HealBot_Spells[spell].HealsExt or 0
@@ -383,6 +395,7 @@ function HealBot_SetSpellDefaults(spell)
   HealBot_Spells[spell].HealsDur = math.floor(baseHeal + extHeal + realHeal);
 end
 
+-- HealBot_AddHeal: Internal utility: HealBot_AddHeal
 function HealBot_AddHeal(spell)
   HealBot_SetSpellDefaults(spell);
   table.foreachi(HealBot_Spells[spell].Target, function (i, val)
@@ -391,6 +404,7 @@ function HealBot_AddHeal(spell)
   HealBot_Spells[spell].BagSlot = HealBot_GetBagSlot(spell);
 end
 
+-- HealBot_FindHealSpells: Maps best heal ranks to UI buttons.
 function HealBot_FindHealSpells()
   local id = 1;
   if HealBot_SpellsInitFlag > 0 then NeedEquipUpdate = 1; return; end
@@ -460,6 +474,7 @@ function HealBot_FindHealSpells()
   HealBot_CalcEquipBonus = false;
 end
 
+-- HealBot_CanCastSpell: Internal utility: HealBot_CanCastSpell
 function HealBot_CanCastSpell(spell, unit)
   local this = HealBot_Spells[spell];
   -- Removed manual mana check so WoW can properly handle 0-cost buffs (Clearcasting/Inner Focus)
@@ -474,6 +489,7 @@ function HealBot_CanCastSpell(spell, unit)
   return true;
 end
 
+-- HealBot_GetHealSpell: Resolves spell rank based on health deficit.
 function HealBot_GetHealSpell(unit, pattern)
   if (not UnitName(unit)) then return nil end;
   if not pattern then return nil end;
@@ -515,14 +531,17 @@ function HealBot_GetHealSpell(unit, pattern)
   return nil;
 end
 
+-- HealBot_HealUnit: Main entry point for healing a unit.
 function HealBot_HealUnit(unit, pattern)
   HealBot_CastSpellOnFriend(HealBot_GetHealSpell(unit, pattern), unit);
 end
 
+-- HealBot_RecalcHeals: Flags unit for visual refresh.
 function HealBot_RecalcHeals(unit)
   HealBot_Action_Refresh(unit);
 end
 
+-- HealBot_RecalcParty: Triggers group layout rebuild.
 function HealBot_RecalcParty()
   HealBot_Action_PartyChanged();
   if HealBot_Action_HealButtons then
@@ -535,11 +554,13 @@ function HealBot_RecalcParty()
   HealBot_Action_RefreshButtons();
 end
 
+-- HealBot_RecalcSpells: Recalculates spells and updates layout.
 function HealBot_RecalcSpells()
   HealBot_FindHealSpells();
   HealBot_RecalcParty();
 end
 
+-- HealBot_GetTalentRank: Internal utility: HealBot_GetTalentRank
 function HealBot_GetTalentRank(talentName)
   for t = 1, GetNumTalentTabs() do
     for i = 1, GetNumTalents(t) do
@@ -552,6 +573,7 @@ function HealBot_GetTalentRank(talentName)
   return 0;
 end
 
+-- HealBot_SpiBonus: Internal utility: HealBot_SpiBonus
 function HealBot_SpiBonus(spell)
   local heals_modifer = 0;
   local base, stat, posBuff, negBuff = UnitStat("player", 5);
@@ -563,6 +585,7 @@ function HealBot_SpiBonus(spell)
   return heals_modifer;
 end
 
+-- HealBot_GetBonus: Internal utility: HealBot_GetBonus
 function HealBot_GetBonus()
   local HealBonus = 0;
   if HealBot_Integrations_ClassicAPI_Active and GetSpellBonusHealing then
@@ -580,6 +603,7 @@ function HealBot_GetBonus()
   return HealBonus;
 end
 
+-- HealBot_InitSpells: Scans spellbook to find available heals.
 function HealBot_InitSpells()
   local id = 1
   local cnt = 0;
@@ -602,6 +626,7 @@ function HealBot_InitSpells()
   return cnt;
 end
 
+-- HealBot_InitGetSpellData: Extracts mana and cast time from spell tooltips.
 function HealBot_InitGetSpellData(spell, id, class)
   local i, _mana, _cast, _HealsMin, _HealsMax, _HealsExt, _duration, _range, _shield, _channel;
   local tooltip = getglobal("HealBot_ScanTooltip");
@@ -791,6 +816,7 @@ function HealBot_InitGetSpellData(spell, id, class)
   end
 end
 
+-- HealBot_Generic_Patten: Internal utility: HealBot_Generic_Patten
 function HealBot_Generic_Patten(matchStr, matchPattern)
   local tmpTest, _HealsMin, _HealsMax, _HealsExt, _duration
   tmpTest, tmpTest, _HealsMin, _HealsMax = string.find(matchStr, matchPattern); 
@@ -805,10 +831,12 @@ end
 
 HealBot_ActiveShapeshiftStance = nil;
 
+-- HealBot_UpdateShapeshiftForm: Internal utility: HealBot_UpdateShapeshiftForm
 function HealBot_UpdateShapeshiftForm()
   HealBot_ActiveShapeshiftStance = HealBot_GetShapeshiftForm();
 end
 
+-- HealBot_GetShapeshiftForm: Detects active druid form to prevent invalid casts.
 function HealBot_GetShapeshiftForm()
   local forms = GetNumShapeshiftForms();
   if forms then

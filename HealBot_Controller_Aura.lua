@@ -4,6 +4,7 @@
 HealBot_MissingBuffs = {}
 local StaticHasBuff = {}
 
+-- HealBot_UnitAffected: Checks if a specific buff/debuff exists on a unit.
 function HealBot_UnitAffected(unit, effect)
     if not effect then return nil; end
     local i = 1
@@ -31,6 +32,7 @@ function HealBot_UnitAffected(unit, effect)
     return nil;
 end
 
+-- HealBot_CheckShamanWeaponBuff: Checks for Shaman weapon enchants via API.
 function HealBot_CheckShamanWeaponBuff(spellName)
     local hasMainHandEnchant, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
     if not (hasMainHandEnchant or hasOffHandEnchant) then return false end
@@ -64,6 +66,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
     return false
 end
 
+-- HealBot_CheckBuffs: Scans unit for missing tracked buffs.
 function HealBot_CheckBuffs(unit)
     if HealBot_Config.BuffWatch ~= 1 then
         HealBot_MissingBuffs[unit] = nil
@@ -157,6 +160,7 @@ local HealBot_TrackedHoTs = {
 
 local HealBot_DebuffTypeMap = nil
 
+-- HealBot_OnEvent_UnitAura: Updates debuff lists and icon textures on aura change.
 function HealBot_OnEvent_UnitAura(this, unit)
     if not HealBot_DebuffTypeMap then
         HealBot_DebuffTypeMap = {

@@ -1,6 +1,7 @@
 -- HealBot Options panel file: HealBot_Options_Chat.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_ChatMsg_Channel_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ChatMsg_Channel_OnClick(id, buttonFrame)
   if not HealBot_Config.ChatMessages then HealBot_Config.ChatMessages = {} end
   if not HealBot_Config.ChatMessages[id] then 
@@ -26,6 +27,7 @@ function HealBot_Options_ChatMsg_Channel_OnClick(id, buttonFrame)
   buttonFrame:SetText(nextChan)
 end
 
+-- HealBot_Options_SetChatMessages: UI handler for SetChatMessages options panel.
 function HealBot_Options_SetChatMessages()
   if not HealBot_Config.ChatMessages then
     HealBot_Config.ChatMessages = {}

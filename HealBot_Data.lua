@@ -579,6 +579,7 @@ HealBot_IamRessing = false;
 
 -- Table Recycling Pool
 local tablePool = {}
+-- HealBot_GetTable: Internal utility: HealBot_GetTable
 function HealBot_GetTable()
     local t = table.remove(tablePool)
     if not t then
@@ -587,6 +588,7 @@ function HealBot_GetTable()
     return t
 end
 
+-- HealBot_ReleaseTable: Internal utility: HealBot_ReleaseTable
 function HealBot_ReleaseTable(t)
     if type(t) == "table" then
         for k in pairs(t) do

@@ -17,6 +17,7 @@ HealBot_Action_HealFocus = {};
 HealBot_Action_HealButtons = {};
 HealBot_Action_UnitButtons = {};
 
+-- HealBot_Action_SetTexture: Internal utility: HealBot_Action_SetTexture
 function HealBot_Action_SetTexture(bar, btexture)
     if not bar then return end
     if btexture == 10 then
@@ -26,6 +27,7 @@ function HealBot_Action_SetTexture(bar, btexture)
     end
 end
 
+-- HealBot_HealthColor: Computes health bar RGBA based on debuffs and class.
 function HealBot_HealthColor(unit, hlth, maxhlth)
     if HealBot_UnitDebuff[unit] then
         local debuff_type = HealBot_UnitDebuff[unit]
@@ -85,6 +87,7 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
     return r, g, b, a;
 end
 
+-- HealBot_Action_HealthBar: Internal utility: HealBot_Action_HealthBar
 function HealBot_Action_HealthBar(button)
     if not button.bar then
         button.bar = getglobal(button:GetName() .. "Bar")
@@ -92,6 +95,7 @@ function HealBot_Action_HealthBar(button)
     return button.bar;
 end
 
+-- HealBot_Action_HealthBar2: Internal utility: HealBot_Action_HealthBar2
 function HealBot_Action_HealthBar2(button)
     if not button.bar2 then
         button.bar2 = getglobal(button:GetName() .. "Bar2")
@@ -99,6 +103,7 @@ function HealBot_Action_HealthBar2(button)
     return button.bar2;
 end
 
+-- HealBot_Action_EnableButton: Updates a button's health, color, text, and debuffs.
 function HealBot_Action_EnableButton(button)
     local unit = button.unit;
     local state = HealBot_Model.units[unit]
@@ -270,12 +275,14 @@ function HealBot_Action_EnableButton(button)
     end
 end
 
+-- HealBot_Action_EnableButtons: Internal utility: HealBot_Action_EnableButtons
 function HealBot_Action_EnableButtons()
     for index, button in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_EnableButton(button)
     end
 end
   
+-- HealBot_Action_RefreshButton: Calls EnableButton if unit is valid.
 function HealBot_Action_RefreshButton(button)
     if not button then return end
     local unit = button.unit;
@@ -284,6 +291,7 @@ function HealBot_Action_RefreshButton(button)
     end
 end
 
+-- HealBot_Action_ResetSkin: Internal utility: HealBot_Action_ResetSkin
 function HealBot_Action_ResetSkin()
     HealBot_Action_PartyChanged()
     if HealBot_Options:IsVisible() then 
@@ -299,6 +307,7 @@ function HealBot_Action_ResetSkin()
     end
 end
 
+-- HealBot_Action_RefreshButtons: Refreshes all active unit buttons.
 function HealBot_Action_RefreshButtons(unit)
     if unit and HealBot_Action_UnitButtons[unit] then
         for index, button in pairs(HealBot_Action_UnitButtons[unit]) do
@@ -311,6 +320,7 @@ function HealBot_Action_RefreshButtons(unit)
     end
 end
 
+-- HealBot_Action_RefreshPower: Fast path: updates only mana bar textures.
 function HealBot_Action_RefreshPower(unit)
     if not unit or not HealBot_Action_UnitButtons[unit] then return end
     local state = HealBot_Model.units[unit]
@@ -326,6 +336,7 @@ function HealBot_Action_RefreshPower(unit)
     end
 end
 
+-- HealBot_Action_PositionButton: Positions a button element within the grid.
 function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, checked, header)
     local brspace = HealBot_Config.brspace[HealBot_Config.Current_Skin] or 3;
     if header then
@@ -361,6 +372,7 @@ function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, ch
     return OsetY;
 end
 
+-- HealBot_Action_PositionButtonHorizontal: Internal utility: HealBot_Action_PositionButtonHorizontal
 function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, bheight, checked, header)
     local bcspace = HealBot_Config.bcspace[HealBot_Config.Current_Skin] or 3;
     if header then
@@ -396,6 +408,7 @@ function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, b
     return OsetX;
 end
 
+-- HealBot_Action_SetHeightWidth: Resizes the main panel frame to fit content.
 function HealBot_Action_SetHeightWidth(width, height, bwidth)
     if HealBot_ActionHeight then
         HealBot_Action:SetHeight(HealBot_ActionHeight);
@@ -421,6 +434,7 @@ function HealBot_Action_SetHeightWidth(width, height, bwidth)
     HealBot_Action:SetWidth(width + bwidth + bpadding)
 end
 
+-- HealBot_Action_SetHealButton: Assigns a unit string to a grid button slot.
 function HealBot_Action_SetHealButton(index, unit)
     if not index then
         HealBot_Action_HealButtons = {};
@@ -440,6 +454,7 @@ function HealBot_Action_SetHealButton(index, unit)
     return button;
 end
 
+-- HealBot_Action_PartyChanged: Rebuilds the entire grid layout based on roster.
 function HealBot_Action_PartyChanged()
     if HealBot_IsFighting then
         HealBot_Action_AppendNewUnits()
@@ -1018,6 +1033,7 @@ function HealBot_Action_PartyChanged()
     HealBot_Action_ShowFrame();
 end
 
+-- HealBot_Action_ShowFrame: Internal utility: HealBot_Action_ShowFrame
 function HealBot_Action_ShowFrame()
     if HealBot_Config.ActionVisible == 1 then
         if HealBot_Config.HideSolo == 1 and GetNumPartyMembers() == 0 and GetNumRaidMembers() == 0 then
@@ -1030,6 +1046,7 @@ function HealBot_Action_ShowFrame()
     end
 end
 
+-- HealBot_Action_Reset: Resets action panel position and rebuilds layout.
 function HealBot_Action_Reset()
     HealBot_Action:ClearAllPoints();
     HealBot_Action:SetPoint("TOP", "MinimapCluster", "BOTTOM", 7, 10);
@@ -1038,6 +1055,7 @@ function HealBot_Action_Reset()
     HealBot_Action_PartyChanged();
 end
 
+-- HealBot_Action_Refresh: Alias for refreshing a unit button.
 function HealBot_Action_Refresh(unit)
     if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
         if HealBot_Config.AutoClose == 1 and HealBot_Config.ActionVisible ~= 0 then 
@@ -1064,6 +1082,7 @@ function HealBot_Action_Refresh(unit)
         end
     end
 end
+-- HealBot_Action_AppendUnit: Internal utility: HealBot_Action_AppendUnit
 function HealBot_Action_AppendUnit(unit)
     if not HealBot_Grid_LastI then return end
     if HealBot_Grid_LastI >= 100 then return end
@@ -1126,6 +1145,7 @@ function HealBot_Action_AppendUnit(unit)
     
     HealBot_Action_SetHeightWidth(totalOffsetX, totalOffsetY + bpadding, bwidth)
 end
+-- HealBot_Action_AppendNewUnits: Internal utility: HealBot_Action_AppendNewUnits
 function HealBot_Action_AppendNewUnits()
     if not HealBot_Grid_LastI then return end
     

@@ -15,6 +15,7 @@ HealBot_Delay_RecalcParty=0;
 
 -- Debugging and Error functions moved to HealBot_Controller_Comms.lua
 
+-- HealBot_TogglePanel: Toggles visibility of a frame panel.
 function HealBot_TogglePanel(panel)
   if (not panel) then return end
   if ( panel:IsVisible() ) then
@@ -24,6 +25,7 @@ function HealBot_TogglePanel(panel)
   end
 end
 
+-- HealBot_StartMoving: Initiates frame dragging when unlocked.
 function HealBot_StartMoving(frame)
   if ( not frame.isMoving ) and ( frame.isLocked ~= 1 ) then
     frame:StartMoving();
@@ -31,6 +33,7 @@ function HealBot_StartMoving(frame)
   end
 end
 
+-- HealBot_StopMoving: Stops frame dragging.
 function HealBot_StopMoving(frame)
   if ( frame.isMoving ) then
     frame:StopMovingOrSizing();
@@ -47,6 +50,7 @@ function HealBot_StopMoving(frame)
 
 end
 
+-- HealBot_SlashCmd: Handles '/hb' or '/healbot' chat commands.
 function HealBot_SlashCmd(cmd)
   if (cmd=="") then
     HealBot_TogglePanel(HealBot_Action);
@@ -103,6 +107,7 @@ end
 
 -- HealBot_SendAddonMessage moved to HealBot_Controller_Comms.lua
 
+-- HealBot_TargetName: Retrieves the name of the current target, ignoring enemies.
 function HealBot_TargetName()
   if UnitIsEnemy("target","player") then return nil end
 --  if not UnitPlayerControlled("target") then return nil end
@@ -136,14 +141,17 @@ end
 
 
 
+-- HealBot_PackBagSlot: Combines bag and slot into a single ID.
 function HealBot_PackBagSlot(bag,slot)
   return bag*100+slot;
 end
 
+-- HealBot_UnpackBagSlot: Extracts bag and slot from a combined ID.
 function HealBot_UnpackBagSlot(bagslot)
   return math.floor(bagslot/100),math.mod(bagslot,100);
 end
 
+-- HealBot_GetItemName: Gets item name from bag slot link.
 function HealBot_GetItemName(bag,slot)
   local link = GetContainerItemLink(bag,slot);
   if not link then return nil end;
@@ -152,6 +160,7 @@ function HealBot_GetItemName(bag,slot)
   return item,count;
 end
 
+-- HealBot_GetBagSlot: Finds bag slot ID for an item name.
 function HealBot_GetBagSlot(item)
   local BagSlot,BestCount;
   for bag=0,NUM_BAG_FRAMES do
@@ -168,6 +177,7 @@ function HealBot_GetBagSlot(item)
   return BagSlot;
 end
 
+-- HealBot_UseItem: Uses an item from inventory.
 function HealBot_UseItem(item)
   local bagslot = HealBot_GetBagSlot(item);
   if not bagslot then return end;
@@ -178,6 +188,7 @@ end
 
 -- Spell parsing and casting functions moved to HealBot_Controller_Spells.lua
 
+-- HealBot_UnitClass: Returns English class string for a unit.
 function HealBot_UnitClass(unit)
   local playerClass, englishClass = UnitClass(unit);
   return englishClass;
@@ -197,6 +208,7 @@ end
 
 -- SpiBonus and GetBonus functions moved to HealBot_Controller_Spells.lua
 
+-- HealBot_FindUnitID: Finds a unit token for a given player name.
 function HealBot_FindUnitID(unitname)
   local text;
   for _,unit in ipairs(HealBot_Action_HealGroup) do
@@ -219,6 +231,7 @@ function HealBot_FindUnitID(unitname)
   return nil;
 end
 
+-- HealBot_PlaySound: Plays an audio alert based on ID.
 function HealBot_PlaySound(id)
   if id==1 then
     PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav");
@@ -231,6 +244,7 @@ end
 
 -- HealBot_InitSpells moved to HealBot_Controller_Spells.lua
 
+-- HealBot_InitData: Registers options and basic setup on variables loaded.
 function HealBot_InitData() 
   HealBot_Skins = HealBot_Config.Skins;
   if(CT_RegisterMod) then
@@ -246,6 +260,7 @@ function HealBot_InitData()
   HealBot_Options_Debuff_Reset()
 end
 
+-- HealBot_ToggleOptions: Toggles the main options menu.
 function HealBot_ToggleOptions()
   HealBot_TogglePanel(HealBot_Options)
 end
@@ -262,6 +277,7 @@ end
 do
   local pass = function() end
   local orig = UseAction
+  -- UseAction: Intercepts standard clicks for mouseover support.
   function UseAction(slot, checkCursor, onSelf)
     if HealBot_Config.ActionMouseover == 1 then
       local mouseover = HealBot_Action_TooltipUnit

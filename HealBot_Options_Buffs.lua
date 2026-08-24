@@ -1,6 +1,7 @@
 -- HealBot Options panel file: HealBot_Options_Buffs.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_BuffWatch_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_BuffWatch_OnClick(self)
   local frame = self or this
   HealBot_Config.BuffWatch = frame:GetChecked() or 0;
@@ -11,11 +12,13 @@ function HealBot_Options_BuffWatch_OnClick(self)
   end
   HealBot_RecalcParty();
 end
+-- HealBot_Options_BuffWatchInCombat_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_BuffWatchInCombat_OnClick(self)
   local frame = self or this
   HealBot_Config.BuffWatchInCombat = frame:GetChecked() or 0;
   HealBot_RecalcParty();
 end
+-- HealBot_Options_BuffSelf_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_BuffSelf_OnLoad(self)
   local frame = self or this
   getglobal(this:GetName().."Text"):SetText("Self Only")
@@ -27,6 +30,7 @@ function HealBot_Options_BuffSelf_OnLoad(self)
     this:SetChecked(nil)
   end
 end
+-- HealBot_Options_BuffSelf_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_BuffSelf_OnClick(self)
   local frame = self or this
   local id = this:GetID()
@@ -40,11 +44,13 @@ function HealBot_Options_BuffSelf_OnClick(self)
   end
   HealBot_RecalcParty();
 end
+-- HealBot_Options_Buff_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_Buff_OnLoad(self)
   local frame = self or this
   UIDropDownMenu_Initialize(frame, HealBot_Options_Buff_Initialize)
   UIDropDownMenu_SetWidth(110, frame)
 end
+-- HealBot_Options_Buff_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_Buff_Initialize()
   local myClass = UnitClass("player")
   local info
@@ -63,6 +69,7 @@ function HealBot_Options_Buff_Initialize()
     end
   end
 end
+-- HealBot_Options_Buff_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_Buff_OnClick()
   local frameName = UIDROPDOWNMENU_OPEN_MENU
   local frame = getglobal(frameName)
@@ -82,6 +89,7 @@ function HealBot_Options_Buff_OnClick()
   UIDropDownMenu_SetText(text, frame)
   HealBot_RecalcParty();
 end
+-- HealBot_Options_SetBuffs: UI handler for SetBuffs options panel.
 function HealBot_Options_SetBuffs()
   local myClass = UnitClass("player")
   if HealBot_Options_BuffWatch then

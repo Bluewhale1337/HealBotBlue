@@ -1,9 +1,11 @@
 -- Status bar layout functions and tables moved to HealBot_View_Layout.lua
 
+-- HealBot_AlwaysHeal: Returns true if healthy units should be shown.
 function HealBot_AlwaysHeal()
   return HealBot_Config.EnableHealthy==1
 end
 
+-- HealBot_MayHeal: Checks if unit is eligible for healing UI.
 function HealBot_MayHeal(unit)
   if not UnitName(unit) or not HealBot_Heals[unit] then return false end
   if unit ~= 'target' then return true end
@@ -11,6 +13,7 @@ function HealBot_MayHeal(unit)
   return true;
 end
 
+-- HealBot_ShouldHeal: Checks if unit needs immediate healing.
 function HealBot_ShouldHeal(unit)
   if HealBot_UnitDebuff[unit] and not UnitIsDeadOrGhost(unit) then
     if HealBot_Range_Check(unit, 30)==1 then
@@ -21,22 +24,26 @@ function HealBot_ShouldHeal(unit)
     and (UnitHealth(unit)<UnitHealthMax(unit)*HealBot_Config.AlertLevel or HealBot_AlwaysHeal());
 end
 
+-- HealBot_Action_ShouldHealSome: Alias for checking if any unit needs healing.
 function HealBot_Action_ShouldHealSome()
   for index, button in pairs(HealBot_Action_HealButtons) do
     if (HealBot_ShouldHeal(button.unit)) then return button.unit; end
   end
 end
 
+-- HealBot_MustHeal: Internal utility: HealBot_MustHeal
 function HealBot_MustHeal(unit)
   return HealBot_ShouldHeal(unit) and UnitHealth(unit)<UnitHealthMax(unit)*HealBot_Config.AlertLevel
 end
 
+-- HealBot_Action_MustHealSome: Checks if emergency healing is required.
 function HealBot_Action_MustHealSome()
   for index, button in pairs(HealBot_Action_HealButtons) do
     if (HealBot_MustHeal(button.unit)) then return button.unit; end
   end
 end
 
+-- HealBot_GetRezSpellForClass: Internal utility: HealBot_GetRezSpellForClass
 function HealBot_GetRezSpellForClass()
   local _, class = UnitClass("player");
   if class == "PRIEST" then return HEALBOT_RESURRECTION;
@@ -47,6 +54,7 @@ function HealBot_GetRezSpellForClass()
   return nil;
 end
 
+-- HealBot_CanHeal: Internal utility: HealBot_CanHeal
 function HealBot_CanHeal(unit)
   if UnitIsDeadOrGhost(unit) then
     local rezSpell = HealBot_GetRezSpellForClass();
@@ -76,6 +84,7 @@ end
 
 -- Refresh and reset functions moved to HealBot_View_Layout.lua
 
+-- HealBot_Action_SpellPattern: Resolves spell string based on click modifiers.
 function HealBot_Action_SpellPattern(button)
   local combos = HealBot_Config.KeyCombo[UnitClass("player")]
   if not combos then return nil end
@@ -86,6 +95,7 @@ function HealBot_Action_SpellPattern(button)
   return combos[press]
 end
 
+-- HealBot_Decode_Button: Decodes click action to spell pattern.
 function HealBot_Decode_Button(button)
   if button=="RightButton" then
     button="Right";
@@ -105,14 +115,17 @@ end
 -- Widget_OnFoo functions
 --------------------------------------------------------------------------------------------------
 
+-- HealBot_Action_HealUnit_OnLoad: Internal utility: HealBot_Action_HealUnit_OnLoad
 function HealBot_Action_HealUnit_OnLoad(this)
   this:RegisterForClicks("LeftButtonUp", "RightButtonUp", "MiddleButtonUp", "Button4Up", "Button5Up");
 end
 
+-- HealBot_Action_HealUnit_OnEnter: Internal utility: HealBot_Action_HealUnit_OnEnter
 function HealBot_Action_HealUnit_OnEnter(this)
   HealBot_Action_ShowTooltip(this);
 end
 
+-- HealBot_Action_HealUnit_OnLeave: Internal utility: HealBot_Action_HealUnit_OnLeave
 function HealBot_Action_HealUnit_OnLeave(this)
   HealBot_Action_HideTooltip(this);
 end
@@ -121,6 +134,7 @@ end
 -- Puppeteer Utility Ports for Macro and Item Execution
 --------------------------------------------------------------------------------------------------
 
+-- HealBot_SplitString: Internal utility: HealBot_SplitString
 function HealBot_SplitString(str, delimiter)
     local result = {}
     if not delimiter or delimiter == "" then
@@ -139,6 +153,7 @@ function HealBot_SplitString(str, delimiter)
     return result
 end
 
+-- HealBot_RunMacroText: Internal utility: HealBot_RunMacroText
 function HealBot_RunMacroText(body)
     local commands = HealBot_SplitString(body, "\n")
     for i = 1, table.getn(commands) do
@@ -147,12 +162,14 @@ function HealBot_RunMacroText(body)
     end
 end
 
+-- HealBot_RunMacro: Internal utility: HealBot_RunMacro
 function HealBot_RunMacro(name)
     if GetMacroIndexByName(name) == 0 then return end
     local _, _, body = GetMacroInfo(GetMacroIndexByName(name))
     HealBot_RunMacroText(body)
 end
 
+-- HealBot_GetBagSlotInfo: Internal utility: HealBot_GetBagSlotInfo
 function HealBot_GetBagSlotInfo(bag, slot)
     local link = GetContainerItemLink(bag, slot)
     if not link then return end
@@ -161,6 +178,7 @@ function HealBot_GetBagSlotInfo(bag, slot)
     return name, count
 end
 
+-- HealBot_FindBagSlot: Internal utility: HealBot_FindBagSlot
 function HealBot_FindBagSlot(itemName)
     local bestBag, bestSlot, lowestStackSize
     for bag = 0, NUM_BAG_FRAMES do
@@ -178,6 +196,7 @@ function HealBot_FindBagSlot(itemName)
     return bestBag, bestSlot
 end
 
+-- HealBot_UseItem: Uses an item from inventory.
 function HealBot_UseItem(itemName)
     local bag, slot = HealBot_FindBagSlot(itemName)
     if not bag then return false end
@@ -185,6 +204,7 @@ function HealBot_UseItem(itemName)
     return true
 end
 
+-- HealBot_Action_HealUnit_OnClick: Click event handler.
 function HealBot_Action_HealUnit_OnClick(this,button)
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
@@ -270,6 +290,7 @@ function HealBot_Action_HealUnit_OnClick(this,button)
     HealBot_HealUnit(this.unit, pattern);
 end
 
+-- HealBot_Action_HealUnitCheck_OnClick: Click event handler.
 function HealBot_Action_HealUnitCheck_OnClick(this)
   if not this.unit then return end
   if this:GetChecked() then
@@ -285,20 +306,24 @@ function HealBot_Action_HealUnitCheck_OnClick(this)
   HealBot_Action_PartyChanged();
 end
 
+-- HealBot_Action_OptionsButton_OnClick: Click event handler.
 function HealBot_Action_OptionsButton_OnClick(this)
     HealBot_TogglePanel(HealBot_Options);
 end
 
+-- HealBot_Action_AbortButton_OnClick: Click event handler.
 function HealBot_Action_AbortButton_OnClick(this)
   SpellStopCasting();
 end
 
 local HealBot_CT_RA_UpdateMTs_Old;
+-- HealBot_CT_RA_UpdateMTs: Internal utility: HealBot_CT_RA_UpdateMTs
 function HealBot_CT_RA_UpdateMTs()
   local value = HealBot_CT_RA_UpdateMTs_Old();
   return value;
 end
 
+-- HealBot_CT_RaidAssist_DEAD: Internal utility: HealBot_CT_RaidAssist_DEAD
 function HealBot_CT_RaidAssist_DEAD()
 --  if (type(CT_RA_MemberFrame_OnClick)=="function") then
 --    HealBot_CT_RA_CustomOnClickFunction_Old = CT_RA_CustomOnClickFunction;
@@ -314,10 +339,12 @@ end
 -- Frame_OnFoo functions
 --------------------------------------------------------------------------------------------------
 
+-- HealBot_Action_OnLoad: Internal utility: HealBot_Action_OnLoad
 function HealBot_Action_OnLoad(this)
 --  HealBot_CT_RaidAssist();
 end
 
+-- HealBot_Action_OnShow: Show event handler.
 function HealBot_Action_OnShow(this)
   if HealBot_Config.PanelSounds==1 then
     PlaySound("igAbilityOpen");
@@ -358,6 +385,7 @@ function HealBot_Action_OnShow(this)
     HealBot_Config.backcola[HealBot_Config.Current_Skin]);
 end
 
+-- HealBot_Action_OnHide: Hide event handler.
 function HealBot_Action_OnHide(this)
   HealBot_StopMoving(this);
   if not this.ProgrammaticHide then
@@ -365,6 +393,7 @@ function HealBot_Action_OnHide(this)
   end
 end
 
+-- HealBot_Action_OnMouseDown: Internal utility: HealBot_Action_OnMouseDown
 function HealBot_Action_OnMouseDown(this,button)
   if button~="RightButton" then
     if HealBot_Config.ActionLocked==0 then
@@ -373,6 +402,7 @@ function HealBot_Action_OnMouseDown(this,button)
   end
 end
 
+-- HealBot_Action_OnMouseUp: Internal utility: HealBot_Action_OnMouseUp
 function HealBot_Action_OnMouseUp(this,button)
   if button~="RightButton" then
     HealBot_StopMoving(this);
@@ -381,16 +411,19 @@ function HealBot_Action_OnMouseUp(this,button)
   end
 end
 
+-- HealBot_Action_OnClick: Handles click events on heal buttons.
 function HealBot_Action_OnClick(this,button)
 --  HealBot_Action_AddDebug("OnClick("..button..")");
 end
 
+-- HealBot_Action_OnDragStart: Internal utility: HealBot_Action_OnDragStart
 function HealBot_Action_OnDragStart(this,button)
   if HealBot_Config.ActionLocked==0 then
     HealBot_StartMoving(this);
   end
 end
 
+-- HealBot_Action_OnDragStop: Internal utility: HealBot_Action_OnDragStop
 function HealBot_Action_OnDragStop(this)
   HealBot_StopMoving(this);
 end
