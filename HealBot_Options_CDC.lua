@@ -238,18 +238,7 @@ function HealBot_Options_CDCButRight_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCButRight_DropDown)
   UIDropDownMenu_SetWidth(140, this)
 end
--- HealBot_Options_CDCToggle_OnClick: UI handler for OnClick event.
-function HealBot_Options_CDCToggle_OnClick(spell, button, class)
-  local spellID = HealBot_GetSpellId(spell)
-  local spellName = HealBot_GetSpellName(spellID)
-  
-  if HealBot_Config.CDCLeftText[class]==spellName then
-    HealBot_Config.CDCLeftText[class]="None"
-  elseif HealBot_Config.CDCRightText[class]==spellName then
-    HealBot_Config.CDCRightText[class]="None"
-  end
-  HealBot_Options_CDC_SetCombo(spell, button, class)
-end
+
 -- HealBot_Options_CDCButLeft_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_CDCButLeft_OnSelect()
   local class=UnitClass("Player");
@@ -281,12 +270,22 @@ function HealBot_Options_CDC_SetCombo(spell, button, class)
 end
 -- HealBot_Options_Debuff_Reset: Restores default debuff tracking options.
 function HealBot_Options_Debuff_Reset()
-  HealBot_DebuffWatch = {
-      [HEALBOT_DISEASE_en] = true, 
-      [HEALBOT_MAGIC_en] = true, 
-      [HEALBOT_POISON_en] = true, 
-      [HEALBOT_CURSE_en] = true 
-  }
+  local classEN=HealBot_UnitClass("player")
+  if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
+    local spell = HealBot_Config.CDCLeftText[UnitClass("player")];
+    HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]=false, [HEALBOT_MAGIC_en]=false, [HEALBOT_POISON_en]=false, [HEALBOT_CURSE_en]=false }
+    if spell and spell ~= "None" and HealBot_Debuff_Types[spell] then
+      table.foreach(HealBot_Debuff_Types[spell], function (index,debuff)
+        HealBot_DebuffWatch[debuff]=true;
+      end)
+    end
+    spell = HealBot_Config.CDCRightText[UnitClass("player")];
+    if spell and spell ~= "None" and HealBot_Debuff_Types[spell] then
+      table.foreach(HealBot_Debuff_Types[spell], function (index,debuff)
+        HealBot_DebuffWatch[debuff]=true;
+      end)
+    end
+  end
 end
 -- HealBot_Colorpick_OnClick: Opens color picker for debuff colors.
 function HealBot_Colorpick_OnClick(CDCType)
