@@ -27,7 +27,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Native Hovercasting (Mouseover):** Cast configured spells on hovered unit frames using keybinds directly from your action bars, without losing your current target. (Toggleable in Options -> General).
 * **Macro, Item, & Script Bindings:** Bind named macros, inventory items, and scripts directly to mouse clicks. Supports implicit `@mouseover` targeting natively.
 * **Zero-Latency Self-Heals:** Incoming heals for the local player process instantly with zero latency, independent of network lag.
-* **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions - currently only TurtleWoW patch 1.18 supported.
+* **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions.
 * **Modifier-Aware Tooltips:** Tooltips dynamically update to show exact bound actions (Shift/Ctrl/Alt) and required mana costs (turns red if insufficient mana).
 * **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
 * **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward).
