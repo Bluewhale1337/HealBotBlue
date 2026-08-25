@@ -202,11 +202,12 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     shouldTrack = true
                 end
 
+                if iconCount < 10 then
+                    iconCount = iconCount + 1
+                    HealBot_UnitIcons[unit][iconCount] = debuff
+                end
+
                 if shouldTrack and mapped_type and HealBot_DebuffWatch[mapped_type] then
-                    if iconCount < 10 then
-                        iconCount = iconCount + 1
-                        HealBot_UnitIcons[unit][iconCount] = debuff
-                    end
                     HealBot_UnitDebuff[unit] = mapped_type
                     DebuffType = mapped_type;
                     
