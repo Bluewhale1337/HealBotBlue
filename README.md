@@ -59,6 +59,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Bug Fix - Slow Client Init** - Fixed missing class colors after `/reload` by adding lazy-load identity fetches directly into the render pipeline for when `UnitClass` data is delayed by the server.
 * **Bug Fix - Debuff Tracking** - HealBot now automatically tracks all curable debuffs for the player's class out of the box. Previously, users had to manually assign a cure spell to a click binding to enable CDC debuff tracking.
 
+**v1.6.5**
+* **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This massive optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.
+
+**v1.6.4**
+* **Bug Fix - UI Opacity** - Fixed a rendering layering bug where incoming heals drew on top of actual health, causing the semi-transparent incoming heal bar to wash out the solid health bar.
+* **Bug Fix - CDC Colors** - Fixed health bar debuff coloring (CDC) by stopping `HealBot_HealthColor` from incorrectly querying debuffs directly, relying instead on cached debuff types.
+
+
 **v1.6.3** 
 * **Hotfix string splitter** - added  falback for string splitter if the the string is empty or nil.
 * **UI Update - Icon Limit** - Increased maximum tracked buffs/debuffs per unit from 5 to 10.
