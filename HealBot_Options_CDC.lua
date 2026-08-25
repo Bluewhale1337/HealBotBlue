@@ -272,8 +272,25 @@ end
 function HealBot_Options_Debuff_Reset()
   local classEN=HealBot_UnitClass("player")
   if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
-    local spell = HealBot_Config.CDCLeftText[UnitClass("player")];
     HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]=false, [HEALBOT_MAGIC_en]=false, [HEALBOT_POISON_en]=false, [HEALBOT_CURSE_en]=false }
+    
+    -- Automatically track all curable debuffs out of the box
+    if classEN == "PRIEST" then
+      HealBot_DebuffWatch[HEALBOT_MAGIC_en] = true
+      HealBot_DebuffWatch[HEALBOT_DISEASE_en] = true
+    elseif classEN == "DRUID" then
+      HealBot_DebuffWatch[HEALBOT_CURSE_en] = true
+      HealBot_DebuffWatch[HEALBOT_POISON_en] = true
+    elseif classEN == "PALADIN" then
+      HealBot_DebuffWatch[HEALBOT_MAGIC_en] = true
+      HealBot_DebuffWatch[HEALBOT_POISON_en] = true
+      HealBot_DebuffWatch[HEALBOT_DISEASE_en] = true
+    elseif classEN == "SHAMAN" then
+      HealBot_DebuffWatch[HEALBOT_POISON_en] = true
+      HealBot_DebuffWatch[HEALBOT_DISEASE_en] = true
+    end
+    
+    local spell = HealBot_Config.CDCLeftText[UnitClass("player")];
     if spell and spell ~= "None" and HealBot_Debuff_Types[spell] then
       table.foreach(HealBot_Debuff_Types[spell], function (index,debuff)
         HealBot_DebuffWatch[debuff]=true;
