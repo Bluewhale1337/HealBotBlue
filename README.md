@@ -58,6 +58,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Bug Fix - Group Aliasing** - Fixed a bug where roster updates caused frames to share memory references, causing the UI to display the same player across multiple group slots.
 * **Bug Fix - Slow Client Init** - Fixed missing class colors after `/reload` by adding lazy-load identity fetches directly into the render pipeline for when `UnitClass` data is delayed by the server.
 * **Bug Fix - Debuff Tracking** - HealBot now automatically tracks all curable debuffs for the player's class out of the box. Previously, users had to manually assign a cure spell to a click binding to enable CDC debuff tracking.
+* **Bug Fix - CDC Filter** - Fixed an issue where the CDC module displayed all debuffs instead of filtering for dispellable ones, restoring proper health bar coloring.
 
 **v1.6.5**
 * **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.
@@ -79,6 +80,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UI Update - Raid & Pets Split** - Split the "Raid / Extra" toggle into separate "Raid" and "Pets" toggles. Simplified the raid bars filter dropdown to core options (All, Melee, Ranged, Heals, Custom).
 
 **v1.6.1**
+* **Hotfix - XML Layering** - Reverted `bar` and `bar2` element order in `HealBot_Action.xml`. The incoming heals bar was rendering on top of the health bar, causing debuff colors to be obscured and creating visual opacity issues.
 * **Hotfix - pet frames** - With class colours toggled extra frames for player pets were given some classy mint colour.
 * **Hotfi - raidframes in combat** - Modfied how frames behave when player leaves during combat.
 
