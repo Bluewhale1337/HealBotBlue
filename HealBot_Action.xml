@@ -129,6 +129,7 @@
             </Texture>
           </Layer>
         </Layers>
+      </StatusBar>
       <StatusBar name="$parentBar3" inherits="HealBot_StatusBar" hidden="true">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="$parentBar" relativePoint="BOTTOMLEFT">
