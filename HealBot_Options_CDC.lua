@@ -162,6 +162,28 @@ function HealBot_Options_GetDebuffSpells_List(class)
   local DebuffSpells = HealBot_Debuff_Spells[class];
   return DebuffSpells;
 end
+
+-- HealBot_Options_CDCShowAllDebuffs_OnLoad: UI handler for OnLoad options panel.
+function HealBot_Options_CDCShowAllDebuffs_OnLoad(this,text)
+  getglobal(this:GetName().."Text"):SetText(text);
+  if HealBot_Config.CDCShowAllDebuffs == nil then HealBot_Config.CDCShowAllDebuffs = 0; end
+  if HealBot_Config.CDCShowAllDebuffs == 1 then
+    this:SetChecked(1);
+  else
+    this:SetChecked(0);
+  end
+end
+
+-- HealBot_Options_CDCShowAllDebuffs_OnClick: UI handler for OnClick options panel.
+function HealBot_Options_CDCShowAllDebuffs_OnClick(this)
+  if this:GetChecked() then
+    HealBot_Config.CDCShowAllDebuffs = 1;
+  else
+    HealBot_Config.CDCShowAllDebuffs = 0;
+  end
+  HealBot_RecalcParty();
+end
+
 -- HealBot_Options_CDCButLeft_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCButLeft_DropDown()
   local classEN=HealBot_UnitClass("player")

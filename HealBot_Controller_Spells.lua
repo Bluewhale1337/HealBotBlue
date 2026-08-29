@@ -133,7 +133,7 @@ end
 
 -- HealBot_Process_HealValue: Internal utility: HealBot_Process_HealValue
 function HealBot_Process_HealValue(spell, target)
-  if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime > 1 then
+  if HealBot_Spells[spell] and (HealBot_Spells[spell].CastTime or 0) > 1 then
     HealBot_HealValue = HealBot_Spells[spell].HealsDur;
     
     -- Apply dynamic Preservation bonus

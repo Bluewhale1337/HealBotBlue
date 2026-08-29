@@ -80,7 +80,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UI Update - Raid & Pets Split** - Split the "Raid / Extra" toggle into separate "Raid" and "Pets" toggles. Simplified the raid bars filter dropdown to core options (All, Melee, Ranged, Heals, Custom).
 
 **v1.6.1**
+* **Feature - CDC Module** - Added a new toggle in the CDC options to track all debuffs. When enabled, non-dispellable debuff icons will appear on the unit frame. Bar coloring continues to only highlight dispellable debuffs to prevent visual clutter.
 * **Hotfix - XML Layering** - Reverted `bar` and `bar2` element order in `HealBot_Action.xml`. The incoming heals bar was rendering on top of the health bar, causing debuff colors to be obscured and creating visual opacity issues.
+* **Hotfix - Debuff Bar Coloring** - Restored the `showDispellable` parameter to `UnitDebuff` in the aura scanning loop so the Vanilla client correctly returns the debuff type string required for bar coloring.
+* **Hotfix - Shapeshift / ShaguTweaks Interaction** - Fixed a Lua error (`attempt to compare number with nil`) in `HealBot_Process_HealValue` caused by missing `CastTime` values when external addons like ShaguTweaks trigger auto-unshift or intercept casts.
 * **Hotfix - pet frames** - With class colours toggled extra frames for player pets were given some classy mint colour.
 * **Hotfi - raidframes in combat** - Modfied how frames behave when player leaves during combat.
 

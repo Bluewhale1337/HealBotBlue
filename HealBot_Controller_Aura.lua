@@ -183,9 +183,10 @@ function HealBot_OnEvent_UnitAura(this, unit)
         local iconCount = 0
         local i = 1;
         HealBot_UnitDebuff[unit] = nil;
+        local trackedTextures = {}
         
         while true do
-            local debuff, tmp, debuff_type = UnitDebuff(unit, i)
+            local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
             if debuff then
                 local mapped_type = nil
                 if debuff_type then
@@ -208,9 +209,10 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 end
 
                 if isDispellable then
-                    if iconCount < 10 then
+                    if iconCount < 10 and not trackedTextures[debuff] then
                         iconCount = iconCount + 1
                         HealBot_UnitIcons[unit][iconCount] = debuff
+                        trackedTextures[debuff] = true
                     end
                 end
 
@@ -235,6 +237,20 @@ function HealBot_OnEvent_UnitAura(this, unit)
             else
                 break
             end 
+        end
+
+        if HealBot_Config.CDCShowAllDebuffs == 1 then
+            local k = 1
+            while true do
+                local debuff = UnitDebuff(unit, k)
+                if not debuff then break end
+                if not trackedTextures[debuff] and iconCount < 10 then
+                    iconCount = iconCount + 1
+                    HealBot_UnitIcons[unit][iconCount] = debuff
+                    trackedTextures[debuff] = true
+                end
+                k = k + 1
+            end
         end
         
         local b = 1
