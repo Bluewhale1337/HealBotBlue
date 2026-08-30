@@ -186,20 +186,20 @@ function HealBot_OnEvent_UnitAura(this, unit)
         local trackedTextures = {}
         
         while true do
-            local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
+            local debuff, tmp, debuff_type = UnitDebuff(unit, i)
             if debuff then
                 local mapped_type = nil
                 if debuff_type then
                     mapped_type = HealBot_DebuffTypeMap[debuff_type] or debuff_type
                 end
                 
-                local unitClass = HealBot_Model.units[unit] and HealBot_Model.units[unit].class or UnitClass(unit)
+                local localizedClass = UnitClass(unit)
                 local shouldTrack = false
                 if unit == "target" then
                     shouldTrack = true
-                elseif HealBot_CDCInc[unitClass] == 1 then
+                elseif localizedClass and HealBot_CDCInc[localizedClass] == 1 then
                     shouldTrack = true
-                elseif not unitClass or HealBot_CDCInc[unitClass] == nil then
+                elseif not localizedClass or HealBot_CDCInc[localizedClass] == nil then
                     shouldTrack = true
                 end
 
@@ -208,7 +208,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
                     isDispellable = true
                 end
 
-                if isDispellable then
+                if isDispellable or HealBot_Config.CDCShowAllDebuffs == 1 then
                     if iconCount < 10 and not trackedTextures[debuff] then
                         iconCount = iconCount + 1
                         HealBot_UnitIcons[unit][iconCount] = debuff
@@ -237,20 +237,6 @@ function HealBot_OnEvent_UnitAura(this, unit)
             else
                 break
             end 
-        end
-
-        if HealBot_Config.CDCShowAllDebuffs == 1 then
-            local k = 1
-            while true do
-                local debuff = UnitDebuff(unit, k)
-                if not debuff then break end
-                if not trackedTextures[debuff] and iconCount < 10 then
-                    iconCount = iconCount + 1
-                    HealBot_UnitIcons[unit][iconCount] = debuff
-                    trackedTextures[debuff] = true
-                end
-                k = k + 1
-            end
         end
         
         local b = 1
