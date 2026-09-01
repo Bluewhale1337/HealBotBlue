@@ -171,6 +171,19 @@ end
 -- HealBot_StartCasting: Initiates spell cast and broadcasts incoming heal.
 function HealBot_StartCasting(spell, target, ttype)
   HealBot_CastFailed = false;
+  
+  -- Extract base spell for internal tracking
+  local baseSpell = spell
+  local parenIndex = string.find(spell, " %(")
+  if parenIndex then
+    baseSpell = string.sub(spell, 1, parenIndex - 1)
+  else
+    parenIndex = string.find(spell, "%(")
+    if parenIndex then
+       baseSpell = string.sub(spell, 1, parenIndex - 1)
+    end
+  end
+
   HealBot_CastSpellByName(spell);
   if ( SpellCanTargetUnit(target) ) then 
     SpellTargetUnit(target);
@@ -184,14 +197,16 @@ function HealBot_StartCasting(spell, target, ttype)
     end
   end
 
-  if ttype == "fired" and HealBot_Spells[spell] then
+  if ttype == "fired" and HealBot_Spells[baseSpell] then
     if not HealBot_CastFailed then
-      HealBot_CastingSpell  = spell;
+      HealBot_CastingSpell  = baseSpell;
       HealBot_CastingTarget = target;
-      HealBot_Process_HealValue(spell, target);
+      HealBot_Process_HealValue(baseSpell, target);
       HealBot_AnnounceCast(spell, target);
     end
   end
+  
+  return ttype == "fired"
 end
 
 -- HealBot_StopCasting: Internal utility: HealBot_StopCasting
@@ -308,7 +323,9 @@ function HealBot_CastSpellOnFriend(spell, target)
   end
   
   if formCancelled then
-    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, expires = GetTime() + 1.0 }
+    -- ALWAYS put the cast into the Pending queue so the OnUpdate loop can wait for the server
+    -- to process the unshift before attempting the cast, otherwise we get "You are in shapeshift form".
+    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, fireTime = GetTime() + 0.05, expires = GetTime() + 1.0 }
     return;
   end
   
@@ -839,9 +856,9 @@ function HealBot_Generic_Patten(matchStr, matchPattern)
   return tmpTest, _HealsMin, _HealsMax;
 end
 
--- HealBot_UpdateShapeshiftForm: Internal utility: HealBot_UpdateShapeshiftForm
+-- HealBot_UpdateShapeshiftForm: Called on UPDATE_SHAPESHIFT_FORM
 function HealBot_UpdateShapeshiftForm()
-  -- Deprecated, state is pulled in real-time on cast
+  -- Deprecated
 end
 
 -- HealBot_GetShapeshiftForm: Detects active druid form to prevent invalid casts.
@@ -852,10 +869,7 @@ function HealBot_GetShapeshiftForm()
     for i=1,forms do
       local icon,name,active = GetShapeshiftFormInfo(i);
       if active then
-        local icon_lower = string.lower(icon);
-        if not string.find(icon_lower, "humanoidform") and not string.find(icon_lower, "treeoflife") and not string.find(icon_lower, "stoneclawtotem") then
-          return i;
-        end
+        return i;
       end
     end
   end

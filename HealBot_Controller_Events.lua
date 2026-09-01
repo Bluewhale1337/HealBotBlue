@@ -78,32 +78,74 @@ function HealBot_OnUpdate(this, arg1)
     end
 
     if HealBot_PendingShapeshiftCast then
-        if GetTime() > HealBot_PendingShapeshiftCast.expires then
-            HealBot_PendingShapeshiftCast = nil
-        else
-            -- Only cast once the form has successfully been removed
-            local currentForm = HealBot_GetShapeshiftForm()
-            if not currentForm then
-                local pendingCast = HealBot_PendingShapeshiftCast
-                HealBot_PendingShapeshiftCast = nil
-                
+        local pendingCast = HealBot_PendingShapeshiftCast
+        
+        -- Wait for server to process the unshift before attempting the cast
+        if GetTime() >= pendingCast.fireTime then
+            if not HealBot_GetShapeshiftForm() then
+                -- Target the unit if necessary before casting
                 -- Target the unit if necessary before casting
                 if pendingCast.oldTarget ~= UnitName(pendingCast.target) then
                     TargetUnit(pendingCast.target)
                 end
                 
-                -- Attempt the cast now that form is cleared
-                HealBot_StartCasting(pendingCast.spell, pendingCast.target, "direct")
-                
-                if pendingCast.targetEnemy then
-                    HealBot_TargetRestorePending = { type = "enemy" }
-                elseif pendingCast.oldTarget and pendingCast.oldTarget ~= UnitName(pendingCast.target) then
-                    HealBot_TargetRestorePending = { type = "friend" }
-                elseif not pendingCast.oldTarget then
-                    HealBot_TargetRestorePending = { type = "clear" }
+                -- 1. Initialize the MVC side effects (AnnounceCast, Incoming Heals) only ONCE
+                if not pendingCast.started then
+                    pendingCast.started = true
+                    
+                    -- Extract base spell
+                    local baseSpell = pendingCast.spell
+                    local parenIndex = string.find(pendingCast.spell, "%(")
+                    if parenIndex then
+                        baseSpell = string.sub(pendingCast.spell, 1, parenIndex - 1)
+                    end
+                    baseSpell = string.gsub(baseSpell, "%s+$", "")
+                    
+                    -- Force MVC updates since we guarantee the cast will eventually pierce the server
+                    HealBot_CastFailed = false
+                    HealBot_CastingSpell = baseSpell
+                    HealBot_CastingTarget = pendingCast.target
+                    HealBot_Process_HealValue(baseSpell, pendingCast.target)
+                    HealBot_AnnounceCast(pendingCast.spell, pendingCast.target)
+                    
+                    -- Restore target logic
+                    if pendingCast.targetEnemy then
+                        HealBot_TargetRestorePending = { type = "enemy" }
+                    elseif pendingCast.oldTarget and pendingCast.oldTarget ~= UnitName(pendingCast.target) then
+                        HealBot_TargetRestorePending = { type = "friend" }
+                    elseif not pendingCast.oldTarget then
+                        HealBot_TargetRestorePending = { type = "clear" }
+                    end
+                    HealBot_TargetRestoreTimer = 0
                 end
-                HealBot_TargetRestoreTimer = 0
+                
+                -- 2. Spam the raw cast silently to guarantee it pierces the server delay
+                if pendingCast.started then
+                    if not pendingCast.nextSpam or GetTime() >= pendingCast.nextSpam then
+                        pendingCast.nextSpam = GetTime() + 0.15
+                        
+                        -- Safely suppress UI errors
+                        UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
+                        
+                        -- Only use HealBot's native cast wrapper
+                        HealBot_CastSpellByName(pendingCast.spell)
+                        
+                        if SpellCanTargetUnit(pendingCast.target) then
+                            SpellTargetUnit(pendingCast.target)
+                        elseif SpellIsTargeting() then
+                            SpellTargetUnit(pendingCast.target)
+                            SpellStopTargeting()
+                        end
+                        
+                        UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE")
+                    end
+                end
             end
+        end
+        
+        -- Failsafe timeout
+        if HealBot_PendingShapeshiftCast and GetTime() > pendingCast.expires then
+            HealBot_PendingShapeshiftCast = nil
         end
     end
 
@@ -524,6 +566,7 @@ end
 -- HealBot_OnEvent_SpellcastStart: Internal utility: HealBot_OnEvent_SpellcastStart
 function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     HealBot_IsCasting = true;
+    HealBot_PendingShapeshiftCast = nil;
     HealBot_RecalcHeals();
     HealBot_CheckCasting();
     if spell == HEALBOT_RESURRECTION or spell == HEALBOT_ANCESTRALSPIRIT or spell == HEALBOT_REBIRTH or spell == HEALBOT_REDEMPTION then
@@ -537,6 +580,7 @@ end
 -- HealBot_OnEvent_SpellcastStop: Internal utility: HealBot_OnEvent_SpellcastStop
 function HealBot_OnEvent_SpellcastStop(this, eventName)
     HealBot_IsCasting = false;
+    HealBot_PendingShapeshiftCast = nil;
     if eventName == "SPELLCAST_FAILED" then
         HealBot_CastFailed = true;
     end

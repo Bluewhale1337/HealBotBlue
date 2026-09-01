@@ -59,6 +59,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Bug Fix - Slow Client Init** - Fixed missing class colors after `/reload` by adding lazy-load identity fetches directly into the render pipeline for when `UnitClass` data is delayed by the server.
 * **Bug Fix - Debuff Tracking** - HealBot now automatically tracks all curable debuffs for the player's class out of the box. Previously, users had to manually assign a cure spell to a click binding to enable CDC debuff tracking.
 * **Bug Fix - CDC Filter** - Fixed an issue where the CDC module displayed all debuffs instead of filtering for dispellable ones, restoring proper health bar coloring.
+* **Bug Fix - UnitClass Localization** - Added a fallback mapping for the Vanilla `UnitClass` API to always return the uppercase English class string. This fixes a bug where default options (like Debuff tracking) failed to initialize.
+* **Feature - Shapeshift Spell Queue** - Built a native spell queue system for Druid auto-unshifting. Bypasses the "Cannot cast while shapeshifted" error and server lag when AutoUnshift is enabled, firing the heal seamlessly the exact millisecond the form is dropped. Now completely unified to use the standard casting API for maximum reliability across all client setups.
 
 **v1.6.5**
 * **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.

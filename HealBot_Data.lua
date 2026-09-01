@@ -27,8 +27,9 @@ HealBot_ConfigDefaults = {
   ActionVisible = 1,
   HideSolo = 0,
   OverHeal = 0.25,
-  CastNotify = 1,
+  UpdateFreq = 0.5,
   AutoUnshift = 1,
+  Integrations_Nampower_Active = true,
   ChatMessages = {
     [1] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
     [2] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },

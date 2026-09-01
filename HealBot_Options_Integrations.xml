@@ -33,7 +33,7 @@
         </Anchors>
         <Scripts>
           <OnLoad>
-            getglobal(this:GetName().."Text"):SetText("Enable nampower Integration (Buffs/Heals)");
+            getglobal(this:GetName().."Text"):SetText("Enable nampower Integration (Buffs/Heals/Queueing)");
           </OnLoad>
           <OnClick>
             HealBot_Config.HealBot_Integrations_Nampower = this:GetChecked() and 1 or 0;
@@ -44,9 +44,9 @@
 
       <CheckButton name="HealBot_Options_Integrations_SuperWoW" inherits="OptionsCheckButtonTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_Nampower" relativePoint="BOTTOMLEFT">
+          <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="0" y="5"/>
+              <AbsDimension x="31" y="-145"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -81,6 +81,21 @@
       </CheckButton>
 
     </Frames>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must DISABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
+          <Size x="330" y="30"/>
+          <Anchors>
+            <Anchor point="TOPLEFT">
+              <Offset>
+                <AbsDimension x="65" y="-95"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+          <Color r="0.7" g="0.7" b="0.7"/>
+        </FontString>
+      </Layer>
+    </Layers>
     <Scripts>
       <OnShow>
         HealBot_Options_Integrations_OnShow(this);
