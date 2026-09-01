@@ -298,11 +298,18 @@ function HealBot_CastSpellOnFriend(spell, target)
   local targetEnemy = UnitCanAttack("player", "target");
   local oldTarget = UnitName("target");
   
+  local formCancelled = false
   if HealBot_UnitClass("player") == "DRUID" and HealBot_Config.AutoUnshift == 1 then
     local currentForm = HealBot_GetShapeshiftForm()
     if currentForm then
         CastShapeshiftForm(currentForm);
+        formCancelled = true
     end
+  end
+  
+  if formCancelled then
+    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, expires = GetTime() + 1.0 }
+    return;
   end
   
   if oldTarget ~= UnitName(target) then

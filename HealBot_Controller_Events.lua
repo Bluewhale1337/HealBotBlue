@@ -77,6 +77,36 @@ function HealBot_OnUpdate(this, arg1)
         end
     end
 
+    if HealBot_PendingShapeshiftCast then
+        if GetTime() > HealBot_PendingShapeshiftCast.expires then
+            HealBot_PendingShapeshiftCast = nil
+        else
+            -- Only cast once the form has successfully been removed
+            local currentForm = HealBot_GetShapeshiftForm()
+            if not currentForm then
+                local pendingCast = HealBot_PendingShapeshiftCast
+                HealBot_PendingShapeshiftCast = nil
+                
+                -- Target the unit if necessary before casting
+                if pendingCast.oldTarget ~= UnitName(pendingCast.target) then
+                    TargetUnit(pendingCast.target)
+                end
+                
+                -- Attempt the cast now that form is cleared
+                HealBot_StartCasting(pendingCast.spell, pendingCast.target, "direct")
+                
+                if pendingCast.targetEnemy then
+                    HealBot_TargetRestorePending = { type = "enemy" }
+                elseif pendingCast.oldTarget and pendingCast.oldTarget ~= UnitName(pendingCast.target) then
+                    HealBot_TargetRestorePending = { type = "friend" }
+                elseif not pendingCast.oldTarget then
+                    HealBot_TargetRestorePending = { type = "clear" }
+                end
+                HealBot_TargetRestoreTimer = 0
+            end
+        end
+    end
+
     -- Process Dirty Queue for MVC View
     local unitsToRefresh = {}
     for unitID in pairs(HealBot_View_DirtyUnits) do
