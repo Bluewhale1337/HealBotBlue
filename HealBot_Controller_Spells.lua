@@ -298,8 +298,11 @@ function HealBot_CastSpellOnFriend(spell, target)
   local targetEnemy = UnitCanAttack("player", "target");
   local oldTarget = UnitName("target");
   
-  if HealBot_UnitClass("player") == "DRUID" and HealBot_ActiveShapeshiftStance and HealBot_Config.AutoUnshift == 1 then
-    CastShapeshiftForm(HealBot_ActiveShapeshiftStance);
+  if HealBot_UnitClass("player") == "DRUID" and HealBot_Config.AutoUnshift == 1 then
+    local currentForm = HealBot_GetShapeshiftForm()
+    if currentForm then
+        CastShapeshiftForm(currentForm);
+    end
   end
   
   if oldTarget ~= UnitName(target) then
@@ -496,7 +499,7 @@ function HealBot_GetHealSpell(unit, pattern)
   if UnitOnTaxi("player") then return nil end;
   if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
   if HealBot_UnitClass("player") == "DRUID" then
-    if HealBot_ActiveShapeshiftStance and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
+    if HealBot_GetShapeshiftForm() and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
   end
   
   -- Handle Inline Scripts
@@ -829,11 +832,9 @@ function HealBot_Generic_Patten(matchStr, matchPattern)
   return tmpTest, _HealsMin, _HealsMax;
 end
 
-HealBot_ActiveShapeshiftStance = nil;
-
 -- HealBot_UpdateShapeshiftForm: Internal utility: HealBot_UpdateShapeshiftForm
 function HealBot_UpdateShapeshiftForm()
-  HealBot_ActiveShapeshiftStance = HealBot_GetShapeshiftForm();
+  -- Deprecated, state is pulled in real-time on cast
 end
 
 -- HealBot_GetShapeshiftForm: Detects active druid form to prevent invalid casts.

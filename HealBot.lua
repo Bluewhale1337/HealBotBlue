@@ -190,8 +190,22 @@ end
 
 -- HealBot_UnitClass: Returns English class string for a unit.
 function HealBot_UnitClass(unit)
-  local playerClass, englishClass = UnitClass(unit);
-  return englishClass;
+    local locClass, enClass = UnitClass(unit)
+    if enClass then return string.upper(enClass) end
+    
+    -- Fallback for Vanilla 1.12 where enClass is nil
+    if locClass == HEALBOT_DRUID then return "DRUID"
+    elseif locClass == HEALBOT_HUNTER then return "HUNTER"
+    elseif locClass == HEALBOT_MAGE then return "MAGE"
+    elseif locClass == HEALBOT_PALADIN then return "PALADIN"
+    elseif locClass == HEALBOT_PRIEST then return "PRIEST"
+    elseif locClass == HEALBOT_ROGUE then return "ROGUE"
+    elseif locClass == HEALBOT_SHAMAN then return "SHAMAN"
+    elseif locClass == HEALBOT_WARLOCK then return "WARLOCK"
+    elseif locClass == HEALBOT_WARRIOR then return "WARRIOR"
+    end
+    
+    return locClass
 end
 
 ---- HealBot_UnitAffected moved to HealBot_Controller_Aura.lua
