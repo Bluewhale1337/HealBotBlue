@@ -102,7 +102,7 @@ function HealBot_OnUpdate(this, arg1)
                     baseSpell = string.gsub(baseSpell, "%s+$", "")
                     
                     -- Force MVC updates since we guarantee the cast will eventually pierce the server
-                    HealBot_CastFailed = false
+                    HealBot_CastFailed = true -- Trigger first attempt immediately
                     HealBot_CastingSpell = baseSpell
                     HealBot_CastingTarget = pendingCast.target
                     HealBot_Process_HealValue(baseSpell, pendingCast.target)
@@ -119,10 +119,10 @@ function HealBot_OnUpdate(this, arg1)
                     HealBot_TargetRestoreTimer = 0
                 end
                 
-                -- 2. Spam the raw cast silently to guarantee it pierces the server delay
+                -- 2. Spam the cast until the server explicitly accepts it (firing SPELLCAST_START)
                 if pendingCast.started then
                     if not pendingCast.nextSpam or GetTime() >= pendingCast.nextSpam then
-                        pendingCast.nextSpam = GetTime() + 0.15
+                        pendingCast.nextSpam = GetTime() + 0.10
                         
                         -- Safely suppress UI errors
                         UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
@@ -146,6 +146,8 @@ function HealBot_OnUpdate(this, arg1)
         -- Failsafe timeout
         if HealBot_PendingShapeshiftCast and GetTime() > pendingCast.expires then
             HealBot_PendingShapeshiftCast = nil
+            HealBot_StopCasting()
+            HealBot_RecalcHeals()
         end
     end
 
@@ -580,10 +582,23 @@ end
 -- HealBot_OnEvent_SpellcastStop: Internal utility: HealBot_OnEvent_SpellcastStop
 function HealBot_OnEvent_SpellcastStop(this, eventName)
     HealBot_IsCasting = false;
-    HealBot_PendingShapeshiftCast = nil;
-    if eventName == "SPELLCAST_FAILED" then
+    if eventName == "SPELLCAST_FAILED" or eventName == "SPELLCAST_INTERRUPTED" then
         HealBot_CastFailed = true;
+        if HealBot_PendingShapeshiftCast then
+            return;
+        end
     end
+    
+    if HealBot_PendingShapeshiftCast and eventName == "SPELLCAST_STOP" then
+        if HealBot_CastFailed or not HealBot_PendingShapeshiftCast.started then
+            -- This STOP is either the trailing event of a failed/interrupted cast,
+            -- or it is the STOP event from the unshift spell itself.
+            -- Do not wipe the queue yet!
+            return;
+        end
+    end
+
+    HealBot_PendingShapeshiftCast = nil;
     HealBot_StopCasting();
     HealBot_RecalcHeals();
     if HealBot_IamRessing then

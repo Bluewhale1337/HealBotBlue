@@ -83,7 +83,7 @@
     </Frames>
     <Layers>
       <Layer level="ARTWORK">
-        <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must DISABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
+        <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must ENABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
           <Size x="330" y="30"/>
           <Anchors>
             <Anchor point="TOPLEFT">

@@ -211,6 +211,7 @@ end
 
 -- HealBot_StopCasting: Internal utility: HealBot_StopCasting
 function HealBot_StopCasting()
+  HealBot_IsCasting = false;
   if HealBot_CastingTarget then
     if HealBot_HealValue > 0 then
       local uname = UnitName(HealBot_CastingTarget)
@@ -325,7 +326,7 @@ function HealBot_CastSpellOnFriend(spell, target)
   if formCancelled then
     -- ALWAYS put the cast into the Pending queue so the OnUpdate loop can wait for the server
     -- to process the unshift before attempting the cast, otherwise we get "You are in shapeshift form".
-    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, fireTime = GetTime() + 0.05, expires = GetTime() + 1.0 }
+    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, fireTime = GetTime() + 0.05, expires = GetTime() + 2.0 }
     return;
   end
   
