@@ -54,10 +54,10 @@ HealBot_ConfigDefaults = {
   PanelAnchorX = -1,
   PanelAnchorY = -1,
   CDCBarColour = {
-    [HEALBOT_DISEASE_en] = { R = 0.1, G = 0.05, B = 0.2, },
-    [HEALBOT_MAGIC_en] = { R = 0.05, G = 0.05, B = 0.1, },
-    [HEALBOT_POISON_en] = { R = 0.05, G = 0.2, B = 0.1, },
-    [HEALBOT_CURSE_en] = { R = 0.2, G = 0.05, B = 0.05, },
+    [HEALBOT_DISEASE_en] = { R = 0.55, G = 0.19, B = 0.70, }, -- Bright Purple
+    [HEALBOT_MAGIC_en] = { R = 0.01, G = 0.30, B = 0.90, }, -- Bright Blue
+    [HEALBOT_POISON_en] = { R = 0.12, G = 0.46, B = 0.24, }, -- Bright Green
+    [HEALBOT_CURSE_en] = { R = 0.83, G = 0.01, B = 0.01, }, -- Bright Red
   },
 
   Debuff_Left = {

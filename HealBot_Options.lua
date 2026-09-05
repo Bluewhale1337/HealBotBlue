@@ -14,6 +14,20 @@ HealBot_Options_EmergencyFilter_List = {
     HEALBOT_OPTIONS_MONITORCUSTOM,
 }
 
+HealBot_Options_CDCMonitor_List = {
+    HEALBOT_OPTIONS_MONITORNO,
+    HEALBOT_OPTIONS_MONITORALL,
+    HEALBOT_DRUID,
+    HEALBOT_HUNTER,
+    HEALBOT_MAGE,
+    HEALBOT_PALADIN,
+    HEALBOT_PRIEST,
+    HEALBOT_ROGUE,
+    HEALBOT_SHAMAN,
+    HEALBOT_WARLOCK,
+    HEALBOT_WARRIOR,
+}
+
 -- HealBot_Options_AddDebug: UI handler for AddDebug options panel.
 function HealBot_Options_AddDebug(msg)
   HealBot_AddDebug("Options: " .. msg);

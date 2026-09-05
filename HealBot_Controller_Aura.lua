@@ -186,7 +186,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         local trackedTextures = {}
         
         while true do
-            local debuff, tmp, debuff_type = UnitDebuff(unit, i)
+            local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
             if debuff then
                 local mapped_type = nil
                 if debuff_type then

@@ -29,21 +29,13 @@ end
 
 -- HealBot_HealthColor: Computes health bar RGBA based on debuffs and class.
 function HealBot_HealthColor(unit, hlth, maxhlth)
-    if HealBot_UnitDebuff[unit] then
-        local debuff_type = HealBot_UnitDebuff[unit]
-        local color = HealBot_Config.CDCBarColour[debuff_type]
+    local cached_debuff = HealBot_UnitDebuff[unit]
+    if cached_debuff then
+        local color = HealBot_Config.CDCBarColour[cached_debuff]
         if color then
             local dr = color.R
             local dg = color.G
             local db = color.B
-            if HealBot_Config.btexture[HealBot_Config.Current_Skin] == 10 then
-                dr = dr * 4
-                dg = dg * 4
-                db = db * 4
-                if dr > 1 then dr = 1 end
-                if dg > 1 then dg = 1 end
-                if db > 1 then db = 1 end
-            end
             return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
         end
     end
@@ -271,6 +263,17 @@ function HealBot_Action_EnableButton(button)
             else
                 icon:Hide()
             end
+        end
+    end
+    
+    local raidIcon = getglobal(button:GetName() .. "BarRaidIcon")
+    if raidIcon then
+        local index = GetRaidTargetIndex(unit)
+        if index then
+            SetRaidTargetIconTexture(raidIcon, index)
+            raidIcon:Show()
+        else
+            raidIcon:Hide()
         end
     end
 end

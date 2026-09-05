@@ -47,6 +47,14 @@
         </Anchors>
         <Layers>
           <Layer level="OVERLAY">
+            <Texture name="$parentRaidIcon" file="Interface\TargetingFrame\UI-RaidTargetingIcons" hidden="true">
+              <Size><AbsDimension x="14" y="14"/></Size>
+              <Anchors>
+                <Anchor point="CENTER">
+                  <Offset><AbsDimension x="0" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
             <Texture name="$parentIcon1" hidden="true">
               <Size><AbsDimension x="12" y="12"/></Size>
               <Anchors>

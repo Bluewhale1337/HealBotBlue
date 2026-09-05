@@ -45,9 +45,9 @@ function HealBot_WarningSound_OnClick(this,id)
 end
 -- HealBot_Options_CDCMonitor_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCMonitor_DropDown()
-  for i=1, getn(HealBot_Options_EmergencyFilter_List), 1 do
+  for i=1, getn(HealBot_Options_CDCMonitor_List), 1 do
     local info = {};
-    info.text = HealBot_Options_EmergencyFilter_List[i];
+    info.text = HealBot_Options_CDCMonitor_List[i];
     info.func = HealBot_Options_CDCMonitor_OnSelect;
     UIDropDownMenu_AddButton(info);
   end

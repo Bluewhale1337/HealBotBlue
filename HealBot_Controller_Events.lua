@@ -281,6 +281,13 @@ local HealBot_EventHandlers = {
         HealBot_Model:NotifyObservers("ROSTER_CHANGED")
         HealBot_OnEvent_PartyMembersChanged(this)
     end,
+    ["RAID_TARGET_UPDATE"] = function(this)
+        if HealBot_Action_UnitButtons then
+            for unit, _ in pairs(HealBot_Action_UnitButtons) do
+                HealBot_View_DirtyUnits[unit] = true
+            end
+        end
+    end,
     ["PLAYER_ENTERING_WORLD"] = function(this)
         HealBot_Model:RefreshUnit("player")
         HealBot_Model:RefreshUnit("pet")
@@ -386,6 +393,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("PLAYER_TARGET_CHANGED");
         this:RegisterEvent("PARTY_MEMBERS_CHANGED");
         this:RegisterEvent("RAID_ROSTER_UPDATE");
+        this:RegisterEvent("RAID_TARGET_UPDATE");
         this:RegisterEvent("PARTY_MEMBER_DISABLE");
         this:RegisterEvent("PARTY_MEMBER_ENABLE");
         this:RegisterEvent("UNIT_PET");
