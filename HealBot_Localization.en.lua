@@ -310,6 +310,7 @@ HEALBOT_OPTIONS_CDCLEFT       = "Alt+Left";
 HEALBOT_OPTIONS_CDCRIGHT      = "Alt+Right";
 HEALBOT_OPTIONS_CDCBARS       = "Healthbar colours";
 HEALBOT_OPTIONS_CDCCLASS      = "Monitor classes";
+HEALBOT_OPTIONS_CDCSHOWALLDEBUFFS = "Track All Debuffs";
 HEALBOT_OPTIONS_CDCWARNINGS   = "Debuff warnings";
 HEALBOT_OPTIONS_USEBUTTONS    = "Define spells";
 HEALBOT_OPTIONS_CDC           = "Cure/Dispel/Cleanse for";

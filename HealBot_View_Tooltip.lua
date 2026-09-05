@@ -3,6 +3,7 @@
 
 HealBot_Action_TooltipUnit = nil
 
+-- HealBot_Tooltip_GetSpellColor: Internal utility: HealBot_Tooltip_GetSpellColor
 function HealBot_Tooltip_GetSpellColor(spell)
     local r, g, b = 1, 1, 0 -- default yellow
     if spell and HealBot_Spells and HealBot_Spells[spell] and HealBot_Spells[spell].Mana then
@@ -13,6 +14,7 @@ function HealBot_Tooltip_GetSpellColor(spell)
     return r, g, b
 end
 
+-- HealBot_Action_RefreshTooltip: Builds and displays spell tooltip on hover.
 function HealBot_Action_RefreshTooltip(unit)
   if HealBot_Config.ShowTooltip==0 then return end
   if not unit then unit = HealBot_Action_TooltipUnit end
@@ -149,6 +151,7 @@ function HealBot_Action_RefreshTooltip(unit)
   HealBot_Tooltip:Show();
 end
 
+-- HealBot_Action_Tooltip_SpellInfo: Internal utility: HealBot_Action_Tooltip_SpellInfo
 function HealBot_Action_Tooltip_SpellInfo(spell,linenum)
   local text
   if HealBot_Spells[spell] then
@@ -184,6 +187,7 @@ function HealBot_Action_Tooltip_SpellInfo(spell,linenum)
   return linenum
 end
 
+-- HealBot_Action_Tooltip_SpellSummary: Internal utility: HealBot_Action_Tooltip_SpellSummary
 function HealBot_Action_Tooltip_SpellSummary(spell)
   local ret_val = "  ";
   if HealBot_Spells[spell] then
@@ -211,6 +215,7 @@ function HealBot_Action_Tooltip_SpellSummary(spell)
   return ret_val
 end
 
+-- HealBot_Action_Tooltip_CheckForInstant: Internal utility: HealBot_Action_Tooltip_CheckForInstant
 function HealBot_Action_Tooltip_CheckForInstant(unit,spell,upd,linenum,check)
   if HealBot_Spells[spell] then
     if HealBot_Spells[spell].CastTime == 0 then
@@ -229,6 +234,7 @@ function HealBot_Action_Tooltip_CheckForInstant(unit,spell,upd,linenum,check)
   return check+1,linenum;
 end
 
+-- HealBot_Action_Tooltip_SetLineLeft: Internal utility: HealBot_Action_Tooltip_SetLineLeft
 function HealBot_Action_Tooltip_SetLineLeft(Text,R,G,B,linenum)
   local txtL = getglobal("HealBot_TooltipTextL" .. linenum)
   txtL:SetTextColor(R,G,B)
@@ -236,6 +242,7 @@ function HealBot_Action_Tooltip_SetLineLeft(Text,R,G,B,linenum)
   txtL:Show()
 end
 
+-- HealBot_Action_Tooltip_SetLineRight: Internal utility: HealBot_Action_Tooltip_SetLineRight
 function HealBot_Action_Tooltip_SetLineRight(Text,R,G,B,linenum)
   local txtR = getglobal("HealBot_TooltipTextR" .. linenum)
   txtR:SetTextColor(R,G,B)
@@ -243,6 +250,7 @@ function HealBot_Action_Tooltip_SetLineRight(Text,R,G,B,linenum)
   txtR:Show()
 end
 
+-- HealBot_Action_Tooltip_ClearLines: Internal utility: HealBot_Action_Tooltip_ClearLines
 function HealBot_Action_Tooltip_ClearLines()
   for j=1,30 do
     local txtL = getglobal("HealBot_TooltipTextL" .. j)
@@ -254,6 +262,7 @@ function HealBot_Action_Tooltip_ClearLines()
   end
 end
 
+-- HealBot_Action_ShowTooltip: Internal utility: HealBot_Action_ShowTooltip
 function HealBot_Action_ShowTooltip(this)
   if HealBot_Config.ShowTooltip==0 then return end
   if not this.unit then return end;
@@ -263,6 +272,7 @@ function HealBot_Action_ShowTooltip(this)
   HealBot_Action_RefreshTooltip(this.unit);
 end
 
+-- HealBot_Action_HideTooltip: Internal utility: HealBot_Action_HideTooltip
 function HealBot_Action_HideTooltip(this)
   if HealBot_Config.ShowTooltip==0 then return end
   HealBot_Tooltip:Hide();

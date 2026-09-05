@@ -1,3 +1,4 @@
+-- HealBot_Options_AutoSwap_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_AutoSwap_OnClick(this)
   if this:GetChecked() then
     HealBot_Config.AutoSwap_Enabled = 1
@@ -7,6 +8,7 @@ function HealBot_Options_AutoSwap_OnClick(this)
   HealBot_Action_PartyChanged()
 end
 
+-- HealBot_Options_Auto_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_Auto_Initialize()
   local dropdownName = UIDROPDOWNMENU_OPEN_MENU
   if not dropdownName then return end
@@ -30,6 +32,7 @@ function HealBot_Options_Auto_Initialize()
   end
 end
 
+-- HealBot_Options_Auto_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_Auto_OnSelect()
   local skin = this:GetText()
   local id = this.value
@@ -53,6 +56,7 @@ function HealBot_Options_Auto_OnSelect()
   HealBot_Action_PartyChanged()
 end
 
+-- HealBot_Options_Auto_OnShow: UI handler for OnShow options panel.
 function HealBot_Options_Auto_OnShow(this)
   if HealBot_Config.AutoSwap_Enabled == 1 then
     HealBot_Options_AutoSwap:SetChecked(1)

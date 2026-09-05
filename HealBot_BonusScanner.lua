@@ -50,6 +50,7 @@ HealBot_BonusScanner = {
 	};
 }
 
+-- HealBot_BonusScanner:GetBonus: Internal utility: HealBot_BonusScanner:GetBonus
 function HealBot_BonusScanner:GetBonus()
 	if(HealBot_BonusScanner.bonuses) then
 		return HealBot_BonusScanner.bonuses;
@@ -58,6 +59,7 @@ function HealBot_BonusScanner:GetBonus()
 end
 
 
+-- HealBot_BonusScanner_Update: Internal utility: HealBot_BonusScanner_Update
 function HealBot_BonusScanner_Update()
 
     if (HealBot_BonusScanner.IsUpdating) then
@@ -69,6 +71,7 @@ function HealBot_BonusScanner_Update()
     HealBot_BonusScanner.IsUpdating = false;
 end
 
+-- HealBot_BonusScanner:ScanEquipment: Internal utility: HealBot_BonusScanner:ScanEquipment
 function HealBot_BonusScanner:ScanEquipment()
 	local slotid, slotname, hasItem, i;
 
@@ -90,6 +93,7 @@ function HealBot_BonusScanner:ScanEquipment()
 	HealBot_BonusScanner.bonuses = HealBot_BonusScanner.temp.bonuses;
 end
 
+-- HealBot_BonusScanner:ScanTooltip: Internal utility: HealBot_BonusScanner:ScanTooltip
 function HealBot_BonusScanner:ScanTooltip()
 	local tmpTxt, line;
 	local lines = HealBot_BonusTooltip:NumLines();
@@ -103,6 +107,7 @@ function HealBot_BonusScanner:ScanTooltip()
 	end
 end
 
+-- HealBot_BonusScanner:AddValue: Internal utility: HealBot_BonusScanner:AddValue
 function HealBot_BonusScanner:AddValue(effect, value)
 	local i,e;
 	if(type(effect) == "string") then
@@ -126,6 +131,7 @@ function HealBot_BonusScanner:AddValue(effect, value)
 	end
 end;
 
+-- HealBot_BonusScanner:ScanLine: Internal utility: HealBot_BonusScanner:ScanLine
 function HealBot_BonusScanner:ScanLine(line)
 	local tmpStr, found;
 	if(string.sub(line,0,string.len(HEALBOT_BONUSSCANNER_PREFIX_EQUIP)) == HEALBOT_BONUSSCANNER_PREFIX_EQUIP) then
@@ -150,6 +156,7 @@ function HealBot_BonusScanner:ScanLine(line)
 	end
 end;
 
+-- HealBot_BonusScanner:CheckPassive: Internal utility: HealBot_BonusScanner:CheckPassive
 function HealBot_BonusScanner:CheckPassive(line)
 	local i, p, value, found;
 
@@ -166,6 +173,7 @@ function HealBot_BonusScanner:CheckPassive(line)
 	end
 end
 
+-- HealBot_BonusScanner:CheckGeneric: Internal utility: HealBot_BonusScanner:CheckGeneric
 function HealBot_BonusScanner:CheckGeneric(line)
 	local value, token, pos, tmpStr, found;
 	found = false;
@@ -199,6 +207,7 @@ function HealBot_BonusScanner:CheckGeneric(line)
 	return found;
 end
 
+-- HealBot_BonusScanner:CheckToken: Internal utility: HealBot_BonusScanner:CheckToken
 function HealBot_BonusScanner:CheckToken(token, value)
 	local i, p, s1, s2;
 	
@@ -209,6 +218,7 @@ function HealBot_BonusScanner:CheckToken(token, value)
 	return false;
 end
 
+-- HealBot_BonusScanner:CheckOther: Internal utility: HealBot_BonusScanner:CheckOther
 function HealBot_BonusScanner:CheckOther(line)
 	local i, p, value, start, found;
 

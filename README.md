@@ -27,7 +27,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Native Hovercasting (Mouseover):** Cast configured spells on hovered unit frames using keybinds directly from your action bars, without losing your current target. (Toggleable in Options -> General).
 * **Macro, Item, & Script Bindings:** Bind named macros, inventory items, and scripts directly to mouse clicks. Supports implicit `@mouseover` targeting natively.
 * **Zero-Latency Self-Heals:** Incoming heals for the local player process instantly with zero latency, independent of network lag.
-* **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions - currently only TurtleWoW patch 1.18 supported.
+* **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions.
 * **Modifier-Aware Tooltips:** Tooltips dynamically update to show exact bound actions (Shift/Ctrl/Alt) and required mana costs (turns red if insufficient mana).
 * **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
 * **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward).
@@ -37,10 +37,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Customizable Health Text:** Dynamic unit health display (Name Only, Percentage, Real Health, or Health Deficit).
 * **Non-Mana Resource Tracking:** Track Rage, Energy, and Focus for non-mana classes.
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
+* **Additional Mods Integration:** Navigate to 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).
 
 ### To be implemented
-- **GUID-based frame mapping:** Migrate internal state to use lightweight GUID tracking to resolve bugs when targets switch or duplicate names appear (e.g., enemy mobs, warlock pets).
-- **Mod Integration Optimization:** Add conditional SuperWoW/UnitXP SP3 integration to reduce GC spikes and improve frame rendering accuracy.
+- **Strategy Pattern / Code Tree Splits:** Migrate heavy mod integrations (like Nampower aura tracking and SuperWoW UI rendering) into isolated code trees (e.g., `HealBot_Model_SuperWoW.lua`). This will allow dynamic overwriting of global functions at startup, eliminating the CPU overhead of running `if integration then` branch checks inside high-frequency update loops on Vanilla clients.
 
 ### Known issues
 
@@ -49,8 +49,24 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.0**
+* **Feature - Raid Marks** - Added tracking and display of raid marks on unit frames.
+* **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).
+* **UI Layout** - Widened the Options UI and neatly centered elements to accommodate the new integrations tab.
+* **Bug Fix - Rendering Crash** - Fixed a critical UI issue where unrecognized debuff types would crash the rendering loop, causing unit frames to disappear.
+* **Bug Fix - Missing Group Frames** - Fixed a layout initialization bug where the group unit array was accidentally cleared, causing the panel to draw 0 bars and shrink to a floating "Options" button.
+* **Bug Fix - Target State Aliasing** - Fixed a bug in `PreserveStateByGUID` where targeting a party member caused their frame to alias the target's state table in memory. This previously caused party frames to adopt enemy mob names and lose their class colors when changing targets.
+* **Bug Fix - Group Aliasing** - Fixed a bug where roster updates caused frames to share memory references, causing the UI to display the same player across multiple group slots.
+* **Bug Fix - Slow Client Init** - Fixed missing class colors after `/reload` by adding lazy-load identity fetches directly into the render pipeline for when `UnitClass` data is delayed by the server.
+* **Bug Fix - Debuff Tracking** - HealBot now automatically tracks all curable debuffs for the player's class out of the box. Previously, users had to manually assign a cure spell to a click binding to enable CDC debuff tracking.
+* **Bug Fix - CDC Filter** - Fixed an issue where the CDC module displayed all debuffs instead of filtering for dispellable ones, restoring proper health bar coloring.
+* **Bug Fix - UnitClass Localization** - Added a fallback mapping for the Vanilla `UnitClass` API to always return the uppercase English class string. This fixes a bug where default options (like Debuff tracking) failed to initialize.
+* **Feature - Shapeshift Spell Queue** - Built a native spell queue system for Druid auto-unshifting. Bypasses the "Cannot cast while shapeshifted" error and server lag when AutoUnshift is enabled, firing the heal seamlessly the exact millisecond the form is dropped. Now completely unified to use the standard casting API for maximum reliability across all client setups.
+* **Bug Fix - CDC Config List** - Fixed an uninitialized dropdown list array that prevented the CDC class monitor configuration from saving correctly.
+* **Bug Fix - Color Picker Accuracy** - Removed an undocumented multiplier hack on default textures that was artificially brightening debuff bar colors and overriding the user's selected colors from the color picker.
+
 **v1.6.5**
-* **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This massive optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.
+* **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.
 
 **v1.6.4**
 * **Bug Fix - UI Opacity** - Fixed a rendering layering bug where incoming heals drew on top of actual health, causing the semi-transparent incoming heal bar to wash out the solid health bar.
@@ -62,12 +78,17 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UI Update - Icon Limit** - Increased maximum tracked buffs/debuffs per unit from 5 to 10.
 * **UI Update - Customizable icon size** - Added an option to change size of HoT icons (default to 12px).
 * **Cleanup** - Removed dead code `HealBot_Groups` table.
+* **Bug Fix - Buff Watch Self** - Fixed an issue where the "Self Only" toggle for watched buffs failed to load visually across sessions.
 
 **v1.6.2**
 * **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.
 * **UI Update - Raid & Pets Split** - Split the "Raid / Extra" toggle into separate "Raid" and "Pets" toggles. Simplified the raid bars filter dropdown to core options (All, Melee, Ranged, Heals, Custom).
 
 **v1.6.1**
+* **Feature - CDC Module** - Added a new toggle in the CDC options to track all debuffs. When enabled, non-dispellable debuff icons will appear on the unit frame. Bar coloring continues to only highlight dispellable debuffs to prevent visual clutter.
+* **Hotfix - XML Layering** - Reverted `bar` and `bar2` element order in `HealBot_Action.xml`. The incoming heals bar was rendering on top of the health bar, causing debuff colors to be obscured and creating visual opacity issues.
+* **Hotfix - Debuff Bar Coloring** - Restored the `showDispellable` parameter to `UnitDebuff` in the aura scanning loop so the Vanilla client correctly returns the debuff type string required for bar coloring.
+* **Hotfix - Shapeshift / ShaguTweaks Interaction** - Fixed a Lua error (`attempt to compare number with nil`) in `HealBot_Process_HealValue` caused by missing `CastTime` values when external addons like ShaguTweaks trigger auto-unshift or intercept casts.
 * **Hotfix - pet frames** - With class colours toggled extra frames for player pets were given some classy mint colour.
 * **Hotfi - raidframes in combat** - Modfied how frames behave when player leaves during combat.
 

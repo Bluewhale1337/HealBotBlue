@@ -7,9 +7,9 @@
 
       <Frame name="HealBot_Options_CDCMonitor" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="170" y="-30" /> 
+              <AbsDimension x="-20" y="-30" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -30,6 +30,20 @@
           <OnLoad> HealBot_Options_CDCMonitor_OnLoad(this) </OnLoad>
 	</Scripts>
       </Frame>
+      
+      <CheckButton name="HealBot_Options_CDCShowAllDebuffs" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="HealBot_Options_CDCMonitor" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-15" y="3" /> 
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_CDCShowAllDebuffs_OnLoad(this,HEALBOT_OPTIONS_CDCSHOWALLDEBUFFS)</OnLoad> 
+          <OnClick>HealBot_Options_CDCShowAllDebuffs_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
       
       <Frame name="HealBot_Options_CureDispelCleanse" inherits="OptionFrameBoxTemplate">
         <Scripts>
@@ -57,9 +71,9 @@
 	<Layer level="BACKGROUND">
 	<FontString name="HealBot_CDCBut_Text" text="HEALBOT_OPTIONS_CDCBUTTONS" inherits="GameFontNormalSmall">
 	  <Anchors>
-	   <Anchor point="TOPLEFT">
+	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="105" y="-12" />
+		<AbsDimension x="0" y="-12" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -71,7 +85,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="100" y="-35" /> 
+              <AbsDimension x="150" y="-35" /> 
             </Offset>
           </Anchor>
        </Anchors>
@@ -81,7 +95,7 @@
               <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
                   <Offset>
-                    <AbsDimension x="40" y="-42"/>
+                    <AbsDimension x="70" y="-42"/>
                   </Offset>
                 </Anchor>
               </Anchors>
@@ -98,7 +112,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="100" y="-67" /> 
+              <AbsDimension x="150" y="-67" /> 
             </Offset>
           </Anchor>
        </Anchors>
@@ -108,7 +122,7 @@
               <Anchors>
                 <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
                   <Offset>
-                    <AbsDimension x="40" y="-74"/>
+                    <AbsDimension x="70" y="-74"/>
                   </Offset>
                 </Anchor>
               </Anchors>
@@ -148,9 +162,9 @@
 	<Layer level="BACKGROUND">
 	<FontString name="HealBot_CDCCol_Text" text="HEALBOT_OPTIONS_CDCBARS" inherits="GameFontNormalSmall">
 	  <Anchors>
-	   <Anchor point="TOPLEFT">
+	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="98" y="-12" />
+		<AbsDimension x="0" y="-12" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -163,9 +177,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
 		<Offset>
-		  <AbsDimension x="81" y="-55"/>
+		  <AbsDimension x="70" y="-35"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -178,9 +192,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
 		<Offset>
-		  <AbsDimension x="81" y="-55"/>
+		  <AbsDimension x="70" y="-35"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -255,9 +269,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
 		<Offset>
-		  <AbsDimension x="65" y="-45"/>
+		  <AbsDimension x="70" y="-65"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -270,9 +284,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="BOTTOM" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
 		<Offset>
-		  <AbsDimension x="65" y="-45"/>
+		  <AbsDimension x="70" y="-65"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -368,9 +382,9 @@
 	<Layer level="BACKGROUND">
 	<FontString name="HealBot_CDCWarn_Text" text="HEALBOT_OPTIONS_CDCWARNINGS" inherits="GameFontNormalSmall">
 	  <Anchors>
-	   <Anchor point="TOPLEFT">
+	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="98" y="-12" />
+		<AbsDimension x="0" y="-12" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -380,9 +394,9 @@
    </Frame>  
       <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="OptionsCheckButtonTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseWarn" relativePoint="BOTTOMLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseWarn" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="25" y="90" /> 
+              <AbsDimension x="70" y="-35" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -407,9 +421,9 @@
 
       <CheckButton name="HealBot_WarningSound1" inherits="SendMailRadioButtonTemplate" id="1">
         <Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundDebuffWarning" relativePoint="TOPLEFT">
+	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundDebuffWarning" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="25" y="-30"/>
+              <AbsDimension x="25" y="-5"/>
             </Offset>
           </Anchor>
         </Anchors>

@@ -3,10 +3,12 @@
 
 local _scale = 0
 
+-- HealBot_ResetRangeScale: Resets map range scaling on zone change.
 function HealBot_ResetRangeScale()
     _scale = 0
 end
 
+-- HealBot_Range_Check: Checks if unit is in range via map distance or API.
 function HealBot_Range_Check(unit, range)
     local return_val = 0;
     if not range then 
@@ -14,6 +16,22 @@ function HealBot_Range_Check(unit, range)
     end
     if ( unit == "player" ) then 
         return_val = 1;
+    elseif HealBot_Integrations_ClassicAPI_Active and UnitDistanceSquared and UnitInLineOfSight then
+        local inSight = UnitInLineOfSight("player", unit)
+        if inSight then
+            local distSq = UnitDistanceSquared(unit)
+            if distSq and distSq <= (range * range) then
+                return_val = 1;
+            end
+        end
+    elseif HealBot_Integrations_UnitXP_Active then
+        local inSight = UnitXP("inSight", "player", unit)
+        if inSight then
+            local dist = UnitXP("distanceBetween", "player", unit, "Gaussian")
+            if dist and dist <= range then
+                return_val = 1;
+            end
+        end
     elseif ( UnitIsVisible(unit) == 1 ) then
         local tx, ty = GetPlayerMapPosition(unit)
         local dist

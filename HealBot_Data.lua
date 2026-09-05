@@ -27,8 +27,9 @@ HealBot_ConfigDefaults = {
   ActionVisible = 1,
   HideSolo = 0,
   OverHeal = 0.25,
-  CastNotify = 1,
+  UpdateFreq = 0.5,
   AutoUnshift = 1,
+  Integrations_Nampower_Active = true,
   ChatMessages = {
     [1] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
     [2] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
@@ -49,14 +50,14 @@ HealBot_ConfigDefaults = {
   ShowDebuffWarning = 0,
   SoundDebuffWarning = 0,
   SoundDebuffPlay = 1,
-  CDCMonitor = 1,
+  CDCMonitor = 2,
   PanelAnchorX = -1,
   PanelAnchorY = -1,
   CDCBarColour = {
-    [HEALBOT_DISEASE_en] = { R = 0.1, G = 0.05, B = 0.2, },
-    [HEALBOT_MAGIC_en] = { R = 0.05, G = 0.05, B = 0.1, },
-    [HEALBOT_POISON_en] = { R = 0.05, G = 0.2, B = 0.1, },
-    [HEALBOT_CURSE_en] = { R = 0.2, G = 0.05, B = 0.05, },
+    [HEALBOT_DISEASE_en] = { R = 0.55, G = 0.19, B = 0.70, }, -- Bright Purple
+    [HEALBOT_MAGIC_en] = { R = 0.01, G = 0.30, B = 0.90, }, -- Bright Blue
+    [HEALBOT_POISON_en] = { R = 0.12, G = 0.46, B = 0.24, }, -- Bright Green
+    [HEALBOT_CURSE_en] = { R = 0.83, G = 0.01, B = 0.01, }, -- Bright Red
   },
 
   Debuff_Left = {
@@ -255,6 +256,10 @@ HealBot_ConfigDefaults = {
   Tooltip_Recommend = 1,
   TooltipPos = 1,  
   HideParty = 0,
+  HealBot_Integrations_UnitXP = 0,
+  HealBot_Integrations_Nampower = 0,
+  HealBot_Integrations_SuperWoW = 0,
+  HealBot_Integrations_ClassicAPI = 0,
 };
 
 HealBot_Config = {};
@@ -575,6 +580,7 @@ HealBot_IamRessing = false;
 
 -- Table Recycling Pool
 local tablePool = {}
+-- HealBot_GetTable: Internal utility: HealBot_GetTable
 function HealBot_GetTable()
     local t = table.remove(tablePool)
     if not t then
@@ -583,6 +589,7 @@ function HealBot_GetTable()
     return t
 end
 
+-- HealBot_ReleaseTable: Internal utility: HealBot_ReleaseTable
 function HealBot_ReleaseTable(t)
     if type(t) == "table" then
         for k in pairs(t) do

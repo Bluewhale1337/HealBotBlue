@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: HealBotBlue
-## Version: 1.6.5
+## Version: 1.7.0
 ## Author: Bluewhale
 ## Notes: Adds panel with skinable bars for healing and decursive
 ## SavedVariablesPerCharacter:  HealBot_Config
@@ -10,6 +10,7 @@
 ..\..\FrameXML\UIDropDownMenu.xml
 HealBot_Error.xml
 HealBot_Model.lua
+HealBot_Integrations.lua
 HealBot_Controller_Range.lua
 HealBot_Controller_Comms.lua
 HealBot_Controller_Aura.lua
@@ -28,3 +29,4 @@ HealBot_Options_Skins.xml
 HealBot_Options_Buffs.xml
 HealBot_Options_Chat.xml
 HealBot_Options_Auto.xml
+HealBot_Options_Integrations.xml

@@ -1,0 +1,105 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+  <Script file="HealBot_Options_Integrations.lua" />
+  <Frame name="HealBot_Options_Panel9" hidden="true" parent="HealBot_Options" setAllPoints="true">
+    <Frames>
+      <CheckButton name="HealBot_Options_Integrations_UnitXP" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="31" y="-40"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable UnitXP_SP3 Integration (Distance/LoS)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_UnitXP = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <CheckButton name="HealBot_Options_Integrations_Nampower" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_UnitXP" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable nampower Integration (Buffs/Heals/Queueing)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_Nampower = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <CheckButton name="HealBot_Options_Integrations_SuperWoW" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="31" y="-145"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable SuperWoW Integration (GUID Tracking)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_SuperWoW = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+      <CheckButton name="HealBot_Options_Integrations_ClassicAPI" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_SuperWoW" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Enable ClassicAPI Integration (+Healing/Focus/Distance)");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_ClassicAPI = this:GetChecked() and 1 or 0;
+            HealBot_Integrations_Toggle();
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
+    </Frames>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must ENABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
+          <Size x="330" y="30"/>
+          <Anchors>
+            <Anchor point="TOPLEFT">
+              <Offset>
+                <AbsDimension x="65" y="-95"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+          <Color r="0.7" g="0.7" b="0.7"/>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnShow>
+        HealBot_Options_Integrations_OnShow(this);
+      </OnShow>
+    </Scripts>
+  </Frame>
+</Ui>

@@ -14,10 +14,26 @@ HealBot_Options_EmergencyFilter_List = {
     HEALBOT_OPTIONS_MONITORCUSTOM,
 }
 
+HealBot_Options_CDCMonitor_List = {
+    HEALBOT_OPTIONS_MONITORNO,
+    HEALBOT_OPTIONS_MONITORALL,
+    HEALBOT_DRUID,
+    HEALBOT_HUNTER,
+    HEALBOT_MAGE,
+    HEALBOT_PALADIN,
+    HEALBOT_PRIEST,
+    HEALBOT_ROGUE,
+    HEALBOT_SHAMAN,
+    HEALBOT_WARLOCK,
+    HEALBOT_WARRIOR,
+}
+
+-- HealBot_Options_AddDebug: UI handler for AddDebug options panel.
 function HealBot_Options_AddDebug(msg)
   HealBot_AddDebug("Options: " .. msg);
 end
 
+-- HealBot_Options_Pct_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_Pct_OnLoad(this,text)
   this.text = text;
   getglobal(this:GetName().."Text"):SetText(text);
@@ -27,6 +43,7 @@ function HealBot_Options_Pct_OnLoad(this,text)
   this:SetValueStep(0.01);
 end
 
+-- HealBot_Options_Pct_OnLoad_MinMax: UI handler for MinMax options panel.
 function HealBot_Options_Pct_OnLoad_MinMax(this,text,Min,Max)
   this.text = text;
   local MinTxt,MaxTxt
@@ -41,6 +58,7 @@ function HealBot_Options_Pct_OnLoad_MinMax(this,text,Min,Max)
   this:SetValueStep(0.01);
 end
 
+-- HealBot_Options_val_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_val_OnLoad(this,text,Min,Max)
   this.text = text;
 
@@ -51,6 +69,7 @@ function HealBot_Options_val_OnLoad(this,text,Min,Max)
   this:SetValueStep(1);
 end
 
+-- HealBot_Options_Pct_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_Pct_OnValueChanged(this)
   local pct = math.floor(this:GetValue()*100+0.5);
   getglobal(this:GetName().."Text"):SetText(this.text .. " (" .. pct .. "%)");
@@ -106,10 +125,12 @@ end
 
 
 
+-- HealBot_Options_CastNotify_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_CastNotify_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
 
+-- HealBot_Options_CastNotify_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_CastNotify_OnClick(this,id)
   -- CastNotify UI elements were removed and replaced by Custom Chat Messages
 end
@@ -147,6 +168,7 @@ end
 
 --------------------------------------------------------------------------------
 
+-- HealBot_Returned_Colours: Internal utility: HealBot_Returned_Colours
 function HealBot_Returned_Colours()
   local A = OpacitySliderFrame:GetValue();
   A = ((0-A)+1);
@@ -188,6 +210,7 @@ function HealBot_Returned_Colours()
   HealBot_SetSkinColours()
   HealBot_SetCDCBarColours()
 end
+-- HealBot_UseColourPick: Internal utility: HealBot_UseColourPick
 function HealBot_UseColourPick(R, G, B, A)
   if ColorPickerFrame:IsVisible() then 
     ColorPickerFrame:Hide();
@@ -208,6 +231,7 @@ function HealBot_UseColourPick(R, G, B, A)
   end
   return ColorPickerFrame:GetColorRGB();
 end
+-- HealBot_Options_Defaults_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_Defaults_OnClick(this)
   HealBot_Options_CastNotify_OnClick(nil,0);
 --  HealBot_Config = HealBot_ConfigDefaults;
@@ -219,15 +243,17 @@ function HealBot_Options_Defaults_OnClick(this)
   HealBot_Action_Reset();
   HealBot_Config.ActionVisible = HealBot_Action:IsVisible();
 end
+-- HealBot_Options_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_OnLoad(this)
   table.insert(UISpecialFrames,this:GetName());
 
   -- Tabs
-  PanelTemplates_SetNumTabs(this,8);
+  PanelTemplates_SetNumTabs(this,9);
   this.selectedTab = 1; 
   PanelTemplates_UpdateTabs(this);
   HealBot_Options_ShowPanel(this.selectedTab);
 end
+-- HealBot_Options_OnShow: UI handler for OnShow options panel.
 function HealBot_Options_OnShow(this)
   HealBot_Skins = HealBot_Config.Skins;
   HealBot_Options_SetSkins()
@@ -295,6 +321,7 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_SetChatMessages();
   HealBot_Options_ShowPanel(this.selectedTab or 1);
 end
+-- HealBot_Options_SetSkins: UI handler for SetSkins options panel.
 function HealBot_Options_SetSkins()
   HealBot_Options_Skins_Refresh()
   HealBot_Options_BarAlpha:SetValue(HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
@@ -334,6 +361,7 @@ function HealBot_Options_SetSkins()
     HealBot_Options_DeleteSkin:Enable();
   end
 end
+-- HealBot_Options_ShowPanel: UI handler for ShowPanel options panel.
 function HealBot_Options_ShowPanel(id)
   if HealBot_Options_CurrentPanel>0 then
     local panel = getglobal("HealBot_Options_Panel"..HealBot_Options_CurrentPanel);

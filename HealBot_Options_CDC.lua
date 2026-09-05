@@ -1,15 +1,19 @@
 -- HealBot Options panel file: HealBot_Options_CDC.lua
 -- Split from original HealBot_Options.lua
 
+-- HealBot_Options_ShowDebuffWarning_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_ShowDebuffWarning_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_ShowDebuffWarning_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_ShowDebuffWarning_OnClick(this)
   HealBot_Config.ShowDebuffWarning = this:GetChecked() or 0;
 end
+-- HealBot_Options_SoundDebuffWarning_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_SoundDebuffWarning_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_Options_SoundDebuffWarning_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_SoundDebuffWarning_OnClick(this)
   HealBot_Config.SoundDebuffWarning = this:GetChecked() or 0;
   if HealBot_Config.SoundDebuffWarning==0 then
@@ -22,9 +26,11 @@ function HealBot_Options_SoundDebuffWarning_OnClick(this)
     HealBot_WarningSound3:Enable();
   end
 end
+-- HealBot_WarningSound_OnLoad: Internal utility: HealBot_WarningSound_OnLoad
 function HealBot_WarningSound_OnLoad(this,text)
   getglobal(this:GetName().."Text"):SetText(text);
 end
+-- HealBot_WarningSound_OnClick: Click event handler.
 function HealBot_WarningSound_OnClick(this,id)
   if HealBot_Config.SoundDebuffPlay>0 then
     getglobal("HealBot_WarningSound"..HealBot_Config.SoundDebuffPlay):SetChecked(nil);
@@ -37,31 +43,37 @@ function HealBot_WarningSound_OnClick(this,id)
     end
   end
 end
+-- HealBot_Options_CDCMonitor_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCMonitor_DropDown()
-  for i=1, getn(HealBot_Options_EmergencyFilter_List), 1 do
+  for i=1, getn(HealBot_Options_CDCMonitor_List), 1 do
     local info = {};
-    info.text = HealBot_Options_EmergencyFilter_List[i];
+    info.text = HealBot_Options_CDCMonitor_List[i];
     info.func = HealBot_Options_CDCMonitor_OnSelect;
     UIDropDownMenu_AddButton(info);
   end
 end
+-- HealBot_Options_CDCMonitor_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_CDCMonitor_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_CDCMonitor,HealBot_Options_CDCMonitor_DropDown)
 end
+-- HealBot_Options_CDCMonitor_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_CDCMonitor_Refresh(onselect)
   if not HealBot_Config.CDCMonitor then return end
   if not onselect then HealBot_Options_CDCMonitor_Initialize() end  -- or wrong menu may be used !
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCMonitor,HealBot_Config.CDCMonitor)
 end
+-- HealBot_Options_CDCMonitor_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_CDCMonitor_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCMonitor_DropDown)
   UIDropDownMenu_SetWidth(100, this)
 end
+-- HealBot_Options_CDCMonitor_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_CDCMonitor_OnSelect()
   HealBot_Config.CDCMonitor = this:GetID()
   HealBot_Options_CDCMonitor_Refresh(true)
   HealBot_Options_CDCMonitor_Reset()
 end
+-- HealBot_Options_CDCMonitor_Reset: UI handler for Reset options panel.
 function HealBot_Options_CDCMonitor_Reset()
 
   HealBot_CDCInc[HEALBOT_DRUID] = 0;
@@ -145,10 +157,34 @@ function HealBot_Options_CDCMonitor_Reset()
 
   HealBot_Action_PartyChanged()
 end
+-- HealBot_Options_GetDebuffSpells_List: UI handler for List options panel.
 function HealBot_Options_GetDebuffSpells_List(class)
   local DebuffSpells = HealBot_Debuff_Spells[class];
   return DebuffSpells;
 end
+
+-- HealBot_Options_CDCShowAllDebuffs_OnLoad: UI handler for OnLoad options panel.
+function HealBot_Options_CDCShowAllDebuffs_OnLoad(this,text)
+  getglobal(this:GetName().."Text"):SetText(text);
+  if HealBot_Config.CDCShowAllDebuffs == nil then HealBot_Config.CDCShowAllDebuffs = 0; end
+  if HealBot_Config.CDCShowAllDebuffs == 1 then
+    this:SetChecked(1);
+  else
+    this:SetChecked(0);
+  end
+end
+
+-- HealBot_Options_CDCShowAllDebuffs_OnClick: UI handler for OnClick options panel.
+function HealBot_Options_CDCShowAllDebuffs_OnClick(this)
+  if this:GetChecked() then
+    HealBot_Config.CDCShowAllDebuffs = 1;
+  else
+    HealBot_Config.CDCShowAllDebuffs = 0;
+  end
+  HealBot_RecalcParty();
+end
+
+-- HealBot_Options_CDCButLeft_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCButLeft_DropDown()
   local classEN=HealBot_UnitClass("player")
   if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
@@ -169,6 +205,7 @@ function HealBot_Options_CDCButLeft_DropDown()
     end
   end
 end
+-- HealBot_Options_CDCButRight_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCButRight_DropDown()
   local classEN=HealBot_UnitClass("player")
   if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
@@ -189,12 +226,15 @@ function HealBot_Options_CDCButRight_DropDown()
     end
   end
 end
+-- HealBot_Options_CDCButLeft_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_CDCButLeft_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_CDCButLeft,HealBot_Options_CDCButLeft_DropDown)
 end
+-- HealBot_Options_CDCButRight_Initialize: UI handler for Initialize options panel.
 function HealBot_Options_CDCButRight_Initialize()
   UIDropDownMenu_Initialize(HealBot_Options_CDCButRight,HealBot_Options_CDCButRight_DropDown)
 end
+-- HealBot_Options_CDCButLeft_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_CDCButLeft_Refresh(onselect)
   local set_id=1;
   local class=UnitClass("Player");
@@ -202,6 +242,7 @@ function HealBot_Options_CDCButLeft_Refresh(onselect)
   set_id = HealBot_Config.Debuff_Left[class];
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButLeft,set_id)
 end
+-- HealBot_Options_CDCButRight_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_CDCButRight_Refresh(onselect)
   local set_id;
   local class=UnitClass("Player");
@@ -209,14 +250,18 @@ function HealBot_Options_CDCButRight_Refresh(onselect)
   set_id = HealBot_Config.Debuff_Right[class];
   HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight,set_id)
 end
+-- HealBot_Options_CDCButLeft_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_CDCButLeft_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCButLeft_DropDown)
   UIDropDownMenu_SetWidth(140, this)
 end
+-- HealBot_Options_CDCButRight_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_CDCButRight_OnLoad()
   UIDropDownMenu_Initialize(this, HealBot_Options_CDCButRight_DropDown)
   UIDropDownMenu_SetWidth(140, this)
 end
+
+-- HealBot_Options_CDCButLeft_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_CDCButLeft_OnSelect()
   local class=UnitClass("Player");
   HealBot_Config.Debuff_Left[class] = this:GetID();
@@ -228,6 +273,7 @@ function HealBot_Options_CDCButLeft_OnSelect()
   HealBot_DebuffPriority = HealBot_Debuff_Types[HealBot_Options_CDCButLeftText:GetText()];
   HealBot_Options_Debuff_Reset()
 end
+-- HealBot_Options_CDCButRight_OnSelect: UI handler for OnSelect options panel.
 function HealBot_Options_CDCButRight_OnSelect()
   local class=UnitClass("Player");
   HealBot_Config.Debuff_Right[class] = this:GetID();
@@ -238,11 +284,13 @@ function HealBot_Options_CDCButRight_OnSelect()
   end    
   HealBot_Options_Debuff_Reset()
 end
+-- HealBot_Options_CDC_SetCombo: UI handler for SetCombo options panel.
 function HealBot_Options_CDC_SetCombo(spell, button, class)
   local combo = HealBot_Config.KeyCombo[class]
   combo["Alt"..button] = spell
   HealBot_Options_KeyCombo_Change()
 end
+-- HealBot_Options_Debuff_Reset: Restores default debuff tracking options.
 function HealBot_Options_Debuff_Reset()
   local classEN=HealBot_UnitClass("player")
   if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
@@ -278,10 +326,12 @@ function HealBot_Options_Debuff_Reset()
     end
   end
 end
+-- HealBot_Colorpick_OnClick: Opens color picker for debuff colors.
 function HealBot_Colorpick_OnClick(CDCType)
   HealBot_ColourObjWaiting=CDCType;
   HealBot_UseColourPick(HealBot_Config.CDCBarColour[CDCType].R,HealBot_Config.CDCBarColour[CDCType].G,HealBot_Config.CDCBarColour[CDCType].B, nil)
 end
+-- HealBot_SetCDCBarColours: Internal utility: HealBot_SetCDCBarColours
 function HealBot_SetCDCBarColours()
   HealBot_DiseaseColorpick:SetStatusBarColor(HealBot_Config.CDCBarColour[HEALBOT_DISEASE_en].R,
                                              HealBot_Config.CDCBarColour[HEALBOT_DISEASE_en].G,
