@@ -171,6 +171,13 @@ function HealBot_OnUpdate(this, arg1)
         HealBot_Action_RefreshPower(unitID)
     end
     
+    local powerID, _ = next(HealBot_View_DirtyPower)
+    while powerID do
+        HealBot_Action_RefreshPower(powerID)
+        HealBot_View_DirtyPower[powerID] = nil
+        powerID, _ = next(HealBot_View_DirtyPower)
+    end
+    
     if HealBot_EquipChangeTimer > 0 then
         HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
         if HealBot_EquipChangeTimer <= 0 then

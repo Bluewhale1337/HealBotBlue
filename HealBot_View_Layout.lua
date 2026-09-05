@@ -38,6 +38,7 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
             local db = color.B
             return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
         end
+        return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
     
     local text = UnitName(unit);
