@@ -50,6 +50,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.1**
+* **Performance Fix - Table Pooling** - Fixed massive Vanilla Lua 5.0 garbage collection memory leaks caused by unbounded table allocations in high-frequency update loops (e.g., `OnUpdate` and `PreserveStateByGUID`). Moved tables to file-local scope and implemented inline clearing.
+* **Performance Fix - OOC Cleanup** - Added an out-of-combat garbage collection hook (`PLAYER_REGEN_ENABLED`) to purge disconnected senders from the `HealBot_IncomingHealers` global table, preventing memory bloat during prolonged play sessions.
 * **Bug Fix - Incoming Heals Comms** - Fixed a regex string parsing bug that caused incoming heals from other HealBot instances to drop if a unit's name contained non-alphabetic characters (e.g. dashes or spaces in pet names).
 * **Feature - Standard HealComm Sync** - Implemented lightweight parsing of the standard `HealComm` addon channel. HealBot now perfectly syncs incoming heals with modern raid frames like Luna, Grid, and pfUI, while retaining backwards compatibility with older versions of HealBot.
 * **UI Update - Raid Marks** - Anchored raid target icons to top of unit frames instead of center.
