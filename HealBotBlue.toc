@@ -2,7 +2,7 @@
 ## Title: HealBotBlue
 ## Version: 1.7.0
 ## Author: Bluewhale
-## Notes: Adds panel with skinable bars for healing and decursive
+## Notes: Raidframe replacement for healing, decursing, resource tracking and buffing with optional support for SuperWow, ClassicAPI, UnitXP_SP3 and Nampower.
 ## SavedVariablesPerCharacter:  HealBot_Config
 ..\..\FrameXML\Fonts.xml
 ..\..\FrameXML\OptionsFrameTemplates.xml
