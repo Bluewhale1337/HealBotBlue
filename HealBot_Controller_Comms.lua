@@ -73,34 +73,58 @@ end
 
 if not HealBot_IncomingHealers then HealBot_IncomingHealers = {} end
 
-local function SetIncomingHeal(sender, targets, amount, protocol)
-    -- prioritize HealComm over HealBot protocol to avoid double-counting
-    if HealBot_IncomingHealers[sender] and HealBot_IncomingHealers[sender].protocol == "HealComm" and protocol == "HealBot" then
-        return
-    end
-    
-    -- remove old heal if it exists
-    if HealBot_IncomingHealers[sender] then
-        local oldTargets = HealBot_IncomingHealers[sender].targets
-        local oldAmount = HealBot_IncomingHealers[sender].amount
-        for _, oldTarget in ipairs(oldTargets) do
+-- Reusable global array for gfind string splitting
+if not HealBot_Comms_Args then HealBot_Comms_Args = {} end
+
+local function ClearIncomingHeal(sender)
+    local data = HealBot_IncomingHealers[sender]
+    if not data then return end
+    local oldAmount = data.amount
+    for i=1, 5 do
+        local oldTarget = data.targets[i]
+        if oldTarget then
             if HealBot_HealsIn[oldTarget] then
                 HealBot_HealsIn[oldTarget] = HealBot_HealsIn[oldTarget] - oldAmount
                 if HealBot_HealsIn[oldTarget] < 0 then HealBot_HealsIn[oldTarget] = 0 end
                 HealBot_RecalcHeals(HealBot_FindUnitID(oldTarget))
             end
+            data.targets[i] = nil
         end
     end
+    data.amount = 0
+end
+
+local function SetIncomingHeal(sender, amount, protocol, t1, t2, t3, t4, t5)
+    -- prioritize HealComm over HealBot protocol to avoid double-counting
+    if HealBot_IncomingHealers[sender] and HealBot_IncomingHealers[sender].protocol == "HealComm" and protocol == "HealBot" then
+        return
+    end
     
-    if amount > 0 and targets and #targets > 0 then
-        HealBot_IncomingHealers[sender] = { targets = targets, amount = amount, protocol = protocol }
-        for _, target in ipairs(targets) do
-            if not HealBot_HealsIn[target] then HealBot_HealsIn[target] = 0 end
-            HealBot_HealsIn[target] = HealBot_HealsIn[target] + amount
-            HealBot_RecalcHeals(HealBot_FindUnitID(target))
+    if not HealBot_IncomingHealers[sender] then
+        HealBot_IncomingHealers[sender] = { targets = {}, amount = 0, protocol = protocol }
+    end
+    
+    ClearIncomingHeal(sender)
+    
+    local data = HealBot_IncomingHealers[sender]
+    data.protocol = protocol
+    
+    if amount > 0 and t1 then
+        data.amount = amount
+        data.targets[1] = t1
+        data.targets[2] = t2
+        data.targets[3] = t3
+        data.targets[4] = t4
+        data.targets[5] = t5
+        
+        for i=1, 5 do
+            local target = data.targets[i]
+            if target then
+                if not HealBot_HealsIn[target] then HealBot_HealsIn[target] = 0 end
+                HealBot_HealsIn[target] = HealBot_HealsIn[target] + amount
+                HealBot_RecalcHeals(HealBot_FindUnitID(target))
+            end
         end
-    else
-        HealBot_IncomingHealers[sender] = nil
     end
 end
 
@@ -109,30 +133,25 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
     if sender_id == UnitName("player") then return end
     
     if addon_id == "HealComm" then
-        -- HealComm protocol
-        local args = {}
+        -- Clear reusable args array
+        for i=1, 10 do HealBot_Comms_Args[i] = nil end
+        local argCount = 0
         for word in string.gfind(inc_msg, "[^/]+") do
-            table.insert(args, word)
+            argCount = argCount + 1
+            HealBot_Comms_Args[argCount] = word
         end
-        local cmd = args[1]
+        local cmd = HealBot_Comms_Args[1]
         
-        if cmd == "Heal" and args[2] and args[3] then
-            SetIncomingHeal(sender_id, {args[2]}, tonumber(args[3]) or 0, "HealComm")
+        if cmd == "Heal" and HealBot_Comms_Args[2] and HealBot_Comms_Args[3] then
+            SetIncomingHeal(sender_id, tonumber(HealBot_Comms_Args[3]) or 0, "HealComm", HealBot_Comms_Args[2])
         elseif cmd == "Healstop" then
-            SetIncomingHeal(sender_id, nil, 0, "HealComm")
-        elseif cmd == "GrpHeal" and args[2] then
-            local amount = tonumber(args[2]) or 0
-            local targets = {}
-            for i = 4, 8 do
-                if args[i] and args[i] ~= "" then
-                    table.insert(targets, args[i])
-                end
-            end
-            SetIncomingHeal(sender_id, targets, amount, "HealComm")
+            SetIncomingHeal(sender_id, 0, "HealComm")
+        elseif cmd == "GrpHeal" and HealBot_Comms_Args[2] then
+            SetIncomingHeal(sender_id, tonumber(HealBot_Comms_Args[2]) or 0, "HealComm", HealBot_Comms_Args[4], HealBot_Comms_Args[5], HealBot_Comms_Args[6], HealBot_Comms_Args[7], HealBot_Comms_Args[8])
         elseif cmd == "GrpHealstop" then
-            SetIncomingHeal(sender_id, nil, 0, "HealComm")
+            SetIncomingHeal(sender_id, 0, "HealComm")
         elseif cmd == "Resurrection" then
-            if args[2] == "stop" then
+            if HealBot_Comms_Args[2] == "stop" then
                 HealBot_AddDebug(sender_id .. " Stopped ressing");
                 for unit, resser in pairs(HealBot_Ressing) do
                     if resser == sender_id then
@@ -140,10 +159,10 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
                         HealBot_RecalcHeals(HealBot_FindUnitID(unit));
                     end
                 end
-            elseif args[2] and args[3] == "start" then
-                HealBot_AddDebug(sender_id .. " is ressing " .. args[2]);
-                HealBot_Ressing[args[2]] = sender_id;
-                HealBot_RecalcHeals(HealBot_FindUnitID(args[2]));
+            elseif HealBot_Comms_Args[2] and HealBot_Comms_Args[3] == "start" then
+                HealBot_AddDebug(sender_id .. " is ressing " .. HealBot_Comms_Args[2]);
+                HealBot_Ressing[HealBot_Comms_Args[2]] = sender_id;
+                HealBot_RecalcHeals(HealBot_FindUnitID(HealBot_Comms_Args[2]));
             end
         end
         
@@ -152,7 +171,7 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
         if heal_val and unitname then
             local amount = tonumber(heal_val) or 0
             if amount < 0 then amount = 0 end -- HealBot sends negative to cancel
-            SetIncomingHeal(sender_id, {unitname}, amount, "HealBot")
+            SetIncomingHeal(sender_id, amount, "HealBot", unitname)
         end
         
     elseif addon_id == "HealBot" then
