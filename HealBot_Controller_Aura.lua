@@ -159,6 +159,7 @@ local HealBot_TrackedHoTs = {
 }
 
 local HealBot_DebuffTypeMap = nil
+local HealBot_AuraWarningPlayed = {}
 
 -- HealBot_OnEvent_UnitAura: Updates debuff lists and icon textures on aura change.
 function HealBot_OnEvent_UnitAura(this, unit)
@@ -276,19 +277,24 @@ function HealBot_OnEvent_UnitAura(this, unit)
         end
         
         if HealBot_UnitDebuff[unit] then
-            if DebuffType and HealBot_Range_Check(unit, 27) == 1 then
-                if HealBot_Config.ShowDebuffWarning == 1 then
-                    local color = HealBot_Config.CDCBarColour[DebuffType]
-                    local r, g, b = 1, 0, 0
-                    if color then
-                        r, g, b = color.R, color.G, color.B
+            if DebuffType and HealBot_Range_Check(unit, 40) == 1 then
+                if HealBot_AuraWarningPlayed[unit] ~= DebuffType then
+                    HealBot_AuraWarningPlayed[unit] = DebuffType
+                    if HealBot_Config.ShowDebuffWarning == 1 then
+                        local color = HealBot_Config.CDCBarColour[DebuffType]
+                        local r, g, b = 1, 0, 0
+                        if color then
+                            r, g, b = color.R, color.G, color.B
+                        end
+                        UIErrorsFrame:AddMessage(UnitName(unit) .. " suffers from " .. DebuffType, 
+                                                 r, g, b,
+                                                 1, UIERRORS_HOLD_TIME);
                     end
-                    UIErrorsFrame:AddMessage(UnitName(unit) .. " suffers from " .. DebuffType, 
-                                             r, g, b,
-                                             1, UIERRORS_HOLD_TIME);
+                    if HealBot_Config.SoundDebuffWarning == 1 then HealBot_PlaySound(HealBot_Config.SoundDebuffPlay); end
                 end
-                if HealBot_Config.SoundDebuffWarning == 1 then HealBot_PlaySound(HealBot_Config.SoundDebuffPlay); end
             end
+        else
+            HealBot_AuraWarningPlayed[unit] = nil
         end
         -- Check buffs synchronously because tooltip scanning fails in OnUpdate
         HealBot_CheckBuffs(unit)
