@@ -50,6 +50,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.1**
+* **UI Update - Raid Marks** - Anchored raid target icons to top of unit frames instead of center.
 * **Bug Fix** - Fixed an issue where the debuff warning sound and UI message would spam repeatedly on every aura update. The warning now only plays once per unique dispellable debuff type applied to a unit. Increased warning trigger range to 40 yards.
 
 **v1.7.0**
