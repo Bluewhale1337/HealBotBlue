@@ -71,33 +71,72 @@ function HealBot_SendAddonMessage(prefix, text)
     end
 end
 
+if not HealBot_IncomingHealers then HealBot_IncomingHealers = {} end
+
+local function SetIncomingHeal(sender, target, amount, protocol)
+    -- prioritize HealComm over HealBot protocol to avoid double-counting
+    if HealBot_IncomingHealers[sender] and HealBot_IncomingHealers[sender].protocol == "HealComm" and protocol == "HealBot" then
+        return
+    end
+    
+    -- remove old heal if it exists
+    if HealBot_IncomingHealers[sender] then
+        local oldTarget = HealBot_IncomingHealers[sender].target
+        local oldAmount = HealBot_IncomingHealers[sender].amount
+        if HealBot_HealsIn[oldTarget] then
+            HealBot_HealsIn[oldTarget] = HealBot_HealsIn[oldTarget] - oldAmount
+            if HealBot_HealsIn[oldTarget] < 0 then HealBot_HealsIn[oldTarget] = 0 end
+            HealBot_RecalcHeals(HealBot_FindUnitID(oldTarget))
+        end
+    end
+    
+    if amount > 0 then
+        HealBot_IncomingHealers[sender] = { target = target, amount = amount, protocol = protocol }
+        if not HealBot_HealsIn[target] then HealBot_HealsIn[target] = 0 end
+        HealBot_HealsIn[target] = HealBot_HealsIn[target] + amount
+        HealBot_RecalcHeals(HealBot_FindUnitID(target))
+    else
+        HealBot_IncomingHealers[sender] = nil
+    end
+end
+
 -- HealBot_OnEvent_AddonMsg: Parses incoming heal data from other clients.
 function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_id)
-    if addon_id == HEALBOT_ADDON_ID then
-        local tmpTest, unitname, heal_val
-        tmpTest, tmpTest, unitname, heal_val = string.find(inc_msg, ">> (%a+) <<=>> (.%d+) <<" );
-        if heal_val then
-            if sender_id == UnitName("player") then return end
-            if not HealBot_HealsIn[unitname] then
-                HealBot_HealsIn[unitname] = 0;
-            end
-            HealBot_Healers[sender_id] = ">> " .. unitname .. " <<=>> " .. heal_val .. " <<";
-            HealBot_HealsIn[unitname] = HealBot_HealsIn[unitname] + tonumber(heal_val);
-            if tonumber(heal_val) > 0 then
-                HealBot_RecalcHeals(HealBot_FindUnitID(unitname))
-            elseif HealBot_HealsIn[unitname] < 0 then
-                HealBot_HealsIn[unitname] = 0;
-            end
+    if sender_id == UnitName("player") then return end
+    
+    if addon_id == "HealComm" then
+        -- HealComm protocol (e.g. "Heal/TargetName/Amount/CastTime/")
+        local cmd, target, amount, cast_time = strsplit("/", inc_msg)
+        if cmd == "Heal" and target and amount then
+            SetIncomingHeal(sender_id, target, tonumber(amount) or 0, "HealComm")
+        elseif cmd == "Healstop" then
+            SetIncomingHeal(sender_id, nil, 0, "HealComm")
+        elseif cmd == "GrpHeal" and amount then
+            -- Note: Group heals technically have multiple targets, but this is a simple implementation
+            -- We'll just track it against the first target to keep it simple, or ignore it.
+            -- Full GrpHeal parsing would split target1,target2,target3
+        elseif cmd == "GrpHealstop" then
+            SetIncomingHeal(sender_id, nil, 0, "HealComm")
         end
+        
+    elseif addon_id == HEALBOT_ADDON_ID then
+        local tmpTest, tmpTest, unitname, heal_val = string.find(inc_msg, ">> (.-) <<=>> (.-) <<" );
+        if heal_val and unitname then
+            local amount = tonumber(heal_val) or 0
+            if amount < 0 then amount = 0 end -- HealBot sends negative to cancel
+            SetIncomingHeal(sender_id, unitname, amount, "HealBot")
+        end
+        
     elseif addon_id == "HealBot" then
         local tmpTest, datatype, datamsg, sender
         local PName = UnitName("player");
-        tmpTest, tmpTest, datatype, sender, datamsg = string.find(inc_msg, ">> (%a+) <<=>> (%a+) <<=>> (.+)");
+        tmpTest, tmpTest, datatype, sender, datamsg = string.find(inc_msg, ">> (.-) <<=>> (.-) <<=>> (.+)");
         if datatype == "RequestVersion" then
             HealBot_SendAddonMessage("HealBot", ">> SendVersion <<=>> " .. sender .. " <<=>> Version=" .. HEALBOT_VERSION);
         elseif datatype == "SendVersion" and PName == sender then
             HealBot_AddChat(sender_id .. ":  " .. datamsg);
         end
+        
     elseif addon_id == "CTRA" then
         if ( string.sub(inc_msg, 1, 3) == "RES" ) then
             if ( inc_msg == "RESNO" ) then

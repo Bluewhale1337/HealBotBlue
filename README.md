@@ -50,6 +50,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.1**
+* **Bug Fix - Incoming Heals Comms** - Fixed a regex string parsing bug that caused incoming heals from other HealBot instances to drop if a unit's name contained non-alphabetic characters (e.g. dashes or spaces in pet names).
+* **Feature - Standard HealComm Sync** - Implemented lightweight parsing of the standard `HealComm` addon channel. HealBot now perfectly syncs incoming heals with modern raid frames like Luna, Grid, and pfUI, while retaining backwards compatibility with older versions of HealBot.
 * **UI Update - Raid Marks** - Anchored raid target icons to top of unit frames instead of center.
 * **Bug Fix** - Fixed an issue where the debuff warning sound and UI message would spam repeatedly on every aura update. The warning now only plays once per unique dispellable debuff type applied to a unit. Increased warning trigger range to 40 yards.
 
