@@ -45,9 +45,9 @@ function HealBot_WarningSound_OnClick(this,id)
 end
 -- HealBot_Options_CDCMonitor_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCMonitor_DropDown()
-  for i=1, getn(HealBot_Options_CDCMonitor_List), 1 do
+  for i=1, getn(HealBot_Options_EmergencyFilter_List), 1 do
     local info = {};
-    info.text = HealBot_Options_CDCMonitor_List[i];
+    info.text = HealBot_Options_EmergencyFilter_List[i];
     info.func = HealBot_Options_CDCMonitor_OnSelect;
     UIDropDownMenu_AddButton(info);
   end
@@ -85,7 +85,7 @@ function HealBot_Options_CDCMonitor_Reset()
   HealBot_CDCInc[HEALBOT_SHAMAN] = 0;
   HealBot_CDCInc[HEALBOT_WARLOCK] = 0;
   HealBot_CDCInc[HEALBOT_WARRIOR] = 0;
-  if HealBot_Config.CDCMonitor==2 then
+  if HealBot_Config.CDCMonitor==1 then
     HealBot_CDCInc[HEALBOT_DRUID] = 1;
     HealBot_CDCInc[HEALBOT_HUNTER] = 1;
     HealBot_CDCInc[HEALBOT_MAGE] = 1;
@@ -95,25 +95,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = 1;
     HealBot_CDCInc[HEALBOT_WARLOCK] = 1;
     HealBot_CDCInc[HEALBOT_WARRIOR] = 1;
-  elseif HealBot_Config.CDCMonitor==3 then
-    HealBot_CDCInc[HEALBOT_DRUID] = 1;
-  elseif HealBot_Config.CDCMonitor==4 then
-    HealBot_CDCInc[HEALBOT_HUNTER] = 1;
-  elseif HealBot_Config.CDCMonitor==5 then
-    HealBot_CDCInc[HEALBOT_MAGE] = 1;
-  elseif HealBot_Config.CDCMonitor==6 then
-    HealBot_CDCInc[HEALBOT_PALADIN] = 1;
-  elseif HealBot_Config.CDCMonitor==7 then
-    HealBot_CDCInc[HEALBOT_PRIEST] = 1;
-  elseif HealBot_Config.CDCMonitor==8 then
-    HealBot_CDCInc[HEALBOT_ROGUE] = 1;
-  elseif HealBot_Config.CDCMonitor==9 then
-    HealBot_CDCInc[HEALBOT_SHAMAN] = 1;
-  elseif HealBot_Config.CDCMonitor==10 then
-    HealBot_CDCInc[HEALBOT_WARLOCK] = 1;
-  elseif HealBot_Config.CDCMonitor==11 then
-    HealBot_CDCInc[HEALBOT_WARRIOR] = 1;
-  elseif HealBot_Config.CDCMonitor==12 then
+  elseif HealBot_Config.CDCMonitor==2 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncMelee[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncMelee[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncMelee[HEALBOT_MAGE];
@@ -123,7 +105,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncMelee[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncMelee[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncMelee[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==13 then
+  elseif HealBot_Config.CDCMonitor==3 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncRange[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncRange[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncRange[HEALBOT_MAGE];
@@ -133,7 +115,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncRange[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncRange[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncRange[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==14 then
+  elseif HealBot_Config.CDCMonitor==4 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncHealers[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncHealers[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncHealers[HEALBOT_MAGE];
@@ -143,7 +125,7 @@ function HealBot_Options_CDCMonitor_Reset()
     HealBot_CDCInc[HEALBOT_SHAMAN] = HealBot_Config.EmergIncHealers[HEALBOT_SHAMAN];
     HealBot_CDCInc[HEALBOT_WARLOCK] = HealBot_Config.EmergIncHealers[HEALBOT_WARLOCK];
     HealBot_CDCInc[HEALBOT_WARRIOR] = HealBot_Config.EmergIncHealers[HEALBOT_WARRIOR];
-  elseif HealBot_Config.CDCMonitor==15 then
+  elseif HealBot_Config.CDCMonitor==5 then
     HealBot_CDCInc[HEALBOT_DRUID] = HealBot_Config.EmergIncCustom[HEALBOT_DRUID];
     HealBot_CDCInc[HEALBOT_HUNTER] = HealBot_Config.EmergIncCustom[HEALBOT_HUNTER];
     HealBot_CDCInc[HEALBOT_MAGE] = HealBot_Config.EmergIncCustom[HEALBOT_MAGE];

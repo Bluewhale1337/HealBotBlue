@@ -264,11 +264,6 @@ HealBot_ConfigDefaults = {
 
 HealBot_Config = {};
 
---HealBot_EmergIncMelee = {};
---HealBot_EmergIncRange = {};
---HealBot_EmergIncHealers = {};
---HealBot_EmergIncCustom = {};
---HealBot_KeyCombo = {};
 HealBot_HealsIn = {};
 HealBot_Healers = {};
 HealBot_UnitDebuff = {};
