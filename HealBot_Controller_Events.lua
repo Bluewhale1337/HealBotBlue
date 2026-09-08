@@ -350,18 +350,19 @@ end
 function HealBot_OnEvent_VariablesLoaded(this)
     local class = HealBot_UnitClass("player")
 
-    table.foreach(HealBot_ConfigDefaults, function (key, val)
-        if not HealBot_Config[key] then
-            HealBot_Config[key] = val;
-        end
-        if type(val) == "table" and type(HealBot_Config[key]) == "table" then
-            for k, v in pairs(val) do
-                if HealBot_Config[key][k] == nil then
-                    HealBot_Config[key][k] = v
+    local function DeepCopyMissing(src, dest)
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                if type(dest[k]) ~= "table" then dest[k] = {} end
+                DeepCopyMissing(v, dest[k])
+            else
+                if dest[k] == nil then
+                    dest[k] = v
                 end
             end
         end
-    end);
+    end
+    DeepCopyMissing(HealBot_ConfigDefaults, HealBot_Config)
     
     local foundModern = false
     if HealBot_Config.Skins then
