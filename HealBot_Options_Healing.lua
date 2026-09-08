@@ -102,7 +102,7 @@ function HealBot_Options_EFClass_OnClick(this)
       HealBot_Config.EmergIncCustom[HEALBOT_WARLOCK] = HealBot_Options_EFClassWarlock:GetChecked() or 0;
       HealBot_Config.EmergIncCustom[HEALBOT_WARRIOR] = HealBot_Options_EFClassWarrior:GetChecked() or 0;
     end
-  if HealBot_Config.EmergIncMonitor>10 then
+  if HealBot_Config.EmergIncMonitor > 1 then
      HealBot_Action_PartyChanged();
   end
 end
