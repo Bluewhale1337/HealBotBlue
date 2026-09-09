@@ -50,6 +50,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.1**
+* **Bug Fix - Shapeshift Auto-Unshift** - Fixed an issue where the shapeshift spell queue would incorrectly pull druids out of Tree of Life form .
+* **Cleanup** - Removed deprecated `UPDATE_SHAPESHIFT_FORM` event listeners and `HealBot_UpdateShapeshiftForm` function to save CPU cycles.
+*
+* **v1.7.2**
 * **Performance Fix - Table Pooling** - Fixed massive Vanilla Lua 5.0 garbage collection memory leaks caused by unbounded table allocations in high-frequency update loops (e.g., `OnUpdate` and `PreserveStateByGUID`). Moved tables to file-local scope and implemented inline clearing.
 * **Performance Fix - OOC Cleanup** - Added an out-of-combat garbage collection hook (`PLAYER_REGEN_ENABLED`) to purge disconnected senders from the `HealBot_IncomingHealers` global table, preventing memory bloat during prolonged play sessions.
 * **Bug Fix - Incoming Heals Comms** - Fixed a regex string parsing bug that caused incoming heals from other HealBot instances to drop if a unit's name contained non-alphabetic characters (e.g. dashes or spaces in pet names).

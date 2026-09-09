@@ -300,9 +300,6 @@ local HealBot_EventHandlers = {
     ["PLAYER_ENTERING_WORLD"] = function(this)
         HealBot_Model:RefreshUnit("player")
         HealBot_Model:RefreshUnit("pet")
-        if HealBot_UnitClass("player") == "DRUID" then
-            HealBot_UpdateShapeshiftForm()
-        end
         HealBot_OnEvent_PlayerEnteringWorld(this)
     end,
     ["VARIABLES_LOADED"] = function(this)
@@ -331,9 +328,7 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1)
     end,
     ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
-    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end,
-    ["UPDATE_SHAPESHIFT_FORM"] = function(this) HealBot_UpdateShapeshiftForm() end,
-    ["UPDATE_SHAPESHIFT_FORMS"] = function(this) HealBot_UpdateShapeshiftForm() end
+    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end
 }
 
 -- HealBot_OnEvent: Event dispatcher for WoW UI events.
@@ -423,11 +418,6 @@ function HealBot_OnEvent_VariablesLoaded(this)
         this:RegisterEvent("CHAT_MSG_ADDON");
         this:RegisterEvent("CHAT_MSG_SYSTEM");
         this:RegisterEvent("PLAYER_ENTERING_WORLD");
-        if class == "DRUID" then
-            this:RegisterEvent("UPDATE_SHAPESHIFT_FORM");
-            this:RegisterEvent("UPDATE_SHAPESHIFT_FORMS");
-            HealBot_UpdateShapeshiftForm();
-        end
         HealBot_SpellsInitFlag = 2;
     end
 end
