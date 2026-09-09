@@ -869,6 +869,7 @@ function HealBot_GetShapeshiftForm()
       if active then
         if icon then
           local icon_lower = string.lower(icon)
+          -- Exclude non-standard/custom forms like Tree of Life from unshifting
           if not string.find(icon_lower, "humanoidform") and not string.find(icon_lower, "treeoflife") and not string.find(icon_lower, "healingway") and not string.find(icon_lower, "stoneclawtotem") then
             return i;
           end

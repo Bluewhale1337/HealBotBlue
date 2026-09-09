@@ -49,6 +49,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.1**
+* **Bug Fix - Shapeshift Auto-Unshift** - Fixed an issue where the shapeshift spell queue would incorrectly pull druids out of Tree of Life form .
+* **Cleanup** - Removed deprecated `UPDATE_SHAPESHIFT_FORM` event listeners and `HealBot_UpdateShapeshiftForm` function to save CPU cycles.
+
 **v1.7.0**
 * **Feature - Raid Marks** - Added tracking and display of raid marks on unit frames.
 * **External Addon Integrations** - Added a new 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).

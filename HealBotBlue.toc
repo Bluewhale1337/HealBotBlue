@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: HealBotBlue
-## Version: 1.7.0
+## Version: 1.7.1
 ## Author: Bluewhale
 ## Notes: Raidframe replacement for healing, decursing, resource tracking and buffing with optional support for SuperWow, ClassicAPI, UnitXP_SP3 and Nampower.
 ## SavedVariablesPerCharacter:  HealBot_Config
