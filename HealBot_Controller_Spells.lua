@@ -873,7 +873,7 @@ function HealBot_GetShapeshiftForm()
       local icon,name,active = GetShapeshiftFormInfo(i);
       if active then
         -- Do not unshift from Tree of Life form
-
+        if icon and (string.find(string.lower(icon), "treeoflife") or string.find(string.lower(icon), "healingway")) then
           return nil;
         end
         return i;
