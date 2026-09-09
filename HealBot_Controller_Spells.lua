@@ -857,10 +857,7 @@ function HealBot_Generic_Patten(matchStr, matchPattern)
   return tmpTest, _HealsMin, _HealsMax;
 end
 
--- HealBot_UpdateShapeshiftForm: Called on UPDATE_SHAPESHIFT_FORM
-function HealBot_UpdateShapeshiftForm()
-  -- Deprecated
-end
+
 
 -- HealBot_GetShapeshiftForm: Detects active druid form to prevent invalid casts.
 function HealBot_GetShapeshiftForm()
@@ -870,11 +867,14 @@ function HealBot_GetShapeshiftForm()
     for i=1,forms do
       local icon,name,active = GetShapeshiftFormInfo(i);
       if active then
-        -- Do not unshift from Tree of Life form
-        if icon and (string.find(string.lower(icon), "treeoflife") or string.find(string.lower(icon), "healingway")) then
-          return nil;
+        if icon then
+          local icon_lower = string.lower(icon)
+          if not string.find(icon_lower, "humanoidform") and not string.find(icon_lower, "treeoflife") and not string.find(icon_lower, "healingway") and not string.find(icon_lower, "stoneclawtotem") then
+            return i;
+          end
+        else
+          return i;
         end
-        return i;
       end
     end
   end
