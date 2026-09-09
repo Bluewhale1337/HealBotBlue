@@ -872,6 +872,10 @@ function HealBot_GetShapeshiftForm()
     for i=1,forms do
       local icon,name,active = GetShapeshiftFormInfo(i);
       if active then
+        -- Do not unshift from Tree of Life form
+
+          return nil;
+        end
         return i;
       end
     end
