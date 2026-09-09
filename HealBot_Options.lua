@@ -234,10 +234,18 @@ end
 -- HealBot_Options_Defaults_OnClick: UI handler for OnClick options panel.
 function HealBot_Options_Defaults_OnClick(this)
   HealBot_Options_CastNotify_OnClick(nil,0);
---  HealBot_Config = HealBot_ConfigDefaults;
-  table.foreach(HealBot_ConfigDefaults, function (key,val)
-    HealBot_Config[key] = val;
-  end);
+  HealBot_Config = {}
+  local function DeepCopy(src, dest)
+      for k, v in pairs(src) do
+          if type(v) == "table" then
+              dest[k] = {}
+              DeepCopy(v, dest[k])
+          else
+              dest[k] = v
+          end
+      end
+  end
+  DeepCopy(HealBot_ConfigDefaults, HealBot_Config)
   HealBot_Options_OnShow(HealBot_Options);
   HealBot_RecalcSpells();
   HealBot_Action_Reset();

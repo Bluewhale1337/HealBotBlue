@@ -3,6 +3,8 @@
 
 HealBot_View_DirtyUnits = {}
 HealBot_View_DirtyPower = {}
+local unitsToRefresh = {}
+local powerToRefresh = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
 HealBot_LastModState = ""
 
@@ -152,7 +154,7 @@ function HealBot_OnUpdate(this, arg1)
     end
 
     -- Process Dirty Queue for MVC View
-    local unitsToRefresh = {}
+    for k in pairs(unitsToRefresh) do unitsToRefresh[k] = nil end
     for unitID in pairs(HealBot_View_DirtyUnits) do
         unitsToRefresh[unitID] = true
         HealBot_View_DirtyUnits[unitID] = nil
@@ -162,7 +164,7 @@ function HealBot_OnUpdate(this, arg1)
         HealBot_Action_Refresh(unitID)
     end
     
-    local powerToRefresh = {}
+    for k in pairs(powerToRefresh) do powerToRefresh[k] = nil end
     for unitID in pairs(HealBot_View_DirtyPower) do
         powerToRefresh[unitID] = true
         HealBot_View_DirtyPower[unitID] = nil
@@ -343,18 +345,19 @@ end
 function HealBot_OnEvent_VariablesLoaded(this)
     local class = HealBot_UnitClass("player")
 
-    table.foreach(HealBot_ConfigDefaults, function (key, val)
-        if not HealBot_Config[key] then
-            HealBot_Config[key] = val;
-        end
-        if type(val) == "table" and type(HealBot_Config[key]) == "table" then
-            for k, v in pairs(val) do
-                if HealBot_Config[key][k] == nil then
-                    HealBot_Config[key][k] = v
+    local function DeepCopyMissing(src, dest)
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                if type(dest[k]) ~= "table" then dest[k] = {} end
+                DeepCopyMissing(v, dest[k])
+            else
+                if dest[k] == nil then
+                    dest[k] = v
                 end
             end
         end
-    end);
+    end
+    DeepCopyMissing(HealBot_ConfigDefaults, HealBot_Config)
     
     local foundModern = false
     if HealBot_Config.Skins then
@@ -480,6 +483,14 @@ end
 function HealBot_OnEvent_PlayerRegenEnabled(this)
     HealBot_IsFighting = false;
     HealBot_Delay_RecalcParty = 1;
+    
+    if HealBot_IncomingHealers then
+        for sender, data in pairs(HealBot_IncomingHealers) do
+            if not HealBot_FindUnitID(sender) then
+                HealBot_IncomingHealers[sender] = nil
+            end
+        end
+    end
 end
 
 -- HealBot_OnEvent_PlayerTargetChanged: Internal utility: HealBot_OnEvent_PlayerTargetChanged

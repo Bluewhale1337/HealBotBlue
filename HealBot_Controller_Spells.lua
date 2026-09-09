@@ -159,6 +159,7 @@ function HealBot_Process_HealValue(spell, target)
     local uname = UnitName(target)
     if uname then
       HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ");
+      HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/");
       if not HealBot_HealsIn[uname] then
           HealBot_HealsIn[uname] = 0;
       end
@@ -217,6 +218,7 @@ function HealBot_StopCasting()
       local uname = UnitName(HealBot_CastingTarget)
       if uname then
         HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+        HealBot_SendAddonMessage("HealComm", "Healstop");
         if HealBot_HealsIn[uname] then
            HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
            if HealBot_HealsIn[uname] < 0 then

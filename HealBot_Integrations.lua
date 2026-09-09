@@ -36,22 +36,24 @@ function HealBot_Integrations_Toggle()
         HealBot_NampowerFrame:RegisterEvent("AURA_CAST_ON_OTHER")
         HealBot_NampowerFrame:SetScript("OnEvent", function()
             if not HealBot_Integrations_Nampower_Active then return end
-            local spellID, caster, target, _, _, _, _, duration = arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8
-            if not caster or not target or duration <= 0 then return end
-            
-            local spellName = GetSpellRecField(spellID, "name")
-            if not spellName then return end
-            
-            if not HealBot_Nampower_Auras[target] then
-                HealBot_Nampower_Auras[target] = {}
-            end
-            
-            local expirationTime = GetTime() + (duration / 1000)
-            HealBot_Nampower_Auras[target][spellName] = expirationTime
-            
-            local unitID = HealBot_Model:GetUnitIDByName(target)
-            if unitID then
-                HealBot_OnEvent_UnitAura(nil, unitID)
+            if event == "AURA_CAST_ON_SELF" or event == "AURA_CAST_ON_OTHER" then
+                local spellID, caster, target, _, _, _, _, duration = arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8
+                if not caster or not target or duration <= 0 then return end
+                
+                local spellName = GetSpellRecField(spellID, "name")
+                if not spellName then return end
+                
+                if not HealBot_Nampower_Auras[target] then
+                    HealBot_Nampower_Auras[target] = {}
+                end
+                
+                local expirationTime = GetTime() + (duration / 1000)
+                HealBot_Nampower_Auras[target][spellName] = expirationTime
+                
+                local unitID = HealBot_Model:GetUnitIDByName(target)
+                if unitID then
+                    HealBot_OnEvent_UnitAura(nil, unitID)
+                end
             end
         end)
     end

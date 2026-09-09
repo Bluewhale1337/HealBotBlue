@@ -1,6 +1,13 @@
 -- HealBot_Model.lua
 -- Centralized Data Store and Observer System for HealBotBlue
 
+local pool_oldGUIDs = {}
+local pool_newUnitForGUID = {}
+local pool_stateSwaps = {}
+local pool_iconSwaps = {}
+local pool_missingBuffSwaps = {}
+local pool_debuffSwaps = {}
+
 -- Safe local wrappers to prevent native UIDropDownMenu concatenation crashes
 -- when setting selected values on closed dropdowns during initialization.
 function HealBot_UIDropDownMenu_SetSelectedID(frame, id, useValue)
@@ -180,14 +187,16 @@ end
 function HealBot_Model:PreserveStateByGUID()
     if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) or not HealBot_GetUnitGUID then return end
     
-    local oldGUIDs = {}
+    for k in pairs(pool_oldGUIDs) do pool_oldGUIDs[k] = nil end
+    local oldGUIDs = pool_oldGUIDs
     for unit, guid in pairs(self.unitGUIDs) do
         if string.find(unit, "^party") or string.find(unit, "^raid") or unit == "player" or unit == "pet" then
             oldGUIDs[unit] = guid
         end
     end
     
-    local newUnitForGUID = {}
+    for k in pairs(pool_newUnitForGUID) do pool_newUnitForGUID[k] = nil end
+    local newUnitForGUID = pool_newUnitForGUID
     -- Scan the new roster
     for _, unit in ipairs(self.partyMembers) do
         local guid = HealBot_GetUnitGUID(unit)
@@ -206,10 +215,14 @@ function HealBot_Model:PreserveStateByGUID()
         end
     end
     
-    local stateSwaps = {}
-    local iconSwaps = {}
-    local missingBuffSwaps = {}
-    local debuffSwaps = {}
+    for k in pairs(pool_stateSwaps) do pool_stateSwaps[k] = nil end
+    local stateSwaps = pool_stateSwaps
+    for k in pairs(pool_iconSwaps) do pool_iconSwaps[k] = nil end
+    local iconSwaps = pool_iconSwaps
+    for k in pairs(pool_missingBuffSwaps) do pool_missingBuffSwaps[k] = nil end
+    local missingBuffSwaps = pool_missingBuffSwaps
+    for k in pairs(pool_debuffSwaps) do pool_debuffSwaps[k] = nil end
+    local debuffSwaps = pool_debuffSwaps
     
     for oldUnit, guid in pairs(oldGUIDs) do
         local newUnit = newUnitForGUID[guid]
@@ -231,11 +244,22 @@ function HealBot_Model:PreserveStateByGUID()
     
     for targetUnit, stateData in pairs(stateSwaps) do
         -- Deep copy to prevent memory aliasing
-        self.units[targetUnit] = {}
-        for k, v in pairs(stateData) do
-            self.units[targetUnit][k] = v
+        if not self.units[targetUnit] then 
+            self.units[targetUnit] = { icons = {} } 
         end
-        self.units[targetUnit].icons = {}
+        
+        local targetIcons = self.units[targetUnit].icons
+        if not targetIcons then targetIcons = {} end
+        for k in pairs(targetIcons) do targetIcons[k] = nil end
+        
+        for k in pairs(self.units[targetUnit]) do self.units[targetUnit][k] = nil end
+        
+        for k, v in pairs(stateData) do
+            if k ~= "icons" then
+                self.units[targetUnit][k] = v
+            end
+        end
+        self.units[targetUnit].icons = targetIcons
 
         if HealBot_UnitIcons and iconSwaps[targetUnit] then
             if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = {} end

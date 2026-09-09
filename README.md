@@ -52,6 +52,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 **v1.7.1**
 * **Bug Fix - Shapeshift Auto-Unshift** - Fixed an issue where the shapeshift spell queue would incorrectly pull druids out of Tree of Life form .
 * **Cleanup** - Removed deprecated `UPDATE_SHAPESHIFT_FORM` event listeners and `HealBot_UpdateShapeshiftForm` function to save CPU cycles.
+*
+* **v1.7.2**
+* **Performance Fix - Table Pooling** - Fixed massive Vanilla Lua 5.0 garbage collection memory leaks caused by unbounded table allocations in high-frequency update loops (e.g., `OnUpdate` and `PreserveStateByGUID`). Moved tables to file-local scope and implemented inline clearing.
+* **Performance Fix - OOC Cleanup** - Added an out-of-combat garbage collection hook (`PLAYER_REGEN_ENABLED`) to purge disconnected senders from the `HealBot_IncomingHealers` global table, preventing memory bloat during prolonged play sessions.
+* **Bug Fix - Incoming Heals Comms** - Fixed a regex string parsing bug that caused incoming heals from other HealBot instances to drop if a unit's name contained non-alphabetic characters (e.g. dashes or spaces in pet names).
+* **Feature - Standard HealComm Sync** - Implemented lightweight parsing of the standard `HealComm` addon channel. HealBot now perfectly syncs incoming heals with modern raid frames like Luna, Grid, and pfUI, while retaining backwards compatibility with older versions of HealBot.
+* **UI Update - Raid Marks** - Anchored raid target icons to top of unit frames instead of center.
+* **Bug Fix** - Fixed an issue where the debuff warning sound and UI message would spam repeatedly on every aura update. The warning now only plays once per unique dispellable debuff type applied to a unit. Increased warning trigger range to 40 yards.
 
 **v1.7.0**
 * **Feature - Raid Marks** - Added tracking and display of raid marks on unit frames.
