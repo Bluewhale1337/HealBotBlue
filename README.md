@@ -49,7 +49,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
-**v1.7.1**
+* **v1.7.1**
 * **Bug Fix - Shapeshift Auto-Unshift** - Fixed an issue where the shapeshift spell queue would incorrectly pull druids out of Tree of Life form .
 * **Cleanup** - Removed deprecated `UPDATE_SHAPESHIFT_FORM` event listeners and `HealBot_UpdateShapeshiftForm` function to save CPU cycles.
 
