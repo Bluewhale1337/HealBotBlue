@@ -472,7 +472,7 @@ function HealBot_FindHealSpells()
     end
   end);
 
-  local items = {};
+  local items = HealBot_GetTable();
   for bag = 0, NUM_BAG_FRAMES do
     for slot = 1, GetContainerNumSlots(bag) do
       local item = HealBot_GetItemName(bag, slot);
@@ -498,6 +498,7 @@ function HealBot_FindHealSpells()
     HealBot_Heals["raidpet" .. i] = HealBot_Heals.party;
   end
 
+  HealBot_ReleaseTable(items);
   if HealBot_CalcEquipBonus then
     HealBot_AddDebug("...Done Equip Bonus:" .. RealHealing);
   end

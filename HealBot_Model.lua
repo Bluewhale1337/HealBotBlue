@@ -245,7 +245,8 @@ function HealBot_Model:PreserveStateByGUID()
     for targetUnit, stateData in pairs(stateSwaps) do
         -- Deep copy to prevent memory aliasing
         if not self.units[targetUnit] then 
-            self.units[targetUnit] = { icons = {} } 
+            self.units[targetUnit] = HealBot_GetTable()
+            self.units[targetUnit].icons = HealBot_GetTable()
         end
         
         local targetIcons = self.units[targetUnit].icons

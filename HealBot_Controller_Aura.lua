@@ -184,7 +184,7 @@ function HealBot_OnEvent_UnitAura(this, unit)
         local iconCount = 0
         local i = 1;
         HealBot_UnitDebuff[unit] = nil;
-        local trackedTextures = {}
+        local trackedTextures = HealBot_GetTable()
         
         while true do
             local debuff, tmp, debuff_type = UnitDebuff(unit, i, 1)
@@ -301,5 +301,6 @@ function HealBot_OnEvent_UnitAura(this, unit)
         
         -- Defer UI updates
         HealBot_View_DirtyUnits[unit] = true
+        HealBot_ReleaseTable(trackedTextures)
     end
 end

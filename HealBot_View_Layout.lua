@@ -1153,7 +1153,7 @@ end
 function HealBot_Action_AppendNewUnits()
     if not HealBot_Grid_LastI then return end
     
-    local unitsToCheck = {}
+    local unitsToCheck = HealBot_GetTable()
     
     -- Gather units based on config, similar to PartyChanged
     if HealBot_Config.GroupHeals == 1 then
@@ -1220,4 +1220,5 @@ function HealBot_Action_AppendNewUnits()
             HealBot_Action_AppendUnit(unit)
         end
     end
+    HealBot_ReleaseTable(unitsToCheck)
 end
