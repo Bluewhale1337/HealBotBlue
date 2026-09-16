@@ -69,11 +69,11 @@ function HealBot_OnUpdate(this, arg1)
             local pending = HealBot_TargetRestorePending;
             HealBot_TargetRestorePending = nil;
             HealBot_TargetRestoreTimer = 0;
-            if pending.type == "enemy" then
+            if pending == "enemy" then
                 TargetLastEnemy();
-            elseif pending.type == "friend" then
+            elseif pending == "friend" then
                 TargetLastTarget();
-            elseif pending.type == "clear" then
+            elseif pending == "clear" then
                 ClearTarget();
             end
         end
@@ -112,11 +112,11 @@ function HealBot_OnUpdate(this, arg1)
                     
                     -- Restore target logic
                     if pendingCast.targetEnemy then
-                        HealBot_TargetRestorePending = { type = "enemy" }
+                        HealBot_TargetRestorePending = "enemy"
                     elseif pendingCast.oldTarget and pendingCast.oldTarget ~= UnitName(pendingCast.target) then
-                        HealBot_TargetRestorePending = { type = "friend" }
+                        HealBot_TargetRestorePending = "friend"
                     elseif not pendingCast.oldTarget then
-                        HealBot_TargetRestorePending = { type = "clear" }
+                        HealBot_TargetRestorePending = "clear"
                     end
                     HealBot_TargetRestoreTimer = 0
                 end

@@ -250,7 +250,7 @@ function HealBot_Model:PreserveStateByGUID()
         end
         
         local targetIcons = self.units[targetUnit].icons
-        if not targetIcons then targetIcons = {} end
+        if not targetIcons then targetIcons = HealBot_GetTable() end
         for k in pairs(targetIcons) do targetIcons[k] = nil end
         
         for k in pairs(self.units[targetUnit]) do self.units[targetUnit][k] = nil end
@@ -263,7 +263,7 @@ function HealBot_Model:PreserveStateByGUID()
         self.units[targetUnit].icons = targetIcons
 
         if HealBot_UnitIcons and iconSwaps[targetUnit] then
-            if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = {} end
+            if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = HealBot_GetTable() end
             for j=1, 10 do
                 HealBot_UnitIcons[targetUnit][j] = iconSwaps[targetUnit][j]
             end

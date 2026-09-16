@@ -237,7 +237,7 @@ function HealBot_StopCasting()
   local ag = HealBot_Config.babortcolg[HealBot_Config.Current_Skin] or 0.1;
   local ab = HealBot_Config.babortcolb[HealBot_Config.Current_Skin] or 0.5;
   local aa = HealBot_Config.babortcola[HealBot_Config.Current_Skin] or 1;
-  bar.txt = getglobal(bar:GetName() .. "_text");
+  if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
   bar:SetStatusBarColor(ar, ag, ab, 0);
   local sr = HealBot_Config.btextdisbledcolr[HealBot_Config.Current_Skin];
   local sg = HealBot_Config.btextdisbledcolg[HealBot_Config.Current_Skin];
@@ -303,7 +303,7 @@ function HealBot_CheckCasting(unit)
     local sg = HealBot_Config.btextenabledcolg[HealBot_Config.Current_Skin];
     local sb = HealBot_Config.btextenabledcolb[HealBot_Config.Current_Skin];
     local sa = HealBot_Config.btextenabledcola[HealBot_Config.Current_Skin];
-    bar.txt = getglobal(bar:GetName() .. "_text");
+    if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
     bar.txt:SetTextColor(sr, sg, sb, sa);
   end
 end
@@ -328,7 +328,15 @@ function HealBot_CastSpellOnFriend(spell, target)
   if formCancelled then
     -- ALWAYS put the cast into the Pending queue so the OnUpdate loop can wait for the server
     -- to process the unshift before attempting the cast, otherwise we get "You are in shapeshift form".
-    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, fireTime = GetTime() + 0.05, expires = GetTime() + 2.0 }
+    if not HealBot_PendingShapeshiftCast then HealBot_PendingShapeshiftCast = {} end
+    HealBot_PendingShapeshiftCast.spell = spell
+    HealBot_PendingShapeshiftCast.target = target
+    HealBot_PendingShapeshiftCast.targetEnemy = targetEnemy
+    HealBot_PendingShapeshiftCast.oldTarget = oldTarget
+    HealBot_PendingShapeshiftCast.fireTime = GetTime() + 0.05
+    HealBot_PendingShapeshiftCast.expires = GetTime() + 2.0
+    HealBot_PendingShapeshiftCast.started = nil
+    HealBot_PendingShapeshiftCast.nextSpam = nil
     return;
   end
   
@@ -339,11 +347,11 @@ function HealBot_CastSpellOnFriend(spell, target)
   HealBot_StartCasting(spell, target, "direct");
   
   if targetEnemy then
-    HealBot_TargetRestorePending = { type = "enemy" };
+    HealBot_TargetRestorePending = "enemy";
   elseif oldTarget and oldTarget ~= UnitName(target) then
-    HealBot_TargetRestorePending = { type = "friend" };
+    HealBot_TargetRestorePending = "friend";
   elseif not oldTarget then
-    HealBot_TargetRestorePending = { type = "clear" };
+    HealBot_TargetRestorePending = "clear";
   end
   HealBot_TargetRestoreTimer = 0;
 end
@@ -674,8 +682,15 @@ function HealBot_InitGetSpellData(spell, id, class)
   _cast = 0;
   line = nil;
   
+  if not HealBot_ScanTooltip_Lines_Left then HealBot_ScanTooltip_Lines_Left = {} end
+  if not HealBot_ScanTooltip_Lines_Right then HealBot_ScanTooltip_Lines_Right = {} end
+  
   for lineNum = 2, 6 do
-    local lText = getglobal("HealBot_ScanTooltipTextLeft"..lineNum);
+    local lText = HealBot_ScanTooltip_Lines_Left[lineNum];
+    if not lText then
+        lText = getglobal("HealBot_ScanTooltipTextLeft"..lineNum);
+        HealBot_ScanTooltip_Lines_Left[lineNum] = lText;
+    end
     if lText and lText:IsVisible() and lText:GetText() then
       local txt = lText:GetText();
       local t1, t2, match;
@@ -699,7 +714,11 @@ function HealBot_InitGetSpellData(spell, id, class)
       end
     end
     
-    local rText = getglobal("HealBot_ScanTooltipTextRight"..lineNum);
+    local rText = HealBot_ScanTooltip_Lines_Right[lineNum];
+    if not rText then
+        rText = getglobal("HealBot_ScanTooltipTextRight"..lineNum);
+        HealBot_ScanTooltip_Lines_Right[lineNum] = rText;
+    end
     if rText and rText:IsVisible() and rText:GetText() then
       local txt = rText:GetText();
       local t1, t2, match;

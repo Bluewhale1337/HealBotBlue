@@ -41,6 +41,7 @@ function HealBot_CheckShamanWeaponBuff(spellName)
     if not firstWord then return false end
 
     HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
+    if not HealBot_ScanTooltip_Lines then HealBot_ScanTooltip_Lines = {} end
     local slots = HealBot_GetTable()
     if hasMainHandEnchant then table.insert(slots, 16) end
     if hasOffHandEnchant then table.insert(slots, 17) end
@@ -49,7 +50,11 @@ function HealBot_CheckShamanWeaponBuff(spellName)
         HealBot_ScanTooltip:ClearLines()
         HealBot_ScanTooltip:SetInventoryItem("player", slot)
         for i = 1, HealBot_ScanTooltip:NumLines() do
-            local textObj = getglobal("HealBot_ScanTooltipTextLeft" .. i)
+            local textObj = HealBot_ScanTooltip_Lines[i]
+            if not textObj then
+                textObj = getglobal("HealBot_ScanTooltipTextLeft" .. i)
+                HealBot_ScanTooltip_Lines[i] = textObj
+            end
             if textObj then
                 local text = textObj:GetText()
                 if text and string.find(text, firstWord) then
