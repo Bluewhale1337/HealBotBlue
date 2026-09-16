@@ -3,6 +3,7 @@
 
 HealBot_CastingSpell  = nil;
 HealBot_CastingTarget = nil;
+HealBot_CastingGroupMembers = nil;
 HealBot_TargetRestorePending = nil;
 HealBot_TargetRestoreTimer = 0;
 
@@ -158,13 +159,52 @@ function HealBot_Process_HealValue(spell, target)
     end
     local uname = UnitName(target)
     if uname then
-      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ");
-      HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/");
-      if not HealBot_HealsIn[uname] then
-          HealBot_HealsIn[uname] = 0;
+      if not HealBot_CastingGroupMembers then HealBot_CastingGroupMembers = {} end
+      for i=1, table.getn(HealBot_CastingGroupMembers) do HealBot_CastingGroupMembers[i] = nil end
+      table.setn(HealBot_CastingGroupMembers, 0)
+      if HEALBOT_PRAYER_OF_HEALING and string.find(spell, HEALBOT_PRAYER_OF_HEALING) then
+        if GetNumRaidMembers() > 0 then
+          local targetGroup = 0
+          for i = 1, GetNumRaidMembers() do
+            local name, _, subgroup = GetRaidRosterInfo(i)
+            if name == uname then targetGroup = subgroup; break; end
+          end
+          if targetGroup > 0 then
+            for i = 1, GetNumRaidMembers() do
+              local name, _, subgroup = GetRaidRosterInfo(i)
+              if subgroup == targetGroup and name then table.insert(HealBot_CastingGroupMembers, name); end
+            end
+          end
+        else
+          table.insert(HealBot_CastingGroupMembers, UnitName("player"))
+          for i = 1, GetNumPartyMembers() do
+            if UnitName("party"..i) then table.insert(HealBot_CastingGroupMembers, UnitName("party"..i)); end
+          end
+        end
       end
-      HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue;
-      HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+      if table.getn(HealBot_CastingGroupMembers) == 0 then
+        table.insert(HealBot_CastingGroupMembers, uname)
+      end
+      
+      if table.getn(HealBot_CastingGroupMembers) > 1 then
+        local commsStr = "GrpHeal/" .. HealBot_HealValue .. "/1500/"
+        for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+          commsStr = commsStr .. memberName .. "/"
+        end
+        HealBot_SendAddonMessage("HealComm", commsStr)
+        for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+          HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. memberName .. " <<=>> " .. HealBot_HealValue .. " << ")
+          if not HealBot_HealsIn[memberName] then HealBot_HealsIn[memberName] = 0 end
+          HealBot_HealsIn[memberName] = HealBot_HealsIn[memberName] + HealBot_HealValue
+          HealBot_RecalcHeals(HealBot_FindUnitID(memberName))
+        end
+      else
+        HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/")
+        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ")
+        if not HealBot_HealsIn[uname] then HealBot_HealsIn[uname] = 0 end
+        HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue
+        HealBot_RecalcHeals(HealBot_FindUnitID(uname))
+      end
     end
   end
 end
@@ -217,14 +257,24 @@ function HealBot_StopCasting()
     if HealBot_HealValue > 0 then
       local uname = UnitName(HealBot_CastingTarget)
       if uname then
-        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
-        HealBot_SendAddonMessage("HealComm", "Healstop");
-        if HealBot_HealsIn[uname] then
-           HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
-           if HealBot_HealsIn[uname] < 0 then
-               HealBot_HealsIn[uname] = 0;
-           end
-           HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+        if HealBot_CastingGroupMembers and table.getn(HealBot_CastingGroupMembers) > 1 then
+          HealBot_SendAddonMessage("HealComm", "GrpHealstop");
+          for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+            HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. memberName .. " <<=>> " .. 0 - HealBot_HealValue .. " << ")
+            if HealBot_HealsIn[memberName] then
+               HealBot_HealsIn[memberName] = HealBot_HealsIn[memberName] - HealBot_HealValue;
+               if HealBot_HealsIn[memberName] < 0 then HealBot_HealsIn[memberName] = 0; end
+               HealBot_RecalcHeals(HealBot_FindUnitID(memberName));
+            end
+          end
+        else
+          HealBot_SendAddonMessage("HealComm", "Healstop");
+          HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+          if HealBot_HealsIn[uname] then
+             HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
+             if HealBot_HealsIn[uname] < 0 then HealBot_HealsIn[uname] = 0; end
+             HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+          end
         end
       end
       HealBot_HealValue = 0;
