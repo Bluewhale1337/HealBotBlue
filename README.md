@@ -49,6 +49,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.3**
+* **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
+* **Performance Fix - HealComm Networking** - Fixed issue where incoming `HealComm` messages triggered synchronous UI redraws, causing massive lag in 40-man raids during combat. `HealBot_RecalcHeals` is now decoupled and deferred through the `HealBot_OnUpdate` dirty queue, allowing multiple network events to collapse into a single frame redraw.
+
 **v1.7.2**
 * **Performance Fix - Table Pooling** - Fixed massive Vanilla Lua 5.0 garbage collection memory leaks caused by unbounded table allocations in high-frequency update loops (e.g., `OnUpdate` and `PreserveStateByGUID`). Moved tables to file-local scope and implemented inline clearing.
 * **Performance Fix - OOC Cleanup** - Added an out-of-combat garbage collection hook (`PLAYER_REGEN_ENABLED`) to purge disconnected senders from the `HealBot_IncomingHealers` global table, preventing memory bloat during prolonged play sessions.

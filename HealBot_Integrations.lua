@@ -44,7 +44,7 @@ function HealBot_Integrations_Toggle()
                 if not spellName then return end
                 
                 if not HealBot_Nampower_Auras[target] then
-                    HealBot_Nampower_Auras[target] = {}
+                    HealBot_Nampower_Auras[target] = HealBot_GetTable()
                 end
                 
                 local expirationTime = GetTime() + (duration / 1000)
@@ -61,7 +61,8 @@ function HealBot_Integrations_Toggle()
     HealBot_Integrations_Nampower_Active = false;
     HealBot_AddDebug("nampower Integration: DISABLED");
     if HealBot_Nampower_Auras then
-        for k in pairs(HealBot_Nampower_Auras) do
+        for k, v in pairs(HealBot_Nampower_Auras) do
+            HealBot_ReleaseTable(v)
             HealBot_Nampower_Auras[k] = nil
         end
     end
@@ -76,6 +77,7 @@ function HealBot_Integrations_PruneNampower()
     for targetName, auras in pairs(HealBot_Nampower_Auras) do
         -- Check if target is still in the raid/party
         if not HealBot_Model:GetUnitIDByName(targetName) then
+            HealBot_ReleaseTable(auras)
             HealBot_Nampower_Auras[targetName] = nil
         else
             -- Prune expired auras
@@ -88,6 +90,7 @@ function HealBot_Integrations_PruneNampower()
                 end
             end
             if not hasAuras then
+                HealBot_ReleaseTable(auras)
                 HealBot_Nampower_Auras[targetName] = nil
             end
         end

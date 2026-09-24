@@ -3,6 +3,7 @@
 
 HealBot_CastingSpell  = nil;
 HealBot_CastingTarget = nil;
+HealBot_CastingGroupMembers = nil;
 HealBot_TargetRestorePending = nil;
 HealBot_TargetRestoreTimer = 0;
 
@@ -158,13 +159,52 @@ function HealBot_Process_HealValue(spell, target)
     end
     local uname = UnitName(target)
     if uname then
-      HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ");
-      HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/");
-      if not HealBot_HealsIn[uname] then
-          HealBot_HealsIn[uname] = 0;
+      if not HealBot_CastingGroupMembers then HealBot_CastingGroupMembers = {} end
+      for i=1, table.getn(HealBot_CastingGroupMembers) do HealBot_CastingGroupMembers[i] = nil end
+      table.setn(HealBot_CastingGroupMembers, 0)
+      if HEALBOT_PRAYER_OF_HEALING and string.find(spell, HEALBOT_PRAYER_OF_HEALING) then
+        if GetNumRaidMembers() > 0 then
+          local targetGroup = 0
+          for i = 1, GetNumRaidMembers() do
+            local name, _, subgroup = GetRaidRosterInfo(i)
+            if name == uname then targetGroup = subgroup; break; end
+          end
+          if targetGroup > 0 then
+            for i = 1, GetNumRaidMembers() do
+              local name, _, subgroup = GetRaidRosterInfo(i)
+              if subgroup == targetGroup and name then table.insert(HealBot_CastingGroupMembers, name); end
+            end
+          end
+        else
+          table.insert(HealBot_CastingGroupMembers, UnitName("player"))
+          for i = 1, GetNumPartyMembers() do
+            if UnitName("party"..i) then table.insert(HealBot_CastingGroupMembers, UnitName("party"..i)); end
+          end
+        end
       end
-      HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue;
-      HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+      if table.getn(HealBot_CastingGroupMembers) == 0 then
+        table.insert(HealBot_CastingGroupMembers, uname)
+      end
+      
+      if table.getn(HealBot_CastingGroupMembers) > 1 then
+        local commsStr = "GrpHeal/" .. HealBot_HealValue .. "/1500/"
+        for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+          commsStr = commsStr .. memberName .. "/"
+        end
+        HealBot_SendAddonMessage("HealComm", commsStr)
+        for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+          HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. memberName .. " <<=>> " .. HealBot_HealValue .. " << ")
+          if not HealBot_HealsIn[memberName] then HealBot_HealsIn[memberName] = 0 end
+          HealBot_HealsIn[memberName] = HealBot_HealsIn[memberName] + HealBot_HealValue
+          HealBot_RecalcHeals(HealBot_FindUnitID(memberName))
+        end
+      else
+        HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/")
+        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ")
+        if not HealBot_HealsIn[uname] then HealBot_HealsIn[uname] = 0 end
+        HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue
+        HealBot_RecalcHeals(HealBot_FindUnitID(uname))
+      end
     end
   end
 end
@@ -217,14 +257,24 @@ function HealBot_StopCasting()
     if HealBot_HealValue > 0 then
       local uname = UnitName(HealBot_CastingTarget)
       if uname then
-        HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
-        HealBot_SendAddonMessage("HealComm", "Healstop");
-        if HealBot_HealsIn[uname] then
-           HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
-           if HealBot_HealsIn[uname] < 0 then
-               HealBot_HealsIn[uname] = 0;
-           end
-           HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+        if HealBot_CastingGroupMembers and table.getn(HealBot_CastingGroupMembers) > 1 then
+          HealBot_SendAddonMessage("HealComm", "GrpHealstop");
+          for _, memberName in ipairs(HealBot_CastingGroupMembers) do
+            HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. memberName .. " <<=>> " .. 0 - HealBot_HealValue .. " << ")
+            if HealBot_HealsIn[memberName] then
+               HealBot_HealsIn[memberName] = HealBot_HealsIn[memberName] - HealBot_HealValue;
+               if HealBot_HealsIn[memberName] < 0 then HealBot_HealsIn[memberName] = 0; end
+               HealBot_RecalcHeals(HealBot_FindUnitID(memberName));
+            end
+          end
+        else
+          HealBot_SendAddonMessage("HealComm", "Healstop");
+          HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. 0 - HealBot_HealValue .. " << ");
+          if HealBot_HealsIn[uname] then
+             HealBot_HealsIn[uname] = HealBot_HealsIn[uname] - HealBot_HealValue;
+             if HealBot_HealsIn[uname] < 0 then HealBot_HealsIn[uname] = 0; end
+             HealBot_RecalcHeals(HealBot_FindUnitID(uname));
+          end
         end
       end
       HealBot_HealValue = 0;
@@ -237,7 +287,7 @@ function HealBot_StopCasting()
   local ag = HealBot_Config.babortcolg[HealBot_Config.Current_Skin] or 0.1;
   local ab = HealBot_Config.babortcolb[HealBot_Config.Current_Skin] or 0.5;
   local aa = HealBot_Config.babortcola[HealBot_Config.Current_Skin] or 1;
-  bar.txt = getglobal(bar:GetName() .. "_text");
+  if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
   bar:SetStatusBarColor(ar, ag, ab, 0);
   local sr = HealBot_Config.btextdisbledcolr[HealBot_Config.Current_Skin];
   local sg = HealBot_Config.btextdisbledcolg[HealBot_Config.Current_Skin];
@@ -303,7 +353,7 @@ function HealBot_CheckCasting(unit)
     local sg = HealBot_Config.btextenabledcolg[HealBot_Config.Current_Skin];
     local sb = HealBot_Config.btextenabledcolb[HealBot_Config.Current_Skin];
     local sa = HealBot_Config.btextenabledcola[HealBot_Config.Current_Skin];
-    bar.txt = getglobal(bar:GetName() .. "_text");
+    if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
     bar.txt:SetTextColor(sr, sg, sb, sa);
   end
 end
@@ -328,7 +378,15 @@ function HealBot_CastSpellOnFriend(spell, target)
   if formCancelled then
     -- ALWAYS put the cast into the Pending queue so the OnUpdate loop can wait for the server
     -- to process the unshift before attempting the cast, otherwise we get "You are in shapeshift form".
-    HealBot_PendingShapeshiftCast = { spell = spell, target = target, targetEnemy = targetEnemy, oldTarget = oldTarget, fireTime = GetTime() + 0.05, expires = GetTime() + 2.0 }
+    if not HealBot_PendingShapeshiftCast then HealBot_PendingShapeshiftCast = {} end
+    HealBot_PendingShapeshiftCast.spell = spell
+    HealBot_PendingShapeshiftCast.target = target
+    HealBot_PendingShapeshiftCast.targetEnemy = targetEnemy
+    HealBot_PendingShapeshiftCast.oldTarget = oldTarget
+    HealBot_PendingShapeshiftCast.fireTime = GetTime() + 0.05
+    HealBot_PendingShapeshiftCast.expires = GetTime() + 2.0
+    HealBot_PendingShapeshiftCast.started = nil
+    HealBot_PendingShapeshiftCast.nextSpam = nil
     return;
   end
   
@@ -339,11 +397,11 @@ function HealBot_CastSpellOnFriend(spell, target)
   HealBot_StartCasting(spell, target, "direct");
   
   if targetEnemy then
-    HealBot_TargetRestorePending = { type = "enemy" };
+    HealBot_TargetRestorePending = "enemy";
   elseif oldTarget and oldTarget ~= UnitName(target) then
-    HealBot_TargetRestorePending = { type = "friend" };
+    HealBot_TargetRestorePending = "friend";
   elseif not oldTarget then
-    HealBot_TargetRestorePending = { type = "clear" };
+    HealBot_TargetRestorePending = "clear";
   end
   HealBot_TargetRestoreTimer = 0;
 end
@@ -472,7 +530,7 @@ function HealBot_FindHealSpells()
     end
   end);
 
-  local items = {};
+  local items = HealBot_GetTable();
   for bag = 0, NUM_BAG_FRAMES do
     for slot = 1, GetContainerNumSlots(bag) do
       local item = HealBot_GetItemName(bag, slot);
@@ -498,6 +556,7 @@ function HealBot_FindHealSpells()
     HealBot_Heals["raidpet" .. i] = HealBot_Heals.party;
   end
 
+  HealBot_ReleaseTable(items);
   if HealBot_CalcEquipBonus then
     HealBot_AddDebug("...Done Equip Bonus:" .. RealHealing);
   end
@@ -568,7 +627,15 @@ end
 
 -- HealBot_RecalcHeals: Flags unit for visual refresh.
 function HealBot_RecalcHeals(unit)
-  HealBot_Action_Refresh(unit);
+  if unit then
+    HealBot_View_DirtyUnits[unit] = true;
+  else
+    if HealBot_Action_UnitButtons then
+        for u, _ in pairs(HealBot_Action_UnitButtons) do
+            HealBot_View_DirtyUnits[u] = true;
+        end
+    end
+  end
 end
 
 -- HealBot_RecalcParty: Triggers group layout rebuild.
@@ -673,8 +740,15 @@ function HealBot_InitGetSpellData(spell, id, class)
   _cast = 0;
   line = nil;
   
+  if not HealBot_ScanTooltip_Lines_Left then HealBot_ScanTooltip_Lines_Left = {} end
+  if not HealBot_ScanTooltip_Lines_Right then HealBot_ScanTooltip_Lines_Right = {} end
+  
   for lineNum = 2, 6 do
-    local lText = getglobal("HealBot_ScanTooltipTextLeft"..lineNum);
+    local lText = HealBot_ScanTooltip_Lines_Left[lineNum];
+    if not lText then
+        lText = getglobal("HealBot_ScanTooltipTextLeft"..lineNum);
+        HealBot_ScanTooltip_Lines_Left[lineNum] = lText;
+    end
     if lText and lText:IsVisible() and lText:GetText() then
       local txt = lText:GetText();
       local t1, t2, match;
@@ -698,7 +772,11 @@ function HealBot_InitGetSpellData(spell, id, class)
       end
     end
     
-    local rText = getglobal("HealBot_ScanTooltipTextRight"..lineNum);
+    local rText = HealBot_ScanTooltip_Lines_Right[lineNum];
+    if not rText then
+        rText = getglobal("HealBot_ScanTooltipTextRight"..lineNum);
+        HealBot_ScanTooltip_Lines_Right[lineNum] = rText;
+    end
     if rText and rText:IsVisible() and rText:GetText() then
       local txt = rText:GetText();
       local t1, t2, match;

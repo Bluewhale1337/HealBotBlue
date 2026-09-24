@@ -857,8 +857,10 @@ function HealBot_Action_PartyChanged()
                     if i == last then break end
                 end
             else
-                local petUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
-                for _, unit in ipairs(petUnits) do
+                if not HealBot_PetUnits then
+                    HealBot_PetUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
+                end
+                for _, unit in ipairs(HealBot_PetUnits) do
                     if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
                         i = i + 1;
                         HealBot_Action_SetHealButton(i, unit);
@@ -1153,7 +1155,7 @@ end
 function HealBot_Action_AppendNewUnits()
     if not HealBot_Grid_LastI then return end
     
-    local unitsToCheck = {}
+    local unitsToCheck = HealBot_GetTable()
     
     -- Gather units based on config, similar to PartyChanged
     if HealBot_Config.GroupHeals == 1 then
@@ -1220,4 +1222,5 @@ function HealBot_Action_AppendNewUnits()
             HealBot_Action_AppendUnit(unit)
         end
     end
+    HealBot_ReleaseTable(unitsToCheck)
 end

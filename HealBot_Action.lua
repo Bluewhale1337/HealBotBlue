@@ -136,9 +136,10 @@ end
 
 -- HealBot_SplitString: Internal utility: HealBot_SplitString
 function HealBot_SplitString(str, delimiter)
-    local result = {}
+    local result = HealBot_GetTable()
     if not delimiter or delimiter == "" then
-        return {str}
+        table.insert(result, str)
+        return result
     end
     local start_pos = 1
     while true do
@@ -160,6 +161,7 @@ function HealBot_RunMacroText(body)
         ChatFrameEditBox:SetText(commands[i])
         ChatEdit_SendText(ChatFrameEditBox)
     end
+    HealBot_ReleaseTable(commands)
 end
 
 -- HealBot_RunMacro: Internal utility: HealBot_RunMacro

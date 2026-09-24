@@ -245,11 +245,12 @@ function HealBot_Model:PreserveStateByGUID()
     for targetUnit, stateData in pairs(stateSwaps) do
         -- Deep copy to prevent memory aliasing
         if not self.units[targetUnit] then 
-            self.units[targetUnit] = { icons = {} } 
+            self.units[targetUnit] = HealBot_GetTable()
+            self.units[targetUnit].icons = HealBot_GetTable()
         end
         
         local targetIcons = self.units[targetUnit].icons
-        if not targetIcons then targetIcons = {} end
+        if not targetIcons then targetIcons = HealBot_GetTable() end
         for k in pairs(targetIcons) do targetIcons[k] = nil end
         
         for k in pairs(self.units[targetUnit]) do self.units[targetUnit][k] = nil end
@@ -262,7 +263,7 @@ function HealBot_Model:PreserveStateByGUID()
         self.units[targetUnit].icons = targetIcons
 
         if HealBot_UnitIcons and iconSwaps[targetUnit] then
-            if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = {} end
+            if not HealBot_UnitIcons[targetUnit] then HealBot_UnitIcons[targetUnit] = HealBot_GetTable() end
             for j=1, 10 do
                 HealBot_UnitIcons[targetUnit][j] = iconSwaps[targetUnit][j]
             end
