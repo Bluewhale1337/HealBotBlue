@@ -630,7 +630,11 @@ function HealBot_RecalcHeals(unit)
   if unit then
     HealBot_View_DirtyUnits[unit] = true;
   else
-    HealBot_Action_Refresh();
+    if HealBot_Action_UnitButtons then
+        for u, _ in pairs(HealBot_Action_UnitButtons) do
+            HealBot_View_DirtyUnits[u] = true;
+        end
+    end
   end
 end
 
