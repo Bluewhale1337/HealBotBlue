@@ -627,7 +627,11 @@ end
 
 -- HealBot_RecalcHeals: Flags unit for visual refresh.
 function HealBot_RecalcHeals(unit)
-  HealBot_Action_Refresh(unit);
+  if unit then
+    HealBot_View_DirtyUnits[unit] = true;
+  else
+    HealBot_Action_Refresh();
+  end
 end
 
 -- HealBot_RecalcParty: Triggers group layout rebuild.
