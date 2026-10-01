@@ -49,6 +49,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.4**
+* **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
+
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
 * **Performance Fix - HealComm Networking** - Fixed issue where incoming `HealComm` messages triggered synchronous UI redraws, causing massive lag in 40-man raids during combat. `HealBot_RecalcHeals` is now decoupled and deferred through the `HealBot_OnUpdate` dirty queue, allowing multiple network events to collapse into a single frame redraw.

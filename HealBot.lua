@@ -222,25 +222,26 @@ end
 
 -- SpiBonus and GetBonus functions moved to HealBot_Controller_Spells.lua
 
+local HealBot_RaidUnitTokens = {}
+for i=1, 40 do HealBot_RaidUnitTokens[i] = "raid"..i end
+
 -- HealBot_FindUnitID: Finds a unit token for a given player name.
 function HealBot_FindUnitID(unitname)
   local text;
-  for _,unit in ipairs(HealBot_Action_HealGroup) do
-    text = UnitName(unit);
-	if text then
-	  if text==unitname then
-	    return unit;
-	  end
-	end
-  end
-  for i=1,40 do
-    local unit = "raid"..i;
-	text = UnitName(unit);
-	if text then
-      if text==unitname then
+  if HealBot_Action_HealGroup then
+    for _,unit in ipairs(HealBot_Action_HealGroup) do
+      text = UnitName(unit);
+      if text and text==unitname then
         return unit;
       end
-	end
+    end
+  end
+  for i=1,40 do
+    local unit = HealBot_RaidUnitTokens[i];
+    text = UnitName(unit);
+    if text and text==unitname then
+      return unit;
+    end
   end
   return nil;
 end
