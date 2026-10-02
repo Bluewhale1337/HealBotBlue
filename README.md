@@ -50,6 +50,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 ### Change Log
 
 **v1.7.4**
+* **Performance Fix - CPU Spikes** - Fixed massive FPS drops (stuttering to 8-16 FPS) during raid combat. The `HealBot_CheckBuffs` function previously forced the client to generate hidden UI tooltips for up to 32 buffs per player on every single `UNIT_AURA` event. Tooltip parsing is now cached per texture, bypassing thousands of redundant API calls per second.
+* **Performance Fix - Frame Rendering** - Eliminated redundant UI layout recalculations in `HealBot_Action_EnableButton`. The UI no longer forces `SetFont`, `SetWidth`, `SetHeight`, and `GetGlobal` lookups on every single combat tick (which previously caused 4,000+ layout updates per second in 40-man raids).
+* **Performance Fix - Range Checking** - Greatly reduced CPU stutter caused by range calculations. `HealBot_Range_Check` now caches map positioning math and API calls per-frame, preventing the addon from calculating the exact same `math.sqrt` distance up to 5 times per unit during heavy combat.
 * **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
 
 **v1.7.3**

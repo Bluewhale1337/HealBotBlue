@@ -648,7 +648,6 @@ function HealBot_RecalcParty()
       end
     end
   end
-  HealBot_Action_RefreshButtons();
 end
 
 -- HealBot_RecalcSpells: Recalculates spells and updates layout.

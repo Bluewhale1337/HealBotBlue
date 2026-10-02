@@ -246,23 +246,38 @@ function HealBot_Action_EnableButton(button)
     bar.txt:SetTextColor(sr, sg, sb, sa);
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
-    if fontOutline == 1 then
-        bar.txt:SetFont(fontName, fontHeight, "OUTLINE")
-    else
-        bar.txt:SetFont(fontName, fontHeight, "")
+    local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+    if fontFlags ~= expectedFlags then
+        bar.txt:SetFont(fontName, fontHeight, expectedFlags)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
     for i = 1, 10 do
-        local icon = getglobal(button:GetName() .. "BarIcon" .. i)
+        local icon = button["icon"..i]
+        if not icon then
+            icon = getglobal(button:GetName() .. "BarIcon" .. i)
+            button["icon"..i] = icon
+        end
         if icon then
             if HealBot_UnitIcons and HealBot_UnitIcons[unit] and HealBot_UnitIcons[unit][i] then
-                icon:SetTexture(HealBot_UnitIcons[unit][i])
-                icon:SetWidth(iconSize)
-                icon:SetHeight(iconSize)
-                icon:Show()
+                local currentTexture = icon:GetTexture()
+                local newTexture = HealBot_UnitIcons[unit][i]
+                if currentTexture ~= newTexture then
+                    icon:SetTexture(newTexture)
+                end
+                
+                if icon:GetWidth() ~= iconSize then
+                    icon:SetWidth(iconSize)
+                    icon:SetHeight(iconSize)
+                end
+                
+                if not icon:IsVisible() then
+                    icon:Show()
+                end
             else
-                icon:Hide()
+                if icon:IsVisible() then
+                    icon:Hide()
+                end
             end
         end
     end

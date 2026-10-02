@@ -107,13 +107,25 @@ function HealBot_CheckBuffs(unit)
         hasBuff[k] = nil
     end
     local i = 1
+    if not HealBot_TextureToName then HealBot_TextureToName = {} end
     while true do
         local buffTexture = UnitBuff(unit, i)
         if not buffTexture then break end
-        HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
-        HealBot_ScanTooltip:ClearLines()
-        HealBot_ScanTooltip:SetUnitBuff(unit, i)
-        local buffName = HealBot_ScanTooltipTextLeft1:GetText()
+        
+        local buffName = HealBot_TextureToName[buffTexture]
+        if buffName == nil then
+            HealBot_ScanTooltip:SetOwner(UIParent, "ANCHOR_NONE")
+            HealBot_ScanTooltip:ClearLines()
+            HealBot_ScanTooltip:SetUnitBuff(unit, i)
+            local textObj = HealBot_ScanTooltipTextLeft1
+            if textObj then
+                buffName = textObj:GetText()
+            end
+            if buffName then
+                HealBot_TextureToName[buffTexture] = buffName
+            end
+        end
+        
         if buffName then
             hasBuff[buffName] = true
         end
