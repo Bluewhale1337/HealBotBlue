@@ -30,8 +30,15 @@ function HealBot_AddChat(msg)
     end
 end
 
--- HealBot_AddDebug: Prints debug messages to internal chat channel.
+-- HealBot_AddDebug: Prints debug messages to chat or internal debug channel.
 function HealBot_AddDebug(msg)
+    if HealBot_Config and HealBot_Config.DebugMode == 1 then
+        if DEFAULT_CHAT_FRAME then
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100[HB Debug]|r " .. msg);
+        end
+        return;
+    end
+
     local chanid = HealBot_Get_DebugChan();
     if chanid and HealBot_SpamCnt < 3 then
         HealBot_SpamCnt = HealBot_SpamCnt + 1;

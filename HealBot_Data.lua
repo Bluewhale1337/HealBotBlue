@@ -1,4 +1,5 @@
 HealBot_ConfigDefaults = {
+  DebugMode = 0,
   ShowManaBars=0,
   ManaBarsHealersOnly=0,
   Version = HEALBOT_VERSION,

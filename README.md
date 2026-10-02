@@ -21,6 +21,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * `/hb` - Toggles the main HealBot panel on and off
 * `/hb options` - Toggles the HealBot options panel on and off
 * `/hb reset` - Resets the contents of the main HealBot panel
+* `/hb debug` - Toggles in-game debug message output to the main chat frame
 
 ### Key Features & Current Functionality
 * **MVC & Observer Architecture:** High-performance, reactive engine that updates frames dynamically on state changes, drastically reducing CPU and memory overhead. Features memory recycling pool and event loop decoupling for zero-stutter combat.
@@ -54,6 +55,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Frame Rendering** - Eliminated redundant UI layout recalculations in `HealBot_Action_EnableButton`. The UI no longer forces `SetFont`, `SetWidth`, `SetHeight`, and `GetGlobal` lookups on every single combat tick (which previously caused 4,000+ layout updates per second in 40-man raids).
 * **Performance Fix - Range Checking** - Greatly reduced CPU stutter caused by range calculations. `HealBot_Range_Check` now caches map positioning math and API calls per-frame, preventing the addon from calculating the exact same `math.sqrt` distance up to 5 times per unit during heavy combat.
 * **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
+* **Debug Output Command** - Added `/hb debug` (or `/hb dbg`) slash command to toggle real-time debug message printing directly into the standard chat frame without requiring custom chat channels.
 
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().

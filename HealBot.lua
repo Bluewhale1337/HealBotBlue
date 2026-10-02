@@ -103,6 +103,21 @@ function HealBot_SlashCmd(cmd)
     HealBot_AddDebug( "Channel active" );
     return;
   end
+  if (cmd=="debug" or cmd=="dbg") then
+    if not HealBot_Config then return; end
+    if HealBot_Config.DebugMode == 1 then
+      HealBot_Config.DebugMode = 0;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFFFF0000DISABLED|r.");
+      end
+    else
+      HealBot_Config.DebugMode = 1;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFF00FF00ENABLED|r.");
+      end
+    end
+    return;
+  end
 end
 
 -- HealBot_SendAddonMessage moved to HealBot_Controller_Comms.lua
