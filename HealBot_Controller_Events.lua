@@ -498,6 +498,7 @@ end
 function HealBot_OnEvent_PartyMembersChanged(this)
     HealBot_Model:PreserveStateByGUID()
     HealBot_Integrations_PruneNampower()
+    if HealBot_UpdateUnitIDCache then HealBot_UpdateUnitIDCache() end
     if HealBot_IsFighting then
         HealBot_Action_PartyChanged()
     end
@@ -557,6 +558,7 @@ end
 function HealBot_OnEvent_SpellsChanged(this, arg1)
     if arg1 then return; end
     HealBot_AddDebug("HB: SpellsChanged");
+    if HealBot_CacheSpellIDs then HealBot_CacheSpellIDs() end
     HealBot_SpellsInitFlag = 2;
 end
 

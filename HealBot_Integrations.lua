@@ -21,7 +21,6 @@ function HealBot_Integrations_Toggle()
     HealBot_Integrations_UnitXP_Active = true;
     HealBot_AddDebug("UnitXP Integration: ENABLED");
   else
-  Look at the lines that need translation
     HealBot_Integrations_UnitXP_Active = false;
     HealBot_AddDebug("UnitXP Integration: DISABLED");
   end

@@ -240,25 +240,38 @@ end
 local HealBot_RaidUnitTokens = {}
 for i=1, 40 do HealBot_RaidUnitTokens[i] = "raid"..i end
 
+HealBot_NameToUnitID = {}
+
+function HealBot_UpdateUnitIDCache()
+  HealBot_NameToUnitID = {}
+  local name = UnitName("player")
+  if name then HealBot_NameToUnitID[name] = "player" end
+  
+  for i=1, 4 do
+    local unit = "party"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "partypet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+  
+  local petName = UnitName("pet")
+  if petName then HealBot_NameToUnitID[petName] = "pet" end
+
+  for i=1, 40 do
+    local unit = "raid"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "raidpet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+end
+
 -- HealBot_FindUnitID: Finds a unit token for a given player name.
 function HealBot_FindUnitID(unitname)
-  local text;
-  if HealBot_Action_HealGroup then
-    for _,unit in ipairs(HealBot_Action_HealGroup) do
-      text = UnitName(unit);
-      if text and text==unitname then
-        return unit;
-      end
-    end
-  end
-  for i=1,40 do
-    local unit = HealBot_RaidUnitTokens[i];
-    text = UnitName(unit);
-    if text and text==unitname then
-      return unit;
-    end
-  end
-  return nil;
+  return HealBot_NameToUnitID[unitname]
 end
 
 -- HealBot_PlaySound: Plays an audio alert based on ID.

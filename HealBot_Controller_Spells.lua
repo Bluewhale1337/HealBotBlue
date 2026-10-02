@@ -34,28 +34,26 @@ function HealBot_GetSpellName(id)
   return spellName .. " (" .. subSpellName .. ")";
 end
 
+HealBot_SpellNameToId = {}
+
+function HealBot_CacheSpellIDs()
+  HealBot_SpellNameToId = {}
+  local id = 1
+  while true do
+    local spellName, subSpellName = GetSpellName(id, BOOKTYPE_SPELL)
+    if not spellName then break end
+    if subSpellName and subSpellName ~= "" then
+      HealBot_SpellNameToId[spellName .. " (" .. subSpellName .. ")"] = id
+      HealBot_SpellNameToId[spellName .. "(" .. subSpellName .. ")"] = id
+    end
+    HealBot_SpellNameToId[spellName] = id
+    id = id + 1
+  end
+end
+
 -- HealBot_GetSpellId: Internal utility: HealBot_GetSpellId
 function HealBot_GetSpellId(spell)
-  local id, idd = 1, 0; 
-  while true do 
-    local spellName, subSpellName = GetSpellName(id, BOOKTYPE_SPELL);
-    if (spellName) then
-      if (spell == spellName .. " (" .. subSpellName .. ")") or (spell == spellName .. "(" .. subSpellName .. ")") then
-        return id;
-      end
-      if (spell == spellName) then
-        idd = id;
-      end   
-    else
-      break
-    end
-    id = id + 1;
-  end
-  if idd > 0 then
-    return idd
-  else
-    return nil;
-  end
+  return HealBot_SpellNameToId[spell]
 end
 
 -- HealBot_CastSpellByName: Internal utility: HealBot_CastSpellByName

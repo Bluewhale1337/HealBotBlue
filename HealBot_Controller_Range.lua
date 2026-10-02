@@ -15,7 +15,11 @@ local _lastFrameTime = 0
 function HealBot_Range_Check(unit, range)
     local currentTime = GetTime()
     if _lastFrameTime ~= currentTime then
-        for k in pairs(_rangeCache) do _rangeCache[k] = nil end
+        for r, cacheTable in pairs(_rangeCache) do
+            for u in pairs(cacheTable) do
+                cacheTable[u] = nil
+            end
+        end
         _lastFrameTime = currentTime
     end
 
@@ -24,9 +28,9 @@ function HealBot_Range_Check(unit, range)
         range = 40;
     end
     
-    local cacheKey = unit .. "_" .. range
-    if _rangeCache[cacheKey] ~= nil then
-        return _rangeCache[cacheKey]
+    _rangeCache[range] = _rangeCache[range] or {}
+    if _rangeCache[range][unit] ~= nil then
+        return _rangeCache[range][unit]
     end
 
     if ( unit == "player" ) then 
@@ -72,6 +76,6 @@ function HealBot_Range_Check(unit, range)
         end
     end
     
-    _rangeCache[cacheKey] = return_val
+    _rangeCache[range][unit] = return_val
     return return_val;
 end

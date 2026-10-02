@@ -152,6 +152,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Chat Announcements & Mouseover Casts:** Chat announcements are now correctly fired when using native Hovercasting (Mouseover). Additionally, added safety checks to prevent spamming chat announcements when accidentally clicking on a dead player (unless casting a resurrection spell).
 * **New Priest Buff (Enlighten):** Added the custom "Enlighten" buff to Priest trackable buffs, complete with the `btnholyscriptures` icon on unit frames.
 
+**1.3.4**
+* **Performance: Spell Lookup Optimization:** Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
+* **Performance: Unit ID Lookup Optimization:** Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
+* **Performance: Range Cache GC Leak:** Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
+* **Integrations Bug Fix:** Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
 
 **1.3.3**
 * **Chat Panel Refactor:** Completely replaced the spell selection dropdowns in the Chat tab with manual text input boxes, allowing users to type exact spell names (with or without ranks) directly, matching the behavior of the key-bindings configuration. Fixed a string matching bug caused by Vanilla WoW's hidden trailing spaces when comparing spell names, ensuring that both rankless (e.g. `Flash Heal`) and ranked inputs trigger correctly. 
