@@ -56,6 +56,10 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Range Checking** - Greatly reduced CPU stutter caused by range calculations. `HealBot_Range_Check` now caches map positioning math and API calls per-frame, preventing the addon from calculating the exact same `math.sqrt` distance up to 5 times per unit during heavy combat.
 * **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
 * **Debug Output Command** - Added `/hb debug` (or `/hb dbg`) slash command to toggle real-time debug message printing directly into the standard chat frame without requiring custom chat channels.
+* **Performance Fix - Spell Lookup** - Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
+* **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
+* **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
+* **Integrations Bug Fix** - Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
 
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
@@ -151,12 +155,6 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Global Variable Namespace Refactoring:** Executed a codebase-wide refactoring to encapsulate all floating global variables inside the `HealBot_` or `HEALBOT_` namespace. This prevents HealBot from silently shadowing other addons or the native WoW API, ensuring strict adherence to Vanilla Lua best practices. (Also resolved a namespace collision with `InitSpells`).
 * **Chat Announcements & Mouseover Casts:** Chat announcements are now correctly fired when using native Hovercasting (Mouseover). Additionally, added safety checks to prevent spamming chat announcements when accidentally clicking on a dead player (unless casting a resurrection spell).
 * **New Priest Buff (Enlighten):** Added the custom "Enlighten" buff to Priest trackable buffs, complete with the `btnholyscriptures` icon on unit frames.
-
-**1.3.4**
-* **Performance: Spell Lookup Optimization:** Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
-* **Performance: Unit ID Lookup Optimization:** Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
-* **Performance: Range Cache GC Leak:** Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
-* **Integrations Bug Fix:** Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
 
 **1.3.3**
 * **Chat Panel Refactor:** Completely replaced the spell selection dropdowns in the Chat tab with manual text input boxes, allowing users to type exact spell names (with or without ranks) directly, matching the behavior of the key-bindings configuration. Fixed a string matching bug caused by Vanilla WoW's hidden trailing spaces when comparing spell names, ensuring that both rankless (e.g. `Flash Heal`) and ranked inputs trigger correctly. 
