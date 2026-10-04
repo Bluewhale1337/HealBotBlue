@@ -10,6 +10,8 @@ function HealBot_GetUnitGUID(unit)
         return UnitGUID(unit)
     elseif HealBot_Integrations_SuperWoW_Active and GetUnitGUID then
         return GetUnitGUID(unit)
+    elseif HealBot_Integrations_Nampower_Active and GetUnitGUID then
+        return GetUnitGUID(unit)
     end
     return nil
 end
@@ -39,6 +41,11 @@ function HealBot_Integrations_Toggle()
             if event == "AURA_CAST_ON_SELF" or event == "AURA_CAST_ON_OTHER" then
                 local spellID, caster, target, _, _, _, _, duration = arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8
                 if not caster or not target or duration <= 0 then return end
+                
+                -- The player is ALWAYS the caster in these events for Nampower
+                if not HealBot_PlayerGUID then
+                    HealBot_PlayerGUID = caster
+                end
                 
                 local spellName = GetSpellRecField(spellID, "name")
                 if not spellName then return end
@@ -76,7 +83,7 @@ function HealBot_Integrations_PruneNampower()
     local currentTime = GetTime()
     for targetName, auras in pairs(HealBot_Nampower_Auras) do
         -- Check if target is still in the raid/party
-        if not HealBot_Model:GetUnitIDByName(targetName) then
+        if not HealBot_Model:GetUnitByGUID(targetName) and not HealBot_Model:GetUnitIDByName(targetName) then
             HealBot_ReleaseTable(auras)
             HealBot_Nampower_Auras[targetName] = nil
         else
@@ -126,5 +133,17 @@ end
   else
     HealBot_Integrations_ClassicAPI_Active = false;
     HealBot_AddDebug("ClassicAPI Integration: DISABLED");
+  end
+  
+  if HealBot_Options_Integrations_ShowHoTTimers then
+    if HealBot_Integrations_Nampower_Active or HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active then
+      HealBot_Options_Integrations_ShowHoTTimers:Enable()
+      getglobal(HealBot_Options_Integrations_ShowHoTTimers:GetName().."Text"):SetTextColor(1, 1, 1)
+    else
+      HealBot_Options_Integrations_ShowHoTTimers:Disable()
+      getglobal(HealBot_Options_Integrations_ShowHoTTimers:GetName().."Text"):SetTextColor(0.5, 0.5, 0.5)
+      HealBot_Options_Integrations_ShowHoTTimers:SetChecked(0)
+      HealBot_Config.HealBot_Integrations_ShowHoTTimers = 0
+    end
   end
 end

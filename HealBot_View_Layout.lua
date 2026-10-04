@@ -1239,3 +1239,155 @@ function HealBot_Action_AppendNewUnits()
     end
     HealBot_ReleaseTable(unitsToCheck)
 end
+
+local HealBot_PlayerHoTsListFrame = nil
+local HealBot_PlayerHoTFrames = {}
+
+local HealBot_PlayerHoTs_ValidHoTs = {
+    ["Renew"] = "Interface\\Icons\\Spell_Holy_Renew",
+    ["Rejuvenation"] = "Interface\\Icons\\Spell_Nature_Rejuvenation",
+    ["Regrowth"] = "Interface\\Icons\\Spell_Nature_ResistNature",
+    ["Power Word: Shield"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
+}
+
+local HealBot_PlayerHoTs_ListCache = {}
+
+function HealBot_Action_UpdatePlayerHoTs()
+    if not HealBot_PlayerHoTsListFrame then
+        HealBot_PlayerHoTsListFrame = CreateFrame("Frame", "HealBot_PlayerHoTsListFrame", HealBot_Action)
+        HealBot_PlayerHoTsListFrame:SetWidth(128)
+        HealBot_PlayerHoTsListFrame:SetHeight(1)
+        HealBot_PlayerHoTsListFrame:SetPoint("TOPLEFT", HealBot_Action, "BOTTOMLEFT", 0, -2)
+        HealBot_PlayerHoTsListFrame:Show()
+    end
+    
+    if HealBot_Config.HealBot_Integrations_ShowHoTTimers ~= 1 then
+        HealBot_PlayerHoTsListFrame:Hide()
+        return
+    else
+        HealBot_PlayerHoTsListFrame:Show()
+    end
+
+    local currentTime = GetTime()
+    
+    -- Clear cache instead of reallocating
+    local numHoTs = 0
+    
+    if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
+        for targetName, auras in pairs(HealBot_Nampower_Auras) do
+            for spellName, expiration in pairs(auras) do
+                if HealBot_PlayerHoTs_ValidHoTs[spellName] then
+                    if expiration > currentTime then
+                        numHoTs = numHoTs + 1
+                        if not HealBot_PlayerHoTs_ListCache[numHoTs] then
+                            HealBot_PlayerHoTs_ListCache[numHoTs] = {}
+                        end
+                        HealBot_PlayerHoTs_ListCache[numHoTs].name = targetName
+                        HealBot_PlayerHoTs_ListCache[numHoTs].spell = spellName
+                        HealBot_PlayerHoTs_ListCache[numHoTs].expires = expiration
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Blank out remaining cache entries so sort doesn't read them
+    for i = numHoTs + 1, table.getn(HealBot_PlayerHoTs_ListCache) do
+        HealBot_PlayerHoTs_ListCache[i].expires = 9999999999
+    end
+    
+    -- Sort only the active portion by shifting expired ones to the end
+    table.sort(HealBot_PlayerHoTs_ListCache, function(a, b) 
+        return (a.expires or 0) < (b.expires or 0) 
+    end)
+    
+    for i = 1, math.max(numHoTs, table.getn(HealBot_PlayerHoTFrames)) do
+        local frame = HealBot_PlayerHoTFrames[i]
+        if i <= numHoTs then
+            if not frame then
+                frame = CreateFrame("Frame", "HealBot_PlayerHoT" .. i, HealBot_PlayerHoTsListFrame)
+                frame:SetWidth(128)
+                frame:SetHeight(16)
+                if i == 1 then
+                    frame:SetPoint("TOPLEFT", HealBot_PlayerHoTsListFrame, "TOPLEFT", 0, 0)
+                else
+                    frame:SetPoint("TOPLEFT", HealBot_PlayerHoTFrames[i-1], "BOTTOMLEFT", 0, -2)
+                end
+                
+                local icon = frame:CreateTexture(nil, "ARTWORK")
+                icon:SetWidth(14)
+                icon:SetHeight(14)
+                icon:SetPoint("LEFT", frame, "LEFT", 2, 0)
+                frame.icon = icon
+                
+                local text = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                text:SetPoint("LEFT", icon, "RIGHT", 4, 0)
+                text:SetJustifyH("LEFT")
+                frame.text = text
+                
+                HealBot_PlayerHoTFrames[i] = frame
+            end
+            
+            local hot = HealBot_PlayerHoTs_ListCache[i]
+            local timeLeft = math.floor(hot.expires - currentTime)
+            
+            -- Resolve GUID to Name
+            if not HealBot_Nampower_NameCache then HealBot_Nampower_NameCache = HealBot_GetTable() end
+            
+            local dispName = HealBot_Nampower_NameCache[hot.name]
+            
+            if not dispName then
+                dispName = hot.name
+                local resolved = false
+                
+                local unitID = HealBot_Model:GetUnitByGUID(hot.name) or HealBot_Model:GetUnitIDByName(hot.name)
+                if unitID then
+                    local n = UnitName(unitID)
+                    if n then 
+                        dispName = n
+                        resolved = true
+                    end
+                elseif string.sub(hot.name, 1, 2) == "0x" or string.sub(hot.name, 1, 2) == "0X" then
+                    if HealBot_PlayerGUID and string.lower(HealBot_PlayerGUID) == string.lower(hot.name) then
+                        dispName = UnitName("player") or "Player"
+                        resolved = true
+                    elseif HealBot_GetUnitGUID then
+                        if string.lower(HealBot_GetUnitGUID("player") or "") == string.lower(hot.name) then
+                            dispName = UnitName("player") or "Player"
+                            resolved = true
+                        elseif string.lower(HealBot_GetUnitGUID("target") or "") == string.lower(hot.name) then
+                            dispName = UnitName("target") or "Target"
+                            resolved = true
+                        elseif string.lower(HealBot_GetUnitGUID("mouseover") or "") == string.lower(hot.name) then
+                            dispName = UnitName("mouseover") or "Mouseover"
+                            resolved = true
+                        end
+                    end
+                end
+                
+                if resolved then
+                    HealBot_Nampower_NameCache[hot.name] = dispName
+                elseif string.sub(hot.name, 1, 2) == "0x" then
+                    dispName = "Unknown"
+                end
+            end
+            
+            local spellId = HealBot_GetSpellId and HealBot_GetSpellId(hot.spell) or nil
+            local tex = HealBot_PlayerHoTs_ValidHoTs[hot.spell] or "Interface\\Icons\\INV_Misc_QuestionMark"
+            if spellId then
+                tex = GetSpellTexture(spellId, "BOOKTYPE_SPELL") or tex
+            end
+            
+            frame.icon:SetTexture(tex)
+            frame.text:SetText(dispName .. ": " .. timeLeft .. "s")
+            frame.text:SetTextColor(0.8, 1, 0.8)
+            frame:Show()
+        else
+            if frame then
+                frame:Hide()
+            end
+        end
+    end
+    
+    HealBot_PlayerHoTsListFrame:SetHeight(math.max(1, numHoTs * 18))
+end

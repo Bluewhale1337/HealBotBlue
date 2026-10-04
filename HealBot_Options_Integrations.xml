@@ -65,7 +65,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_SuperWoW" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5"/>
+              <AbsDimension x="0" y="-5"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -80,6 +80,24 @@
         </Scripts>
       </CheckButton>
 
+      <CheckButton name="HealBot_Options_Integrations_ShowHoTTimers" inherits="OptionsCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ClassicAPI" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-5"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>
+            getglobal(this:GetName().."Text"):SetText("Track Player HoT Timers");
+          </OnLoad>
+          <OnClick>
+            HealBot_Config.HealBot_Integrations_ShowHoTTimers = this:GetChecked() and 1 or 0;
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+
     </Frames>
     <Layers>
       <Layer level="ARTWORK">
@@ -89,6 +107,17 @@
             <Anchor point="TOPLEFT">
               <Offset>
                 <AbsDimension x="65" y="-95"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+          <Color r="0.7" g="0.7" b="0.7"/>
+        </FontString>
+        <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower, SuperWoW, or ClassicAPI to be enabled and active to provide accurate aura times.">
+          <Size x="330" y="30"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
+              <Offset>
+                <AbsDimension x="34" y="-2"/>
               </Offset>
             </Anchor>
           </Anchors>

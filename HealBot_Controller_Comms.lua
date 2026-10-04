@@ -143,9 +143,17 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
         -- Clear reusable args array
         for i=1, 10 do HealBot_Comms_Args[i] = nil end
         local argCount = 0
-        for word in string.gfind(inc_msg, "[^/]+") do
+        local start_pos = 1
+        local next_pos = string.find(inc_msg, "/", start_pos, true)
+        while next_pos do
             argCount = argCount + 1
-            HealBot_Comms_Args[argCount] = word
+            HealBot_Comms_Args[argCount] = string.sub(inc_msg, start_pos, next_pos - 1)
+            start_pos = next_pos + 1
+            next_pos = string.find(inc_msg, "/", start_pos, true)
+        end
+        if start_pos <= string.len(inc_msg) then
+            argCount = argCount + 1
+            HealBot_Comms_Args[argCount] = string.sub(inc_msg, start_pos)
         end
         local cmd = HealBot_Comms_Args[1]
         

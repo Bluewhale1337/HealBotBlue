@@ -272,15 +272,41 @@ function HealBot_OnEvent_UnitAura(this, unit)
         end
         
         local b = 1
+        local activeBuffs = HealBot_GetTable()
         while true do
             local buff = UnitBuff(unit, b)
             if not buff then break end
+            activeBuffs[buff] = true
             if HealBot_TrackedHoTs[buff] and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
             b = b + 1
         end
+
+        if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
+            local guid = HealBot_GetUnitGUID and HealBot_GetUnitGUID(unit)
+            if guid then
+                if not HealBot_Nampower_NameCache then HealBot_Nampower_NameCache = HealBot_GetTable() end
+                HealBot_Nampower_NameCache[guid] = UnitName(unit)
+                
+                if HealBot_Nampower_Auras[guid] then
+                    local validHoTs = {
+                        ["Renew"] = "Interface\\Icons\\Spell_Holy_Renew",
+                        ["Rejuvenation"] = "Interface\\Icons\\Spell_Nature_Rejuvenation",
+                        ["Regrowth"] = "Interface\\Icons\\Spell_Nature_ResistNature",
+                        ["Power Word: Shield"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
+                    }
+                    for spellName, _ in pairs(HealBot_Nampower_Auras[guid]) do
+                        local tex = validHoTs[spellName]
+                        if tex and not activeBuffs[tex] then
+                            HealBot_Nampower_Auras[guid][spellName] = nil
+                        end
+                    end
+                end
+            end
+        end
+        HealBot_ReleaseTable(activeBuffs)
 
         local d = 1
         while true do

@@ -182,6 +182,16 @@ function HealBot_OnUpdate(this, arg1)
             HealBot_RecalcSpells();
         end
     end
+    if HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1 then
+        if not HealBot_HoT_Update_Timer or GetTime() >= HealBot_HoT_Update_Timer then
+            HealBot_HoT_Update_Timer = GetTime() + 0.25
+            if HealBot_Action_UpdatePlayerHoTs then
+                HealBot_Action_UpdatePlayerHoTs()
+            end
+        end
+    elseif HealBot_PlayerHoTsListFrame and HealBot_PlayerHoTsListFrame:IsVisible() then
+        HealBot_PlayerHoTsListFrame:Hide()
+    end
 
     HealBot_Timer1 = HealBot_Timer1 + arg1;
     if HealBot_Timer1 >= 2.5 then

@@ -4,4 +4,5 @@ function HealBot_Options_Integrations_OnShow(this)
   HealBot_Options_Integrations_Nampower:SetChecked(HealBot_Config.HealBot_Integrations_Nampower);
   HealBot_Options_Integrations_SuperWoW:SetChecked(HealBot_Config.HealBot_Integrations_SuperWoW);
   HealBot_Options_Integrations_ClassicAPI:SetChecked(HealBot_Config.HealBot_Integrations_ClassicAPI);
+  HealBot_Options_Integrations_ShowHoTTimers:SetChecked(HealBot_Config.HealBot_Integrations_ShowHoTTimers);
 end

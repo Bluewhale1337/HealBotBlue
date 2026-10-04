@@ -55,12 +55,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Frame Rendering** - Eliminated redundant UI layout recalculations in `HealBot_Action_EnableButton`. The UI no longer forces `SetFont`, `SetWidth`, `SetHeight`, and `GetGlobal` lookups on every single combat tick (which previously caused 4,000+ layout updates per second in 40-man raids).
 * **Performance Fix - Range Checking** - Greatly reduced CPU stutter caused by range calculations. `HealBot_Range_Check` now caches map positioning math and API calls per-frame, preventing the addon from calculating the exact same `math.sqrt` distance up to 5 times per unit during heavy combat.
 * **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
+* **Performance Fix - String GC Leak** - Fixed garbage collection hitches caused by `string.gfind` closures in the HealComm parsing loop by rewriting it to use closure-free `string.find` native loops.
 * **Debug Output Command** - Added `/hb debug` (or `/hb dbg`) slash command to toggle real-time debug message printing directly into the standard chat frame without requiring custom chat channels.
 * **Performance Fix - Spell Lookup** - Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
 * **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
 * **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
 * **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
 * **Integrations Bug Fix** - Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
+* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations.
 
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
