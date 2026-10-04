@@ -61,7 +61,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
 * **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
 * **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
-* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations. Added support for tracking Power Word: Shield. Implemented with a pre-allocated static cache array for zero GC leaks, and precise GUID trapping for instant name resolution on self and non-party members.
+* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower to fetch exact durations. Added support for tracking Power Word: Shield. Implemented with a pre-allocated static cache array for zero GC leaks, and precise GUID trapping for instant name resolution on self and non-party members.
 
 
 **v1.7.3**
