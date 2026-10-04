@@ -53,6 +53,7 @@ end
 
 -- HealBot_GetSpellId: Internal utility: HealBot_GetSpellId
 function HealBot_GetSpellId(spell)
+  if not spell then return nil end
   return HealBot_SpellNameToId[spell]
 end
 
@@ -210,18 +211,6 @@ end
 -- HealBot_StartCasting: Initiates spell cast and broadcasts incoming heal.
 function HealBot_StartCasting(spell, target, ttype)
   HealBot_CastFailed = false;
-  
-  -- Extract base spell for internal tracking
-  local baseSpell = spell
-  local parenIndex = string.find(spell, " %(")
-  if parenIndex then
-    baseSpell = string.sub(spell, 1, parenIndex - 1)
-  else
-    parenIndex = string.find(spell, "%(")
-    if parenIndex then
-       baseSpell = string.sub(spell, 1, parenIndex - 1)
-    end
-  end
 
   HealBot_CastSpellByName(spell);
   if ( SpellCanTargetUnit(target) ) then 
@@ -236,11 +225,11 @@ function HealBot_StartCasting(spell, target, ttype)
     end
   end
 
-  if ttype == "fired" and HealBot_Spells[baseSpell] then
+  if ttype == "fired" and HealBot_Spells[spell] then
     if not HealBot_CastFailed then
-      HealBot_CastingSpell  = baseSpell;
+      HealBot_CastingSpell  = spell;
       HealBot_CastingTarget = target;
-      HealBot_Process_HealValue(baseSpell, target);
+      HealBot_Process_HealValue(spell, target);
       HealBot_AnnounceCast(spell, target);
     end
   end
@@ -654,17 +643,24 @@ function HealBot_RecalcSpells()
   HealBot_RecalcParty();
 end
 
--- HealBot_GetTalentRank: Internal utility: HealBot_GetTalentRank
-function HealBot_GetTalentRank(talentName)
+HealBot_TalentRanks = {}
+
+function HealBot_UpdateTalentRanks()
+  HealBot_TalentRanks = {}
   for t = 1, GetNumTalentTabs() do
     for i = 1, GetNumTalents(t) do
-      local nameTalent, icon, tier, column, currRank, maxRank = GetTalentInfo(t, i);
-      if nameTalent == talentName then
-        return currRank;
+      local nameTalent, icon, tier, column, currRank, maxRank = GetTalentInfo(t, i)
+      if nameTalent then
+        HealBot_TalentRanks[nameTalent] = currRank
       end
     end
   end
-  return 0;
+end
+
+-- HealBot_GetTalentRank: Internal utility: HealBot_GetTalentRank
+function HealBot_GetTalentRank(talentName)
+  if not next(HealBot_TalentRanks) then HealBot_UpdateTalentRanks() end
+  return HealBot_TalentRanks[talentName] or 0
 end
 
 -- HealBot_SpiBonus: Internal utility: HealBot_SpiBonus
@@ -699,6 +695,7 @@ end
 
 -- HealBot_InitSpells: Scans spellbook to find available heals.
 function HealBot_InitSpells()
+  HealBot_CacheSpellIDs()
   local id = 1
   local cnt = 0;
   local class = HealBot_UnitClass("player")

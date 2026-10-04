@@ -271,6 +271,7 @@ end
 
 -- HealBot_FindUnitID: Finds a unit token for a given player name.
 function HealBot_FindUnitID(unitname)
+  if not unitname then return nil end
   return HealBot_NameToUnitID[unitname]
 end
 

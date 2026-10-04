@@ -565,6 +565,7 @@ end
 -- HealBot_OnEvent_TalentsChanged: Internal utility: HealBot_OnEvent_TalentsChanged
 function HealBot_OnEvent_TalentsChanged(this, arg1)
     HealBot_AddDebug("HB: TalentsChanged");
+    if HealBot_UpdateTalentRanks then HealBot_UpdateTalentRanks() end
 end
 
 -- HealBot_OnEvent_PlayerEnteringWorld: Internal utility: HealBot_OnEvent_PlayerEnteringWorld
@@ -574,6 +575,7 @@ function HealBot_OnEvent_PlayerEnteringWorld(this)
     if HealBot_ApplyRefreshHook then
         HealBot_ApplyRefreshHook()
     end
+    if HealBot_UpdateUnitIDCache then HealBot_UpdateUnitIDCache() end
 end
 
 -- HealBot_OnEvent_SpellcastStart: Internal utility: HealBot_OnEvent_SpellcastStart

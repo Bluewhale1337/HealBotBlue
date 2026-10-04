@@ -59,6 +59,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Spell Lookup** - Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
 * **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
 * **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
+* **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
 * **Integrations Bug Fix** - Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
 
 **v1.7.3**
