@@ -62,7 +62,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
 * **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
 * **Integrations Bug Fix** - Removed stray translation text from `HealBot_Integrations.lua` that caused Lua syntax errors on load.
-* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations.
+* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations. Added support for tracking Power Word: Shield.
+* **Performance Fix - HoT Tracker GC Leak** - Fixed a massive Lua garbage collection memory leak in the HoT tracker that spawned hundreds of tables per second during `OnUpdate`. Converted the tracker loop to utilize a pre-allocated static cache array.
+* **Bug Fix - HoT Tracker GUID Resolution** - Fixed an issue where the HoT tracker displayed "Unknown" or the raw GUID when casting on non-party members or dropping your target. The tracker now hooks `UNIT_AURA` events to dynamically build a permanent GUID-to-Name cache map.
+* **Bug Fix - Player GUID Tracking** - Implemented precise player GUID trapping that caches the player's exact GUID globally upon their first aura cast. This completely eliminates self-cast tracking fallbacks and natively resolves self-targeted HoT names instantly.
+* **Bug Fix - Options UI Spacing** - Fixed inverted XML `y` offset variables in `HealBot_Options_Integrations.xml` that caused overlapping checkboxes and missing text when navigating the Integrations tab.
 
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
