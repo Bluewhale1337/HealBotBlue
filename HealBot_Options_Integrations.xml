@@ -112,7 +112,7 @@
           </Anchors>
           <Color r="0.7" g="0.7" b="0.7"/>
         </FontString>
-        <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower, SuperWoW, or ClassicAPI to be enabled and active to provide accurate aura times.">
+        <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower to be enabled and active to provide accurate aura times.">
           <Size x="330" y="30"/>
           <Anchors>
             <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
