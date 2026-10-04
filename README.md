@@ -21,6 +21,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * `/hb` - Toggles the main HealBot panel on and off
 * `/hb options` - Toggles the HealBot options panel on and off
 * `/hb reset` - Resets the contents of the main HealBot panel
+* `/hb debug` - Toggles in-game debug message output to the main chat frame
 
 ### Key Features & Current Functionality
 * **MVC & Observer Architecture:** High-performance, reactive engine that updates frames dynamically on state changes, drastically reducing CPU and memory overhead. Features memory recycling pool and event loop decoupling for zero-stutter combat.
@@ -30,7 +31,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions.
 * **Modifier-Aware Tooltips:** Tooltips dynamically update to show exact bound actions (Shift/Ctrl/Alt) and required mana costs (turns red if insufficient mana).
 * **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
-* **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward).
+* **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward). Optional extended HoT timer tracker togglable below frames. 
 * **Mana Bars for Healers:** Enable and position mini-mana status bars next to unit frames, toggleable to display for healer classes only or all classes.
 * **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic).
 * **Pet & Familiar Frames:** Dedicated, toggleable frames for tracking and healing player pets.
@@ -48,6 +49,20 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 
 ### Change Log
+
+**v1.7.4**
+* **Performance Fix - CPU Spikes** - Fixed massive FPS drops during raid combat. The `HealBot_CheckBuffs` function previously forced the client to generate hidden UI tooltips for up to 32 buffs per player on every single `UNIT_AURA` event. Tooltip parsing is now cached per texture, bypassing thousands of redundant API calls per second.
+* **Performance Fix - Frame Rendering** - Eliminated redundant UI layout recalculations in `HealBot_Action_EnableButton`. The UI no longer forces `SetFont`, `SetWidth`, `SetHeight`, and `GetGlobal` lookups on every single combat tick (which previously caused 4,000+ layout updates per second in 40-man raids).
+* **Performance Fix - Range Checking** - Greatly reduced CPU stutter caused by range calculations. `HealBot_Range_Check` now caches map positioning math and API calls per-frame, preventing the addon from calculating the exact same `math.sqrt` distance up to 5 times per unit during heavy combat.
+* **Performance Fix - Unit ID Lookup** - Optimized `HealBot_FindUnitID` by pre-allocating raid unit tokens, preventing massive string concatenation and garbage collection spam during high-frequency combat events like `CHAT_MSG_ADDON` (HealComm).
+* **Performance Fix - String GC Leak** - Fixed garbage collection hitches caused by `string.gfind` closures in the HealComm parsing loop by rewriting it to use closure-free `string.find` native loops.
+* **Debug Output Command** - Added `/hb debug` (or `/hb dbg`) slash command to toggle real-time debug message printing directly into the standard chat frame without requiring custom chat channels.
+* **Performance Fix - Spell Lookup** - Fixed a massive CPU drain and garbage generation issue where the entire spellbook was linearly scanned every frame per unit. Spell IDs are now cached via O(1) dictionary lookup on login and talent/spell changes.
+* **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
+* **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
+* **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
+* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations. Added support for tracking Power Word: Shield. Implemented with a pre-allocated static cache array for zero GC leaks, and precise GUID trapping for instant name resolution on self and non-party members.
+
 
 **v1.7.3**
 * **Performance Fix - Table Pooling Part 2** - Fixed remaining un-pooled table allocations in layout updates, macro parsing, nampower integration, and aura tracking by utilizing HealBot_GetTable().
@@ -143,7 +158,6 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Global Variable Namespace Refactoring:** Executed a codebase-wide refactoring to encapsulate all floating global variables inside the `HealBot_` or `HEALBOT_` namespace. This prevents HealBot from silently shadowing other addons or the native WoW API, ensuring strict adherence to Vanilla Lua best practices. (Also resolved a namespace collision with `InitSpells`).
 * **Chat Announcements & Mouseover Casts:** Chat announcements are now correctly fired when using native Hovercasting (Mouseover). Additionally, added safety checks to prevent spamming chat announcements when accidentally clicking on a dead player (unless casting a resurrection spell).
 * **New Priest Buff (Enlighten):** Added the custom "Enlighten" buff to Priest trackable buffs, complete with the `btnholyscriptures` icon on unit frames.
-
 
 **1.3.3**
 * **Chat Panel Refactor:** Completely replaced the spell selection dropdowns in the Chat tab with manual text input boxes, allowing users to type exact spell names (with or without ranks) directly, matching the behavior of the key-bindings configuration. Fixed a string matching bug caused by Vanilla WoW's hidden trailing spaces when comparing spell names, ensuring that both rankless (e.g. `Flash Heal`) and ranked inputs trigger correctly. 

@@ -18,7 +18,7 @@ if (GetLocale() == "frFR") then
 
 HEALBOT_DRUID   = "Druide";
 HEALBOT_HUNTER  = "Chasseur";
-HEALBOT_MAGE    = "Magier";
+HEALBOT_MAGE    = "Mage";
 HEALBOT_PALADIN = "Paladin";
 HEALBOT_PRIEST  = "Pr\195\170tre";
 HEALBOT_ROGUE   = "Voleur";

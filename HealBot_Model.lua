@@ -156,7 +156,7 @@ function HealBot_Model:UpdateUnitIdentity(unit)
         self.units[unit].englishClass = englishClass
         self.units[unit].class = UnitClass(unit)
         
-        if (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) and HealBot_GetUnitGUID then
+        if (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active or HealBot_Integrations_Nampower_Active) and HealBot_GetUnitGUID then
             local guid = HealBot_GetUnitGUID(unit)
             if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
                 self.unitGUIDs[unit] = guid
@@ -185,7 +185,7 @@ end
 
 -- HealBot_Model:PreserveStateByGUID: Preserves icon and debuff state when group indices shift during combat.
 function HealBot_Model:PreserveStateByGUID()
-    if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active) or not HealBot_GetUnitGUID then return end
+    if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active or HealBot_Integrations_Nampower_Active) or not HealBot_GetUnitGUID then return end
     
     for k in pairs(pool_oldGUIDs) do pool_oldGUIDs[k] = nil end
     local oldGUIDs = pool_oldGUIDs

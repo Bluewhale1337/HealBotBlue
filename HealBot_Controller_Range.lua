@@ -8,12 +8,31 @@ function HealBot_ResetRangeScale()
     _scale = 0
 end
 
+local _rangeCache = {}
+local _lastFrameTime = 0
+
 -- HealBot_Range_Check: Checks if unit is in range via map distance or API.
 function HealBot_Range_Check(unit, range)
+    local currentTime = GetTime()
+    if _lastFrameTime ~= currentTime then
+        for r, cacheTable in pairs(_rangeCache) do
+            for u in pairs(cacheTable) do
+                cacheTable[u] = nil
+            end
+        end
+        _lastFrameTime = currentTime
+    end
+
     local return_val = 0;
     if not range then 
         range = 40;
     end
+    
+    _rangeCache[range] = _rangeCache[range] or {}
+    if _rangeCache[range][unit] ~= nil then
+        return _rangeCache[range][unit]
+    end
+
     if ( unit == "player" ) then 
         return_val = 1;
     elseif HealBot_Integrations_ClassicAPI_Active and UnitDistanceSquared and UnitInLineOfSight then
@@ -56,5 +75,7 @@ function HealBot_Range_Check(unit, range)
             end
         end
     end
+    
+    _rangeCache[range][unit] = return_val
     return return_val;
 end

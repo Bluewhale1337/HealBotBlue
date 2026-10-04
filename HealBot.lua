@@ -103,6 +103,21 @@ function HealBot_SlashCmd(cmd)
     HealBot_AddDebug( "Channel active" );
     return;
   end
+  if (cmd=="debug" or cmd=="dbg") then
+    if not HealBot_Config then return; end
+    if HealBot_Config.DebugMode == 1 then
+      HealBot_Config.DebugMode = 0;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFFFF0000DISABLED|r.");
+      end
+    else
+      HealBot_Config.DebugMode = 1;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFF00FF00ENABLED|r.");
+      end
+    end
+    return;
+  end
 end
 
 -- HealBot_SendAddonMessage moved to HealBot_Controller_Comms.lua
@@ -222,27 +237,42 @@ end
 
 -- SpiBonus and GetBonus functions moved to HealBot_Controller_Spells.lua
 
+local HealBot_RaidUnitTokens = {}
+for i=1, 40 do HealBot_RaidUnitTokens[i] = "raid"..i end
+
+HealBot_NameToUnitID = {}
+
+function HealBot_UpdateUnitIDCache()
+  HealBot_NameToUnitID = {}
+  local name = UnitName("player")
+  if name then HealBot_NameToUnitID[name] = "player" end
+  
+  for i=1, 4 do
+    local unit = "party"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "partypet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+  
+  local petName = UnitName("pet")
+  if petName then HealBot_NameToUnitID[petName] = "pet" end
+
+  for i=1, 40 do
+    local unit = "raid"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "raidpet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+end
+
 -- HealBot_FindUnitID: Finds a unit token for a given player name.
 function HealBot_FindUnitID(unitname)
-  local text;
-  for _,unit in ipairs(HealBot_Action_HealGroup) do
-    text = UnitName(unit);
-	if text then
-	  if text==unitname then
-	    return unit;
-	  end
-	end
-  end
-  for i=1,40 do
-    local unit = "raid"..i;
-	text = UnitName(unit);
-	if text then
-      if text==unitname then
-        return unit;
-      end
-	end
-  end
-  return nil;
+  if not unitname then return nil end
+  return HealBot_NameToUnitID[unitname]
 end
 
 -- HealBot_PlaySound: Plays an audio alert based on ID.

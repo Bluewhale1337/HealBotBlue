@@ -30,8 +30,15 @@ function HealBot_AddChat(msg)
     end
 end
 
--- HealBot_AddDebug: Prints debug messages to internal chat channel.
+-- HealBot_AddDebug: Prints debug messages to chat or internal debug channel.
 function HealBot_AddDebug(msg)
+    if HealBot_Config and HealBot_Config.DebugMode == 1 then
+        if DEFAULT_CHAT_FRAME then
+            DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100[HB Debug]|r " .. msg);
+        end
+        return;
+    end
+
     local chanid = HealBot_Get_DebugChan();
     if chanid and HealBot_SpamCnt < 3 then
         HealBot_SpamCnt = HealBot_SpamCnt + 1;
@@ -136,9 +143,17 @@ function HealBot_OnEvent_AddonMsg(this, addon_id, inc_msg, dist_target, sender_i
         -- Clear reusable args array
         for i=1, 10 do HealBot_Comms_Args[i] = nil end
         local argCount = 0
-        for word in string.gfind(inc_msg, "[^/]+") do
+        local start_pos = 1
+        local next_pos = string.find(inc_msg, "/", start_pos, true)
+        while next_pos do
             argCount = argCount + 1
-            HealBot_Comms_Args[argCount] = word
+            HealBot_Comms_Args[argCount] = string.sub(inc_msg, start_pos, next_pos - 1)
+            start_pos = next_pos + 1
+            next_pos = string.find(inc_msg, "/", start_pos, true)
+        end
+        if start_pos <= string.len(inc_msg) then
+            argCount = argCount + 1
+            HealBot_Comms_Args[argCount] = string.sub(inc_msg, start_pos)
         end
         local cmd = HealBot_Comms_Args[1]
         

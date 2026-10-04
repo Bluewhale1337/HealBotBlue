@@ -173,13 +173,6 @@ function HealBot_OnUpdate(this, arg1)
         HealBot_Action_RefreshPower(unitID)
     end
     
-    local powerID, _ = next(HealBot_View_DirtyPower)
-    while powerID do
-        HealBot_Action_RefreshPower(powerID)
-        HealBot_View_DirtyPower[powerID] = nil
-        powerID, _ = next(HealBot_View_DirtyPower)
-    end
-    
     if HealBot_EquipChangeTimer > 0 then
         HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
         if HealBot_EquipChangeTimer <= 0 then
@@ -188,6 +181,16 @@ function HealBot_OnUpdate(this, arg1)
             HealBot_CalcEquipBonus = true;
             HealBot_RecalcSpells();
         end
+    end
+    if HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1 then
+        if not HealBot_HoT_Update_Timer or GetTime() >= HealBot_HoT_Update_Timer then
+            HealBot_HoT_Update_Timer = GetTime() + 0.25
+            if HealBot_Action_UpdatePlayerHoTs then
+                HealBot_Action_UpdatePlayerHoTs()
+            end
+        end
+    elseif HealBot_PlayerHoTsListFrame and HealBot_PlayerHoTsListFrame:IsVisible() then
+        HealBot_PlayerHoTsListFrame:Hide()
     end
 
     HealBot_Timer1 = HealBot_Timer1 + arg1;
@@ -505,6 +508,7 @@ end
 function HealBot_OnEvent_PartyMembersChanged(this)
     HealBot_Model:PreserveStateByGUID()
     HealBot_Integrations_PruneNampower()
+    if HealBot_UpdateUnitIDCache then HealBot_UpdateUnitIDCache() end
     if HealBot_IsFighting then
         HealBot_Action_PartyChanged()
     end
@@ -564,12 +568,14 @@ end
 function HealBot_OnEvent_SpellsChanged(this, arg1)
     if arg1 then return; end
     HealBot_AddDebug("HB: SpellsChanged");
+    if HealBot_CacheSpellIDs then HealBot_CacheSpellIDs() end
     HealBot_SpellsInitFlag = 2;
 end
 
 -- HealBot_OnEvent_TalentsChanged: Internal utility: HealBot_OnEvent_TalentsChanged
 function HealBot_OnEvent_TalentsChanged(this, arg1)
     HealBot_AddDebug("HB: TalentsChanged");
+    if HealBot_UpdateTalentRanks then HealBot_UpdateTalentRanks() end
 end
 
 -- HealBot_OnEvent_PlayerEnteringWorld: Internal utility: HealBot_OnEvent_PlayerEnteringWorld
@@ -579,6 +585,7 @@ function HealBot_OnEvent_PlayerEnteringWorld(this)
     if HealBot_ApplyRefreshHook then
         HealBot_ApplyRefreshHook()
     end
+    if HealBot_UpdateUnitIDCache then HealBot_UpdateUnitIDCache() end
 end
 
 -- HealBot_OnEvent_SpellcastStart: Internal utility: HealBot_OnEvent_SpellcastStart
