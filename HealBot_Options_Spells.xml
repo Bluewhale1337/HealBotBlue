@@ -4,7 +4,7 @@
   <Script file="HealBot_Options_Spells.lua" />
       <Frame name="HealBot_Options_Panel2" parent="HealBot_Options" hidden="true" setAllPoints="true">
         <Frames>
-     <Frame name="HealBot_Options_KeysFrame" inherits="OptionFrameBoxTemplate">
+     <Frame name="HealBot_Options_KeysFrame">
         <Size>
           <AbsDimension y="268"/>
         </Size>
@@ -24,9 +24,9 @@
 	<Layer level="BACKGROUND">
 	<FontString name="HealBot_ComboButtons_ButtonText1" text="HEALBOT_OPTIONS_USEBUTTONS" inherits="GameFontNormalSmall">
 	  <Anchors>
-	   <Anchor point="TOPLEFT">
+	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="110" y="-10" />
+		<AbsDimension x="0" y="-10" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -50,7 +50,7 @@
 	  <Anchors>
 	   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="BOTTOMLEFT">
 	    <Offset>
-		<AbsDimension x="-5" y="-25" />
+		<AbsDimension x="0" y="-25" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -132,7 +132,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="-5" y="-68"/>
+              <AbsDimension x="0" y="-68"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -212,13 +212,7 @@
         </Frames>
       </Frame>
 
-      <Frame name="HealBot_Options_TooltipsPanel" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_TooltipsPanel">
         <Size>
           <AbsDimension y="118"/>
         </Size>

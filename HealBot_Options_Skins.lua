@@ -8,15 +8,41 @@ function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
   HealBot_Action_PartyChanged()
 end
 
--- HealBot_Options_GridOrientation_OnClick: UI handler for OnClick options panel.
-function HealBot_Options_GridOrientation_OnClick(this)
+function HealBot_Options_GridOrientationDD_OnLoad(this)
+  UIDropDownMenu_Initialize(this, HealBot_Options_GridOrientationDD_Initialize);
+  UIDropDownMenu_SetWidth(110, this);
+end
+
+function HealBot_Options_GridOrientationDD_Initialize()
+  local orient = HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] or 1;
+  local info = {};
+  info.text = "Vertical (Columns)";
+  info.func = HealBot_Options_GridOrientationDD_OnClick;
+  info.value = 1;
+  info.checked = (orient == 1);
+  UIDropDownMenu_AddButton(info);
+
+  info = {};
+  info.text = "Horizontal (Rows)";
+  info.func = HealBot_Options_GridOrientationDD_OnClick;
+  info.value = 2;
+  info.checked = (orient == 2);
+  UIDropDownMenu_AddButton(info);
+end
+
+function HealBot_Options_GridOrientationDD_OnClick()
+  UIDropDownMenu_SetSelectedID(HealBot_Options_GridOrientation_Dropdown, this:GetID());
   if not HealBot_Config.GridOrientation then HealBot_Config.GridOrientation = {} end
-  if this:GetChecked() then
-    HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = 2 -- Horizontal
-  else
-    HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = 1 -- Vertical
-  end
+  HealBot_Config.GridOrientation[HealBot_Config.Current_Skin] = this.value;
   HealBot_Action_PartyChanged()
+  
+  if (this.value == 2) then
+    HealBot_Options_BarMaxRowsS:Hide();
+    HealBot_Options_BarNumColsS:Show();
+  else
+    HealBot_Options_BarMaxRowsS:Show();
+    HealBot_Options_BarNumColsS:Hide();
+  end
 end
 
 -- HealBot_Options_NewSkin_OnTextChanged: UI handler for OnTextChanged options panel.
@@ -157,4 +183,20 @@ function HealBot_Options_Skins_OnSelect()
     HealBot_Config.Current_Skin = this:GetText()
     HealBot_Options_SetSkins()
   end
+end
+
+function HealBot_Options_TestBarsButton_OnClick(this)
+  if HealBot_Config.TestBarsOn then
+    HealBot_Config.TestBarsOn = false
+    this:SetText(HEALBOT_OPTIONS_TESTBARS.." OFF")
+  else
+    HealBot_Config.TestBarsOn = true
+    this:SetText(HEALBOT_OPTIONS_TESTBARS.." ON")
+  end
+  HealBot_Action_PartyChanged()
+end
+
+function HealBot_Options_NumTestBars_OnValueChanged(this)
+  HealBot_Config.numTestBars = this:GetValue()
+  if HealBot_Config.TestBarsOn then HealBot_Action_PartyChanged() end
 end

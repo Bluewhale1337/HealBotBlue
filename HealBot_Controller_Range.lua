@@ -33,7 +33,7 @@ function HealBot_Range_Check(unit, range)
         return _rangeCache[range][unit]
     end
 
-    if ( unit == "player" ) then 
+    if ( unit == "player" or string.find(unit, "^Test") ) then 
         return_val = 1;
     elseif HealBot_Integrations_ClassicAPI_Active and UnitDistanceSquared and UnitInLineOfSight then
         local inSight = UnitInLineOfSight("player", unit)

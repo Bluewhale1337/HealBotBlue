@@ -9,7 +9,7 @@
         <Anchors>
           <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="-20" y="-30" /> 
+              <AbsDimension x="40" y="-30" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -45,13 +45,7 @@
         </Scripts>
       </CheckButton>
       
-      <Frame name="HealBot_Options_CureDispelCleanse" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_CureDispelCleanse">
         <Size>
           <AbsDimension y="110"/>
         </Size>
@@ -83,9 +77,9 @@
     </Frame>  
     <Frame name="HealBot_Options_CDCButLeft" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+          <Anchor point="TOP" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOP">
             <Offset>
-              <AbsDimension x="150" y="-35" /> 
+              <AbsDimension x="40" y="-35" /> 
             </Offset>
           </Anchor>
        </Anchors>
@@ -93,9 +87,9 @@
           <Layer level="OVERLAY">
             <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCLEFT">
               <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+                <Anchor point="RIGHT" relativeTo="HealBot_Options_CDCButLeft" relativePoint="LEFT">
                   <Offset>
-                    <AbsDimension x="70" y="-42"/>
+                    <AbsDimension x="-5" y="3"/>
                   </Offset>
                 </Anchor>
               </Anchors>
@@ -110,9 +104,9 @@
    </Frame>    
    <Frame name="HealBot_Options_CDCButRight" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+          <Anchor point="TOP" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOP">
             <Offset>
-              <AbsDimension x="150" y="-67" /> 
+              <AbsDimension x="40" y="-67" /> 
             </Offset>
           </Anchor>
        </Anchors>
@@ -120,9 +114,9 @@
           <Layer level="OVERLAY">
             <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCRIGHT">
               <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanse" relativePoint="TOPLEFT">
+                <Anchor point="RIGHT" relativeTo="HealBot_Options_CDCButRight" relativePoint="LEFT">
                   <Offset>
-                    <AbsDimension x="70" y="-74"/>
+                    <AbsDimension x="-5" y="3"/>
                   </Offset>
                 </Anchor>
               </Anchors>
@@ -136,13 +130,7 @@
 	</Scripts>
    </Frame>    
 
-      <Frame name="HealBot_Options_CureDispelCleanseCol" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_CureDispelCleanseCol">
         <Size>
           <AbsDimension y="95"/>
         </Size>
@@ -177,9 +165,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="70" y="-35"/>
+		  <AbsDimension x="-2" y="-35"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -192,9 +180,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="70" y="-35"/>
+		  <AbsDimension x="-2" y="-35"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -269,9 +257,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="70" y="-65"/>
+		  <AbsDimension x="-2" y="-65"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -284,9 +272,9 @@
 	  <AbsDimension x="130" y="20"/>
 	</Size>
 	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOPLEFT">
+	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="70" y="-65"/>
+		  <AbsDimension x="-2" y="-65"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -356,13 +344,7 @@
 	<BarColor r="0" g="1" b="0"/>
   </StatusBar>
 
-      <Frame name="HealBot_Options_CureDispelCleanseWarn" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_CureDispelCleanseWarn">
         <Size>
           <AbsDimension y="120"/>
         </Size>
@@ -394,9 +376,9 @@
    </Frame>  
       <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="OptionsCheckButtonTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CureDispelCleanseWarn" relativePoint="TOPLEFT">
+          <Anchor point="TOP" relativeTo="HealBot_Options_CureDispelCleanseWarn" relativePoint="TOP">
             <Offset>
-              <AbsDimension x="70" y="-35" /> 
+              <AbsDimension x="-90" y="-35" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -409,7 +391,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffWarning" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>

@@ -4,13 +4,7 @@
   <Script file="HealBot_Options_Buffs.lua" />
       <Frame name="HealBot_Options_Panel6" parent="HealBot_Options" hidden="true" setAllPoints="true">
         <Frames>
-          <Frame name="HealBot_Options_BuffFrame" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+          <Frame name="HealBot_Options_BuffFrame">
             <Size>
               <AbsDimension y="330"/>
             </Size>

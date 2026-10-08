@@ -567,10 +567,14 @@ end
 
 -- HealBot_GetHealSpell: Resolves spell rank based on health deficit.
 function HealBot_GetHealSpell(unit, pattern)
-  if (not UnitName(unit)) then return nil end;
+  if not string.find(unit, "^Test") then
+      if (not UnitName(unit)) then return nil end;
+  end
   if not pattern then return nil end;
   if UnitOnTaxi("player") then return nil end;
-  if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
+  if not string.find(unit, "^Test") then
+      if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
+  end
   if HealBot_UnitClass("player") == "DRUID" then
     if HealBot_GetShapeshiftForm() and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
   end

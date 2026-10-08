@@ -144,7 +144,7 @@ end
 
 -- Updates base unit info (Name, Class)
 function HealBot_Model:UpdateUnitIdentity(unit)
-    if not self.units[unit] then return false end
+    if not self.units[unit] or string.find(unit, "^Test") then return false end
     
     local oldName = self.units[unit].name
     local oldEnglishClass = self.units[unit].englishClass

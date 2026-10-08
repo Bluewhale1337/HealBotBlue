@@ -23,7 +23,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionLocked" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -36,7 +36,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GrowUpwards" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -94,13 +94,7 @@
         </Scripts>
       </CheckButton>
 
-      <Frame name="HealBot_Options_GenFrame" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_GenFrame">
         <Size>
           <AbsDimension y="95"/>
         </Size>
@@ -178,7 +172,7 @@
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowManaBars" relativePoint="BOTTOMLEFT">
                 <Offset>
-                  <AbsDimension x="0" y="-2" /> 
+                  <AbsDimension x="0" y="-5" /> 
                 </Offset>
               </Anchor>
             </Anchors>
@@ -216,7 +210,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-2" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -229,7 +223,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideAbort" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-2" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -242,7 +236,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_QualityRange" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-2" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -255,7 +249,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ProtectPvP" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-2" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>

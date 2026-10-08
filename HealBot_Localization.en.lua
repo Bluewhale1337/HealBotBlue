@@ -390,3 +390,5 @@ HEALBOT_WORDS_SEC               = "sec";
 HEALBOT_WORDS_TO                = "to";
 HEALBOT_WORDS_CAST              = "Cast"
 HEALBOT_WORDS_FOR               = "for";
+HEALBOT_OPTIONS_TESTBARS        = "Test Bars";
+HEALBOT_WORD_TEST               = "Test";

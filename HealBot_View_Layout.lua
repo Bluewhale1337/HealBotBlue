@@ -41,7 +41,12 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
         return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
     
-    local text = UnitName(unit);
+    local text
+    if string.find(unit, "^Test") then
+        text = HealBot_Model.units[unit] and HealBot_Model.units[unit].name or unit
+    else
+        text = UnitName(unit) or unit
+    end
     if not HealBot_HealsIn[text] then
         HealBot_HealsIn[text] = 0;
     end
@@ -284,7 +289,10 @@ function HealBot_Action_EnableButton(button)
     
     local raidIcon = getglobal(button:GetName() .. "BarRaidIcon")
     if raidIcon then
-        local index = GetRaidTargetIndex(unit)
+        local index
+        if not string.find(unit, "^Test") then
+            index = GetRaidTargetIndex(unit)
+        end
         if index then
             SetRaidTargetIconTexture(raidIcon, index)
             raidIcon:Show()
@@ -539,7 +547,52 @@ function HealBot_Action_PartyChanged()
         local i = 0;
         local last = 0;
         local GroupValid = numBars;
-        last = last + 6
+        if HealBot_Config.TestBarsOn then
+            local testBars = HealBot_Config.numTestBars or 25
+            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+                HeaderPos[i + 1] = HEALBOT_OPTIONS_TESTBARS or "Test Bars"
+            end
+            local testClasses = {"PRIEST", "DRUID", "SHAMAN", "PALADIN", "WARRIOR", "MAGE", "WARLOCK", "HUNTER", "ROGUE"}
+            local testNames = {"Arthas", "Illidan", "Sylvanas", "Thrall", "Jaina", "Uther", "Grommash", "Malfurion", "Tyrande", "Guldan", "Kael", "Rexxar", "Varian", "Voljin", "Baine"}
+            for j = 1, testBars do
+                i = i + 1
+                local unit = "Test" .. j
+                HealBot_Action_SetHealButton(i, unit)
+                if not HealBot_Model.units[unit] then
+                    local rClass = testClasses[math.random(1, #testClasses)]
+                    local rName = testNames[math.random(1, #testNames)] .. j
+                    local mHealth = math.random(4000, 8000)
+                    local cHealth = math.random(1, mHealth)
+                    local pt = 0
+                    if rClass == "WARRIOR" then pt = 1 elseif rClass == "ROGUE" then pt = 3 end
+                    HealBot_Model.units[unit] = { name = rName, guid = "TestGuid"..j, class = rClass, englishClass = rClass, health = cHealth, maxHealth = mHealth, mana = 2000, maxMana = 4000, powerType = pt, incomingHeal = 0, hasAggro = false, range = 1 }
+                    if not HealBot_UnitIcons then HealBot_UnitIcons = {} end
+                    HealBot_UnitIcons[unit] = {}
+                    local testIcons = {
+                        "Interface\\Icons\\Spell_Holy_Renew",
+                        "Interface\\Icons\\Spell_Nature_Rejuvenation",
+                        "Interface\\Icons\\Spell_Nature_ResistNature", -- Regrowth
+                        "Interface\\Icons\\Spell_Holy_PowerWordShield",
+                        "Interface\\Icons\\Spell_Holy_Excorcism" -- Fear Ward
+                    }
+                    -- Shuffle icons
+                    for k = #testIcons, 2, -1 do
+                        local j = math.random(k)
+                        testIcons[k], testIcons[j] = testIcons[j], testIcons[k]
+                    end
+                    local numIcons = math.random(0, 3)
+                    for k = 1, numIcons do
+                        HealBot_UnitIcons[unit][k] = testIcons[k]
+                    end
+                end
+                numBars = numBars + 1
+            end
+            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+                numBars = numBars + 1
+                numHeaders = numHeaders + 1
+            end
+        else
+            last = last + 6
         if HealBot_Config.GroupHeals == 1 then
             if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
                 HeaderPos[i + 1] = HEALBOT_OPTIONS_GROUPHEALS
@@ -891,6 +944,7 @@ function HealBot_Action_PartyChanged()
             HeaderPos[PetsValid + 1] = nil;
             numBars = numBars - 1;
             numHeaders = numHeaders - 1;
+        end
         end
       
         local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10

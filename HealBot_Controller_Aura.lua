@@ -6,6 +6,7 @@ local StaticHasBuff = {}
 
 -- HealBot_UnitAffected: Checks if a specific buff/debuff exists on a unit.
 function HealBot_UnitAffected(unit, effect)
+    if string.find(unit, "^Test") then return nil; end
     if not effect then return nil; end
     local i = 1
     while true do
@@ -73,6 +74,7 @@ end
 
 -- HealBot_CheckBuffs: Scans unit for missing tracked buffs.
 function HealBot_CheckBuffs(unit)
+    if string.find(unit, "^Test") then return end
     if HealBot_Config.BuffWatch ~= 1 then
         HealBot_MissingBuffs[unit] = nil
         return
@@ -180,6 +182,7 @@ local HealBot_AuraWarningPlayed = {}
 
 -- HealBot_OnEvent_UnitAura: Updates debuff lists and icon textures on aura change.
 function HealBot_OnEvent_UnitAura(this, unit)
+    if string.find(unit, "^Test") then return end
     if not HealBot_DebuffTypeMap then
         HealBot_DebuffTypeMap = {
             [HEALBOT_DISEASE] = HEALBOT_DISEASE_en,

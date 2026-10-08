@@ -5,13 +5,7 @@
       <Frame name="HealBot_Options_Panel3" parent="HealBot_Options" hidden="true" setAllPoints="true">
         <Frames>
 
-      <Frame name="HealBot_Options_HealTargetFrame" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_HealTargetFrame">
         <Size>
           <AbsDimension y="88"/>
         </Size>
@@ -32,9 +26,9 @@
 	<Layer level="BACKGROUND">
 	<FontString name="HealBot_HealButtons_Text" text="HEALBOT_OPTIONS_HEAL_BUTTONS" inherits="GameFontNormalSmall">
 	  <Anchors>
-	   <Anchor point="TOPLEFT">
+	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="100" y="-8" />
+		<AbsDimension x="0" y="-8" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -47,7 +41,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="25" y="-21" /> 
+              <AbsDimension x="85" y="-21" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -60,7 +54,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GroupHeals" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="5" /> 
+              <AbsDimension x="0" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -86,7 +80,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GroupHeals" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="122" y="5" /> 
+              <AbsDimension x="122" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -99,7 +93,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GroupHeals" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="244" y="5" /> 
+              <AbsDimension x="244" y="-5" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -114,9 +108,9 @@
 
       <Slider name="HealBot_Options_AlertLevel" inherits="HealBot_Options_SliderTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="45" y="-132" /> 
+              <AbsDimension x="0" y="-132" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -142,9 +136,9 @@
 
       <Frame name="HealBot_Options_EmergencyFilter" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="155" y="-205" /> 
+              <AbsDimension x="40" y="-205" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -170,9 +164,9 @@
       
       <Frame name="HealBot_Options_ExtraSort" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="155" y="-238" /> 
+              <AbsDimension x="40" y="-238" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -198,9 +192,9 @@
 
       <Frame name="HealBot_Options_HealthText" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="155" y="-271" /> 
+              <AbsDimension x="40" y="-271" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -224,13 +218,7 @@
 	</Scripts>
       </Frame>
 
-      <Frame name="HealBot_Options_EmergLFrame" inherits="OptionFrameBoxTemplate">
-        <Scripts>
-          <OnLoad>
-            this:SetBackdropBorderColor(0.4, 0.4, 0.4);
-            this:SetBackdropColor(0, 0, 0, 0);
-          </OnLoad>
-        </Scripts>
+      <Frame name="HealBot_Options_EmergLFrame">
         <Size>
           <AbsDimension y="125"/>
         </Size>
@@ -251,9 +239,9 @@
 
       <Frame name="HealBot_Options_EmergencyFClass" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors>
-          <Anchor point="TOPLEFT">
+          <Anchor point="TOP">
             <Offset>
-              <AbsDimension x="128" y="-10" /> 
+              <AbsDimension x="40" y="-10" /> 
             </Offset>
           </Anchor>
         </Anchors>

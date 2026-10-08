@@ -342,7 +342,17 @@ function HealBot_Options_SetSkins()
   HealBot_Options_BarWidthS:SetValue(HealBot_Config.bwidth[HealBot_Config.Current_Skin])
   HealBot_Options_BarNumColsS:SetValue(HealBot_Config.numcols[HealBot_Config.Current_Skin])
   HealBot_Options_BarMaxRowsS:SetValue((HealBot_Config.bmaxrows and HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]) or 0)
-  HealBot_Options_GridOrientation:SetChecked(((HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) == 2) and 1 or nil)
+  local orient = (HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) or 1
+  UIDropDownMenu_SetSelectedID(HealBot_Options_GridOrientation_Dropdown, orient)
+  if orient == 2 then
+    HealBot_Options_GridOrientation_DropdownText:SetText("Horizontal (Rows)")
+    HealBot_Options_BarMaxRowsS:Hide()
+    HealBot_Options_BarNumColsS:Show()
+  else
+    HealBot_Options_GridOrientation_DropdownText:SetText("Vertical (Columns)")
+    HealBot_Options_BarMaxRowsS:Show()
+    HealBot_Options_BarNumColsS:Hide()
+  end
   HealBot_Options_BarBRSpaceS:SetValue(HealBot_Config.brspace[HealBot_Config.Current_Skin])
   HealBot_Options_BarBCSpaceS:SetValue(HealBot_Config.bcspace[HealBot_Config.Current_Skin])
   HealBot_Options_FramePaddingS:SetValue((HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10)
