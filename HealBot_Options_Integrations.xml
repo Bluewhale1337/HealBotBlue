@@ -8,7 +8,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="31" y="-40"/>
+              <AbsDimension x="160" y="-40"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -46,7 +46,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="31" y="-145"/>
+              <AbsDimension x="160" y="-145"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -106,7 +106,7 @@
           <Anchors>
             <Anchor point="TOPLEFT">
               <Offset>
-                <AbsDimension x="65" y="-95"/>
+                <AbsDimension x="194" y="-95"/>
               </Offset>
             </Anchor>
           </Anchors>
@@ -117,7 +117,7 @@
           <Anchors>
             <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
               <Offset>
-                <AbsDimension x="34" y="-2"/>
+                <AbsDimension x="163" y="-2"/>
               </Offset>
             </Anchor>
           </Anchors>

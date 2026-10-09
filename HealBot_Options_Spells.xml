@@ -11,7 +11,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="21" y="-30"/>
+              <AbsDimension x="76" y="-30"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT">
@@ -63,7 +63,7 @@
         <Anchors>
 	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Dummy" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="40" y="-30"/>
+              <AbsDimension x="95" y="-30"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -79,7 +79,7 @@
         <Anchors>
 	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button1" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="40" y="0"/>
+              <AbsDimension x="95" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -92,7 +92,7 @@
         <Anchors>
 	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button2" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="50" y="0"/>
+              <AbsDimension x="105" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -118,7 +118,7 @@
         <Anchors>
 	  <Anchor point="TOPLEFT" relativeTo="HealBot_ComboButtons_Button4" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="55" y="0"/>
+              <AbsDimension x="110" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -200,7 +200,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShiftCtrl" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="25" y="-4" /> 
+              <AbsDimension x="80" y="-4" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -219,7 +219,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-300"/>
+              <AbsDimension x="75" y="-300"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT">
@@ -233,7 +233,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-4" /> 
+              <AbsDimension x="75" y="-4" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -246,7 +246,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="68" y="-2" /> 
+              <AbsDimension x="123" y="-2" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -258,7 +258,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-30" /> 
+              <AbsDimension x="75" y="-30" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -271,7 +271,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-55" /> 
+              <AbsDimension x="75" y="-55" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -284,7 +284,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipsPanel" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-80" /> 
+              <AbsDimension x="75" y="-80" /> 
             </Offset>
           </Anchor>
         </Anchors>

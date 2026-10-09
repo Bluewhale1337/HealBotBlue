@@ -114,6 +114,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UI Update - Customizable icon size** - Added an option to change size of HoT icons (default to 12px).
 * **Cleanup** - Removed dead code `HealBot_Groups` table.
 * **Bug Fix - Buff Watch Self** - Fixed an issue where the "Self Only" toggle for watched buffs failed to load visually across sessions.
+* **Bug Fix - Pet Coloring** - Fixed an issue where custom server integrations giving pets a class could override the mint pet color when class color override is toggled.
 
 **v1.6.2**
 * **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.

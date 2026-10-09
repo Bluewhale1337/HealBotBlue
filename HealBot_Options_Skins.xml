@@ -92,39 +92,6 @@
           <OnClick>HealBot_Options_NewSkinb_OnClick(this)</OnClick> 
         </Scripts>
       </Button>
-
-      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
-        <Size>
-          <AbsDimension x="100" y="22"/>
-        </Size>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NewSkinb" relativePoint="TOPRIGHT">
-            <Offset>
-              <AbsDimension x="10" y="0"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnClick>HealBot_Options_TestBarsButton_OnClick(this)</OnClick> 
-        </Scripts>
-      </Button>
-
-      <Slider name="HealBot_Options_NumTestBarsS" inherits="HealBot_Options_SliderTemplate">
-        <Size>
-		  <AbsDimension x="100" y="18" />
-		</Size>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TestBarsButton" relativePoint="TOPRIGHT">
-            <Offset>
-              <AbsDimension x="15" y="0"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_TESTBARS,1,40)</OnLoad> 
-          <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(this)</OnValueChanged> 
-        </Scripts>
-      </Slider>
       
             <Frame name="HealBot_Options_Scale">
         <Size>
@@ -612,6 +579,41 @@
 	<BarColor r="0" g="1" b="0"/>
   </StatusBar>    
 
+      
+
+      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
+        <Size>
+          <AbsDimension x="100" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="-61" y="-20"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_TestBarsButton_OnClick(this)</OnClick> 
+        </Scripts>
+      </Button>
+
+
+      <Slider name="HealBot_Options_NumTestBarsS" inherits="HealBot_Options_SliderTemplate">
+        <Size>
+		  <AbsDimension x="100" y="18" />
+		</Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TestBarsButton" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="15" y="-2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_TESTBARS,1,40)</OnLoad> 
+          <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
       </Frames>
    </Frame> 
    

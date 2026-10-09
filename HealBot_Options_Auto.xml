@@ -8,7 +8,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="25" y="-30" /> 
+              <AbsDimension x="165" y="-30" /> 
             </Offset>
           </Anchor>
         </Anchors>
@@ -36,7 +36,7 @@
         </Layers>
         <Anchors>
           <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-80" /></Offset>
+            <Offset><AbsDimension x="170" y="-80" /></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -60,7 +60,7 @@
         </Layers>
         <Anchors>
           <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-130" /></Offset>
+            <Offset><AbsDimension x="170" y="-130" /></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -84,7 +84,7 @@
         </Layers>
         <Anchors>
           <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-180" /></Offset>
+            <Offset><AbsDimension x="170" y="-180" /></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -108,7 +108,7 @@
         </Layers>
         <Anchors>
           <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-230" /></Offset>
+            <Offset><AbsDimension x="170" y="-230" /></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -132,7 +132,7 @@
         </Layers>
         <Anchors>
           <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-280" /></Offset>
+            <Offset><AbsDimension x="170" y="-280" /></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
