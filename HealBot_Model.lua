@@ -149,7 +149,7 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     local oldName = self.units[unit].name
     local oldEnglishClass = self.units[unit].englishClass
     local name = UnitName(unit)
-    local _, englishClass = UnitClass(unit)
+    local englishClass = HealBot_UnitClass(unit)
     
     if oldName ~= name or oldEnglishClass ~= englishClass then
         self.units[unit].name = name

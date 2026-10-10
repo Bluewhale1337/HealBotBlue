@@ -510,7 +510,7 @@ function HealBot_FindHealSpells()
           temp_Spell_cast = HealBot_Spells[spell].CastTime;
         end
         RealHealing = ((HealBot_GetBonus() * healingbonus_penalty) * (temp_Spell_cast / 3.5));
-        local playerClass, englishClass = UnitClass("player");
+        local englishClass = HealBot_UnitClass("player");
         local SpiBonus = 0;
         if (englishClass == "PRIEST") then
           SpiBonus = ((HealBot_SpiBonus(spell) * healingbonus_penalty) * (temp_Spell_cast / 3.5))
