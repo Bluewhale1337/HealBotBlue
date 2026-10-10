@@ -77,10 +77,25 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
         g = RAID_CLASS_COLORS[engClass].g
         b = RAID_CLASS_COLORS[engClass].b
     else
-        if pct >= 0.98 then r = 0.0; end
-        if pct < 0.98 and pct >= 0.65 then r = 2.94 - (pct * 3); end 
-        if pct <= 0.64 and pct > 0.31 then g = (pct - 0.31) * 3; end 
-        if pct <= 0.31 then g = 0.0; end
+        local skin = HealBot_Config.Current_Skin
+        local maxR = HealBot_Config.bcolormaxr and HealBot_Config.bcolormaxr[skin] or 0.0
+        local maxG = HealBot_Config.bcolormaxg and HealBot_Config.bcolormaxg[skin] or 1.0
+        local maxB = HealBot_Config.bcolormaxb and HealBot_Config.bcolormaxb[skin] or 0.0
+
+        local minR = HealBot_Config.bcolorminr and HealBot_Config.bcolorminr[skin] or 1.0
+        local minG = HealBot_Config.bcolorming and HealBot_Config.bcolorming[skin] or 0.0
+        local minB = HealBot_Config.bcolorminb and HealBot_Config.bcolorminb[skin] or 0.0
+
+        if maxR == 0 and maxG == 1 and maxB == 0 and minR == 1 and minG == 0 and minB == 0 then
+            if pct >= 0.98 then r = 0.0; end
+            if pct < 0.98 and pct >= 0.65 then r = 2.94 - (pct * 3); end 
+            if pct <= 0.64 and pct > 0.31 then g = (pct - 0.31) * 3; end 
+            if pct <= 0.31 then g = 0.0; end
+        else
+            r = minR + (maxR - minR) * pct
+            g = minG + (maxG - minG) * pct
+            b = minB + (maxB - minB) * pct
+        end
     end
     return r, g, b, a;
 end
@@ -252,8 +267,9 @@ function HealBot_Action_EnableButton(button)
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
     local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
-    if fontFlags ~= expectedFlags then
-        bar.txt:SetFont(fontName, fontHeight, expectedFlags)
+    local expectedFont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or fontName
+    if fontFlags ~= expectedFlags or fontName ~= expectedFont then
+        bar.txt:SetFont(expectedFont, fontHeight, expectedFlags)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
@@ -465,8 +481,8 @@ end
 function HealBot_Action_SetHealButton(index, unit)
     if not index then
         for k in pairs(HealBot_Action_HealButtons) do HealBot_Action_HealButtons[k] = nil end
-        for k, v in pairs(HealBot_Action_UnitButtons) do
-            for j in pairs(v) do v[j] = nil end
+        for k in pairs(HealBot_Action_UnitButtons) do
+            HealBot_Action_UnitButtons[k] = nil
         end
         return nil
     end
@@ -1205,7 +1221,10 @@ function HealBot_Action_AppendUnit(unit)
     local btexture = (HealBot_Config.btexture and HealBot_Config.btexture[HealBot_Config.Current_Skin]) or 5
     HealBot_Action_SetTexture(bar, btexture)
     local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
-    bar.txt:SetTextHeight(btextheight)
+    local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+    local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+    local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+    bar.txt:SetFont(bfont, btextheight, expectedFlags)
     bar2:SetHeight(bheight)
     HealBot_Action_SetTexture(bar2, btexture)
     

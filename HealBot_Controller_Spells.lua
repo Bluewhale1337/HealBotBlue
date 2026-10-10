@@ -473,7 +473,13 @@ end
 -- HealBot_AddHeal: Internal utility: HealBot_AddHeal
 function HealBot_AddHeal(spell)
   HealBot_SetSpellDefaults(spell);
-  table.foreachi(HealBot_Spells[spell].Target, function (i, val)
+  local targetList = HealBot_Spells[spell].Target
+  if not targetList and HealBot_Spells[spell].Group and HealBot_Spells[HealBot_Spells[spell].Group] then
+    targetList = HealBot_Spells[HealBot_Spells[spell].Group].Target
+  end
+  if not targetList then targetList = {"player", "party", "pet"} end
+  table.foreachi(targetList, function (i, val)
+    if not HealBot_Heals[val] then HealBot_Heals[val] = {} end
     table.insert(HealBot_Heals[val], spell);
   end);
   HealBot_Spells[spell].BagSlot = HealBot_GetBagSlot(spell);

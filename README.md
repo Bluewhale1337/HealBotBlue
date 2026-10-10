@@ -52,7 +52,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
-* **UI - Cleanup** - While adding new funcionalities I ignored how menus look, just adding things for each tab where there was free space, so now I tried to clean up this convoluted mess I made. Menu Tabs are now aligned and grouped in a manner that makes more sense.
+* **UI - Cleanup** - While adding new funcionalities the way menus look was ignored, new functions were added to each tab where there was free space, so attempt was made to clean up this convoluted mess I made. Menu Tabs are now aligned and grouped in a manner that makes more sense.
 * **Performance Fix - Table Pooling & GC Leaks** - Resolved critical table leaks in emergency heals where pooled tables (`order` and `units`) failed to release when pet heals were disabled, un-nested pet healing from emergency heals, eliminated high-frequency (4 Hz) anonymous closure allocations in `HealBot_Action_UpdatePlayerHoTs`, and implemented in-place key recycling for equipment scanning and grid button tables.
 
 **v1.7.4**
@@ -149,6 +149,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Memory Optimization:** Fixed a significant memory leak where tracking tables were being repeatedly allocated every tick during aura scanning, and replaced `table.foreach` with pairs loops to avoid GC spikes during combat.
 
 **v1.4.1**
+* **Frame Disappearing Fix:** Fixed a layout rendering bug where frames would flash for a split second and disappear on login due to improper table clearing of unit buttons, leaving empty arrays that incorrectly failed the layout check.
+* **Ranked Spell Parsing Fix:** Fixed a Lua crash during addon initialization when discovering ranked spells without an explicit target property. Ranked spells now dynamically inherit the target table from their base spells.
 * **Talent-based Healing Calculations:** Implemented dynamic spell healing calculations for Druid, Priest, and Paladin classes based on talents.
 * **Modifier Key Polling:** Replaced MODIFIER_STATE_CHANGED event with polling in HealBot_OnUpdate to track modifier keys reliably.
 * **Incoming Heals Fix:** Fixed a bug where incoming heals failed to broadcast or show on the UI due to synchronous GCD fails and `CheckInteractDistance` limitations in the 1.12 API.

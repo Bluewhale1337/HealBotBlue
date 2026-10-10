@@ -202,6 +202,20 @@ function HealBot_Returned_Colours()
     HealBot_Config.babortcolg[HealBot_Config.Current_Skin],
     HealBot_Config.babortcolb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
     HealBot_Config.babortcola[HealBot_Config.Current_Skin] = A;
+  elseif HealBot_ColourObjWaiting=="MaxHP" then
+    if not HealBot_Config.bcolormaxr then HealBot_Config.bcolormaxr = {} end
+    if not HealBot_Config.bcolormaxg then HealBot_Config.bcolormaxg = {} end
+    if not HealBot_Config.bcolormaxb then HealBot_Config.bcolormaxb = {} end
+    HealBot_Config.bcolormaxr[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolormaxg[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolormaxb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
+  elseif HealBot_ColourObjWaiting=="MinHP" then
+    if not HealBot_Config.bcolorminr then HealBot_Config.bcolorminr = {} end
+    if not HealBot_Config.bcolorming then HealBot_Config.bcolorming = {} end
+    if not HealBot_Config.bcolorminb then HealBot_Config.bcolorminb = {} end
+    HealBot_Config.bcolorminr[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolorming[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolorminb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
   else
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].R,
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].G,
@@ -358,6 +372,21 @@ function HealBot_Options_SetSkins()
   HealBot_Options_FramePaddingS:SetValue((HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10)
   HealBot_Options_BorderThicknessS:SetValue((HealBot_Config.bboffset and HealBot_Config.bboffset[HealBot_Config.Current_Skin]) or 1)
   HealBot_Options_FontHeight:SetValue(HealBot_Config.btextheight[HealBot_Config.Current_Skin])
+
+  local fontFile = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+  local fontName = "Friz Quadrata"
+  if HealBot_Font_List then
+    for i = 1, getn(HealBot_Font_List) do
+      if HealBot_Font_List[i].file == fontFile then
+        fontName = HealBot_Font_List[i].text
+        UIDropDownMenu_SetSelectedID(HealBot_Options_Font_Dropdown, i)
+        break
+      end
+    end
+  end
+  if HealBot_Options_Font_DropdownText then
+    HealBot_Options_Font_DropdownText:SetText(fontName)
+  end
   HealBot_Options_BarAlphaDis:SetValue(HealBot_Config.bardisa[HealBot_Config.Current_Skin])
   HealBot_Options_AbortBarSize:SetValue(HealBot_Config.abortsize[HealBot_Config.Current_Skin])
   local isShowHeaders = (HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1)

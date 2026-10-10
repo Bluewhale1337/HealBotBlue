@@ -170,13 +170,13 @@
 
 <!-- COLUMN 2: Grid & Layout --> 
       <CheckButton name="HealBot_Options_ShowHeaders" inherits="SendMailRadioButtonTemplate">
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarMaxRowsS" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5" /></Offset></Anchor></Anchors>
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="190" y="-5" /></Offset></Anchor></Anchors>
         <Scripts>
           <OnLoad>HealBot_Options_ShowHeaders_OnLoad(this,HEALBOT_OPTIONS_SHOWHEADERS)</OnLoad> 
           <OnClick>HealBot_Options_ShowHeaders_OnClick(this)</OnClick> 
         </Scripts>
       </CheckButton>
-            <Frame name="HealBot_Options_GridOrientation_Dropdown" inherits="UIDropDownMenuTemplate" id="1">
+      <Frame name="HealBot_Options_GridOrientation_Dropdown" inherits="UIDropDownMenuTemplate" id="1">
         <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHeaders" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="-15" y="-20" /></Offset></Anchor></Anchors>
         <Layers>
           <Layer level="OVERLAY">
@@ -223,6 +223,23 @@
           <OnValueChanged>HealBot_Options_AbortBarSize_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider>
+      <Frame name="HealBot_Options_Font_Dropdown" inherits="UIDropDownMenuTemplate" id="2">
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_AbortBarSize" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="-15" y="-20" /></Offset></Anchor></Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Font">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="15" y="0"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>HealBot_Options_FontDD_OnLoad(this)</OnLoad>
+        </Scripts>
+      </Frame>
 
 <!-- COLUMN 3: Visuals & Opacity -->
       <CheckButton name="HealBot_Options_BarColorMode" inherits="SendMailRadioButtonTemplate">
@@ -287,309 +304,269 @@
         </Scripts>
       </Slider> 
 
-   <Button name="HealBot_EnTextColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IconSizeS"  relativePoint="BOTTOMLEFT">
-  		<Offset>
-  		  <AbsDimension x="58" y="-15"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IconSizeS"  relativePoint="BOTTOMLEFT">
-  		<Offset>
-  		  <AbsDimension x="58" y="-15"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="HealBot_EnTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_ENTEXT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_EnTextColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(70); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>
-  <StatusBar name="HealBot_EnTextColorpickin" inherits="TextStatusBar">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IconSizeS"  relativePoint="BOTTOMLEFT">
-  		<Offset>
-  		  <AbsDimension x="58" y="-15"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>
-  
-  <Button name="HealBot_DisTextColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="HealBot_DisTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_DISTEXT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_DisTextColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>
-  
-  <Button name="HealBot_DebTextColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_DebTextColorpick" inherits="HealBot_ColourButtonTemplate">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="HealBot_DebTextColorpickt" inherits="GameFontNormalSmall" text="HEALBOT_SKIN_DEBTEXT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_DebTextColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-    </Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>
-
-
-  <Button name="HealBot_BackgroundColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPLEFT">
-		<Offset>
-		  <AbsDimension x="0" y="-25"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_BackgroundColorpick" inherits="HealBot_ColourButtonTemplate">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPLEFT">
-		<Offset>
-		  <AbsDimension x="0" y="-25"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString inherits="GameFontNormalSmall" text="HEALBOT_SKIN_BACKTEXT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_BackgroundColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>    
-  <Button name="HealBot_BorderColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_BorderColorpick" inherits="HealBot_ColourButtonTemplate">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString inherits="GameFontNormalSmall" text="HEALBOT_SKIN_BORDERTEXT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_BorderColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>    
-  <Button name="HealBot_AbortColorpickb">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-	<Scripts>
-      <OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick> 
-	</Scripts>
-  </Button>
-  <StatusBar name="HealBot_AbortColorpick" inherits="HealBot_ColourButtonTemplate">
-	<Size>
-	  <AbsDimension x="87" y="20"/>
-	</Size>
-	<Anchors>
-	  <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"  relativePoint="TOPRIGHT">
-		<Offset>
-		  <AbsDimension x="5" y="0"/>
-		</Offset>
-	  </Anchor>
-	</Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString inherits="GameFontNormalSmall" text="HEALBOT_ACTION_ABORT">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="HealBot_AbortColorpick" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-	<Scripts>
-      <OnLoad> this:SetMinMaxValues(0,100); this:SetValue(100); </OnLoad> 
-	</Scripts>
-	<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-	<BarColor r="0" g="1" b="0"/>
-  </StatusBar>    
-
-      
-
-      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
-        <Size>
-          <AbsDimension x="100" y="22"/>
-        </Size>
+      <!-- BOTTOM ROW 1: Max HP, Min HP, Font Enabled, Font Disabled -->
+      <StatusBar name="HealBot_MaxHPColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick" relativePoint="BOTTOMLEFT">
-            <Offset>
-              <AbsDimension x="-61" y="-20"/>
-            </Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IconSizeS" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="-25" y="-30"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Max Health">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_MaxHPColorpickt" inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_MAXHPTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_MaxHPColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_MaxHPColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("MaxHP")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_MinHPColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_MaxHPColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Min Health">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_MinHPColorpickt" inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_MINHPTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="1" g="0" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_MinHPColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_MinHPColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("MinHP")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_MinHPColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Font Normal">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_EnTextColorpickt" inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_ENTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(70);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <StatusBar name="HealBot_EnTextColorpickin" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"/></Anchors>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_EnTextColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Font Disabled">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_DisTextColorpickt" inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_DISTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_DisTextColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick></Scripts>
+      </Button>
+
+      <!-- BOTTOM ROW 2: Font Debuff, Background, Border, Abort Bar -->
+      <StatusBar name="HealBot_DebTextColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_MaxHPColorpick" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-22"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Font Debuff">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_DebTextColorpickt" inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_DEBTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_DebTextColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_BackgroundColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Background">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_BACKTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_BackgroundColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_BorderColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Border">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString inherits="GameFontHighlightSmall" text="HEALBOT_SKIN_BORDERTEXT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_BorderColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick></Scripts>
+      </Button>
+
+      <StatusBar name="HealBot_AbortColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick" relativePoint="TOPRIGHT">
+            <Offset><AbsDimension x="12" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Abort Bar">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString inherits="GameFontHighlightSmall" text="HEALBOT_ACTION_ABORT">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="0" g="1" b="0"/>
+      </StatusBar>
+      <Button name="HealBot_AbortColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_AbortColorpick"/></Anchors>
+        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick></Scripts>
+      </Button>
+
+      <!-- BOTTOM ROW 3: Test Bars -->
+      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
+        <Size><AbsDimension x="110" y="22"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="80" y="-12"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -597,16 +574,11 @@
         </Scripts>
       </Button>
 
-
       <Slider name="HealBot_Options_NumTestBarsS" inherits="HealBot_Options_SliderTemplate">
-        <Size>
-		  <AbsDimension x="100" y="18" />
-		</Size>
+        <Size><AbsDimension x="110" y="18"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TestBarsButton" relativePoint="TOPRIGHT">
-            <Offset>
-              <AbsDimension x="15" y="-2"/>
-            </Offset>
+            <Offset><AbsDimension x="15" y="-2"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>

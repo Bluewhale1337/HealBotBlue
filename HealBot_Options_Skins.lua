@@ -1,6 +1,41 @@
 -- HealBot Options panel file: HealBot_Options_Skins.lua
 -- Split from original HealBot_Options.lua
 
+HealBot_Font_List = {
+  { text = "Friz Quadrata", file = "Fonts\\FRIZQT__.TTF" },
+  { text = "Arial Narrow",  file = "Fonts\\ARIALN.TTF" },
+  { text = "Skurri",        file = "Fonts\\skurri.ttf" },
+  { text = "Morpheus",      file = "Fonts\\MORPHEUS.ttf" },
+}
+
+function HealBot_Options_FontDD_OnLoad(this)
+  UIDropDownMenu_Initialize(this, HealBot_Options_FontDD_Initialize)
+  UIDropDownMenu_SetWidth(110, this)
+end
+
+function HealBot_Options_FontDD_Initialize()
+  local currentFont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+  for i = 1, getn(HealBot_Font_List) do
+    local fontItem = HealBot_Font_List[i]
+    local info = {}
+    info.text = fontItem.text
+    info.func = HealBot_Options_FontDD_OnClick
+    info.value = fontItem.file
+    info.checked = (currentFont == fontItem.file)
+    UIDropDownMenu_AddButton(info)
+  end
+end
+
+function HealBot_Options_FontDD_OnClick()
+  UIDropDownMenu_SetSelectedID(HealBot_Options_Font_Dropdown, this:GetID())
+  if HealBot_Options_Font_DropdownText then
+    HealBot_Options_Font_DropdownText:SetText(this:GetText())
+  end
+  if not HealBot_Config.bfont then HealBot_Config.bfont = {} end
+  HealBot_Config.bfont[HealBot_Config.Current_Skin] = this.value
+  HealBot_Action_ResetSkin()
+end
+
 -- HealBot_Options_BarMaxRowsS_OnValueChanged: UI handler for OnValueChanged options panel.
 function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
   if not HealBot_Config.bmaxrows then HealBot_Config.bmaxrows = {} end
@@ -97,6 +132,24 @@ function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Config.babortcola[HealBot_Options_NewSkin:GetText()] = HealBot_Config.babortcola[HealBot_Config.Current_Skin]
   HealBot_Config.ShowHeader[HealBot_Options_NewSkin:GetText()] = HealBot_Config.ShowHeader[HealBot_Config.Current_Skin]
 
+  if not HealBot_Config.bcolormaxr then HealBot_Config.bcolormaxr = {} end
+  if not HealBot_Config.bcolormaxg then HealBot_Config.bcolormaxg = {} end
+  if not HealBot_Config.bcolormaxb then HealBot_Config.bcolormaxb = {} end
+  if not HealBot_Config.bcolorminr then HealBot_Config.bcolorminr = {} end
+  if not HealBot_Config.bcolorming then HealBot_Config.bcolorming = {} end
+  if not HealBot_Config.bcolorminb then HealBot_Config.bcolorminb = {} end
+  if not HealBot_Config.bfont then HealBot_Config.bfont = {} end
+
+  local curSkin = HealBot_Config.Current_Skin
+  local newSkin = HealBot_Options_NewSkin:GetText()
+  HealBot_Config.bcolormaxr[newSkin] = HealBot_Config.bcolormaxr[curSkin] or 0
+  HealBot_Config.bcolormaxg[newSkin] = HealBot_Config.bcolormaxg[curSkin] or 1
+  HealBot_Config.bcolormaxb[newSkin] = HealBot_Config.bcolormaxb[curSkin] or 0
+  HealBot_Config.bcolorminr[newSkin] = HealBot_Config.bcolorminr[curSkin] or 1
+  HealBot_Config.bcolorming[newSkin] = HealBot_Config.bcolorming[curSkin] or 0
+  HealBot_Config.bcolorminb[newSkin] = HealBot_Config.bcolorminb[curSkin] or 0
+  HealBot_Config.bfont[newSkin] = HealBot_Config.bfont[curSkin] or "Fonts\\FRIZQT__.TTF"
+
   table.insert(HealBot_Skins,2,HealBot_Options_NewSkin:GetText())
   HealBot_Config.Skin_ID = 2;
   HealBot_Config.Skins = HealBot_Skins;  HealBot_Config.Current_Skin = HealBot_Options_NewSkin:GetText();
@@ -144,6 +197,13 @@ function HealBot_Options_DeleteSkin_OnClick(this)
     HealBot_Config.babortcolb[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.babortcola[HealBot_Options_SkinsText:GetText()] = nil
     HealBot_Config.ShowHeader[HealBot_Options_SkinsText:GetText()] = nil
+    if HealBot_Config.bcolormaxr then HealBot_Config.bcolormaxr[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bcolormaxg then HealBot_Config.bcolormaxg[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bcolormaxb then HealBot_Config.bcolormaxb[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bcolorminr then HealBot_Config.bcolorminr[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bcolorming then HealBot_Config.bcolorming[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bcolorminb then HealBot_Config.bcolorminb[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bfont then HealBot_Config.bfont[HealBot_Options_SkinsText:GetText()] = nil end
     table.remove(HealBot_Skins,HealBot_Config.Skin_ID)
     HealBot_Config.Skin_ID = 1;
     HealBot_Config.Skins = HealBot_Skins;  
