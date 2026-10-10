@@ -77,7 +77,11 @@ function HealBot_BonusScanner:ScanEquipment()
 
     HealBot_BonusTooltip:SetOwner(HealBot_BonusTooltip, "ANCHOR_NONE");
 	HealBot_BonusScanner.temp.bonuses = 0;
-	HealBot_BonusScanner.temp.sets = {};
+	if not HealBot_BonusScanner.temp.sets then
+		HealBot_BonusScanner.temp.sets = {}
+	else
+		for k in pairs(HealBot_BonusScanner.temp.sets) do HealBot_BonusScanner.temp.sets[k] = nil end
+	end
 	HealBot_BonusScanner.temp.set = "";
 	for i, slotname in HealBot_BonusScanner.slots do
 		slotid, _ = GetInventorySlotInfo(slotname.. "Slot");

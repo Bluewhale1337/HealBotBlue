@@ -53,6 +53,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
 * **UI - Cleanup** - While adding new funcionalities I ignored how menus look, just adding things for each tab where there was free space, so now I tried to clean up this convoluted mess I made. Menu Tabs are now aligned and grouped in a manner that makes more sense.
+* **Performance Fix - Table Pooling & GC Leaks** - Resolved critical table leaks in emergency heals where pooled tables (`order` and `units`) failed to release when pet heals were disabled, un-nested pet healing from emergency heals, eliminated high-frequency (4 Hz) anonymous closure allocations in `HealBot_Action_UpdatePlayerHoTs`, and implemented in-place key recycling for equipment scanning and grid button tables.
 
 **v1.7.4**
 * **Performance Fix - CPU Spikes** - Fixed massive FPS drops during raid combat. The `HealBot_CheckBuffs` function previously forced the client to generate hidden UI tooltips for up to 32 buffs per player on every single `UNIT_AURA` event. Tooltip parsing is now cached per texture, bypassing thousands of redundant API calls per second.

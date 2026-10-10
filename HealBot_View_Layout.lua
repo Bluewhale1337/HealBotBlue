@@ -464,8 +464,10 @@ end
 -- HealBot_Action_SetHealButton: Assigns a unit string to a grid button slot.
 function HealBot_Action_SetHealButton(index, unit)
     if not index then
-        HealBot_Action_HealButtons = {};
-        HealBot_Action_UnitButtons = {};
+        for k in pairs(HealBot_Action_HealButtons) do HealBot_Action_HealButtons[k] = nil end
+        for k, v in pairs(HealBot_Action_UnitButtons) do
+            for j in pairs(v) do v[j] = nil end
+        end
         return nil
     end
     local button = getglobal("HealBot_Action_HealUnit" .. index);
@@ -905,47 +907,47 @@ function HealBot_Action_PartyChanged()
             HeaderPos[i + 1] = nil;
             numBars = numBars - 1;
         end
+        HealBot_ReleaseTable(order);
+        HealBot_ReleaseTable(units);
+    end
         
-        last = last + 40
-        local PetsValid = numBars;
-        if HealBot_Config.PetHeals == 1 then
-            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
-                HeaderPos[i + 1] = HEALBOT_OPTIONS_PETHEALS
-                numBars = numBars + 1;
-                numHeaders = numHeaders + 1;
+    last = last + 40
+    local PetsValid = numBars;
+    if HealBot_Config.PetHeals == 1 then
+        if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+            HeaderPos[i + 1] = HEALBOT_OPTIONS_PETHEALS
+            numBars = numBars + 1;
+            numHeaders = numHeaders + 1;
+        end
+        if GetNumRaidMembers() > 0 then
+            for j = 1, 40 do
+                local unit = "raidpet" .. j;
+                if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                    i = i + 1;
+                    HealBot_Action_SetHealButton(i, unit);
+                    numBars = numBars + 1;
+                end
+                if i == last then break end
             end
-            if GetNumRaidMembers() > 0 then
-                for j = 1, 40 do
-                    local unit = "raidpet" .. j;
-                    if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
-                        i = i + 1;
-                        HealBot_Action_SetHealButton(i, unit);
-                        numBars = numBars + 1;
-                    end
-                    if i == last then break end
-                end
-            else
-                if not HealBot_PetUnits then
-                    HealBot_PetUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
-                end
-                for _, unit in ipairs(HealBot_PetUnits) do
-                    if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
-                        i = i + 1;
-                        HealBot_Action_SetHealButton(i, unit);
-                        numBars = numBars + 1;
-                    end
-                    if i == last then break end
-                end
+        else
+            if not HealBot_PetUnits then
+                HealBot_PetUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
             end
-            HealBot_ReleaseTable(order);
-            HealBot_ReleaseTable(units);
+            for _, unit in ipairs(HealBot_PetUnits) do
+                if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                    i = i + 1;
+                    HealBot_Action_SetHealButton(i, unit);
+                    numBars = numBars + 1;
+                end
+                if i == last then break end
+            end
         end
-        if numBars == PetsValid + 1 and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
-            HeaderPos[PetsValid + 1] = nil;
-            numBars = numBars - 1;
-            numHeaders = numHeaders - 1;
-        end
-        end
+    end
+    if numBars == PetsValid + 1 and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+        HeaderPos[PetsValid + 1] = nil;
+        numBars = numBars - 1;
+        numHeaders = numHeaders - 1;
+    end
       
         local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
         local OffsetY = bpadding;
@@ -1125,8 +1127,8 @@ end
 function HealBot_Action_Reset()
     HealBot_Action:ClearAllPoints();
     HealBot_Action:SetPoint("TOP", "MinimapCluster", "BOTTOM", 7, 10);
-    HealBot_Action_HealTarget = {};
-    HealBot_Action_HealFocus = {};
+    for k in pairs(HealBot_Action_HealTarget) do HealBot_Action_HealTarget[k] = nil end
+    for k in pairs(HealBot_Action_HealFocus) do HealBot_Action_HealFocus[k] = nil end
     HealBot_Action_PartyChanged();
 end
 
@@ -1306,6 +1308,10 @@ local HealBot_PlayerHoTs_ValidHoTs = {
 
 local HealBot_PlayerHoTs_ListCache = {}
 
+local function HealBot_PlayerHoTs_SortComparator(a, b)
+    return (a.expires or 0) < (b.expires or 0)
+end
+
 function HealBot_Action_UpdatePlayerHoTs()
     if not HealBot_PlayerHoTsListFrame then
         HealBot_PlayerHoTsListFrame = CreateFrame("Frame", "HealBot_PlayerHoTsListFrame", HealBot_Action)
@@ -1351,9 +1357,7 @@ function HealBot_Action_UpdatePlayerHoTs()
     end
     
     -- Sort only the active portion by shifting expired ones to the end
-    table.sort(HealBot_PlayerHoTs_ListCache, function(a, b) 
-        return (a.expires or 0) < (b.expires or 0) 
-    end)
+    table.sort(HealBot_PlayerHoTs_ListCache, HealBot_PlayerHoTs_SortComparator)
     
     for i = 1, math.max(numHoTs, table.getn(HealBot_PlayerHoTFrames)) do
         local frame = HealBot_PlayerHoTFrames[i]
