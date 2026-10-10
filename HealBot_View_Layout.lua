@@ -41,7 +41,12 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
         return dr, dg, db, HealBot_Config.Barcola[HealBot_Config.Current_Skin];
     end
     
-    local text = UnitName(unit);
+    local text
+    if string.find(unit, "^Test") then
+        text = HealBot_Model.units[unit] and HealBot_Model.units[unit].name or unit
+    else
+        text = UnitName(unit) or unit
+    end
     if not HealBot_HealsIn[text] then
         HealBot_HealsIn[text] = 0;
     end
@@ -64,18 +69,33 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
     end
 
     local colorMode = HealBot_Config.bcolormode[HealBot_Config.Current_Skin] or 1
-    if colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass and RAID_CLASS_COLORS and RAID_CLASS_COLORS[HealBot_Model.units[unit].englishClass] then
+    if colorMode == 2 and string.find(unit, "pet") then
+        r, g, b = 0.4, 0.9, 0.6 -- Mint color
+    elseif colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass and RAID_CLASS_COLORS and RAID_CLASS_COLORS[HealBot_Model.units[unit].englishClass] then
         local engClass = HealBot_Model.units[unit].englishClass
         r = RAID_CLASS_COLORS[engClass].r
         g = RAID_CLASS_COLORS[engClass].g
         b = RAID_CLASS_COLORS[engClass].b
-    elseif colorMode == 2 and string.find(unit, "pet") then
-        r, g, b = 0.4, 0.9, 0.6 -- Mint color
     else
-        if pct >= 0.98 then r = 0.0; end
-        if pct < 0.98 and pct >= 0.65 then r = 2.94 - (pct * 3); end 
-        if pct <= 0.64 and pct > 0.31 then g = (pct - 0.31) * 3; end 
-        if pct <= 0.31 then g = 0.0; end
+        local skin = HealBot_Config.Current_Skin
+        local maxR = HealBot_Config.bcolormaxr and HealBot_Config.bcolormaxr[skin] or 0.0
+        local maxG = HealBot_Config.bcolormaxg and HealBot_Config.bcolormaxg[skin] or 1.0
+        local maxB = HealBot_Config.bcolormaxb and HealBot_Config.bcolormaxb[skin] or 0.0
+
+        local minR = HealBot_Config.bcolorminr and HealBot_Config.bcolorminr[skin] or 1.0
+        local minG = HealBot_Config.bcolorming and HealBot_Config.bcolorming[skin] or 0.0
+        local minB = HealBot_Config.bcolorminb and HealBot_Config.bcolorminb[skin] or 0.0
+
+        if maxR == 0 and maxG == 1 and maxB == 0 and minR == 1 and minG == 0 and minB == 0 then
+            if pct >= 0.98 then r = 0.0; end
+            if pct < 0.98 and pct >= 0.65 then r = 2.94 - (pct * 3); end 
+            if pct <= 0.64 and pct > 0.31 then g = (pct - 0.31) * 3; end 
+            if pct <= 0.31 then g = 0.0; end
+        else
+            r = minR + (maxR - minR) * pct
+            g = minG + (maxG - minG) * pct
+            b = minB + (maxB - minB) * pct
+        end
     end
     return r, g, b, a;
 end
@@ -247,8 +267,9 @@ function HealBot_Action_EnableButton(button)
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
     local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
-    if fontFlags ~= expectedFlags then
-        bar.txt:SetFont(fontName, fontHeight, expectedFlags)
+    local expectedFont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or fontName
+    if fontFlags ~= expectedFlags or fontName ~= expectedFont then
+        bar.txt:SetFont(expectedFont, fontHeight, expectedFlags)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
@@ -284,7 +305,10 @@ function HealBot_Action_EnableButton(button)
     
     local raidIcon = getglobal(button:GetName() .. "BarRaidIcon")
     if raidIcon then
-        local index = GetRaidTargetIndex(unit)
+        local index
+        if not string.find(unit, "^Test") then
+            index = GetRaidTargetIndex(unit)
+        end
         if index then
             SetRaidTargetIconTexture(raidIcon, index)
             raidIcon:Show()
@@ -313,15 +337,34 @@ end
 -- HealBot_Action_ResetSkin: Internal utility: HealBot_Action_ResetSkin
 function HealBot_Action_ResetSkin()
     HealBot_Action_PartyChanged()
+    local skin = HealBot_Config.Current_Skin
+    local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[skin]) or "Fonts\\FRIZQT__.TTF"
+    local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[skin]) or 10
+    local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[skin]) or 0
+    local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
+    if HealBot_Action_OptionsButton and HealBot_Action_OptionsButton:GetFontString() then
+        HealBot_Action_OptionsButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+    end
+    if HealBot_Action_AbortButton and HealBot_Action_AbortButton:GetFontString() then
+        HealBot_Action_AbortButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+    end
+    for j = 1, 20 do
+        local headerobj = getglobal("HealBot_Action_Header" .. j)
+        if headerobj and headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
+    end
+
     if HealBot_Options:IsVisible() then 
-        HealBot_Action_SetTexture(HealBot_DiseaseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_MagicColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_PoisonColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_CurseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_EnTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+        HealBot_Action_SetTexture(HealBot_DiseaseColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_MagicColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_PoisonColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_CurseColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_EnTextColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[skin])
         HealBot_SetSkinColours()
     end
 end
@@ -362,6 +405,13 @@ function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, ch
         headerno = headerno + 1;
         local headerobj = getglobal("HealBot_Action_Header" .. headerno);
         headerobj:SetText(header)
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+        if headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
         headerobj:Show();
         headerobj:ClearAllPoints();
         headerobj:SetHeight(bheight);
@@ -398,6 +448,13 @@ function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, b
         headerno = headerno + 1;
         local headerobj = getglobal("HealBot_Action_Header" .. headerno);
         headerobj:SetText(header)
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+        if headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
         headerobj:Show();
         headerobj:ClearAllPoints();
         headerobj:SetHeight(bheight);
@@ -456,8 +513,10 @@ end
 -- HealBot_Action_SetHealButton: Assigns a unit string to a grid button slot.
 function HealBot_Action_SetHealButton(index, unit)
     if not index then
-        HealBot_Action_HealButtons = {};
-        HealBot_Action_UnitButtons = {};
+        for k in pairs(HealBot_Action_HealButtons) do HealBot_Action_HealButtons[k] = nil end
+        for k in pairs(HealBot_Action_UnitButtons) do
+            HealBot_Action_UnitButtons[k] = nil
+        end
         return nil
     end
     local button = getglobal("HealBot_Action_HealUnit" .. index);
@@ -510,10 +569,12 @@ function HealBot_Action_PartyChanged()
             end
         end
         
-        for j = 1, 15 do
+        for j = 1, 20 do
             local headerobj = getglobal("HealBot_Action_Header" .. j);
-            headerobj:SetText(" ")
-            headerobj:Hide();
+            if headerobj then
+                headerobj:SetText(" ")
+                headerobj:Hide();
+            end
         end
 
         local bwidth = HealBot_Config.bwidth[HealBot_Config.Current_Skin] or 85;
@@ -539,7 +600,52 @@ function HealBot_Action_PartyChanged()
         local i = 0;
         local last = 0;
         local GroupValid = numBars;
-        last = last + 6
+        if HealBot_Config.TestBarsOn then
+            local testBars = HealBot_Config.numTestBars or 25
+            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+                HeaderPos[i + 1] = HEALBOT_OPTIONS_TESTBARS or "Test Bars"
+            end
+            local testClasses = {"PRIEST", "DRUID", "SHAMAN", "PALADIN", "WARRIOR", "MAGE", "WARLOCK", "HUNTER", "ROGUE"}
+            local testNames = {"Arthas", "Illidan", "Sylvanas", "Thrall", "Jaina", "Uther", "Grommash", "Malfurion", "Tyrande", "Guldan", "Kael", "Rexxar", "Varian", "Voljin", "Baine"}
+            for j = 1, testBars do
+                i = i + 1
+                local unit = "Test" .. j
+                HealBot_Action_SetHealButton(i, unit)
+                if not HealBot_Model.units[unit] then
+                    local rClass = testClasses[math.random(1, #testClasses)]
+                    local rName = testNames[math.random(1, #testNames)] .. j
+                    local mHealth = math.random(4000, 8000)
+                    local cHealth = math.random(1, mHealth)
+                    local pt = 0
+                    if rClass == "WARRIOR" then pt = 1 elseif rClass == "ROGUE" then pt = 3 end
+                    HealBot_Model.units[unit] = { name = rName, guid = "TestGuid"..j, class = rClass, englishClass = rClass, health = cHealth, maxHealth = mHealth, mana = 2000, maxMana = 4000, powerType = pt, incomingHeal = 0, hasAggro = false, range = 1 }
+                    if not HealBot_UnitIcons then HealBot_UnitIcons = {} end
+                    HealBot_UnitIcons[unit] = {}
+                    local testIcons = {
+                        "Interface\\Icons\\Spell_Holy_Renew",
+                        "Interface\\Icons\\Spell_Nature_Rejuvenation",
+                        "Interface\\Icons\\Spell_Nature_ResistNature", -- Regrowth
+                        "Interface\\Icons\\Spell_Holy_PowerWordShield",
+                        "Interface\\Icons\\Spell_Holy_Excorcism" -- Fear Ward
+                    }
+                    -- Shuffle icons
+                    for k = #testIcons, 2, -1 do
+                        local j = math.random(k)
+                        testIcons[k], testIcons[j] = testIcons[j], testIcons[k]
+                    end
+                    local numIcons = math.random(0, 3)
+                    for k = 1, numIcons do
+                        HealBot_UnitIcons[unit][k] = testIcons[k]
+                    end
+                end
+                numBars = numBars + 1
+            end
+            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+                numBars = numBars + 1
+                numHeaders = numHeaders + 1
+            end
+        else
+            last = last + 6
         if HealBot_Config.GroupHeals == 1 then
             if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
                 HeaderPos[i + 1] = HEALBOT_OPTIONS_GROUPHEALS
@@ -852,46 +958,47 @@ function HealBot_Action_PartyChanged()
             HeaderPos[i + 1] = nil;
             numBars = numBars - 1;
         end
+        HealBot_ReleaseTable(order);
+        HealBot_ReleaseTable(units);
+    end
         
-        last = last + 40
-        local PetsValid = numBars;
-        if HealBot_Config.PetHeals == 1 then
-            if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
-                HeaderPos[i + 1] = HEALBOT_OPTIONS_PETHEALS
-                numBars = numBars + 1;
-                numHeaders = numHeaders + 1;
-            end
-            if GetNumRaidMembers() > 0 then
-                for j = 1, 40 do
-                    local unit = "raidpet" .. j;
-                    if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
-                        i = i + 1;
-                        HealBot_Action_SetHealButton(i, unit);
-                        numBars = numBars + 1;
-                    end
-                    if i == last then break end
-                end
-            else
-                if not HealBot_PetUnits then
-                    HealBot_PetUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
-                end
-                for _, unit in ipairs(HealBot_PetUnits) do
-                    if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
-                        i = i + 1;
-                        HealBot_Action_SetHealButton(i, unit);
-                        numBars = numBars + 1;
-                    end
-                    if i == last then break end
-                end
-            end
-            HealBot_ReleaseTable(order);
-            HealBot_ReleaseTable(units);
+    last = last + 40
+    local PetsValid = numBars;
+    if HealBot_Config.PetHeals == 1 then
+        if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+            HeaderPos[i + 1] = HEALBOT_OPTIONS_PETHEALS
+            numBars = numBars + 1;
+            numHeaders = numHeaders + 1;
         end
-        if numBars == PetsValid + 1 and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
-            HeaderPos[PetsValid + 1] = nil;
-            numBars = numBars - 1;
-            numHeaders = numHeaders - 1;
+        if GetNumRaidMembers() > 0 then
+            for j = 1, 40 do
+                local unit = "raidpet" .. j;
+                if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                    i = i + 1;
+                    HealBot_Action_SetHealButton(i, unit);
+                    numBars = numBars + 1;
+                end
+                if i == last then break end
+            end
+        else
+            if not HealBot_PetUnits then
+                HealBot_PetUnits = { "pet", "partypet1", "partypet2", "partypet3", "partypet4" };
+            end
+            for _, unit in ipairs(HealBot_PetUnits) do
+                if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                    i = i + 1;
+                    HealBot_Action_SetHealButton(i, unit);
+                    numBars = numBars + 1;
+                end
+                if i == last then break end
+            end
         end
+    end
+    if numBars == PetsValid + 1 and HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
+        HeaderPos[PetsValid + 1] = nil;
+        numBars = numBars - 1;
+        numHeaders = numHeaders - 1;
+    end
       
         local bpadding = (HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10
         local OffsetY = bpadding;
@@ -1005,10 +1112,17 @@ function HealBot_Action_PartyChanged()
         HealBot_Grid_Limit = limit;
         HealBot_Grid_NumBars = numBars;
 
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
         if HealBot_Config.HideOptions == 1 then
             HealBot_Action_OptionsButton:Hide();
         else
             HealBot_Action_OptionsButton:SetPoint("BOTTOM", "HealBot_Action", "BOTTOM", 0, bpadding);
+            if HealBot_Action_OptionsButton:GetFontString() then
+                HealBot_Action_OptionsButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+            end
             HealBot_Action_OptionsButton:Show();
             MaxOffsetY = MaxOffsetY + 30;
         end  
@@ -1024,6 +1138,7 @@ function HealBot_Action_PartyChanged()
             bar.txt = getglobal(bar:GetName() .. "_text");
             bar.txt:SetTextColor(sr, sg, sb, sa);
             bar.txt:SetText(HEALBOT_ACTION_ABORT);
+            bar.txt:SetFont(bfont, btextheight, expectedFlags);
             HealBot_Action_SetTexture(bar, btexture);
             bar:SetMinMaxValues(0, 100);
             bar:SetValue(100);
@@ -1071,8 +1186,8 @@ end
 function HealBot_Action_Reset()
     HealBot_Action:ClearAllPoints();
     HealBot_Action:SetPoint("TOP", "MinimapCluster", "BOTTOM", 7, 10);
-    HealBot_Action_HealTarget = {};
-    HealBot_Action_HealFocus = {};
+    for k in pairs(HealBot_Action_HealTarget) do HealBot_Action_HealTarget[k] = nil end
+    for k in pairs(HealBot_Action_HealFocus) do HealBot_Action_HealFocus[k] = nil end
     HealBot_Action_PartyChanged();
 end
 
@@ -1149,7 +1264,10 @@ function HealBot_Action_AppendUnit(unit)
     local btexture = (HealBot_Config.btexture and HealBot_Config.btexture[HealBot_Config.Current_Skin]) or 5
     HealBot_Action_SetTexture(bar, btexture)
     local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
-    bar.txt:SetTextHeight(btextheight)
+    local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+    local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+    local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+    bar.txt:SetFont(bfont, btextheight, expectedFlags)
     bar2:SetHeight(bheight)
     HealBot_Action_SetTexture(bar2, btexture)
     
@@ -1252,6 +1370,10 @@ local HealBot_PlayerHoTs_ValidHoTs = {
 
 local HealBot_PlayerHoTs_ListCache = {}
 
+local function HealBot_PlayerHoTs_SortComparator(a, b)
+    return (a.expires or 0) < (b.expires or 0)
+end
+
 function HealBot_Action_UpdatePlayerHoTs()
     if not HealBot_PlayerHoTsListFrame then
         HealBot_PlayerHoTsListFrame = CreateFrame("Frame", "HealBot_PlayerHoTsListFrame", HealBot_Action)
@@ -1297,9 +1419,7 @@ function HealBot_Action_UpdatePlayerHoTs()
     end
     
     -- Sort only the active portion by shifting expired ones to the end
-    table.sort(HealBot_PlayerHoTs_ListCache, function(a, b) 
-        return (a.expires or 0) < (b.expires or 0) 
-    end)
+    table.sort(HealBot_PlayerHoTs_ListCache, HealBot_PlayerHoTs_SortComparator)
     
     for i = 1, math.max(numHoTs, table.getn(HealBot_PlayerHoTFrames)) do
         local frame = HealBot_PlayerHoTFrames[i]

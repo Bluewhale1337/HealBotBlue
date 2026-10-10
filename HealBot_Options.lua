@@ -202,6 +202,20 @@ function HealBot_Returned_Colours()
     HealBot_Config.babortcolg[HealBot_Config.Current_Skin],
     HealBot_Config.babortcolb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
     HealBot_Config.babortcola[HealBot_Config.Current_Skin] = A;
+  elseif HealBot_ColourObjWaiting=="MaxHP" then
+    if not HealBot_Config.bcolormaxr then HealBot_Config.bcolormaxr = {} end
+    if not HealBot_Config.bcolormaxg then HealBot_Config.bcolormaxg = {} end
+    if not HealBot_Config.bcolormaxb then HealBot_Config.bcolormaxb = {} end
+    HealBot_Config.bcolormaxr[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolormaxg[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolormaxb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
+  elseif HealBot_ColourObjWaiting=="MinHP" then
+    if not HealBot_Config.bcolorminr then HealBot_Config.bcolorminr = {} end
+    if not HealBot_Config.bcolorming then HealBot_Config.bcolorming = {} end
+    if not HealBot_Config.bcolorminb then HealBot_Config.bcolorminb = {} end
+    HealBot_Config.bcolorminr[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolorming[HealBot_Config.Current_Skin],
+    HealBot_Config.bcolorminb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
   else
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].R,
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].G,
@@ -210,13 +224,18 @@ function HealBot_Returned_Colours()
   HealBot_SetSkinColours()
   HealBot_SetCDCBarColours()
 end
+ColorPickerFrame.func = HealBot_Returned_Colours
+
 -- HealBot_UseColourPick: Internal utility: HealBot_UseColourPick
 function HealBot_UseColourPick(R, G, B, A)
+  ColorPickerFrame.func = HealBot_Returned_Colours;
+  ColorPickerFrame.cancelFunc = HealBot_Returned_Colours;
   if ColorPickerFrame:IsVisible() then 
     ColorPickerFrame:Hide();
   elseif A then
     ColorPickerFrame.hasOpacity = true;
     ColorPickerFrame.opacity = A;
+    ColorPickerFrame.opacityFunc = HealBot_Returned_Colours;
     ColorPickerFrame:ClearAllPoints();
     ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
     ColorPickerFrame:Show();
@@ -224,6 +243,7 @@ function HealBot_UseColourPick(R, G, B, A)
     ColorPickerFrame:SetColorRGB(R, G, B);
   else
     ColorPickerFrame.hasOpacity = false;
+    ColorPickerFrame.opacityFunc = nil;
     ColorPickerFrame:ClearAllPoints();
     ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
     ColorPickerFrame:Show();
@@ -342,12 +362,37 @@ function HealBot_Options_SetSkins()
   HealBot_Options_BarWidthS:SetValue(HealBot_Config.bwidth[HealBot_Config.Current_Skin])
   HealBot_Options_BarNumColsS:SetValue(HealBot_Config.numcols[HealBot_Config.Current_Skin])
   HealBot_Options_BarMaxRowsS:SetValue((HealBot_Config.bmaxrows and HealBot_Config.bmaxrows[HealBot_Config.Current_Skin]) or 0)
-  HealBot_Options_GridOrientation:SetChecked(((HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) == 2) and 1 or nil)
+  local orient = (HealBot_Config.GridOrientation and HealBot_Config.GridOrientation[HealBot_Config.Current_Skin]) or 1
+  UIDropDownMenu_SetSelectedID(HealBot_Options_GridOrientation_Dropdown, orient)
+  if orient == 2 then
+    HealBot_Options_GridOrientation_DropdownText:SetText("Horizontal (Rows)")
+    HealBot_Options_BarMaxRowsS:Hide()
+    HealBot_Options_BarNumColsS:Show()
+  else
+    HealBot_Options_GridOrientation_DropdownText:SetText("Vertical (Columns)")
+    HealBot_Options_BarMaxRowsS:Show()
+    HealBot_Options_BarNumColsS:Hide()
+  end
   HealBot_Options_BarBRSpaceS:SetValue(HealBot_Config.brspace[HealBot_Config.Current_Skin])
   HealBot_Options_BarBCSpaceS:SetValue(HealBot_Config.bcspace[HealBot_Config.Current_Skin])
   HealBot_Options_FramePaddingS:SetValue((HealBot_Config.bpadding and HealBot_Config.bpadding[HealBot_Config.Current_Skin]) or 10)
   HealBot_Options_BorderThicknessS:SetValue((HealBot_Config.bboffset and HealBot_Config.bboffset[HealBot_Config.Current_Skin]) or 1)
   HealBot_Options_FontHeight:SetValue(HealBot_Config.btextheight[HealBot_Config.Current_Skin])
+
+  local fontFile = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+  local fontName = "Friz Quadrata"
+  if HealBot_Font_List then
+    for i = 1, getn(HealBot_Font_List) do
+      if HealBot_Font_List[i].file == fontFile then
+        fontName = HealBot_Font_List[i].text
+        UIDropDownMenu_SetSelectedID(HealBot_Options_Font_Dropdown, i)
+        break
+      end
+    end
+  end
+  if HealBot_Options_Font_DropdownText then
+    HealBot_Options_Font_DropdownText:SetText(fontName)
+  end
   HealBot_Options_BarAlphaDis:SetValue(HealBot_Config.bardisa[HealBot_Config.Current_Skin])
   HealBot_Options_AbortBarSize:SetValue(HealBot_Config.abortsize[HealBot_Config.Current_Skin])
   local isShowHeaders = (HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1)

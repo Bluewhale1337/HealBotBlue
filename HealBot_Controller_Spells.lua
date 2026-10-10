@@ -473,7 +473,13 @@ end
 -- HealBot_AddHeal: Internal utility: HealBot_AddHeal
 function HealBot_AddHeal(spell)
   HealBot_SetSpellDefaults(spell);
-  table.foreachi(HealBot_Spells[spell].Target, function (i, val)
+  local targetList = HealBot_Spells[spell].Target
+  if not targetList and HealBot_Spells[spell].Group and HealBot_Spells[HealBot_Spells[spell].Group] then
+    targetList = HealBot_Spells[HealBot_Spells[spell].Group].Target
+  end
+  if not targetList then targetList = {"player", "party", "pet"} end
+  table.foreachi(targetList, function (i, val)
+    if not HealBot_Heals[val] then HealBot_Heals[val] = {} end
     table.insert(HealBot_Heals[val], spell);
   end);
   HealBot_Spells[spell].BagSlot = HealBot_GetBagSlot(spell);
@@ -567,10 +573,14 @@ end
 
 -- HealBot_GetHealSpell: Resolves spell rank based on health deficit.
 function HealBot_GetHealSpell(unit, pattern)
-  if (not UnitName(unit)) then return nil end;
+  if not string.find(unit, "^Test") then
+      if (not UnitName(unit)) then return nil end;
+  end
   if not pattern then return nil end;
   if UnitOnTaxi("player") then return nil end;
-  if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
+  if not string.find(unit, "^Test") then
+      if HealBot_Config.ProtectPvP == 1 and UnitIsPVP(unit) and not UnitIsPVP("player") then return nil end
+  end
   if HealBot_UnitClass("player") == "DRUID" then
     if HealBot_GetShapeshiftForm() and HealBot_Config.AutoUnshift ~= 1 then return nil end; 
   end

@@ -50,6 +50,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.5**
+* **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
+* **UI - Skins Options & Custom Health Gradients** - Added configurable Max HP and Min HP colour pickers with descriptive labels for custom gradient support. Fixed colour picker button click interceptors and hooked ColorPickerFrame callbacks. Integrated global font selector across raid frame text, headers, Options button, and preview bars. Reorganized Skins tab layout to anchor Test Bars cleanly in Column 2.
+* **UI - Cleanup** - While adding new funcionalities the way menus look was ignored, new functions were added to each tab where there was free space, so attempt was made to clean up this convoluted mess I made. Menu Tabs are now aligned and grouped in a manner that makes more sense.
+* **UI - Options Tabs Relative Anchoring Fix** - Fixed layout skewing and margin drift across Spells, Buffs, Chat, Extras (Integrations), and Auto options tabs. Replaced arbitrary hardcoded coordinate shifts with clean relative-anchoring hierarchies centered across the dialog width.
+* **Performance Fix - Table Pooling & GC Leaks** - Resolved critical table leaks in emergency heals where pooled tables (`order` and `units`) failed to release when pet heals were disabled, un-nested pet healing from emergency heals, eliminated high-frequency (4 Hz) anonymous closure allocations in `HealBot_Action_UpdatePlayerHoTs`, and implemented in-place key recycling for equipment scanning and grid button tables.
+
 **v1.7.4**
 * **Performance Fix - CPU Spikes** - Fixed massive FPS drops during raid combat. The `HealBot_CheckBuffs` function previously forced the client to generate hidden UI tooltips for up to 32 buffs per player on every single `UNIT_AURA` event. Tooltip parsing is now cached per texture, bypassing thousands of redundant API calls per second.
 * **Performance Fix - Frame Rendering** - Eliminated redundant UI layout recalculations in `HealBot_Action_EnableButton`. The UI no longer forces `SetFont`, `SetWidth`, `SetHeight`, and `GetGlobal` lookups on every single combat tick (which previously caused 4,000+ layout updates per second in 40-man raids).
@@ -61,7 +68,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Performance Fix - Unit Hash Lookup** - Eliminated heavy C-API calls to `UnitName()` during incoming heals by caching raid and party unit tokens in a fast O(1) hash table that updates on roster changes.
 * **Performance Fix - Range Cache GC Leak** - Fixed a continuous memory leak in the range checker caused by string concatenation (`unit .. "_" .. range`) running every frame. Range states are now stored in a nested numeric table cache.
 * **Performance Fix - Talent Rank Scan** - Fixed severe CPU stutter when gaining or losing auras that affect stats. Previously, inventory updates forced a full equipment and spell recalculation which linearly scanned the entire talent tree multiple times per rank. Talent ranks are now cached natively.
-* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower, SuperWoW, or ClassicAPI to fetch exact durations. Added support for tracking Power Word: Shield. Implemented with a pre-allocated static cache array for zero GC leaks, and precise GUID trapping for instant name resolution on self and non-party members.
+* **Feature - HoT Tracking** - Added an option in the Integrations tab to track Player-cast HoT timers in a dedicated list below the main HealBot frame. Requires Nampower to fetch exact durations. Added support for tracking Power Word: Shield. Implemented with a pre-allocated static cache array for zero GC leaks, and precise GUID trapping for instant name resolution on self and non-party members.
 
 
 **v1.7.3**
@@ -110,6 +117,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **UI Update - Customizable icon size** - Added an option to change size of HoT icons (default to 12px).
 * **Cleanup** - Removed dead code `HealBot_Groups` table.
 * **Bug Fix - Buff Watch Self** - Fixed an issue where the "Self Only" toggle for watched buffs failed to load visually across sessions.
+* **Bug Fix - Pet Coloring** - Fixed an issue where custom server integrations giving pets a class could override the mint pet color when class color override is toggled.
 
 **v1.6.2**
 * **Hotfix - raid and party frames** - if getNumRaidMembers() > 0 wrapper around extra bars stopped from displaying all frames blocked from displaying Extras\Raid.
@@ -143,6 +151,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Memory Optimization:** Fixed a significant memory leak where tracking tables were being repeatedly allocated every tick during aura scanning, and replaced `table.foreach` with pairs loops to avoid GC spikes during combat.
 
 **v1.4.1**
+* **Frame Disappearing Fix:** Fixed a layout rendering bug where frames would flash for a split second and disappear on login due to improper table clearing of unit buttons, leaving empty arrays that incorrectly failed the layout check.
+* **Ranked Spell Parsing Fix:** Fixed a Lua crash during addon initialization when discovering ranked spells without an explicit target property. Ranked spells now dynamically inherit the target table from their base spells.
 * **Talent-based Healing Calculations:** Implemented dynamic spell healing calculations for Druid, Priest, and Paladin classes based on talents.
 * **Modifier Key Polling:** Replaced MODIFIER_STATE_CHANGED event with polling in HealBot_OnUpdate to track modifier keys reliably.
 * **Incoming Heals Fix:** Fixed a bug where incoming heals failed to broadcast or show on the UI due to synchronous GCD fails and `CheckInteractDistance` limitations in the 1.12 API.

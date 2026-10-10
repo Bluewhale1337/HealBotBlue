@@ -119,6 +119,16 @@ function HealBot_SkinColorpick_OnClick(SkinType)
                           HealBot_Config.babortcolg[HealBot_Config.Current_Skin],
                           HealBot_Config.babortcolb[HealBot_Config.Current_Skin],
                           HealBot_Config.babortcola[HealBot_Config.Current_Skin])
+  elseif SkinType=="MaxHP" then
+    local r = HealBot_Config.bcolormaxr and HealBot_Config.bcolormaxr[HealBot_Config.Current_Skin] or 0.0
+    local g = HealBot_Config.bcolormaxg and HealBot_Config.bcolormaxg[HealBot_Config.Current_Skin] or 1.0
+    local b = HealBot_Config.bcolormaxb and HealBot_Config.bcolormaxb[HealBot_Config.Current_Skin] or 0.0
+    HealBot_UseColourPick(r, g, b, 1.0)
+  elseif SkinType=="MinHP" then
+    local r = HealBot_Config.bcolorminr and HealBot_Config.bcolorminr[HealBot_Config.Current_Skin] or 1.0
+    local g = HealBot_Config.bcolorming and HealBot_Config.bcolorming[HealBot_Config.Current_Skin] or 0.0
+    local b = HealBot_Config.bcolorminb and HealBot_Config.bcolorminb[HealBot_Config.Current_Skin] or 0.0
+    HealBot_UseColourPick(r, g, b, 1.0)
   end
 end
 -- HealBot_SetSkinColours: Applies skin configuration to UI elements.
@@ -135,6 +145,20 @@ function HealBot_SetSkinColours()
   HealBot_EnTextColorpick:SetStatusBarColor(0, 1, 0, alpha)
   HealBot_EnTextColorpickin:SetStatusBarColor(0, 1, 0, inHealAlpha)
   HealBot_DisTextColorpick:SetStatusBarColor(0, 1, 0, disabledAlpha)
+
+  local maxR = HealBot_Config.bcolormaxr and HealBot_Config.bcolormaxr[skin] or 0.0
+  local maxG = HealBot_Config.bcolormaxg and HealBot_Config.bcolormaxg[skin] or 1.0
+  local maxB = HealBot_Config.bcolormaxb and HealBot_Config.bcolormaxb[skin] or 0.0
+  if HealBot_MaxHPColorpick then
+    HealBot_MaxHPColorpick:SetStatusBarColor(maxR, maxG, maxB, 1.0)
+  end
+
+  local minR = HealBot_Config.bcolorminr and HealBot_Config.bcolorminr[skin] or 1.0
+  local minG = HealBot_Config.bcolorming and HealBot_Config.bcolorming[skin] or 0.0
+  local minB = HealBot_Config.bcolorminb and HealBot_Config.bcolorminb[skin] or 0.0
+  if HealBot_MinHPColorpick then
+    HealBot_MinHPColorpick:SetStatusBarColor(minR, minG, minB, 1.0)
+  end
 
   -- 2. Set Text Colors
   HealBot_EnTextColorpickt:SetTextColor(
@@ -203,13 +227,30 @@ function HealBot_SetSkinColours()
   end
 
   -- 5. Update Text Labels
-  HealBot_EnTextColorpickt:SetTextHeight(btextheight)
-  HealBot_DisTextColorpickt:SetTextHeight(btextheight)
-  HealBot_DebTextColorpickt:SetTextHeight(btextheight)
-  
-  HealBot_EnTextColorpickt:SetText(HEALBOT_SKIN_ENTEXT)
-  HealBot_DisTextColorpickt:SetText(HEALBOT_SKIN_DISTEXT)
-  HealBot_DebTextColorpickt:SetText(HEALBOT_SKIN_DEBTEXT)
+  local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[skin]) or "Fonts\\FRIZQT__.TTF"
+  local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[skin]) or 0
+  local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
+  if HealBot_EnTextColorpickt then
+    HealBot_EnTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_EnTextColorpickt:SetText(HEALBOT_SKIN_ENTEXT)
+  end
+  if HealBot_DisTextColorpickt then
+    HealBot_DisTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_DisTextColorpickt:SetText(HEALBOT_SKIN_DISTEXT)
+  end
+  if HealBot_DebTextColorpickt then
+    HealBot_DebTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_DebTextColorpickt:SetText(HEALBOT_SKIN_DEBTEXT)
+  end
+  if HealBot_MaxHPColorpickt then
+    HealBot_MaxHPColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_MaxHPColorpickt:SetText(HEALBOT_SKIN_MAXHPTEXT or "Max HP")
+  end
+  if HealBot_MinHPColorpickt then
+    HealBot_MinHPColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_MinHPColorpickt:SetText(HEALBOT_SKIN_MINHPTEXT or "Min HP")
+  end
 
   -- 6. Force UI redraw (Kept the scale hack since it addresses a specific engine quirk)
   local barScale = HealBot_EnTextColorpick:GetScale()

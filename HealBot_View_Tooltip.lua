@@ -20,8 +20,15 @@ function HealBot_Action_RefreshTooltip(unit)
   if not unit then unit = HealBot_Action_TooltipUnit end
   if not unit then return end;
 
-  local hlth=UnitHealth(unit);
-  local maxhlth=UnitHealthMax(unit);
+  local hlth=0;
+  local maxhlth=100;
+  if string.find(unit, "^Test") then
+      hlth = HealBot_Model.units[unit] and HealBot_Model.units[unit].health or 5000;
+      maxhlth = HealBot_Model.units[unit] and HealBot_Model.units[unit].maxHealth or 10000;
+  else
+      hlth=UnitHealth(unit);
+      maxhlth=UnitHealthMax(unit);
+  end
 
   local spellLeft = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Left"));
   local spellMiddle = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Middle"));
@@ -33,8 +40,9 @@ function HealBot_Action_RefreshTooltip(unit)
   HealBot_Action_Tooltip_ClearLines();
   
   if HealBot_Config.Tooltip_ShowTarget==1 then
-    if UnitName(unit) then
-      HealBot_Action_Tooltip_SetLineLeft(UnitName(unit),0,1,0,linenum)  
+    local uname = HealBot_Model.units[unit] and HealBot_Model.units[unit].name or UnitName(unit)
+    if uname then
+      HealBot_Action_Tooltip_SetLineLeft(uname,0,1,0,linenum)  
       if hlth and maxhlth then
         local r,g,b,a=HealBot_HealthColor(unit,hlth,maxhlth);
         HealBot_Action_Tooltip_SetLineRight(hlth.."/"..maxhlth.." (-"..maxhlth-hlth..")",r,g,b,linenum) 

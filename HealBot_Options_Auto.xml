@@ -8,7 +8,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="25" y="-30" /> 
+              <AbsDimension x="170" y="-30"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -28,15 +28,15 @@
             <FontString name="$parentLabel" text="Solo Skin:" inherits="GameFontNormalSmall">
               <Anchors>
                 <Anchor point="TOPLEFT">
-                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                  <Offset><AbsDimension x="-10" y="15"/></Offset>
                 </Anchor>
               </Anchors>
             </FontString>
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-80" /></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AutoSwap" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-25"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -52,15 +52,15 @@
             <FontString name="$parentLabel" text="Party Skin:" inherits="GameFontNormalSmall">
               <Anchors>
                 <Anchor point="TOPLEFT">
-                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                  <Offset><AbsDimension x="-10" y="15"/></Offset>
                 </Anchor>
               </Anchors>
             </FontString>
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-130" /></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Auto_Solo" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-25"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -76,15 +76,15 @@
             <FontString name="$parentLabel" text="Raid 15 Skin:" inherits="GameFontNormalSmall">
               <Anchors>
                 <Anchor point="TOPLEFT">
-                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                  <Offset><AbsDimension x="-10" y="15"/></Offset>
                 </Anchor>
               </Anchors>
             </FontString>
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-180" /></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Auto_Party" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-25"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -100,15 +100,15 @@
             <FontString name="$parentLabel" text="Raid 25 Skin:" inherits="GameFontNormalSmall">
               <Anchors>
                 <Anchor point="TOPLEFT">
-                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                  <Offset><AbsDimension x="-10" y="15"/></Offset>
                 </Anchor>
               </Anchors>
             </FontString>
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-230" /></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Auto_Raid15" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-25"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -124,15 +124,15 @@
             <FontString name="$parentLabel" text="Raid 40 Skin:" inherits="GameFontNormalSmall">
               <Anchors>
                 <Anchor point="TOPLEFT">
-                  <Offset><AbsDimension x="-10" y="15" /></Offset>
+                  <Offset><AbsDimension x="-10" y="15"/></Offset>
                 </Anchor>
               </Anchors>
             </FontString>
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT">
-            <Offset><AbsDimension x="30" y="-280" /></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Auto_Raid25" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-25"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -141,7 +141,6 @@
           </OnLoad>
         </Scripts>
       </Frame>
-
     </Frames>
     <Scripts>
       <OnShow>

@@ -7,6 +7,7 @@ end
 
 -- HealBot_MayHeal: Checks if unit is eligible for healing UI.
 function HealBot_MayHeal(unit)
+  if string.find(unit, "^Test") then return true end
   if not UnitName(unit) or not HealBot_Heals[unit] then return false end
   if unit ~= 'target' then return true end
   if not HealBot_Config.TargetHeals or UnitCanAttack("player",unit) then return false end
@@ -20,6 +21,7 @@ function HealBot_ShouldHeal(unit)
       return true;
     end
   end
+  if string.find(unit, "^Test") then return true end
   return HealBot_MayHeal(unit) and UnitHealth(unit)>0 and not UnitIsDeadOrGhost(unit)
     and (UnitHealth(unit)<UnitHealthMax(unit)*HealBot_Config.AlertLevel or HealBot_AlwaysHeal());
 end
@@ -33,6 +35,7 @@ end
 
 -- HealBot_MustHeal: Internal utility: HealBot_MustHeal
 function HealBot_MustHeal(unit)
+  if string.find(unit, "^Test") then return true end
   return HealBot_ShouldHeal(unit) and UnitHealth(unit)<UnitHealthMax(unit)*HealBot_Config.AlertLevel
 end
 
@@ -56,6 +59,7 @@ end
 
 -- HealBot_CanHeal: Internal utility: HealBot_CanHeal
 function HealBot_CanHeal(unit)
+  if string.find(unit, "^Test") then return true end
   if UnitIsDeadOrGhost(unit) then
     local rezSpell = HealBot_GetRezSpellForClass();
     if rezSpell and HealBot_GetHealSpell(unit, rezSpell) then
