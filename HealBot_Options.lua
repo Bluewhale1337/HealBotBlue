@@ -224,13 +224,18 @@ function HealBot_Returned_Colours()
   HealBot_SetSkinColours()
   HealBot_SetCDCBarColours()
 end
+ColorPickerFrame.func = HealBot_Returned_Colours
+
 -- HealBot_UseColourPick: Internal utility: HealBot_UseColourPick
 function HealBot_UseColourPick(R, G, B, A)
+  ColorPickerFrame.func = HealBot_Returned_Colours;
+  ColorPickerFrame.cancelFunc = HealBot_Returned_Colours;
   if ColorPickerFrame:IsVisible() then 
     ColorPickerFrame:Hide();
   elseif A then
     ColorPickerFrame.hasOpacity = true;
     ColorPickerFrame.opacity = A;
+    ColorPickerFrame.opacityFunc = HealBot_Returned_Colours;
     ColorPickerFrame:ClearAllPoints();
     ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
     ColorPickerFrame:Show();
@@ -238,6 +243,7 @@ function HealBot_UseColourPick(R, G, B, A)
     ColorPickerFrame:SetColorRGB(R, G, B);
   else
     ColorPickerFrame.hasOpacity = false;
+    ColorPickerFrame.opacityFunc = nil;
     ColorPickerFrame:ClearAllPoints();
     ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
     ColorPickerFrame:Show();

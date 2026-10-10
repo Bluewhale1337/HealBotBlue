@@ -337,15 +337,34 @@ end
 -- HealBot_Action_ResetSkin: Internal utility: HealBot_Action_ResetSkin
 function HealBot_Action_ResetSkin()
     HealBot_Action_PartyChanged()
+    local skin = HealBot_Config.Current_Skin
+    local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[skin]) or "Fonts\\FRIZQT__.TTF"
+    local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[skin]) or 10
+    local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[skin]) or 0
+    local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
+    if HealBot_Action_OptionsButton and HealBot_Action_OptionsButton:GetFontString() then
+        HealBot_Action_OptionsButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+    end
+    if HealBot_Action_AbortButton and HealBot_Action_AbortButton:GetFontString() then
+        HealBot_Action_AbortButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+    end
+    for j = 1, 20 do
+        local headerobj = getglobal("HealBot_Action_Header" .. j)
+        if headerobj and headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
+    end
+
     if HealBot_Options:IsVisible() then 
-        HealBot_Action_SetTexture(HealBot_DiseaseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_MagicColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_PoisonColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_CurseColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_EnTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
-        HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[HealBot_Config.Current_Skin])
+        HealBot_Action_SetTexture(HealBot_DiseaseColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_MagicColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_PoisonColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_CurseColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_EnTextColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[skin])
+        HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[skin])
         HealBot_SetSkinColours()
     end
 end
@@ -386,6 +405,13 @@ function HealBot_Action_PositionButton(button, OsetX, OsetY, bwidth, bheight, ch
         headerno = headerno + 1;
         local headerobj = getglobal("HealBot_Action_Header" .. headerno);
         headerobj:SetText(header)
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+        if headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
         headerobj:Show();
         headerobj:ClearAllPoints();
         headerobj:SetHeight(bheight);
@@ -422,6 +448,13 @@ function HealBot_Action_PositionButtonHorizontal(button, OsetX, OsetY, bwidth, b
         headerno = headerno + 1;
         local headerobj = getglobal("HealBot_Action_Header" .. headerno);
         headerobj:SetText(header)
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+        if headerobj:GetFontString() then
+            headerobj:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+        end
         headerobj:Show();
         headerobj:ClearAllPoints();
         headerobj:SetHeight(bheight);
@@ -536,10 +569,12 @@ function HealBot_Action_PartyChanged()
             end
         end
         
-        for j = 1, 15 do
+        for j = 1, 20 do
             local headerobj = getglobal("HealBot_Action_Header" .. j);
-            headerobj:SetText(" ")
-            headerobj:Hide();
+            if headerobj then
+                headerobj:SetText(" ")
+                headerobj:Hide();
+            end
         end
 
         local bwidth = HealBot_Config.bwidth[HealBot_Config.Current_Skin] or 85;
@@ -1077,10 +1112,17 @@ function HealBot_Action_PartyChanged()
         HealBot_Grid_Limit = limit;
         HealBot_Grid_NumBars = numBars;
 
+        local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or "Fonts\\FRIZQT__.TTF"
+        local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[HealBot_Config.Current_Skin]) or 0
+        local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
         if HealBot_Config.HideOptions == 1 then
             HealBot_Action_OptionsButton:Hide();
         else
             HealBot_Action_OptionsButton:SetPoint("BOTTOM", "HealBot_Action", "BOTTOM", 0, bpadding);
+            if HealBot_Action_OptionsButton:GetFontString() then
+                HealBot_Action_OptionsButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
+            end
             HealBot_Action_OptionsButton:Show();
             MaxOffsetY = MaxOffsetY + 30;
         end  
@@ -1096,6 +1138,7 @@ function HealBot_Action_PartyChanged()
             bar.txt = getglobal(bar:GetName() .. "_text");
             bar.txt:SetTextColor(sr, sg, sb, sa);
             bar.txt:SetText(HEALBOT_ACTION_ABORT);
+            bar.txt:SetFont(bfont, btextheight, expectedFlags);
             HealBot_Action_SetTexture(bar, btexture);
             bar:SetMinMaxValues(0, 100);
             bar:SetValue(100);

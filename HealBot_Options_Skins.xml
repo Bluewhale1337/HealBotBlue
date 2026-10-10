@@ -240,6 +240,29 @@
           <OnLoad>HealBot_Options_FontDD_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
+      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
+        <Size><AbsDimension x="123" y="22"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Font_Dropdown" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="15" y="-12"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_TestBarsButton_OnClick(this)</OnClick> 
+        </Scripts>
+      </Button>
+      <Slider name="HealBot_Options_NumTestBarsS" inherits="HealBot_Options_SliderTemplate">
+        <Size><AbsDimension x="123" y="17"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TestBarsButton" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-18"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_TESTBARS,1,40)</OnLoad> 
+          <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider>
 
 <!-- COLUMN 3: Visuals & Opacity -->
       <CheckButton name="HealBot_Options_BarColorMode" inherits="SendMailRadioButtonTemplate">
@@ -332,8 +355,15 @@
       </StatusBar>
       <Button name="HealBot_MaxHPColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_MaxHPColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("MaxHP")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_MaxHPColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("MaxHP")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_MinHPColorpick" inherits="TextStatusBar">
@@ -363,8 +393,15 @@
       </StatusBar>
       <Button name="HealBot_MinHPColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_MinHPColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("MinHP")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_MinHPColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("MinHP")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
@@ -401,8 +438,15 @@
       </StatusBar>
       <Button name="HealBot_EnTextColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
@@ -432,8 +476,15 @@
       </StatusBar>
       <Button name="HealBot_DisTextColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick>
+        </Scripts>
       </Button>
 
       <!-- BOTTOM ROW 2: Font Debuff, Background, Border, Abort Bar -->
@@ -464,8 +515,15 @@
       </StatusBar>
       <Button name="HealBot_DebTextColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_BackgroundColorpick" inherits="TextStatusBar">
@@ -495,8 +553,15 @@
       </StatusBar>
       <Button name="HealBot_BackgroundColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_BorderColorpick" inherits="TextStatusBar">
@@ -526,8 +591,15 @@
       </StatusBar>
       <Button name="HealBot_BorderColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick></Scripts>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BorderColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick>
+        </Scripts>
       </Button>
 
       <StatusBar name="HealBot_AbortColorpick" inherits="TextStatusBar">
@@ -557,35 +629,16 @@
       </StatusBar>
       <Button name="HealBot_AbortColorpickb">
         <Size><AbsDimension x="87" y="18"/></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_AbortColorpick"/></Anchors>
-        <Scripts><OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick></Scripts>
-      </Button>
-
-      <!-- BOTTOM ROW 3: Test Bars -->
-      <Button name="HealBot_Options_TestBarsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TESTBARS">
-        <Size><AbsDimension x="110" y="22"/></Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="BOTTOMLEFT">
-            <Offset><AbsDimension x="80" y="-12"/></Offset>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_AbortColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_TestBarsButton_OnClick(this)</OnClick> 
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick>
         </Scripts>
       </Button>
-
-      <Slider name="HealBot_Options_NumTestBarsS" inherits="HealBot_Options_SliderTemplate">
-        <Size><AbsDimension x="110" y="18"/></Size>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TestBarsButton" relativePoint="TOPRIGHT">
-            <Offset><AbsDimension x="15" y="-2"/></Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_TESTBARS,1,40)</OnLoad> 
-          <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(this)</OnValueChanged> 
-        </Scripts>
-      </Slider>
       </Frames>
    </Frame> 
    

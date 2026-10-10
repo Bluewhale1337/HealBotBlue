@@ -52,6 +52,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
+* **UI - Skins Options & Custom Health Gradients** - Added configurable Max HP and Min HP colour pickers with descriptive labels for custom gradient support. Fixed colour picker button click interceptors and hooked ColorPickerFrame callbacks. Integrated global font selector across raid frame text, headers, Options button, and preview bars. Reorganized Skins tab layout to anchor Test Bars cleanly in Column 2.
 * **UI - Cleanup** - While adding new funcionalities the way menus look was ignored, new functions were added to each tab where there was free space, so attempt was made to clean up this convoluted mess I made. Menu Tabs are now aligned and grouped in a manner that makes more sense.
 * **Performance Fix - Table Pooling & GC Leaks** - Resolved critical table leaks in emergency heals where pooled tables (`order` and `units`) failed to release when pet heals were disabled, un-nested pet healing from emergency heals, eliminated high-frequency (4 Hz) anonymous closure allocations in `HealBot_Action_UpdatePlayerHoTs`, and implemented in-place key recycling for equipment scanning and grid button tables.
 

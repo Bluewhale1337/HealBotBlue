@@ -227,15 +227,30 @@ function HealBot_SetSkinColours()
   end
 
   -- 5. Update Text Labels
-  HealBot_EnTextColorpickt:SetTextHeight(btextheight)
-  HealBot_DisTextColorpickt:SetTextHeight(btextheight)
-  HealBot_DebTextColorpickt:SetTextHeight(btextheight)
-  
-  HealBot_EnTextColorpickt:SetText(HEALBOT_SKIN_ENTEXT)
-  HealBot_DisTextColorpickt:SetText(HEALBOT_SKIN_DISTEXT)
-  HealBot_DebTextColorpickt:SetText(HEALBOT_SKIN_DEBTEXT)
-  if HealBot_MaxHPColorpickt then HealBot_MaxHPColorpickt:SetText(HEALBOT_SKIN_MAXHPTEXT or "Max HP") end
-  if HealBot_MinHPColorpickt then HealBot_MinHPColorpickt:SetText(HEALBOT_SKIN_MINHPTEXT or "Min HP") end
+  local bfont = (HealBot_Config.bfont and HealBot_Config.bfont[skin]) or "Fonts\\FRIZQT__.TTF"
+  local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[skin]) or 0
+  local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
+
+  if HealBot_EnTextColorpickt then
+    HealBot_EnTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_EnTextColorpickt:SetText(HEALBOT_SKIN_ENTEXT)
+  end
+  if HealBot_DisTextColorpickt then
+    HealBot_DisTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_DisTextColorpickt:SetText(HEALBOT_SKIN_DISTEXT)
+  end
+  if HealBot_DebTextColorpickt then
+    HealBot_DebTextColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_DebTextColorpickt:SetText(HEALBOT_SKIN_DEBTEXT)
+  end
+  if HealBot_MaxHPColorpickt then
+    HealBot_MaxHPColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_MaxHPColorpickt:SetText(HEALBOT_SKIN_MAXHPTEXT or "Max HP")
+  end
+  if HealBot_MinHPColorpickt then
+    HealBot_MinHPColorpickt:SetFont(bfont, btextheight, expectedFlags)
+    HealBot_MinHPColorpickt:SetText(HEALBOT_SKIN_MINHPTEXT or "Min HP")
+  end
 
   -- 6. Force UI redraw (Kept the scale hack since it addresses a specific engine quirk)
   local barScale = HealBot_EnTextColorpick:GetScale()
