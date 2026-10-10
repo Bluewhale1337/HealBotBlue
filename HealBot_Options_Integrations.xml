@@ -8,7 +8,7 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="90" y="-30"/>
+              <AbsDimension x="100" y="-35"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -27,7 +27,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_UnitXP" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-4"/>
+              <AbsDimension x="0" y="-6"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -44,9 +44,9 @@
 
       <CheckButton name="HealBot_Options_Integrations_SuperWoW" inherits="OptionsCheckButtonTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_NampowerInfo" relativePoint="BOTTOMLEFT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_Nampower" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="-20" y="-12"/>
+              <AbsDimension x="0" y="-60"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -65,7 +65,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_SuperWoW" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-4"/>
+              <AbsDimension x="0" y="-6"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -84,7 +84,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ClassicAPI" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="0" y="-4"/>
+              <AbsDimension x="0" y="-6"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -97,33 +97,35 @@
           </OnClick>
         </Scripts>
       </CheckButton>
+      <Frame setAllPoints="true">
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must ENABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
+              <Size x="340" y="48"/>
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_Nampower" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                    <AbsDimension x="20" y="-4"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="0.7" g="0.7" b="0.7"/>
+            </FontString>
+            <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower to be enabled and active to provide accurate aura times.">
+              <Size x="340" y="30"/>
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                    <AbsDimension x="20" y="-4"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="0.7" g="0.7" b="0.7"/>
+            </FontString>
+          </Layer>
+        </Layers>
+      </Frame>
     </Frames>
-    <Layers>
-      <Layer level="ARTWORK">
-        <FontString name="HealBot_Options_Integrations_NampowerInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: For the 1-click Shapeshift auto-unshift to work smoothly, you must ENABLE 'Retry server rejected spells' in Nampower ENABLE Queue Instant Cast Spells and Queue Cast Time Spells.">
-          <Size x="340" y="30"/>
-          <Anchors>
-            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_Nampower" relativePoint="BOTTOMLEFT">
-              <Offset>
-                <AbsDimension x="20" y="-2"/>
-              </Offset>
-            </Anchor>
-          </Anchors>
-          <Color r="0.7" g="0.7" b="0.7"/>
-        </FontString>
-        <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower to be enabled and active to provide accurate aura times.">
-          <Size x="340" y="30"/>
-          <Anchors>
-            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
-              <Offset>
-                <AbsDimension x="20" y="-2"/>
-              </Offset>
-            </Anchor>
-          </Anchors>
-          <Color r="0.7" g="0.7" b="0.7"/>
-        </FontString>
-      </Layer>
-    </Layers>
     <Scripts>
       <OnShow>
         HealBot_Options_Integrations_OnShow(this);

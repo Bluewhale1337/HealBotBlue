@@ -89,11 +89,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff1Self" inherits="OptionsCheckButtonTemplate" id="1">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff1Self" inherits="UICheckButtonTemplate" id="1">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -127,11 +126,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff2Self" inherits="OptionsCheckButtonTemplate" id="2">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff2Self" inherits="UICheckButtonTemplate" id="2">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -165,11 +163,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff3Self" inherits="OptionsCheckButtonTemplate" id="3">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff3Self" inherits="UICheckButtonTemplate" id="3">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -203,11 +200,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff4Self" inherits="OptionsCheckButtonTemplate" id="4">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff4Self" inherits="UICheckButtonTemplate" id="4">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -242,11 +238,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff5Self" inherits="OptionsCheckButtonTemplate" id="5">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff5Self" inherits="UICheckButtonTemplate" id="5">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -280,11 +275,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff6Self" inherits="OptionsCheckButtonTemplate" id="6">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff6Self" inherits="UICheckButtonTemplate" id="6">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -318,11 +312,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff7Self" inherits="OptionsCheckButtonTemplate" id="7">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff7Self" inherits="UICheckButtonTemplate" id="7">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -356,11 +349,10 @@
           <OnLoad>HealBot_Options_Buff_OnLoad(this)</OnLoad>
         </Scripts>
       </Frame>
-      <CheckButton name="HealBot_Options_Buff8Self" inherits="OptionsCheckButtonTemplate" id="8">
-        <Size><AbsDimension x="80" y="20"/></Size>
+      <CheckButton name="HealBot_Options_Buff8Self" inherits="UICheckButtonTemplate" id="8">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="100" y="18"/></Offset>
+            <Offset><AbsDimension x="145" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
