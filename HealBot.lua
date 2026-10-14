@@ -203,22 +203,59 @@ end
 
 -- Spell parsing and casting functions moved to HealBot_Controller_Spells.lua
 
+HealBot_ClassMap = nil
+
+function HealBot_InitClassMap()
+    HealBot_ClassMap = {
+        ["DRUID"] = "DRUID", ["Druid"] = "DRUID",
+        ["HUNTER"] = "HUNTER", ["Hunter"] = "HUNTER",
+        ["MAGE"] = "MAGE", ["Mage"] = "MAGE",
+        ["PALADIN"] = "PALADIN", ["Paladin"] = "PALADIN",
+        ["PRIEST"] = "PRIEST", ["Priest"] = "PRIEST",
+        ["ROGUE"] = "ROGUE", ["Rogue"] = "ROGUE",
+        ["SHAMAN"] = "SHAMAN", ["Shaman"] = "SHAMAN",
+        ["WARLOCK"] = "WARLOCK", ["Warlock"] = "WARLOCK",
+        ["WARRIOR"] = "WARRIOR", ["Warrior"] = "WARRIOR",
+    }
+    if HEALBOT_DRUID then HealBot_ClassMap[HEALBOT_DRUID] = "DRUID" end
+    if HEALBOT_HUNTER then HealBot_ClassMap[HEALBOT_HUNTER] = "HUNTER" end
+    if HEALBOT_MAGE then HealBot_ClassMap[HEALBOT_MAGE] = "MAGE" end
+    if HEALBOT_PALADIN then HealBot_ClassMap[HEALBOT_PALADIN] = "PALADIN" end
+    if HEALBOT_PRIEST then HealBot_ClassMap[HEALBOT_PRIEST] = "PRIEST" end
+    if HEALBOT_ROGUE then HealBot_ClassMap[HEALBOT_ROGUE] = "ROGUE" end
+    if HEALBOT_SHAMAN then HealBot_ClassMap[HEALBOT_SHAMAN] = "SHAMAN" end
+    if HEALBOT_WARLOCK then HealBot_ClassMap[HEALBOT_WARLOCK] = "WARLOCK" end
+    if HEALBOT_WARRIOR then HealBot_ClassMap[HEALBOT_WARRIOR] = "WARRIOR" end
+end
+
 -- HealBot_UnitClass: Returns English class string for a unit.
 function HealBot_UnitClass(unit)
-    local locClass, enClass = UnitClass(unit)
-    if enClass then return string.upper(enClass) end
-    
-    -- Fallback for Vanilla 1.12 where enClass is nil
-    if locClass == HEALBOT_DRUID then return "DRUID"
-    elseif locClass == HEALBOT_HUNTER then return "HUNTER"
-    elseif locClass == HEALBOT_MAGE then return "MAGE"
-    elseif locClass == HEALBOT_PALADIN then return "PALADIN"
-    elseif locClass == HEALBOT_PRIEST then return "PRIEST"
-    elseif locClass == HEALBOT_ROGUE then return "ROGUE"
-    elseif locClass == HEALBOT_SHAMAN then return "SHAMAN"
-    elseif locClass == HEALBOT_WARLOCK then return "WARLOCK"
-    elseif locClass == HEALBOT_WARRIOR then return "WARRIOR"
+    if not unit then return nil end
+    if not HealBot_ClassMap then HealBot_InitClassMap() end
+
+    -- 1. If player self, query "player" directly
+    if unit == "player" or UnitIsUnit(unit, "player") then
+        local locClass, enClass = UnitClass("player")
+        if enClass and enClass ~= "" then return string.upper(enClass) end
+        if locClass and HealBot_ClassMap[locClass] then return HealBot_ClassMap[locClass] end
+        if locClass then return string.upper(locClass) end
     end
+
+    -- 2. If raid member, query GetRaidRosterInfo (server authoritative English class token)
+    local _, _, raidIdx = string.find(unit, "^raid(%d+)$")
+    if raidIdx and GetNumRaidMembers() > 0 then
+        local _, _, _, _, class, fileName = GetRaidRosterInfo(tonumber(raidIdx))
+        if fileName and fileName ~= "" then
+            return string.upper(fileName)
+        elseif class and HealBot_ClassMap[class] then
+            return HealBot_ClassMap[class]
+        end
+    end
+
+    -- 3. General fallback via UnitClass API
+    local locClass, enClass = UnitClass(unit)
+    if enClass and enClass ~= "" then return string.upper(enClass) end
+    if locClass and HealBot_ClassMap[locClass] then return HealBot_ClassMap[locClass] end
     
     return locClass
 end

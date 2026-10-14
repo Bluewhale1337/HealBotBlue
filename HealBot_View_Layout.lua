@@ -69,10 +69,20 @@ function HealBot_HealthColor(unit, hlth, maxhlth)
     end
 
     local colorMode = HealBot_Config.bcolormode[HealBot_Config.Current_Skin] or 1
+    local engClass = nil
+    if colorMode == 2 and not string.find(unit, "pet") then
+        engClass = HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass
+        if not engClass then
+            engClass = HealBot_UnitClass(unit)
+            if engClass and HealBot_Model and HealBot_Model.units[unit] then
+                HealBot_Model.units[unit].englishClass = engClass
+            end
+        end
+    end
+
     if colorMode == 2 and string.find(unit, "pet") then
         r, g, b = 0.4, 0.9, 0.6 -- Mint color
-    elseif colorMode == 2 and HealBot_Model and HealBot_Model.units[unit] and HealBot_Model.units[unit].englishClass and RAID_CLASS_COLORS and RAID_CLASS_COLORS[HealBot_Model.units[unit].englishClass] then
-        local engClass = HealBot_Model.units[unit].englishClass
+    elseif colorMode == 2 and engClass and RAID_CLASS_COLORS and RAID_CLASS_COLORS[engClass] then
         r = RAID_CLASS_COLORS[engClass].r
         g = RAID_CLASS_COLORS[engClass].g
         b = RAID_CLASS_COLORS[engClass].b
@@ -845,13 +855,14 @@ function HealBot_Action_PartyChanged()
                 if GetNumRaidMembers() > 0 then
                     for j = 1, 40 do
                         local unit = "raid" .. j;
-                        local Class = UnitClass(unit);
-                        local ProcessUnit = 0;
-                        local PossibleEmerg = 1;
                         local name, rank, subgroup, level, class, fileName, zone, online, isDead = GetRaidRosterInfo(j);
                         if not name then name = "not known" end
                         if not class then class = "not known" end
                         if not subgroup then subgroup = "not known" end
+                        
+                        local Class = UnitClass(unit) or class;
+                        local ProcessUnit = 0;
+                        local PossibleEmerg = 1;
                         
                         if HealBot_EmergInc[Class] == 1 then 
                             ProcessUnit = 1;

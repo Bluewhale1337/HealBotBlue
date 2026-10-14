@@ -47,7 +47,10 @@ HealBot_Model = {
     
     -- Integration maps
     unitGUIDs = {}, -- unit -> GUID
-    guidUnits = {}  -- GUID -> unit
+    guidUnits = {},  -- GUID -> unit
+
+    -- Delayed resolution queue
+    unresolvedUnits = {}
 }
 
 --------------------------------------------------------------------------------
@@ -87,6 +90,7 @@ end
 
 -- HealBot_Model:Initialize: Pre-allocates the unit state dictionary.
 function HealBot_Model:Initialize()
+    for k in pairs(self.unresolvedUnits) do self.unresolvedUnits[k] = nil end
     self:InitUnitState("player")
     self:InitUnitState("target")
     self:InitUnitState("pet")
@@ -149,7 +153,36 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     local oldName = self.units[unit].name
     local oldEnglishClass = self.units[unit].englishClass
     local name = UnitName(unit)
+    
+    -- If UnitName is not ready, attempt raid roster fallback for raid units
+    if not name or name == "Unknown" then
+        local _, _, raidIdx = string.find(unit, "^raid(%d+)$")
+        if raidIdx and GetNumRaidMembers() > 0 then
+            local rName = GetRaidRosterInfo(tonumber(raidIdx))
+            if rName and rName ~= "" and rName ~= "Unknown" then
+                name = rName
+            end
+        end
+    end
+
+    -- If name is still nil, retain oldName if unit exists
+    if not name and oldName and UnitExists(unit) then
+        name = oldName
+    end
+
     local englishClass = HealBot_UnitClass(unit)
+
+    -- If name is identical, do NOT overwrite an existing valid englishClass with nil
+    if oldName and name == oldName and not englishClass and oldEnglishClass then
+        englishClass = oldEnglishClass
+    end
+
+    -- Track unresolved units (unit exists with a name, but missing englishClass)
+    if name and not englishClass then
+        self.unresolvedUnits[unit] = true
+    else
+        self.unresolvedUnits[unit] = nil
+    end
     
     if oldName ~= name or oldEnglishClass ~= englishClass then
         self.units[unit].name = name

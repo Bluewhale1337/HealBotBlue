@@ -172,7 +172,19 @@ function HealBot_OnUpdate(this, arg1)
     for unitID in pairs(powerToRefresh) do
         HealBot_Action_RefreshPower(unitID)
     end
-    
+    -- Periodic resolution of units with missing class identity
+    if HealBot_Model and HealBot_Model.unresolvedUnits and next(HealBot_Model.unresolvedUnits) then
+        HealBot_UnresolvedTimer = (HealBot_UnresolvedTimer or 0) + arg1
+        if HealBot_UnresolvedTimer >= 0.5 then
+            HealBot_UnresolvedTimer = 0
+            for u in pairs(HealBot_Model.unresolvedUnits) do
+                if HealBot_Model:UpdateUnitIdentity(u) then
+                    HealBot_View_DirtyUnits[u] = true
+                end
+            end
+        end
+    end
+
     if HealBot_EquipChangeTimer > 0 then
         HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
         if HealBot_EquipChangeTimer <= 0 then
@@ -274,6 +286,7 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PlayerTargetChanged(this)
     end,
     ["PARTY_MEMBERS_CHANGED"] = function(this)
+        HealBot_Model:RefreshUnit("player")
         for _, unit in ipairs(HealBot_Model.partyMembers) do
             HealBot_Model:RefreshUnit(unit)
         end
@@ -284,6 +297,7 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PartyMembersChanged(this)
     end,
     ["RAID_ROSTER_UPDATE"] = function(this)
+        HealBot_Model:RefreshUnit("player")
         for _, unit in ipairs(HealBot_Model.partyMembers) do
             HealBot_Model:RefreshUnit(unit)
         end
