@@ -72,6 +72,7 @@ HEALBOT_LESSER_HEAL         = "Soins inf\195\169rieurs";
 HEALBOT_LESSER_HEALING_WAVE = "Vague de soins mineurs";
 HEALBOT_MEND_PET            = "Soigner un Familier";
 HEALBOT_POWER_WORD_SHIELD   = "Mot de pouvoir : Bouclier"; 
+HEALBOT_WEAKENED_SOUL        = "\195\130me affaiblie";
 HEALBOT_REGROWTH            = "R\195\169tablissement";
 HEALBOT_RENEW               = "R\195\169novation";
 HEALBOT_REJUVENATION        = "R\195\169cup\195\169ration";

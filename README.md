@@ -50,6 +50,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.6**
+* **Refactor & Feature - Unified Aura & HoT Tracking** - Unified bar icons and HoT timers into a single master dictionary (`HealBot_TrackedAuras`) in `HealBot_Data.lua`. Added Weakened Soul, Fear Ward, Abolish Disease, and Abolish Poison to active timer bars with localized client support and debuff-aware pruning.
+
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
 * **UI - Skins Options & Custom Health Gradients** - Added configurable Max HP and Min HP colour pickers with descriptive labels for custom gradient support. Fixed colour picker button click interceptors and hooked ColorPickerFrame callbacks. Integrated global font selector across raid frame text, headers, Options button, and preview bars. Reorganized Skins tab layout to anchor Test Bars cleanly in Column 2.

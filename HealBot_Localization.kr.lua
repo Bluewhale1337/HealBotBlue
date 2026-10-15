@@ -54,6 +54,7 @@ if (GetLocale() == "koKR") then
 	HEALBOT_LESSER_HEALING_WAVE	= "하급 치유의 물결";
 	HEALBOT_MEND_PET				= "동물 치료";
 	HEALBOT_POWER_WORD_SHIELD	= "신의 권능: 보호막";
+	HEALBOT_WEAKENED_SOUL		= "신체 취약";
 	HEALBOT_REGROWTH			= "재생";
 	HEALBOT_RENEW				= "소생";
 	HEALBOT_REJUVENATION			= "회복";

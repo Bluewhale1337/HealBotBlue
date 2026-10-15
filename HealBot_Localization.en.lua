@@ -171,6 +171,7 @@ HEALBOT_BUFF_REGROWTH            = "Interface\\Icons\\Spell_Nature_ResistNature"
 HEALBOT_BUFF_RENEW               = "Interface\\Icons\\Spell_Holy_Renew";
 HEALBOT_BUFF_FEAR_WARD           = "Interface\\Icons\\Spell_Holy_Excorcism";
 HEALBOT_DEBUFF_WEAKENED_SOUL     = "Interface\\Icons\\Spell_Holy_AshesToAshes";
+HEALBOT_WEAKENED_SOUL            = "Weakened Soul";
 HEALBOT_DEBUFF_RECENTLY_BANDAGED = "Interface\\Icons\\INV_Misc_Bandage_08";
 
 

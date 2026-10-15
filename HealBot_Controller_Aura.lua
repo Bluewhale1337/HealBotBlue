@@ -166,17 +166,6 @@ function HealBot_CheckBuffs(unit)
     end
 end
 
-local HealBot_TrackedHoTs = {
-    ["Interface\\Icons\\Spell_Holy_Renew"] = true,
-    ["Interface\\Icons\\Spell_Nature_Rejuvenation"] = true,
-    ["Interface\\Icons\\Spell_Nature_ResistNature"] = true,
-    ["Interface\\Icons\\Spell_Holy_PowerWordShield"] = true,
-    ["Interface\\Icons\\Spell_Holy_SealOfProtection"] = true,
-    ["Interface\\Icons\\Spell_Holy_Excorcism"] = true,
-    ["Interface\\Icons\\btnholyscriptures"] = true,
-    ["Interface\\Icons\\Spell_Holy_AshesToAshes"] = true,
-}
-
 local HealBot_DebuffTypeMap = nil
 local HealBot_AuraWarningPlayed = {}
 
@@ -190,6 +179,9 @@ function HealBot_OnEvent_UnitAura(this, unit)
             [HEALBOT_POISON] = HEALBOT_POISON_en,
             [HEALBOT_CURSE] = HEALBOT_CURSE_en
         }
+        if HealBot_Init_TrackedAuras then
+            HealBot_Init_TrackedAuras()
+        end
     end
     
     local DebuffType;
@@ -280,11 +272,24 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local buff = UnitBuff(unit, b)
             if not buff then break end
             activeBuffs[buff] = true
-            if HealBot_TrackedHoTs[buff] and iconCount < 10 then
+            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[buff] and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
             b = b + 1
+        end
+
+        local d = 1
+        local activeDebuffs = HealBot_GetTable()
+        while true do
+            local debuff = UnitDebuff(unit, d)
+            if not debuff then break end
+            activeDebuffs[debuff] = true
+            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[debuff] and iconCount < 10 then
+                iconCount = iconCount + 1
+                HealBot_UnitIcons[unit][iconCount] = debuff
+            end
+            d = d + 1
         end
 
         if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
@@ -294,33 +299,21 @@ function HealBot_OnEvent_UnitAura(this, unit)
                 HealBot_Nampower_NameCache[guid] = UnitName(unit)
                 
                 if HealBot_Nampower_Auras[guid] then
-                    local validHoTs = {
-                        ["Renew"] = "Interface\\Icons\\Spell_Holy_Renew",
-                        ["Rejuvenation"] = "Interface\\Icons\\Spell_Nature_Rejuvenation",
-                        ["Regrowth"] = "Interface\\Icons\\Spell_Nature_ResistNature",
-                        ["Power Word: Shield"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
-                    }
                     for spellName, _ in pairs(HealBot_Nampower_Auras[guid]) do
-                        local tex = validHoTs[spellName]
-                        if tex and not activeBuffs[tex] then
-                            HealBot_Nampower_Auras[guid][spellName] = nil
+                        local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                        if auraInfo then
+                            local tex = auraInfo.texture
+                            local isActive = auraInfo.isDebuff and activeDebuffs[tex] or activeBuffs[tex]
+                            if not isActive then
+                                HealBot_Nampower_Auras[guid][spellName] = nil
+                            end
                         end
                     end
                 end
             end
         end
         HealBot_ReleaseTable(activeBuffs)
-
-        local d = 1
-        while true do
-            local debuff = UnitDebuff(unit, d)
-            if not debuff then break end
-            if HealBot_TrackedHoTs[debuff] and iconCount < 10 then
-                iconCount = iconCount + 1
-                HealBot_UnitIcons[unit][iconCount] = debuff
-            end
-            d = d + 1
-        end
+        HealBot_ReleaseTable(activeDebuffs)
         
         if HealBot_UnitDebuff[unit] then
             if DebuffType and HealBot_Range_Check(unit, 40) == 1 then

@@ -1372,12 +1372,7 @@ end
 local HealBot_PlayerHoTsListFrame = nil
 local HealBot_PlayerHoTFrames = {}
 
-local HealBot_PlayerHoTs_ValidHoTs = {
-    ["Renew"] = "Interface\\Icons\\Spell_Holy_Renew",
-    ["Rejuvenation"] = "Interface\\Icons\\Spell_Nature_Rejuvenation",
-    ["Regrowth"] = "Interface\\Icons\\Spell_Nature_ResistNature",
-    ["Power Word: Shield"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
-}
+
 
 local HealBot_PlayerHoTs_ListCache = {}
 
@@ -1409,7 +1404,8 @@ function HealBot_Action_UpdatePlayerHoTs()
     if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
         for targetName, auras in pairs(HealBot_Nampower_Auras) do
             for spellName, expiration in pairs(auras) do
-                if HealBot_PlayerHoTs_ValidHoTs[spellName] then
+                local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                if auraInfo and auraInfo.showTimer then
                     if expiration > currentTime then
                         numHoTs = numHoTs + 1
                         if not HealBot_PlayerHoTs_ListCache[numHoTs] then
@@ -1504,7 +1500,7 @@ function HealBot_Action_UpdatePlayerHoTs()
             end
             
             local spellId = HealBot_GetSpellId and HealBot_GetSpellId(hot.spell) or nil
-            local tex = HealBot_PlayerHoTs_ValidHoTs[hot.spell] or "Interface\\Icons\\INV_Misc_QuestionMark"
+            local tex = (HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[hot.spell] and HealBot_TrackedAura_Spells[hot.spell].texture) or "Interface\\Icons\\INV_Misc_QuestionMark"
             if spellId then
                 tex = GetSpellTexture(spellId, "BOOKTYPE_SPELL") or tex
             end
