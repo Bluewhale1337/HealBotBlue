@@ -283,6 +283,10 @@ function HealBot_Action_EnableButton(button)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
+    local isPet = string.find(unit, "pet") ~= nil
+    local overlayMode = (HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1) and ((HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0) == 1) and not isPet
+    local unitGUID = overlayMode and ((HealBot_GetUnitGUID and HealBot_GetUnitGUID(unit)) or (unit == "player" and HealBot_PlayerGUID))
+    local currentTime = overlayMode and GetTime()
     for i = 1, 10 do
         local icon = button["icon"..i]
         if not icon then
@@ -305,9 +309,53 @@ function HealBot_Action_EnableButton(button)
                 if not icon:IsVisible() then
                     icon:Show()
                 end
+                
+                -- Icon overlay timer text
+                local iconText = button["iconText"..i]
+                if not iconText then
+                    iconText = button:CreateFontString(nil, "OVERLAY")
+                    iconText:SetFont("Fonts\\ARIALN.TTF", 10, "OUTLINE")
+                    iconText:SetPoint("CENTER", icon, "CENTER", 0, 0)
+                    iconText:SetTextColor(1, 1, 1, 1)
+                    button["iconText"..i] = iconText
+                end
+                if overlayMode and unitGUID and HealBot_Nampower_Auras and HealBot_Nampower_Auras[unitGUID] then
+                    local texturePath = HealBot_UnitIcons[unit][i]
+                    local auraInfo = HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[texturePath]
+                    if auraInfo and auraInfo.showTimer then
+                        local expiration = (auraInfo.locName and HealBot_Nampower_Auras[unitGUID][auraInfo.locName])
+                                           or (auraInfo.spell and HealBot_Nampower_Auras[unitGUID][auraInfo.spell])
+                        if not expiration and HealBot_TrackedAura_Spells then
+                            for spellName, spInfo in pairs(HealBot_TrackedAura_Spells) do
+                                if spInfo.texture == texturePath and spInfo.showTimer then
+                                    expiration = HealBot_Nampower_Auras[unitGUID][spellName]
+                                    if expiration then break end
+                                end
+                            end
+                        end
+                        if expiration and expiration > currentTime then
+                            local timeLeft = math.floor(expiration - currentTime)
+                            iconText:SetText(timeLeft)
+                            iconText:Show()
+                        else
+                            iconText:SetText("")
+                            iconText:Hide()
+                        end
+                    else
+                        iconText:SetText("")
+                        iconText:Hide()
+                    end
+                else
+                    iconText:SetText("")
+                    iconText:Hide()
+                end
             else
                 if icon:IsVisible() then
                     icon:Hide()
+                end
+                local iconText = button["iconText"..i]
+                if iconText and iconText:IsVisible() then
+                    iconText:Hide()
                 end
             end
         end
@@ -1380,21 +1428,64 @@ local function HealBot_PlayerHoTs_SortComparator(a, b)
     return (a.expires or 0) < (b.expires or 0)
 end
 
+-- Reposition the HoT timer list frame based on config
+local function HealBot_HoTTimerList_Reanchor()
+    if not HealBot_PlayerHoTsListFrame then return end
+    local pos = HealBot_Config.HealBot_Integrations_HoTTimerPosition or "BELOW"
+    HealBot_PlayerHoTsListFrame:ClearAllPoints()
+    if pos == "ABOVE" then
+        HealBot_PlayerHoTsListFrame:SetPoint("BOTTOMLEFT", HealBot_Action, "TOPLEFT", 0, 2)
+    elseif pos == "RIGHT" then
+        HealBot_PlayerHoTsListFrame:SetPoint("TOPLEFT", HealBot_Action, "TOPRIGHT", 2, 0)
+    elseif pos == "LEFT" then
+        HealBot_PlayerHoTsListFrame:SetPoint("TOPRIGHT", HealBot_Action, "TOPLEFT", -2, 0)
+    else -- BELOW (default)
+        HealBot_PlayerHoTsListFrame:SetPoint("TOPLEFT", HealBot_Action, "BOTTOMLEFT", 0, -2)
+    end
+end
+
+-- Reposition child HoT frames for stacking direction
+local function HealBot_HoTTimerList_StackChild(frame, index)
+    local pos = HealBot_Config.HealBot_Integrations_HoTTimerPosition or "BELOW"
+    frame:ClearAllPoints()
+    if pos == "ABOVE" then
+        if index == 1 then
+            frame:SetPoint("BOTTOMLEFT", HealBot_PlayerHoTsListFrame, "BOTTOMLEFT", 0, 0)
+        else
+            frame:SetPoint("BOTTOMLEFT", HealBot_PlayerHoTFrames[index-1], "TOPLEFT", 0, 2)
+        end
+    else
+        if index == 1 then
+            frame:SetPoint("TOPLEFT", HealBot_PlayerHoTsListFrame, "TOPLEFT", 0, 0)
+        else
+            frame:SetPoint("TOPLEFT", HealBot_PlayerHoTFrames[index-1], "BOTTOMLEFT", 0, -2)
+        end
+    end
+end
+
 function HealBot_Action_UpdatePlayerHoTs()
     if not HealBot_PlayerHoTsListFrame then
         HealBot_PlayerHoTsListFrame = CreateFrame("Frame", "HealBot_PlayerHoTsListFrame", HealBot_Action)
         HealBot_PlayerHoTsListFrame:SetWidth(128)
         HealBot_PlayerHoTsListFrame:SetHeight(1)
-        HealBot_PlayerHoTsListFrame:SetPoint("TOPLEFT", HealBot_Action, "BOTTOMLEFT", 0, -2)
         HealBot_PlayerHoTsListFrame:Show()
     end
-    
+
+    HealBot_HoTTimerList_Reanchor()
+
     if HealBot_Config.HealBot_Integrations_ShowHoTTimers ~= 1 then
         HealBot_PlayerHoTsListFrame:Hide()
         return
-    else
-        HealBot_PlayerHoTsListFrame:Show()
     end
+
+    -- If display mode is Icon Overlay, hide the list and return
+    local displayMode = HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0
+    if displayMode == 1 then
+        HealBot_PlayerHoTsListFrame:Hide()
+        return
+    end
+
+    HealBot_PlayerHoTsListFrame:Show()
 
     local currentTime = GetTime()
     
@@ -1403,17 +1494,20 @@ function HealBot_Action_UpdatePlayerHoTs()
     
     if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
         for targetName, auras in pairs(HealBot_Nampower_Auras) do
-            for spellName, expiration in pairs(auras) do
-                local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
-                if auraInfo and auraInfo.showTimer then
-                    if expiration > currentTime then
-                        numHoTs = numHoTs + 1
-                        if not HealBot_PlayerHoTs_ListCache[numHoTs] then
-                            HealBot_PlayerHoTs_ListCache[numHoTs] = {}
+            local unitID = HealBot_Model:GetUnitByGUID(targetName) or HealBot_Model:GetUnitIDByName(targetName)
+            if not (unitID and string.find(unitID, "pet")) then
+                for spellName, expiration in pairs(auras) do
+                    local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                    if auraInfo and auraInfo.showTimer then
+                        if expiration > currentTime then
+                            numHoTs = numHoTs + 1
+                            if not HealBot_PlayerHoTs_ListCache[numHoTs] then
+                                HealBot_PlayerHoTs_ListCache[numHoTs] = {}
+                            end
+                            HealBot_PlayerHoTs_ListCache[numHoTs].name = targetName
+                            HealBot_PlayerHoTs_ListCache[numHoTs].spell = spellName
+                            HealBot_PlayerHoTs_ListCache[numHoTs].expires = expiration
                         end
-                        HealBot_PlayerHoTs_ListCache[numHoTs].name = targetName
-                        HealBot_PlayerHoTs_ListCache[numHoTs].spell = spellName
-                        HealBot_PlayerHoTs_ListCache[numHoTs].expires = expiration
                     end
                 end
             end
@@ -1435,11 +1529,6 @@ function HealBot_Action_UpdatePlayerHoTs()
                 frame = CreateFrame("Frame", "HealBot_PlayerHoT" .. i, HealBot_PlayerHoTsListFrame)
                 frame:SetWidth(128)
                 frame:SetHeight(16)
-                if i == 1 then
-                    frame:SetPoint("TOPLEFT", HealBot_PlayerHoTsListFrame, "TOPLEFT", 0, 0)
-                else
-                    frame:SetPoint("TOPLEFT", HealBot_PlayerHoTFrames[i-1], "BOTTOMLEFT", 0, -2)
-                end
                 
                 local icon = frame:CreateTexture(nil, "ARTWORK")
                 icon:SetWidth(14)
@@ -1454,6 +1543,9 @@ function HealBot_Action_UpdatePlayerHoTs()
                 
                 HealBot_PlayerHoTFrames[i] = frame
             end
+
+            -- Reposition child for stacking direction
+            HealBot_HoTTimerList_StackChild(frame, i)
             
             local hot = HealBot_PlayerHoTs_ListCache[i]
             local timeLeft = math.floor(hot.expires - currentTime)

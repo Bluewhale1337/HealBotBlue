@@ -197,6 +197,28 @@ function HealBot_OnUpdate(this, arg1)
     if HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1 then
         if not HealBot_HoT_Update_Timer or GetTime() >= HealBot_HoT_Update_Timer then
             HealBot_HoT_Update_Timer = GetTime() + 0.25
+            local displayMode = HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0
+            if displayMode == 1 then
+                -- Icon Overlay mode: dirty-flag units with active Nampower auras
+                if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
+                    local now = GetTime()
+                    for guid, auras in pairs(HealBot_Nampower_Auras) do
+                        local hasActive = false
+                        for _, exp in pairs(auras) do
+                            if exp > now then hasActive = true; break end
+                        end
+                        if hasActive then
+                            local unitID = (HealBot_Model and HealBot_Model:GetUnitByGUID(guid))
+                            if not unitID and HealBot_PlayerGUID and guid == HealBot_PlayerGUID then
+                                unitID = "player"
+                            end
+                            if unitID and not string.find(unitID, "pet") then
+                                HealBot_View_DirtyUnits[unitID] = true
+                            end
+                        end
+                    end
+                end
+            end
             if HealBot_Action_UpdatePlayerHoTs then
                 HealBot_Action_UpdatePlayerHoTs()
             end

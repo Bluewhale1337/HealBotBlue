@@ -269,6 +269,8 @@ HealBot_ConfigDefaults = {
   HealBot_Integrations_SuperWoW = 0,
   HealBot_Integrations_ClassicAPI = 0,
   HealBot_Integrations_ShowHoTTimers = 0,
+  HealBot_Integrations_HoTTimerPosition = "BELOW",
+  HealBot_Integrations_HoTTimerDisplayMode = 0,
 };
 
 HealBot_Config = {};
@@ -621,11 +623,13 @@ HealBot_TrackedAura_Spells = {};
 
 function HealBot_Init_TrackedAuras()
     for spell, info in pairs(HealBot_TrackedAuras) do
+        info.spell = spell
         HealBot_TrackedAura_Textures[info.texture] = info
         HealBot_TrackedAura_Spells[spell] = info
         if info.locKey then
             local locName = getglobal(info.locKey)
             if locName and locName ~= "" then
+                info.locName = locName
                 HealBot_TrackedAura_Spells[locName] = info
             end
         end

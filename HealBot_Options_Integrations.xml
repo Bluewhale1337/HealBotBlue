@@ -94,9 +94,81 @@
           </OnLoad>
           <OnClick>
             HealBot_Config.HealBot_Integrations_ShowHoTTimers = this:GetChecked() and 1 or 0;
+            HealBot_Options_Integrations_UpdateDropdownStates();
+            if HealBot_Action_UnitButtons then
+              for u in pairs(HealBot_Action_UnitButtons) do
+                HealBot_View_DirtyUnits[u] = true;
+              end
+            end
+            if HealBot_Action_UpdatePlayerHoTs then
+              HealBot_Action_UpdatePlayerHoTs();
+            end
           </OnClick>
         </Scripts>
       </CheckButton>
+
+      <!-- HoT Timer Display Mode Dropdown -->
+      <Frame name="HealBot_Options_Integrations_DisplayModeDropdown" inherits="UIDropDownMenuTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="-15" y="-22"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="HealBot_Options_Integrations_DisplayModeLabel" inherits="GameFontHighlightSmall" justifyH="LEFT" text="Timer Display Mode:">
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="20" y="2"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1" g="0.82" b="0"/>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_SetWidth(120, this);
+            UIDropDownMenu_Initialize(this, HealBot_Options_Integrations_DisplayModeDropdown_Init);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
+      <!-- HoT Timer Position Dropdown -->
+      <Frame name="HealBot_Options_Integrations_PositionDropdown" inherits="UIDropDownMenuTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_DisplayModeDropdown" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="0" y="-22"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="HealBot_Options_Integrations_PositionLabel" inherits="GameFontHighlightSmall" justifyH="LEFT" text="Timer List Position:">
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="20" y="2"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1" g="0.82" b="0"/>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            UIDropDownMenu_SetWidth(120, this);
+            UIDropDownMenu_Initialize(this, HealBot_Options_Integrations_PositionDropdown_Init);
+          </OnLoad>
+        </Scripts>
+      </Frame>
+
       <Frame setAllPoints="true">
         <Layers>
           <Layer level="ARTWORK">
@@ -114,9 +186,9 @@
             <FontString name="HealBot_Options_Integrations_HoTInfo" inherits="GameFontHighlightSmall" justifyH="LEFT" justifyV="TOP" text="Note: HoT Timers require Nampower to be enabled and active to provide accurate aura times.">
               <Size x="340" y="30"/>
               <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_ShowHoTTimers" relativePoint="BOTTOMLEFT">
+                <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Integrations_PositionDropdown" relativePoint="BOTTOMLEFT">
                   <Offset>
-                    <AbsDimension x="20" y="-4"/>
+                    <AbsDimension x="20" y="-6"/>
                   </Offset>
                 </Anchor>
               </Anchors>

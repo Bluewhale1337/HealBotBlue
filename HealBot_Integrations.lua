@@ -145,5 +145,8 @@ end
       HealBot_Options_Integrations_ShowHoTTimers:SetChecked(0)
       HealBot_Config.HealBot_Integrations_ShowHoTTimers = 0
     end
+    if HealBot_Options_Integrations_UpdateDropdownStates then
+      HealBot_Options_Integrations_UpdateDropdownStates()
+    end
   end
 end
