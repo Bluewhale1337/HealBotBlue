@@ -26,7 +26,7 @@ function HealBot_Options_Integrations_UpdateDropdownStates()
   local displayMode = HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0
 
   HealBot_Options_SetDropDownState(HealBot_Options_Integrations_DisplayModeDropdown, timersEnabled)
-  HealBot_Options_SetDropDownState(HealBot_Options_Integrations_PositionDropdown, timersEnabled and (displayMode == 0))
+  HealBot_Options_SetDropDownState(HealBot_Options_Integrations_PositionDropdown, timersEnabled and (displayMode == 0 or displayMode == 2))
 end
 
 -- HealBot_Options_Integrations_OnShow: UI handler for OnShow options panel.
@@ -41,6 +41,8 @@ function HealBot_Options_Integrations_OnShow(this)
   local displayMode = HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0
   if displayMode == 1 then
     UIDropDownMenu_SetText("Icon Overlay", HealBot_Options_Integrations_DisplayModeDropdown)
+  elseif displayMode == 2 then
+    UIDropDownMenu_SetText("Both", HealBot_Options_Integrations_DisplayModeDropdown)
   else
     UIDropDownMenu_SetText("List", HealBot_Options_Integrations_DisplayModeDropdown)
   end
@@ -89,6 +91,15 @@ function HealBot_Options_Integrations_DisplayModeDropdown_Init()
   info.value = 1
   info.func = HealBot_Options_Integrations_DisplayModeDropdown_OnClick
   if mode == 1 then
+    info.checked = 1
+  end
+  UIDropDownMenu_AddButton(info)
+
+  info = {}
+  info.text = "Both"
+  info.value = 2
+  info.func = HealBot_Options_Integrations_DisplayModeDropdown_OnClick
+  if mode == 2 then
     info.checked = 1
   end
   UIDropDownMenu_AddButton(info)
