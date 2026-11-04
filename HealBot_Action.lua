@@ -2,6 +2,10 @@
 
 -- HealBot_AlwaysHeal: Returns true if healthy units should be shown.
 function HealBot_AlwaysHeal()
+  local class = HealBot_UnitClass("player")
+  if class ~= "PRIEST" and class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
+    return true
+  end
   return HealBot_Config.EnableHealthy==1
 end
 
@@ -60,6 +64,14 @@ end
 -- HealBot_CanHeal: Internal utility: HealBot_CanHeal
 function HealBot_CanHeal(unit)
   if string.find(unit, "^Test") then return true end
+  local class = HealBot_UnitClass("player")
+  if class ~= "PRIEST" and class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
+    if UnitExists(unit) and not UnitIsDeadOrGhost(unit) then
+      return true
+    end
+    return false
+  end
+
   if UnitIsDeadOrGhost(unit) then
     local rezSpell = HealBot_GetRezSpellForClass();
     if rezSpell and HealBot_GetHealSpell(unit, rezSpell) then

@@ -83,6 +83,59 @@ HEALBOT_POWER_WORD_FORTITUDE  = "Machtwort: Seelenst\195\164rke";
 HEALBOT_MARK_OF_THE_WILD      = "Mal der Wildnis";
 HEALBOT_BLESSING_OF_SALVATION = "Segen der Rettung";
 
+HEALBOT_BATTLE_SHOUT          = "Schlachtruf";
+HEALBOT_BLOODRAGE             = "Blutrausch";
+HEALBOT_BERSERKER_RAGE        = "Berserkerwut";
+
+HEALBOT_DEMON_SKIN            = "D\195\164monenhaut";
+HEALBOT_DEMON_ARMOR           = "D\195\164monenr\195\188stung";
+HEALBOT_UNENDING_BREATH       = "Unendlicher Atem";
+HEALBOT_DETECT_LESSER_INVISIBILITY = "Geringe Unsichtbarkeit entdecken";
+HEALBOT_DETECT_INVISIBILITY   = "Unsichtbarkeit entdecken";
+HEALBOT_SHADOW_WARD           = "Schattenzauberschutz";
+HEALBOT_SOULSTONE_RESURRECTION = "Seelenstein-Auferstehung";
+HEALBOT_FIRE_SHIELD           = "Feuerschild";
+
+HEALBOT_TRUESHOT_AURA         = "Aura des Volltreffers";
+HEALBOT_ASPECT_OF_THE_HAWK    = "Aspekt des Falken";
+HEALBOT_ASPECT_OF_THE_MONKEY  = "Aspekt des Affen";
+HEALBOT_ASPECT_OF_THE_CHEETAH = "Aspekt des Geparden";
+HEALBOT_ASPECT_OF_THE_PACK    = "Aspekt des Rudels";
+HEALBOT_ASPECT_OF_THE_WILD    = "Aspekt der Wildnis";
+HEALBOT_ASPECT_OF_THE_BEAST   = "Aspekt des Wildtiers";
+
+HEALBOT_STEALTH               = "Verstohlenheit";
+HEALBOT_BLADE_FLURRY          = "Klingenwirbel";
+HEALBOT_EVASION               = "Entrinnen";
+HEALBOT_SPRINT                = "Sprinten";
+HEALBOT_SLICE_AND_DICE        = "Zerh\195\164ckseln";
+
+HEALBOT_FROST_ARMOR           = "Frostr\195\188stung";
+HEALBOT_ICE_ARMOR             = "Eisr\195\188stung";
+HEALBOT_MAGE_ARMOR            = "Magische R\195\188stung";
+HEALBOT_MANA_SHIELD           = "Manaschild";
+HEALBOT_ICE_BARRIER           = "Eisbarriere";
+HEALBOT_FIRE_WARD             = "Feuerzauberschutz";
+HEALBOT_FROST_WARD            = "Frostzauberschutz";
+
+HEALBOT_GREATER_BLESSING_OF_SALVATION = "Gro\195\159er Segen der Rettung";
+HEALBOT_GREATER_BLESSING_OF_MIGHT     = "Gro\195\159er Segen der Macht";
+HEALBOT_GREATER_BLESSING_OF_WISDOM    = "Gro\195\159er Segen der Weisheit";
+HEALBOT_GREATER_BLESSING_OF_KINGS     = "Gro\195\159er Segen der K\195\182nige";
+HEALBOT_GREATER_BLESSING_OF_LIGHT     = "Gro\195\159er Segen des Lichts";
+HEALBOT_GREATER_BLESSING_OF_SANCTUARY = "Gro\195\159er Segen des Unterschlupfs";
+HEALBOT_RIGHTEOUS_FURY                = "Zorn der Gerechtigkeit";
+
+HEALBOT_SHADOWFORM            = "Schattengestalt";
+
+HEALBOT_BARKSKIN              = "Baumrinde";
+HEALBOT_NATURES_GRASP         = "Griff der Natur";
+
+HEALBOT_LIGHTNING_SHIELD      = "Blitzschlagschild";
+HEALBOT_WATER_SHIELD          = "Wasserschild";
+HEALBOT_WATER_WALKING         = "Wasserwandeln";
+HEALBOT_WATER_BREATHING       = "Wasseratmung";
+
 HEALBOT_RESURRECTION        = "Auferstehung";
 HEALBOT_REDEMPTION          = "Erl\195\182sung";
 HEALBOT_REBIRTH             = "Wiedergeburt";
@@ -96,6 +149,7 @@ HEALBOT_DISPEL_MAGIC       = "Magiebannung";
 HEALBOT_CURE_POISON        = "Vergiftung heilen";
 HEALBOT_ABOLISH_POISON     = "Vergiftung aufheben";
 HEALBOT_REMOVE_CURSE       = "Fluch aufheben"; 
+HEALBOT_REMOVE_LESSER_CURSE= "Geringeren Fluch aufheben";
 HEALBOT_DISEASE            = "Krankheit";   
 HEALBOT_MAGIC              = "Magie";
 HEALBOT_CURSE              = "Fluch";   

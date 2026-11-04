@@ -50,6 +50,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.6**
+* **Feature - All-Class Support & Raid Frame Replacement:** Removed legacy restriction that disabled HealBot event listeners and UI frames for classes without native healing spells. HealBot now initializes and functions as a full party/raid frame replacement for all classes (Warrior, Mage, Rogue, Hunter, Warlock).
+* **Targeting & Binding Defaults:** Added default `Left` click `"Target"` binding for non-healer classes, recognized `"target"` in spell resolution, and prevented non-healer buttons from disabling on full-health allies.
+* **Mage Decurse Support:** Integrated `Remove Lesser Curse` into Mage debuff tables and Cure/Dispel (CDC) options.
+* **Bug Fix - Spellbook Scan Lua Error:** Initialized `RealHealing` in spell scanner, resolving `attempt to concatenate global 'RealHealing' (a nil value)` when opening the spellbook on non-healer classes.
+* **UI Fix - Cure Dropdown Stale Text:** Unconditionally added "None" entry and disabled curing button dropdowns for classes without decurse/cleanse abilities, fixing stale dropdown text ("Melee") displaying on Warrior and other non-dispelling classes.
+* **Feature - Class Buff Tracking:** Added buff tracking lists, bidirectional group/rank equivalents (Greater Blessings, armors, etc.), and self-only auto-filtering for all classes. Added Water Shield for Shaman and refreshed buff dropdown labels to eliminate stale UI cache text.
+
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.
 * **UI - Skins Options & Custom Health Gradients** - Added configurable Max HP and Min HP colour pickers with descriptive labels for custom gradient support. Fixed colour picker button click interceptors and hooked ColorPickerFrame callbacks. Integrated global font selector across raid frame text, headers, Options button, and preview bars. Reorganized Skins tab layout to anchor Test Bars cleanly in Column 2.

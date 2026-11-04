@@ -1,3 +1,4 @@
+local HealBot_Buff_Equivalents = nil
 -- HealBot_Controller_Aura.lua
 -- Handles tracking buffs/debuffs (auras) on group/raid units
 
@@ -94,14 +95,52 @@ function HealBot_CheckBuffs(unit)
         return
     end
     
-    -- Group Buff Equivalents
-    local HealBot_Buff_Equivalents = {
-        [HEALBOT_POWER_WORD_FORTITUDE] = HEALBOT_PRAYER_OF_FORTITUDE,
-        [HEALBOT_DIVINE_SPIRIT] = HEALBOT_PRAYER_OF_SPIRIT,
-        [HEALBOT_SHADOW_PROTECTION] = HEALBOT_PRAYER_OF_SHADOW_PROTECTION,
-        [HEALBOT_ARCANE_INTELLECT] = HEALBOT_ARCANE_BRILLIANCE,
-        [HEALBOT_MARK_OF_THE_WILD] = HEALBOT_GIFT_OF_THE_WILD,
-    }
+    if not HealBot_Buff_Equivalents then
+        HealBot_Buff_Equivalents = {
+            -- Priest Fortitude
+            [HEALBOT_POWER_WORD_FORTITUDE] = { HEALBOT_PRAYER_OF_FORTITUDE },
+            [HEALBOT_PRAYER_OF_FORTITUDE] = { HEALBOT_POWER_WORD_FORTITUDE },
+            -- Priest Spirit
+            [HEALBOT_DIVINE_SPIRIT] = { HEALBOT_PRAYER_OF_SPIRIT },
+            [HEALBOT_PRAYER_OF_SPIRIT] = { HEALBOT_DIVINE_SPIRIT },
+            -- Priest Shadow Protection
+            [HEALBOT_SHADOW_PROTECTION] = { HEALBOT_PRAYER_OF_SHADOW_PROTECTION },
+            [HEALBOT_PRAYER_OF_SHADOW_PROTECTION] = { HEALBOT_SHADOW_PROTECTION },
+            -- Mage Intellect
+            [HEALBOT_ARCANE_INTELLECT] = { HEALBOT_ARCANE_BRILLIANCE },
+            [HEALBOT_ARCANE_BRILLIANCE] = { HEALBOT_ARCANE_INTELLECT },
+            -- Mage Armors
+            [HEALBOT_FROST_ARMOR] = { HEALBOT_ICE_ARMOR },
+            [HEALBOT_ICE_ARMOR] = { HEALBOT_FROST_ARMOR },
+            -- Druid MotW
+            [HEALBOT_MARK_OF_THE_WILD] = { HEALBOT_GIFT_OF_THE_WILD },
+            [HEALBOT_GIFT_OF_THE_WILD] = { HEALBOT_MARK_OF_THE_WILD },
+            -- Paladin Kings
+            [HEALBOT_BLESSING_OF_KINGS] = { HEALBOT_GREATER_BLESSING_OF_KINGS },
+            [HEALBOT_GREATER_BLESSING_OF_KINGS] = { HEALBOT_BLESSING_OF_KINGS },
+            -- Paladin Might
+            [HEALBOT_BLESSING_OF_MIGHT] = { HEALBOT_GREATER_BLESSING_OF_MIGHT },
+            [HEALBOT_GREATER_BLESSING_OF_MIGHT] = { HEALBOT_BLESSING_OF_MIGHT },
+            -- Paladin Wisdom
+            [HEALBOT_BLESSING_OF_WISDOM] = { HEALBOT_GREATER_BLESSING_OF_WISDOM },
+            [HEALBOT_GREATER_BLESSING_OF_WISDOM] = { HEALBOT_BLESSING_OF_WISDOM },
+            -- Paladin Salvation
+            [HEALBOT_BLESSING_OF_SALVATION] = { HEALBOT_GREATER_BLESSING_OF_SALVATION },
+            [HEALBOT_GREATER_BLESSING_OF_SALVATION] = { HEALBOT_BLESSING_OF_SALVATION },
+            -- Paladin Light
+            [HEALBOT_BLESSING_OF_LIGHT] = { HEALBOT_GREATER_BLESSING_OF_LIGHT },
+            [HEALBOT_GREATER_BLESSING_OF_LIGHT] = { HEALBOT_BLESSING_OF_LIGHT },
+            -- Paladin Sanctuary
+            [HEALBOT_BLESSING_OF_SANCTUARY] = { HEALBOT_GREATER_BLESSING_OF_SANCTUARY },
+            [HEALBOT_GREATER_BLESSING_OF_SANCTUARY] = { HEALBOT_BLESSING_OF_SANCTUARY },
+            -- Warlock Armors
+            [HEALBOT_DEMON_SKIN] = { HEALBOT_DEMON_ARMOR },
+            [HEALBOT_DEMON_ARMOR] = { HEALBOT_DEMON_SKIN },
+            -- Warlock Invisibility
+            [HEALBOT_DETECT_LESSER_INVISIBILITY] = { HEALBOT_DETECT_INVISIBILITY },
+            [HEALBOT_DETECT_INVISIBILITY] = { HEALBOT_DETECT_LESSER_INVISIBILITY },
+        }
+    end
     
     -- Gather buffs on unit
     local hasBuff = StaticHasBuff
@@ -141,13 +180,17 @@ function HealBot_CheckBuffs(unit)
         for j = 1, 8 do
             local val = HealBot_Config.BuffDropDowns[myClass][j]
             if val and val > 0 then
-                local isSelfOnly = (HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[j] == 1)
+                local spellName = HealBot_Buff_Spells[myClass][val]
+                local isSelfOnly = (HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[j] == 1) or (HealBot_SelfOnly_Buffs and HealBot_SelfOnly_Buffs[spellName])
                 if not (isSelfOnly and not UnitIsUnit(unit, "player")) then
-                    local spellName = HealBot_Buff_Spells[myClass][val]
-                    
                     local hasIt = hasBuff[spellName]
                     if not hasIt and HealBot_Buff_Equivalents[spellName] then
-                        hasIt = hasBuff[HealBot_Buff_Equivalents[spellName]]
+                        for _, equiv in ipairs(HealBot_Buff_Equivalents[spellName]) do
+                            if hasBuff[equiv] then
+                                hasIt = true
+                                break
+                            end
+                        end
                     end
                     
                     if not hasIt then

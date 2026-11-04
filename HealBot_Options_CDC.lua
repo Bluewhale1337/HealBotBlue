@@ -168,14 +168,13 @@ end
 
 -- HealBot_Options_CDCButLeft_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCButLeft_DropDown()
-  local classEN=HealBot_UnitClass("player")
-  if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
-    local class=UnitClass("Player");
-    local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class)
-    local info = {};
-    info.text = "None";
-    info.func = HealBot_Options_CDCButLeft_OnSelect;
-    UIDropDownMenu_AddButton(info);
+  local info = {};
+  info.text = "None";
+  info.func = HealBot_Options_CDCButLeft_OnSelect;
+  UIDropDownMenu_AddButton(info);
+  local class = UnitClass("Player");
+  local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class);
+  if DebuffSpells_List then
     for i=1, getn(DebuffSpells_List), 1 do
       local spell=HealBot_GetSpellName(HealBot_GetSpellId(DebuffSpells_List[i]));
       if spell then
@@ -189,14 +188,13 @@ function HealBot_Options_CDCButLeft_DropDown()
 end
 -- HealBot_Options_CDCButRight_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCButRight_DropDown()
-  local classEN=HealBot_UnitClass("player")
-  if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
-    local class=UnitClass("Player");
-    local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class)
-    local info = {};
-    info.text = "None";
-    info.func = HealBot_Options_CDCButRight_OnSelect;
-    UIDropDownMenu_AddButton(info);
+  local info = {};
+  info.text = "None";
+  info.func = HealBot_Options_CDCButRight_OnSelect;
+  UIDropDownMenu_AddButton(info);
+  local class = UnitClass("Player");
+  local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class);
+  if DebuffSpells_List then
     for i=1, getn(DebuffSpells_List), 1 do
       local spell=HealBot_GetSpellName(HealBot_GetSpellId(DebuffSpells_List[i]));
       if spell then
@@ -218,19 +216,49 @@ function HealBot_Options_CDCButRight_Initialize()
 end
 -- HealBot_Options_CDCButLeft_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_CDCButLeft_Refresh(onselect)
-  local set_id=1;
-  local class=UnitClass("Player");
+  local set_id = 1;
+  local class = UnitClass("Player");
+  local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class);
   if not onselect then HealBot_Options_CDCButLeft_Initialize() end 
-  set_id = HealBot_Config.Debuff_Left[class];
-  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButLeft,set_id)
+  if DebuffSpells_List and getn(DebuffSpells_List) > 0 then
+    set_id = HealBot_Config.Debuff_Left[class] or 1;
+    getglobal("HealBot_Options_CDCButLeftButton"):Enable();
+    getglobal("HealBot_Options_CDCButLeftText"):SetTextColor(1.0, 1.0, 1.0);
+    HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButLeft, set_id);
+    if set_id == 1 then
+      UIDropDownMenu_SetText("None", HealBot_Options_CDCButLeft);
+    end
+  else
+    set_id = 1;
+    HealBot_Config.Debuff_Left[class] = 1;
+    HealBot_Config.CDCLeftText[class] = "None";
+    getglobal("HealBot_Options_CDCButLeftButton"):Disable();
+    getglobal("HealBot_Options_CDCButLeftText"):SetTextColor(0.5, 0.5, 0.5);
+    UIDropDownMenu_SetText("None", HealBot_Options_CDCButLeft);
+  end
 end
 -- HealBot_Options_CDCButRight_Refresh: UI handler for Refresh options panel.
 function HealBot_Options_CDCButRight_Refresh(onselect)
-  local set_id;
-  local class=UnitClass("Player");
+  local set_id = 1;
+  local class = UnitClass("Player");
+  local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(class);
   if not onselect then HealBot_Options_CDCButRight_Initialize() end 
-  set_id = HealBot_Config.Debuff_Right[class];
-  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight,set_id)
+  if DebuffSpells_List and getn(DebuffSpells_List) > 0 then
+    set_id = HealBot_Config.Debuff_Right[class] or 1;
+    getglobal("HealBot_Options_CDCButRightButton"):Enable();
+    getglobal("HealBot_Options_CDCButRightText"):SetTextColor(1.0, 1.0, 1.0);
+    HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCButRight, set_id);
+    if set_id == 1 then
+      UIDropDownMenu_SetText("None", HealBot_Options_CDCButRight);
+    end
+  else
+    set_id = 1;
+    HealBot_Config.Debuff_Right[class] = 1;
+    HealBot_Config.CDCRightText[class] = "None";
+    getglobal("HealBot_Options_CDCButRightButton"):Disable();
+    getglobal("HealBot_Options_CDCButRightText"):SetTextColor(0.5, 0.5, 0.5);
+    UIDropDownMenu_SetText("None", HealBot_Options_CDCButRight);
+  end
 end
 -- HealBot_Options_CDCButLeft_OnLoad: UI handler for OnLoad options panel.
 function HealBot_Options_CDCButLeft_OnLoad()
@@ -275,7 +303,7 @@ end
 -- HealBot_Options_Debuff_Reset: Restores default debuff tracking options.
 function HealBot_Options_Debuff_Reset()
   local classEN=HealBot_UnitClass("player")
-  if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" then
+  if classEN=="PRIEST" or classEN=="DRUID" or classEN=="PALADIN" or classEN=="SHAMAN" or classEN=="MAGE" then
     HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]=false, [HEALBOT_MAGIC_en]=false, [HEALBOT_POISON_en]=false, [HEALBOT_CURSE_en]=false }
     
     -- Automatically track all curable debuffs out of the box
@@ -292,6 +320,8 @@ function HealBot_Options_Debuff_Reset()
     elseif classEN == "SHAMAN" then
       HealBot_DebuffWatch[HEALBOT_POISON_en] = true
       HealBot_DebuffWatch[HEALBOT_DISEASE_en] = true
+    elseif classEN == "MAGE" then
+      HealBot_DebuffWatch[HEALBOT_CURSE_en] = true
     end
     
     local spell = HealBot_Config.CDCLeftText[UnitClass("player")];
