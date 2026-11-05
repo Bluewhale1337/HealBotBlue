@@ -83,6 +83,7 @@ HEALBOT_BLESSING_OF_SANCTUARY = "Blessing of Sanctuary";
 HEALBOT_DIVINE_SPIRIT         = "Divine Spirit";
 HEALBOT_PRAYER_OF_FORTITUDE   = "Prayer of Fortitude";
 HEALBOT_PRAYER_OF_SPIRIT      = "Prayer of Spirit";
+HEALBOT_SPIRIT_OF_ZANZA       = "Spirit of Zanza";
 HEALBOT_SHADOW_PROTECTION     = "Shadow Protection";
 HEALBOT_PRAYER_OF_SHADOW_PROTECTION = "Prayer of Shadow Protection";
 HEALBOT_ARCANE_INTELLECT      = "Arcane Intellect";

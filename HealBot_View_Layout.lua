@@ -275,11 +275,13 @@ function HealBot_Action_EnableButton(button)
     bar.txt:SetText(displayText);
     bar.txt:SetTextColor(sr, sg, sb, sa);
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
+    local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+    local fontHeightToUse = (fontHeight and fontHeight >= 6) and fontHeight or btextheight
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
     local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
     local expectedFont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or fontName
-    if fontFlags ~= expectedFlags or fontName ~= expectedFont then
-        bar.txt:SetFont(expectedFont, fontHeight, expectedFlags)
+    if fontFlags ~= expectedFlags or fontName ~= expectedFont or (fontHeight and fontHeight < 6) then
+        bar.txt:SetFont(expectedFont, fontHeightToUse, expectedFlags)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
