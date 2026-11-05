@@ -206,27 +206,49 @@ end
 -- HealBot_Model:PopulateAllGUIDs: Refreshes unit-to-GUID and GUID-to-unit mappings for all current roster units.
 function HealBot_Model:PopulateAllGUIDs()
     if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active or HealBot_Integrations_Nampower_Active) or not HealBot_GetUnitGUID then return end
+    if not HealBot_Nampower_NameCache then HealBot_Nampower_NameCache = HealBot_GetTable() end
     
     local playerGuid = HealBot_GetUnitGUID("player")
     if playerGuid and playerGuid ~= "0" and playerGuid ~= "0x0000000000000000" then
+        local lowerPGuid = string.lower(playerGuid)
         self.unitGUIDs["player"] = playerGuid
         self.guidUnits[playerGuid] = "player"
+        self.guidUnits[lowerPGuid] = "player"
         HealBot_PlayerGUID = playerGuid
+        local pName = UnitName("player")
+        if pName then
+            HealBot_Nampower_NameCache[playerGuid] = pName
+            HealBot_Nampower_NameCache[lowerPGuid] = pName
+        end
     end
     
     for _, unit in ipairs(self.partyMembers) do
         local guid = HealBot_GetUnitGUID(unit)
         if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
+            local lowerGuid = string.lower(guid)
             self.unitGUIDs[unit] = guid
             self.guidUnits[guid] = unit
+            self.guidUnits[lowerGuid] = unit
+            local uName = UnitName(unit)
+            if uName then
+                HealBot_Nampower_NameCache[guid] = uName
+                HealBot_Nampower_NameCache[lowerGuid] = uName
+            end
         end
     end
     
     for _, unit in ipairs(self.raidMembers) do
         local guid = HealBot_GetUnitGUID(unit)
         if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
+            local lowerGuid = string.lower(guid)
             self.unitGUIDs[unit] = guid
             self.guidUnits[guid] = unit
+            self.guidUnits[lowerGuid] = unit
+            local uName = UnitName(unit)
+            if uName then
+                HealBot_Nampower_NameCache[guid] = uName
+                HealBot_Nampower_NameCache[lowerGuid] = uName
+            end
         end
     end
 end
@@ -238,14 +260,19 @@ function HealBot_Model:GetUnitByGUID(guid)
     if unit and UnitExists(unit) then return unit end
     
     local lowerGuid = string.lower(guid)
+    unit = self.guidUnits[lowerGuid]
+    if unit and UnitExists(unit) then return unit end
+    
     if HealBot_PlayerGUID and string.lower(HealBot_PlayerGUID) == lowerGuid then
         self.guidUnits[guid] = "player"
+        self.guidUnits[lowerGuid] = "player"
         return "player"
     end
     if HealBot_GetUnitGUID then
         local pGuid = HealBot_GetUnitGUID("player")
         if pGuid and string.lower(pGuid) == lowerGuid then
             self.guidUnits[guid] = "player"
+            self.guidUnits[lowerGuid] = "player"
             HealBot_PlayerGUID = pGuid
             return "player"
         end
@@ -255,6 +282,8 @@ function HealBot_Model:GetUnitByGUID(guid)
                 local uGuid = HealBot_GetUnitGUID(u)
                 if uGuid and string.lower(uGuid) == lowerGuid then
                     self.guidUnits[guid] = u
+                    self.guidUnits[lowerGuid] = u
+                    self.unitGUIDs[u] = guid
                     return u
                 end
             end
@@ -265,8 +294,22 @@ function HealBot_Model:GetUnitByGUID(guid)
                 local uGuid = HealBot_GetUnitGUID(u)
                 if uGuid and string.lower(uGuid) == lowerGuid then
                     self.guidUnits[guid] = u
+                    self.guidUnits[lowerGuid] = u
+                    self.unitGUIDs[u] = guid
                     return u
                 end
+            end
+        end
+        if UnitExists("target") then
+            local tGuid = HealBot_GetUnitGUID("target")
+            if tGuid and string.lower(tGuid) == lowerGuid then
+                return "target"
+            end
+        end
+        if UnitExists("mouseover") then
+            local moGuid = HealBot_GetUnitGUID("mouseover")
+            if moGuid and string.lower(moGuid) == lowerGuid then
+                return "mouseover"
             end
         end
     end

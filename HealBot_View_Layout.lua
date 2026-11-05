@@ -335,13 +335,18 @@ function HealBot_Action_EnableButton(button)
                         iconText:SetTextColor(1, 1, 1, 1)
                         bar["iconText"..i] = iconText
                     end
-                    local timeLeft = unitMap and (unitMap[newTexture] or (newTexture and unitMap[string.lower(newTexture)]))
+                    local cleanTex = newTexture and string.lower(string.gsub(newTexture, "/", "\\"))
+                    local shortTex = cleanTex and string.match(cleanTex, "([^\\]+)$")
+                    local timeLeft = unitMap and (unitMap[newTexture] or (cleanTex and unitMap[cleanTex]) or (shortTex and unitMap[shortTex]))
                     if timeLeft then
+                        if bar.overlayFrame then bar.overlayFrame:Show() end
                         iconText:SetText(timeLeft)
                         iconText:Show()
                     else
-                        iconText:SetText("")
-                        iconText:Hide()
+                        if iconText and iconText:IsVisible() then
+                            iconText:SetText("")
+                            iconText:Hide()
+                        end
                     end
                 elseif iconText and iconText:IsVisible() then
                     iconText:SetText("")
@@ -1493,7 +1498,9 @@ function HealBot_RenderHoTOverlays()
                     local iconText = bar["iconText"..i]
                     if icon and icon:IsVisible() then
                         local tex = icon:GetTexture()
-                        local timeLeft = unitMap and (unitMap[tex] or (tex and unitMap[string.lower(tex)]))
+                        local cleanTex = tex and string.lower(string.gsub(tex, "/", "\\"))
+                        local shortTex = cleanTex and string.match(cleanTex, "([^\\]+)$")
+                        local timeLeft = unitMap and (unitMap[tex] or (cleanTex and unitMap[cleanTex]) or (shortTex and unitMap[shortTex]))
                         if timeLeft then
                             if not iconText then
                                 local overlayFrame = bar.overlayFrame
@@ -1509,6 +1516,7 @@ function HealBot_RenderHoTOverlays()
                                 iconText:SetTextColor(1, 1, 1, 1)
                                 bar["iconText"..i] = iconText
                             end
+                            if bar.overlayFrame then bar.overlayFrame:Show() end
                             iconText:SetText(timeLeft)
                             iconText:Show()
                         else
@@ -1603,13 +1611,23 @@ function HealBot_UpdateActiveHoTTimers()
 
     if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
         for targetKey, auras in pairs(HealBot_Nampower_Auras) do
-            local unitID = HealBot_Model and HealBot_Model:GetUnitByGUID(targetKey)
-            if not unitID and HealBot_PlayerGUID and (targetKey == HealBot_PlayerGUID or string.lower(targetKey) == string.lower(HealBot_PlayerGUID)) then
-                unitID = "player"
+            local lowerKey = string.lower(targetKey)
+            local unitID = HealBot_Model and (HealBot_Model:GetUnitByGUID(targetKey) or HealBot_Model:GetUnitByGUID(lowerKey))
+            
+            if not unitID then
+                local isPlayer = (HealBot_PlayerGUID and (targetKey == HealBot_PlayerGUID or lowerKey == string.lower(HealBot_PlayerGUID)))
+                                 or (UnitName("player") and (targetKey == UnitName("player") or lowerKey == string.lower(UnitName("player"))))
+                                 or (HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("player") or lowerKey == string.lower(HealBot_GetUnitGUID("player") or "")))
+                if isPlayer then
+                    unitID = "player"
+                end
             end
-            if not unitID and UnitName("player") and (targetKey == UnitName("player") or string.lower(targetKey) == string.lower(UnitName("player"))) then
-                unitID = "player"
+            
+            if not unitID and HealBot_Model and HealBot_Model.GetUnitIDByName then
+                unitID = HealBot_Model:GetUnitIDByName(targetKey)
             end
+
+            -- Multi-tier player name resolution
             local displayName = nil
             if unitID and unitID ~= "target" then
                 if HealBot_Model and HealBot_Model.units[unitID] and HealBot_Model.units[unitID].name then
@@ -1620,16 +1638,32 @@ function HealBot_UpdateActiveHoTTimers()
                 end
             end
             if not displayName and HealBot_Nampower_NameCache then
-                displayName = HealBot_Nampower_NameCache[targetKey]
+                displayName = HealBot_Nampower_NameCache[targetKey] or HealBot_Nampower_NameCache[lowerKey]
+            end
+            if not displayName and UnitExists("target") and HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("target") or lowerKey == string.lower(HealBot_GetUnitGUID("target") or "")) then
+                displayName = UnitName("target")
+            end
+            if not displayName and UnitExists("mouseover") and HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("mouseover") or lowerKey == string.lower(HealBot_GetUnitGUID("mouseover") or "")) then
+                displayName = UnitName("mouseover")
+            end
+            if not displayName then
+                local uName = UnitName(targetKey)
+                if uName and uName ~= targetKey and uName ~= "Unknown" then
+                    displayName = uName
+                end
             end
             if displayName and HealBot_Nampower_NameCache then
                 HealBot_Nampower_NameCache[targetKey] = displayName
+                HealBot_Nampower_NameCache[lowerKey] = displayName
             end
 
             -- Exclude pets
             if not (unitID and string.find(unitID, "pet")) then
                 for spellName, expiration in pairs(auras) do
                     local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                    if not auraInfo and HealBot_TrackedAuras and HealBot_TrackedAuras[spellName] then
+                        auraInfo = HealBot_TrackedAuras[spellName]
+                    end
                     if auraInfo and auraInfo.showTimer and expiration > currentTime then
                         local timeLeft = math.floor(expiration - currentTime)
                         local tex = auraInfo.texture or "Interface\\Icons\\INV_Misc_QuestionMark"
@@ -1640,7 +1674,7 @@ function HealBot_UpdateActiveHoTTimers()
                         end
                         local hot = HealBot_PlayerHoTs_ListCache[numHoTs]
                         hot.unit = unitID
-                        hot.name = displayName or targetKey
+                        hot.name = displayName or "Unknown"
                         hot.spell = spellName
                         hot.texture = tex
                         hot.expires = expiration
@@ -1650,8 +1684,29 @@ function HealBot_UpdateActiveHoTTimers()
                             if not HealBot_ActiveHoTUnitMap[unitID] then
                                 HealBot_ActiveHoTUnitMap[unitID] = {}
                             end
+                            local cleanTex = string.lower(string.gsub(tex, "/", "\\"))
+                            local shortTex = string.match(cleanTex, "([^\\]+)$")
                             HealBot_ActiveHoTUnitMap[unitID][tex] = timeLeft
-                            HealBot_ActiveHoTUnitMap[unitID][string.lower(tex)] = timeLeft
+                            HealBot_ActiveHoTUnitMap[unitID][cleanTex] = timeLeft
+                            if shortTex then
+                                HealBot_ActiveHoTUnitMap[unitID][shortTex] = timeLeft
+                            end
+
+                            -- If player in raid, map under raid token button as well
+                            if unitID == "player" and HealBot_Action_UnitButtons then
+                                for btnUnit in pairs(HealBot_Action_UnitButtons) do
+                                    if btnUnit ~= "player" and UnitIsUnit(btnUnit, "player") then
+                                        if not HealBot_ActiveHoTUnitMap[btnUnit] then
+                                            HealBot_ActiveHoTUnitMap[btnUnit] = {}
+                                        end
+                                        HealBot_ActiveHoTUnitMap[btnUnit][tex] = timeLeft
+                                        HealBot_ActiveHoTUnitMap[btnUnit][cleanTex] = timeLeft
+                                        if shortTex then
+                                            HealBot_ActiveHoTUnitMap[btnUnit][shortTex] = timeLeft
+                                        end
+                                    end
+                                end
+                            end
                         end
                     end
                 end

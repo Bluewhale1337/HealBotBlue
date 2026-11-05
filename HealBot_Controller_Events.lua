@@ -333,6 +333,9 @@ local HealBot_EventHandlers = {
     ["PLAYER_ENTERING_WORLD"] = function(this)
         HealBot_Model:RefreshUnit("player")
         HealBot_Model:RefreshUnit("pet")
+        if HealBot_Model and HealBot_Model.PopulateAllGUIDs then
+            HealBot_Model:PopulateAllGUIDs()
+        end
         HealBot_OnEvent_PlayerEnteringWorld(this)
     end,
     ["VARIABLES_LOADED"] = function(this)
