@@ -50,7 +50,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
-**v1.7.6**
+**v1.7.7**
 * **Feature - HoT Timer Position & Icon Overlay Display Modes** - Added configurable HoT Timer list position dropdown (`Below`, `Above`, `Left`, `Right`) relative to raid frames. Added alternative `Icon Overlay` display mode rendering countdown numbers directly on unit bar HoT icons. Excluded pets from timer lists and overlay numbers. Optimized expiration lookup with O(1) cached texture-to-spell mappings.
 * **Bug Fix & Feature - HoT Timer Resolution & "Both" Display Mode** - Resolved issue where HoT timer lists displayed raw GUID strings instead of player names by adding eager roster GUID synchronization on group updates and direct raid/party fallback scanning. Added "Both" display mode option (`List`, `Icon Overlay`, `Both`) allowing simultaneous list timers and on-bar icon countdown overlays. Added case-insensitive texture fallback mapping to ensure overlay numbers render consistently across all tracked auras.
 * **Refactor & Feature - Unified Aura & HoT Tracking** - Unified bar icons and HoT timers into a single master dictionary (`HealBot_TrackedAuras`) in `HealBot_Data.lua`. Added Weakened Soul, Fear Ward, Abolish Disease, and Abolish Poison to active timer bars with localized client support and debuff-aware pruning.
