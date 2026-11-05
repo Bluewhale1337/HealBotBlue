@@ -62,7 +62,6 @@ HEALBOT_PRAYER_OF_HEALING       = "치유의 기원";
 HEALBOT_CHAIN_HEAL              = "연쇄 치유";
 
 HEALBOT_POWER_WORD_FORTITUDE          = "신의 권능: 인내";
-HEALBOT_SPIRIT_OF_ZANZA                = "잔자의 기백";
 HEALBOT_INNER_FIRE            = "내면의 열정";
 HEALBOT_FEAR_WARD             = "공포의 결계";
 HEALBOT_ENLIGHTEN             = "Enlighten";

@@ -80,7 +80,6 @@ HEALBOT_PRAYER_OF_HEALING   = "Pri\195\168re de soins";
 HEALBOT_CHAIN_HEAL          = "Salve de gu\195\169rison";
 
 HEALBOT_POWER_WORD_FORTITUDE  = "Mot de pouvoir : Robustesse";
-HEALBOT_SPIRIT_OF_ZANZA       = "Esprit de Zanza";
 HEALBOT_MARK_OF_THE_WILD      = "Marque du fauve";
 HEALBOT_BLESSING_OF_SALVATION = "B\195\169n\195\169diction de salut";
 

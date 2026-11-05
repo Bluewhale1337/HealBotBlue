@@ -80,7 +80,6 @@ HEALBOT_PRAYER_OF_HEALING   = "Gebet der Heilung";
 HEALBOT_CHAIN_HEAL          = "Kettenheilung";
 
 HEALBOT_POWER_WORD_FORTITUDE  = "Machtwort: Seelenst\195\164rke";
-HEALBOT_SPIRIT_OF_ZANZA       = "Geist von Zanza";
 HEALBOT_MARK_OF_THE_WILD      = "Mal der Wildnis";
 HEALBOT_BLESSING_OF_SALVATION = "Segen der Rettung";
 

@@ -50,6 +50,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.7**
+* **Feature - HoT Timer Display Modes & Positioning:** Added configurable HoT timer list position dropdown (`Below`, `Above`, `Left`, `Right`) relative to raid frames. Added `Icon Overlay` mode rendering countdown timers directly on health bar HoT icons, and a `Both` mode allowing simultaneous timer list and on-bar icon countdown numbers. Excluded pets from HoT timer lists and overlays. Optimized expiration lookups with O(1) texture-to-spell mappings.
+* **Refactor & Feature - Unified Aura & HoT Tracking:** Unified bar icons and HoT timers into a master dictionary (`HealBot_TrackedAuras`) in `HealBot_Data.lua`. Added Weakened Soul, Fear Ward, Abolish Disease, and Abolish Poison to active timer bars with localized client support and debuff-aware pruning.
+* **Bug Fix - HoT Tracking Premature Deletion & GUID Resolution:** Resolved issue where synchronous aura scans on spell cast prematurely purged active HoTs before server buff packets arrived. Fixed HoT timer list showing raw GUID strings instead of names by ensuring GUID caches populate immediately on `PLAYER_ENTERING_WORLD` (even when solo) and adding multi-tier name resolution fallbacks. Fixed unit bar icon countdown numbers not rendering by adding explicit overlay frame show triggers and normalized texture lookup fallbacks.
+
 **v1.7.6**
 * **Feature - All-Class Support & Raid Frame Replacement:** Removed legacy restriction that disabled HealBot event listeners and UI frames for classes without native healing spells. HealBot now initializes and functions as a full party/raid frame replacement for all classes (Warrior, Mage, Rogue, Hunter, Warlock).
 * **Targeting & Binding Defaults:** Added default `Left` click `"Target"` binding for non-healer classes, recognized `"target"` in spell resolution, and prevented non-healer buttons from disabling on full-health allies.
