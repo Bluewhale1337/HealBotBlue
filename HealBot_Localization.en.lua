@@ -95,6 +95,59 @@ HEALBOT_INNER_FIRE            = "Inner Fire";
 HEALBOT_FEAR_WARD             = "Fear Ward";
 HEALBOT_ENLIGHTEN             = "Enlighten";
 
+HEALBOT_BATTLE_SHOUT          = "Battle Shout";
+HEALBOT_BLOODRAGE             = "Bloodrage";
+HEALBOT_BERSERKER_RAGE        = "Berserker Rage";
+
+HEALBOT_DEMON_SKIN            = "Demon Skin";
+HEALBOT_DEMON_ARMOR           = "Demon Armor";
+HEALBOT_UNENDING_BREATH       = "Unending Breath";
+HEALBOT_DETECT_LESSER_INVISIBILITY = "Detect Lesser Invisibility";
+HEALBOT_DETECT_INVISIBILITY   = "Detect Invisibility";
+HEALBOT_SHADOW_WARD           = "Shadow Ward";
+HEALBOT_SOULSTONE_RESURRECTION = "Soulstone Resurrection";
+HEALBOT_FIRE_SHIELD           = "Fire Shield";
+
+HEALBOT_TRUESHOT_AURA         = "Trueshot Aura";
+HEALBOT_ASPECT_OF_THE_HAWK    = "Aspect of the Hawk";
+HEALBOT_ASPECT_OF_THE_MONKEY  = "Aspect of the Monkey";
+HEALBOT_ASPECT_OF_THE_CHEETAH = "Aspect of the Cheetah";
+HEALBOT_ASPECT_OF_THE_PACK    = "Aspect of the Pack";
+HEALBOT_ASPECT_OF_THE_WILD    = "Aspect of the Wild";
+HEALBOT_ASPECT_OF_THE_BEAST   = "Aspect of the Beast";
+
+HEALBOT_STEALTH               = "Stealth";
+HEALBOT_BLADE_FLURRY          = "Blade Flurry";
+HEALBOT_EVASION               = "Evasion";
+HEALBOT_SPRINT                = "Sprint";
+HEALBOT_SLICE_AND_DICE        = "Slice and Dice";
+
+HEALBOT_FROST_ARMOR           = "Frost Armor";
+HEALBOT_ICE_ARMOR             = "Ice Armor";
+HEALBOT_MAGE_ARMOR            = "Mage Armor";
+HEALBOT_MANA_SHIELD           = "Mana Shield";
+HEALBOT_ICE_BARRIER           = "Ice Barrier";
+HEALBOT_FIRE_WARD             = "Fire Ward";
+HEALBOT_FROST_WARD            = "Frost Ward";
+
+HEALBOT_GREATER_BLESSING_OF_SALVATION = "Greater Blessing of Salvation";
+HEALBOT_GREATER_BLESSING_OF_MIGHT     = "Greater Blessing of Might";
+HEALBOT_GREATER_BLESSING_OF_WISDOM    = "Greater Blessing of Wisdom";
+HEALBOT_GREATER_BLESSING_OF_KINGS     = "Greater Blessing of Kings";
+HEALBOT_GREATER_BLESSING_OF_LIGHT     = "Greater Blessing of Light";
+HEALBOT_GREATER_BLESSING_OF_SANCTUARY = "Greater Blessing of Sanctuary";
+HEALBOT_RIGHTEOUS_FURY                = "Righteous Fury";
+
+HEALBOT_SHADOWFORM            = "Shadowform";
+
+HEALBOT_BARKSKIN              = "Barkskin";
+HEALBOT_NATURES_GRASP         = "Nature's Grasp";
+
+HEALBOT_LIGHTNING_SHIELD      = "Lightning Shield";
+HEALBOT_WATER_SHIELD          = "Water Shield";
+HEALBOT_WATER_WALKING         = "Water Walking";
+HEALBOT_WATER_BREATHING       = "Water Breathing";
+
 HEALBOT_RESURRECTION       = "Resurrection";
 HEALBOT_REDEMPTION         = "Redemption";
 HEALBOT_REBIRTH            = "Rebirth";
@@ -104,6 +157,7 @@ HEALBOT_PURIFY             = "Purify";
 HEALBOT_CLEANSE            = "Cleanse";
 HEALBOT_CURE_POISON        = "Cure Poison";
 HEALBOT_REMOVE_CURSE       = "Remove Curse";
+HEALBOT_REMOVE_LESSER_CURSE= "Remove Lesser Curse";
 HEALBOT_ABOLISH_POISON     = "Abolish Poison";
 HEALBOT_CURE_DISEASE       = "Cure Disease";
 HEALBOT_ABOLISH_DISEASE    = "Abolish Disease";

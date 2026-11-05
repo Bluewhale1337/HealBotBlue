@@ -50,10 +50,13 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
-**v1.7.7**
-* **Feature - HoT Timer Position & Icon Overlay Display Modes** - Added configurable HoT Timer list position dropdown (`Below`, `Above`, `Left`, `Right`) relative to raid frames. Added alternative `Icon Overlay` display mode rendering countdown numbers directly on unit bar HoT icons. Excluded pets from timer lists and overlay numbers. Optimized expiration lookup with O(1) cached texture-to-spell mappings.
-* **Bug Fix & Feature - HoT Timer Resolution & "Both" Display Mode** - Resolved issue where HoT timer lists displayed raw GUID strings instead of player names by adding eager roster GUID synchronization on group updates and direct raid/party fallback scanning. Added "Both" display mode option (`List`, `Icon Overlay`, `Both`) allowing simultaneous list timers and on-bar icon countdown overlays. Added case-insensitive texture fallback mapping to ensure overlay numbers render consistently across all tracked auras.
-* **Refactor & Feature - Unified Aura & HoT Tracking** - Unified bar icons and HoT timers into a single master dictionary (`HealBot_TrackedAuras`) in `HealBot_Data.lua`. Added Weakened Soul, Fear Ward, Abolish Disease, and Abolish Poison to active timer bars with localized client support and debuff-aware pruning.
+**v1.7.6**
+* **Feature - All-Class Support & Raid Frame Replacement:** Removed legacy restriction that disabled HealBot event listeners and UI frames for classes without native healing spells. HealBot now initializes and functions as a full party/raid frame replacement for all classes (Warrior, Mage, Rogue, Hunter, Warlock).
+* **Targeting & Binding Defaults:** Added default `Left` click `"Target"` binding for non-healer classes, recognized `"target"` in spell resolution, and prevented non-healer buttons from disabling on full-health allies.
+* **Mage Decurse Support:** Integrated `Remove Lesser Curse` into Mage debuff tables and Cure/Dispel (CDC) options.
+* **Bug Fix - Spellbook Scan Lua Error:** Initialized `RealHealing` in spell scanner, resolving `attempt to concatenate global 'RealHealing' (a nil value)` when opening the spellbook on non-healer classes.
+* **UI Fix - Cure Dropdown Stale Text:** Unconditionally added "None" entry and disabled curing button dropdowns for classes without decurse/cleanse abilities, fixing stale dropdown text ("Melee") displaying on Warrior and other non-dispelling classes.
+* **Feature - Class Buff Tracking:** Added buff tracking lists, bidirectional group/rank equivalents (Greater Blessings, armors, etc.), and self-only auto-filtering for all classes. Added Water Shield for Shaman and refreshed buff dropdown labels to eliminate stale UI cache text.
 
 **v1.7.5**
 * **Feature - Test Bars** - Implemented a "Test Bars" button and slider in the Skins options tab, allowing you to spawn and adjust a dummy raid group of up to 40 members without being in a real raid. This allows for easy layout and appearance customization out of combat.

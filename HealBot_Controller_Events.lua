@@ -376,8 +376,6 @@ end
 
 -- HealBot_OnEvent_VariablesLoaded: Applies config defaults and initializes state.
 function HealBot_OnEvent_VariablesLoaded(this)
-    local class = HealBot_UnitClass("player")
-
     local function DeepCopyMissing(src, dest)
         for k, v in pairs(src) do
             if type(v) == "table" then
@@ -391,6 +389,11 @@ function HealBot_OnEvent_VariablesLoaded(this)
         end
     end
     DeepCopyMissing(HealBot_ConfigDefaults, HealBot_Config)
+
+    local locClass = UnitClass("player")
+    if locClass and (not HealBot_Config.KeyCombo[locClass] or not next(HealBot_Config.KeyCombo[locClass])) then
+        HealBot_Config.KeyCombo[locClass] = { ["Left"] = "Target" }
+    end
     
     local foundModern = false
     if HealBot_Config.Skins then
@@ -420,39 +423,37 @@ function HealBot_OnEvent_VariablesLoaded(this)
         HidePartyFrame();
     end
     
-    if class == "PRIEST" or class == "DRUID" or class == "PALADIN" or class == "SHAMAN" then
-        HealBot_BonusScanner:ScanEquipment();
+    HealBot_BonusScanner:ScanEquipment();
 
-        HealBot_Action_ShowFrame();
+    HealBot_Action_ShowFrame();
 
-        this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-        this:RegisterEvent("PLAYER_REGEN_DISABLED");
-        this:RegisterEvent("PLAYER_REGEN_ENABLED");
-        this:RegisterEvent("PLAYER_TARGET_CHANGED");
-        this:RegisterEvent("PARTY_MEMBERS_CHANGED");
-        this:RegisterEvent("RAID_ROSTER_UPDATE");
-        this:RegisterEvent("RAID_TARGET_UPDATE");
-        this:RegisterEvent("PARTY_MEMBER_DISABLE");
-        this:RegisterEvent("PARTY_MEMBER_ENABLE");
-        this:RegisterEvent("UNIT_PET");
-        this:RegisterEvent("UNIT_HEALTH");
-        this:RegisterEvent("UNIT_MANA");
-        this:RegisterEvent("UNIT_RAGE");
-        this:RegisterEvent("UNIT_ENERGY");
-        this:RegisterEvent("UNIT_DISPLAYPOWER");
-        this:RegisterEvent("SPELLS_CHANGED");
-        this:RegisterEvent("SPELLCAST_START");
-        this:RegisterEvent("SPELLCAST_STOP");
-        this:RegisterEvent("SPELLCAST_INTERRUPTED");
-        this:RegisterEvent("SPELLCAST_FAILED");
-        this:RegisterEvent("UNIT_AURA");
-        this:RegisterEvent("UPDATE_INVENTORY_ALERTS");
-        this:RegisterEvent("UNIT_INVENTORY_CHANGED");
-        this:RegisterEvent("CHAT_MSG_ADDON");
-        this:RegisterEvent("CHAT_MSG_SYSTEM");
-        this:RegisterEvent("PLAYER_ENTERING_WORLD");
-        HealBot_SpellsInitFlag = 2;
-    end
+    this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+    this:RegisterEvent("PLAYER_REGEN_DISABLED");
+    this:RegisterEvent("PLAYER_REGEN_ENABLED");
+    this:RegisterEvent("PLAYER_TARGET_CHANGED");
+    this:RegisterEvent("PARTY_MEMBERS_CHANGED");
+    this:RegisterEvent("RAID_ROSTER_UPDATE");
+    this:RegisterEvent("RAID_TARGET_UPDATE");
+    this:RegisterEvent("PARTY_MEMBER_DISABLE");
+    this:RegisterEvent("PARTY_MEMBER_ENABLE");
+    this:RegisterEvent("UNIT_PET");
+    this:RegisterEvent("UNIT_HEALTH");
+    this:RegisterEvent("UNIT_MANA");
+    this:RegisterEvent("UNIT_RAGE");
+    this:RegisterEvent("UNIT_ENERGY");
+    this:RegisterEvent("UNIT_DISPLAYPOWER");
+    this:RegisterEvent("SPELLS_CHANGED");
+    this:RegisterEvent("SPELLCAST_START");
+    this:RegisterEvent("SPELLCAST_STOP");
+    this:RegisterEvent("SPELLCAST_INTERRUPTED");
+    this:RegisterEvent("SPELLCAST_FAILED");
+    this:RegisterEvent("UNIT_AURA");
+    this:RegisterEvent("UPDATE_INVENTORY_ALERTS");
+    this:RegisterEvent("UNIT_INVENTORY_CHANGED");
+    this:RegisterEvent("CHAT_MSG_ADDON");
+    this:RegisterEvent("CHAT_MSG_SYSTEM");
+    this:RegisterEvent("PLAYER_ENTERING_WORLD");
+    HealBot_SpellsInitFlag = 2;
 end
 
 -- HealBot_OnEvent_UnitHealth: Internal utility: HealBot_OnEvent_UnitHealth

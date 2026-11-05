@@ -83,6 +83,59 @@ HEALBOT_POWER_WORD_FORTITUDE  = "Mot de pouvoir : Robustesse";
 HEALBOT_MARK_OF_THE_WILD      = "Marque du fauve";
 HEALBOT_BLESSING_OF_SALVATION = "B\195\169n\195\169diction de salut";
 
+HEALBOT_BATTLE_SHOUT          = "Cri de guerre";
+HEALBOT_BLOODRAGE             = "Rage sanguinaire";
+HEALBOT_BERSERKER_RAGE        = "Rage berserker";
+
+HEALBOT_DEMON_SKIN            = "Peau de d\195\169mon";
+HEALBOT_DEMON_ARMOR           = "Armure d\195\169moniaque";
+HEALBOT_UNENDING_BREATH       = "Respiration interminable";
+HEALBOT_DETECT_LESSER_INVISIBILITY = "D\195\169tection de l'invisibilit\195\169 inf\195\169rieure";
+HEALBOT_DETECT_INVISIBILITY   = "D\195\169tection de l'invisibilit\195\169";
+HEALBOT_SHADOW_WARD           = "Gardien de l'ombre";
+HEALBOT_SOULSTONE_RESURRECTION = "R\195\169surrection de pierre d'\195\162me";
+HEALBOT_FIRE_SHIELD           = "Bouclier de feu";
+
+HEALBOT_TRUESHOT_AURA         = "Aura de pr\195\169cision";
+HEALBOT_ASPECT_OF_THE_HAWK    = "Aspect du faucon";
+HEALBOT_ASPECT_OF_THE_MONKEY  = "Aspect du singe";
+HEALBOT_ASPECT_OF_THE_CHEETAH = "Aspect du gu\195\169pard";
+HEALBOT_ASPECT_OF_THE_PACK    = "Aspect de la meute";
+HEALBOT_ASPECT_OF_THE_WILD    = "Aspect de la nature";
+HEALBOT_ASPECT_OF_THE_BEAST   = "Aspect de la b\195\170te";
+
+HEALBOT_STEALTH               = "Camouflage";
+HEALBOT_BLADE_FLURRY          = "D\195\169luge de lames";
+HEALBOT_EVASION               = "Evasion";
+HEALBOT_SPRINT                = "Sprint";
+HEALBOT_SLICE_AND_DICE        = "D\195\169biter";
+
+HEALBOT_FROST_ARMOR           = "Armure de givre";
+HEALBOT_ICE_ARMOR             = "Armure de glace";
+HEALBOT_MAGE_ARMOR            = "Armure du mage";
+HEALBOT_MANA_SHIELD           = "Bouclier de mana";
+HEALBOT_ICE_BARRIER           = "Barri\195\168re de glace";
+HEALBOT_FIRE_WARD             = "Gardien de feu";
+HEALBOT_FROST_WARD            = "Gardien de givre";
+
+HEALBOT_GREATER_BLESSING_OF_SALVATION = "B\195\169n\195\169diction de salut sup\195\169rieure";
+HEALBOT_GREATER_BLESSING_OF_MIGHT     = "B\195\169n\195\169diction de puissance sup\195\169rieure";
+HEALBOT_GREATER_BLESSING_OF_WISDOM    = "B\195\169n\195\169diction de sagesse sup\195\169rieure";
+HEALBOT_GREATER_BLESSING_OF_KINGS     = "B\195\169n\195\169diction des rois sup\195\169rieure";
+HEALBOT_GREATER_BLESSING_OF_LIGHT     = "B\195\169n\195\169diction de lumi\195\168re sup\195\169rieure";
+HEALBOT_GREATER_BLESSING_OF_SANCTUARY = "B\195\169n\195\169diction du sanctuaire sup\195\169rieure";
+HEALBOT_RIGHTEOUS_FURY                = "Fureur vertueuse";
+
+HEALBOT_SHADOWFORM            = "Forme d'Ombre";
+
+HEALBOT_BARKSKIN              = "Peau d'\195\169corce";
+HEALBOT_NATURES_GRASP         = "Emprise de la nature";
+
+HEALBOT_LIGHTNING_SHIELD      = "Bouclier de foudre";
+HEALBOT_WATER_SHIELD          = "Bouclier d'eau";
+HEALBOT_WATER_WALKING         = "Marche sur l'eau";
+HEALBOT_WATER_BREATHING       = "Respiration aquatique";
+
 HEALBOT_RESURRECTION       = "R\195\169surrection";
 HEALBOT_REDEMPTION         = "R\195\169demption";
 HEALBOT_REBIRTH            = "Renaissance";
@@ -92,6 +145,7 @@ HEALBOT_PURIFY             = "Purification";
 HEALBOT_CLEANSE            = "Epuration";
 HEALBOT_CURE_POISON        = "Gu\195\169rison du poison";
 HEALBOT_REMOVE_CURSE       = "D\195\169livrance de la mal\195\169diction";
+HEALBOT_REMOVE_LESSER_CURSE= "D\195\169livrance de la mal\195\169diction mineure";
 HEALBOT_ABOLISH_POISON     = "Abolir le poison";
 HEALBOT_CURE_DISEASE       = "Gu\195\169rison des maladies";
 HEALBOT_ABOLISH_DISEASE    = "Abolir maladie";

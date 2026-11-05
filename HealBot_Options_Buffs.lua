@@ -111,6 +111,11 @@ function HealBot_Options_SetBuffs()
       local val = HealBot_Config.BuffDropDowns[myClass][i] or 0
       UIDropDownMenu_Initialize(dropDown, HealBot_Options_Buff_Initialize)
       HealBot_UIDropDownMenu_SetSelectedID(dropDown, val + 1)
+      local text = "None"
+      if val > 0 and HealBot_Buff_Spells[myClass] and HealBot_Buff_Spells[myClass][val] then
+        text = HealBot_Buff_Spells[myClass][val]
+      end
+      UIDropDownMenu_SetText(text, dropDown)
     end
     
     local selfCheck = getglobal("HealBot_Options_Buff" .. i .. "Self")

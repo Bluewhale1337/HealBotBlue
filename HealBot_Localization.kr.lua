@@ -68,6 +68,58 @@ HEALBOT_ENLIGHTEN             = "Enlighten";
 HEALBOT_MARK_OF_THE_WILD              = "야생의 징표";
 HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 
+HEALBOT_BATTLE_SHOUT          = "전투의 외침";
+HEALBOT_BLOODRAGE             = "피의 분노";
+HEALBOT_BERSERKER_RAGE        = "광전사의 격노";
+
+HEALBOT_DEMON_SKIN            = "악마의 피부";
+HEALBOT_DEMON_ARMOR           = "악마의 갑옷";
+HEALBOT_UNENDING_BREATH       = "영원의 숨결";
+HEALBOT_DETECT_LESSER_INVISIBILITY = "하급 투명체 감지";
+HEALBOT_DETECT_INVISIBILITY   = "투명체 감지";
+HEALBOT_SHADOW_WARD           = "암흑계 수호";
+HEALBOT_SOULSTONE_RESURRECTION = "영혼석 부활";
+HEALBOT_FIRE_SHIELD           = "불의 방패";
+
+HEALBOT_TRUESHOT_AURA         = "정밀함의 오라";
+HEALBOT_ASPECT_OF_THE_HAWK    = "매의 상";
+HEALBOT_ASPECT_OF_THE_MONKEY  = "원숭이의 상";
+HEALBOT_ASPECT_OF_THE_CHEETAH = "치타의 상";
+HEALBOT_ASPECT_OF_THE_PACK    = "치타 무리의 상";
+HEALBOT_ASPECT_OF_THE_WILD    = "야생의 상";
+HEALBOT_ASPECT_OF_THE_BEAST   = "야수의 상";
+
+HEALBOT_STEALTH               = "은신";
+HEALBOT_BLADE_FLURRY          = "폭풍의 칼날";
+HEALBOT_EVASION               = "회피";
+HEALBOT_SPRINT                = "전력 질주";
+HEALBOT_SLICE_AND_DICE        = "난도질";
+
+HEALBOT_FROST_ARMOR           = "서리 갑옷";
+HEALBOT_ICE_ARMOR             = "얼음 갑옷";
+HEALBOT_MAGE_ARMOR            = "마법사 갑옷";
+HEALBOT_MANA_SHIELD           = "마나 보호막";
+HEALBOT_ICE_BARRIER           = "얼음 보호막";
+HEALBOT_FIRE_WARD             = "화염계 수호";
+HEALBOT_FROST_WARD            = "냉기계 수호";
+
+HEALBOT_GREATER_BLESSING_OF_MIGHT     = "상급 힘의 축복";
+HEALBOT_GREATER_BLESSING_OF_WISDOM    = "상급 지혜의 축복";
+HEALBOT_GREATER_BLESSING_OF_KINGS     = "상급 왕의 축복";
+HEALBOT_GREATER_BLESSING_OF_LIGHT     = "상급 빛의 축복";
+HEALBOT_GREATER_BLESSING_OF_SANCTUARY = "상급 성역의 축복";
+HEALBOT_RIGHTEOUS_FURY                = "정의의 격노";
+
+HEALBOT_SHADOWFORM            = "어둠의 형상";
+
+HEALBOT_BARKSKIN              = "나무 껍질";
+HEALBOT_NATURES_GRASP         = "자연의 파악";
+
+HEALBOT_LIGHTNING_SHIELD      = "번개 보호막";
+HEALBOT_WATER_SHIELD          = "물의 보호막";
+HEALBOT_WATER_WALKING         = "수면 보행";
+HEALBOT_WATER_BREATHING       = "수중 호흡";
+
 	HEALBOT_RESURRECTION			= "부활";
 	HEALBOT_REDEMPTION			= "구원";
 	HEALBOT_REBIRTH				= "환생";
@@ -77,6 +129,7 @@ HEALBOT_GREATER_BLESSING_OF_SALVATION = "상급 구원의 축복";
 	HEALBOT_CLEANSE			= "정화";
 	HEALBOT_CURE_POISON		= "해독";
 	HEALBOT_REMOVE_CURSE		= "저주 해제";
+	HEALBOT_REMOVE_LESSER_CURSE	= "하급 저주 해제";
 	HEALBOT_ABOLISH_POISON	= "독 해제";
 	HEALBOT_CURE_DISEASE		= "질병 치료";
 	HEALBOT_ABOLISH_DISEASE	= "질병 해제";

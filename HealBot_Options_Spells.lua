@@ -116,6 +116,11 @@ function HealBot_Options_ComboClass_Text()
     HealBot_Options_Shift:SetText(combo["Shift"..button] or "")
     HealBot_Options_Ctrl:SetText(combo["Ctrl"..button] or "")
     HealBot_Options_ShiftCtrl:SetText(combo["ShiftCtrl"..button] or "")
+  else
+    HealBot_Options_Click:SetText("")
+    HealBot_Options_Shift:SetText("")
+    HealBot_Options_Ctrl:SetText("")
+    HealBot_Options_ShiftCtrl:SetText("")
   end
 end
 

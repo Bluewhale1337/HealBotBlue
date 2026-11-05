@@ -491,6 +491,7 @@ function HealBot_FindHealSpells()
   if HealBot_SpellsInitFlag > 0 then NeedEquipUpdate = 1; return; end
 
   HealBot_Heals = { player = {}, pet = {}, party = {} };
+  RealHealing = 0;
   
   table.foreach(HealBot_CurrentSpells, function (index, spell)
     if (HealBot_Spells[spell]) then
@@ -534,12 +535,8 @@ function HealBot_FindHealSpells()
       end
     end
   end
-  table.foreach(HealBot_Heals, function (key, val)
-    if (table.getn(val) == 0) then
-      HealBot_Heals[key] = nil;
-    end
-  end);
   HealBot_Heals.target = HealBot_Heals.party;
+  HealBot_Heals.focus = HealBot_Heals.party;
   for i = 1, 4 do
     HealBot_Heals["party" .. i] = HealBot_Heals.party;
     HealBot_Heals["partypet" .. i] = HealBot_Heals.party;
@@ -551,7 +548,7 @@ function HealBot_FindHealSpells()
 
   HealBot_ReleaseTable(items);
   if HealBot_CalcEquipBonus then
-    HealBot_AddDebug("...Done Equip Bonus:" .. RealHealing);
+    HealBot_AddDebug("...Done Equip Bonus:" .. tostring(RealHealing or 0));
   end
   HealBot_CalcEquipBonus = false;
 end
@@ -587,6 +584,11 @@ function HealBot_GetHealSpell(unit, pattern)
   
   -- Handle Inline Scripts
   if string.sub(pattern, 1, 1) == "/" then
+      return pattern;
+  end
+
+  -- Handle Special Targeting Pattern
+  if string.lower(pattern) == "target" then
       return pattern;
   end
 
