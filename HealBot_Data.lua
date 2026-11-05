@@ -294,6 +294,8 @@ HealBot_ConfigDefaults = {
   HealBot_Integrations_SuperWoW = 0,
   HealBot_Integrations_ClassicAPI = 0,
   HealBot_Integrations_ShowHoTTimers = 0,
+  HealBot_Integrations_HoTTimerPosition = "BELOW",
+  HealBot_Integrations_HoTTimerDisplayMode = 0,
 };
 
 HealBot_Config = {};
@@ -689,4 +691,37 @@ function HealBot_ReleaseTable(t)
         table.insert(tablePool, t)
     end
 end
+
+HealBot_TrackedAuras = {
+    ["Renew"]                  = { texture = "Interface\\Icons\\Spell_Holy_Renew",           isDebuff = false, showTimer = true,  locKey = "HEALBOT_RENEW" },
+    ["Rejuvenation"]           = { texture = "Interface\\Icons\\Spell_Nature_Rejuvenation",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_REJUVENATION" },
+    ["Regrowth"]               = { texture = "Interface\\Icons\\Spell_Nature_ResistNature",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_REGROWTH" },
+    ["Power Word: Shield"]     = { texture = "Interface\\Icons\\Spell_Holy_PowerWordShield", isDebuff = false, showTimer = true,  locKey = "HEALBOT_POWER_WORD_SHIELD" },
+    ["Fear Ward"]              = { texture = "Interface\\Icons\\Spell_Holy_Excorcism",       isDebuff = false, showTimer = true,  locKey = "HEALBOT_FEAR_WARD" },
+    ["Abolish Disease"]        = { texture = "Interface\\Icons\\Spell_Nature_NullifyDisease",isDebuff = false, showTimer = true,  locKey = "HEALBOT_ABOLISH_DISEASE" },
+    ["Abolish Poison"]         = { texture = "Interface\\Icons\\Spell_Nature_NullifyPoison",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_ABOLISH_POISON" },
+    ["Weakened Soul"]          = { texture = "Interface\\Icons\\Spell_Holy_AshesToAshes",    isDebuff = true,  showTimer = true,  locKey = "HEALBOT_WEAKENED_SOUL" },
+    ["Blessing of Protection"] = { texture = "Interface\\Icons\\Spell_Holy_SealOfProtection", isDebuff = false, showTimer = false },
+    ["Holy Scriptures"]        = { texture = "Interface\\Icons\\btnholyscriptures",          isDebuff = false, showTimer = false },
+};
+
+HealBot_TrackedAura_Textures = {};
+HealBot_TrackedAura_Spells = {};
+
+function HealBot_Init_TrackedAuras()
+    for spell, info in pairs(HealBot_TrackedAuras) do
+        info.spell = spell
+        HealBot_TrackedAura_Textures[info.texture] = info
+        HealBot_TrackedAura_Spells[spell] = info
+        if info.locKey then
+            local locName = getglobal(info.locKey)
+            if locName and locName ~= "" then
+                info.locName = locName
+                HealBot_TrackedAura_Spells[locName] = info
+            end
+        end
+    end
+end
+HealBot_Init_TrackedAuras();
+
 

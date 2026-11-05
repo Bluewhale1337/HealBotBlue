@@ -50,6 +50,11 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.7**
+* **Feature - HoT Timer Position & Icon Overlay Display Modes** - Added configurable HoT Timer list position dropdown (`Below`, `Above`, `Left`, `Right`) relative to raid frames. Added alternative `Icon Overlay` display mode rendering countdown numbers directly on unit bar HoT icons. Excluded pets from timer lists and overlay numbers. Optimized expiration lookup with O(1) cached texture-to-spell mappings.
+* **Bug Fix & Feature - HoT Timer Resolution & "Both" Display Mode** - Resolved issue where HoT timer lists displayed raw GUID strings instead of player names by adding eager roster GUID synchronization on group updates and direct raid/party fallback scanning. Added "Both" display mode option (`List`, `Icon Overlay`, `Both`) allowing simultaneous list timers and on-bar icon countdown overlays. Added case-insensitive texture fallback mapping to ensure overlay numbers render consistently across all tracked auras.
+* **Refactor & Feature - Unified Aura & HoT Tracking** - Unified bar icons and HoT timers into a single master dictionary (`HealBot_TrackedAuras`) in `HealBot_Data.lua`. Added Weakened Soul, Fear Ward, Abolish Disease, and Abolish Poison to active timer bars with localized client support and debuff-aware pruning.
+
 **v1.7.6**
 * **Feature - All-Class Support & Raid Frame Replacement:** Removed legacy restriction that disabled HealBot event listeners and UI frames for classes without native healing spells. HealBot now initializes and functions as a full party/raid frame replacement for all classes (Warrior, Mage, Rogue, Hunter, Warlock).
 * **Targeting & Binding Defaults:** Added default `Left` click `"Target"` binding for non-healer classes, recognized `"target"` in spell resolution, and prevented non-healer buttons from disabling on full-health allies.
@@ -110,6 +115,8 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Feature - Shapeshift Spell Queue** - Built a native spell queue system for Druid auto-unshifting. Bypasses the "Cannot cast while shapeshifted" error and server lag when AutoUnshift is enabled, firing the heal seamlessly the exact millisecond the form is dropped. Now completely unified to use the standard casting API for maximum reliability across all client setups.
 * **Bug Fix - CDC Config List** - Fixed an uninitialized dropdown list array that prevented the CDC class monitor configuration from saving correctly.
 * **Bug Fix - Color Picker Accuracy** - Removed an undocumented multiplier hack on default textures that was artificially brightening debuff bar colors and overriding the user's selected colors from the color picker.
+* **Bug Fix - Raid Self-Range & Transparency** - Fixed player health bar appearing transparent in raid instances by checking `UnitIsUnit(unit, "player")` in range detection, preventing false out-of-range failures when player is represented by a `raidX` token.
+* **Bug Fix - Raid Class Coloring & Identity Cache** - Fixed missing and delayed raid class colors by querying authoritative server data (`GetRaidRosterInfo`) for raid members, preventing model identity cache wipes, adding a throttled resolution retry in `OnUpdate`, and providing on-demand class color fallbacks in `HealBot_HealthColor`.
 
 **v1.6.5**
 * **Performance Update - Mana Tracking** - Added a fast-path redraw pipeline for unit power changes. This optimization prevents full frame redraws when players naturally regenerate or consume mana, resolving severe FPS drops in 40-man raids while tracking mana.

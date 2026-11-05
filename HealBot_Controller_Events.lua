@@ -172,7 +172,19 @@ function HealBot_OnUpdate(this, arg1)
     for unitID in pairs(powerToRefresh) do
         HealBot_Action_RefreshPower(unitID)
     end
-    
+    -- Periodic resolution of units with missing class identity
+    if HealBot_Model and HealBot_Model.unresolvedUnits and next(HealBot_Model.unresolvedUnits) then
+        HealBot_UnresolvedTimer = (HealBot_UnresolvedTimer or 0) + arg1
+        if HealBot_UnresolvedTimer >= 0.5 then
+            HealBot_UnresolvedTimer = 0
+            for u in pairs(HealBot_Model.unresolvedUnits) do
+                if HealBot_Model:UpdateUnitIdentity(u) then
+                    HealBot_View_DirtyUnits[u] = true
+                end
+            end
+        end
+    end
+
     if HealBot_EquipChangeTimer > 0 then
         HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
         if HealBot_EquipChangeTimer <= 0 then
@@ -185,12 +197,22 @@ function HealBot_OnUpdate(this, arg1)
     if HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1 then
         if not HealBot_HoT_Update_Timer or GetTime() >= HealBot_HoT_Update_Timer then
             HealBot_HoT_Update_Timer = GetTime() + 0.25
-            if HealBot_Action_UpdatePlayerHoTs then
+            if HealBot_UpdateActiveHoTTimers then
+                HealBot_UpdateActiveHoTTimers()
+            elseif HealBot_Action_UpdatePlayerHoTs then
                 HealBot_Action_UpdatePlayerHoTs()
             end
         end
-    elseif HealBot_PlayerHoTsListFrame and HealBot_PlayerHoTsListFrame:IsVisible() then
-        HealBot_PlayerHoTsListFrame:Hide()
+    else
+        if (HealBot_PlayerHoTsListFrame and HealBot_PlayerHoTsListFrame:IsVisible()) or HealBot_Overlays_Active then
+            if HealBot_PlayerHoTsListFrame and HealBot_PlayerHoTsListFrame:IsVisible() then
+                HealBot_PlayerHoTsListFrame:Hide()
+            end
+            if HealBot_ClearHoTOverlays then
+                HealBot_ClearHoTOverlays()
+            end
+            HealBot_Overlays_Active = false
+        end
     end
 
     HealBot_Timer1 = HealBot_Timer1 + arg1;
@@ -274,21 +296,29 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PlayerTargetChanged(this)
     end,
     ["PARTY_MEMBERS_CHANGED"] = function(this)
+        HealBot_Model:RefreshUnit("player")
         for _, unit in ipairs(HealBot_Model.partyMembers) do
             HealBot_Model:RefreshUnit(unit)
         end
         for _, unit in ipairs(HealBot_Model.raidMembers) do
             HealBot_Model:RefreshUnit(unit)
+        end
+        if HealBot_Model and HealBot_Model.PopulateAllGUIDs then
+            HealBot_Model:PopulateAllGUIDs()
         end
         HealBot_Model:NotifyObservers("ROSTER_CHANGED")
         HealBot_OnEvent_PartyMembersChanged(this)
     end,
     ["RAID_ROSTER_UPDATE"] = function(this)
+        HealBot_Model:RefreshUnit("player")
         for _, unit in ipairs(HealBot_Model.partyMembers) do
             HealBot_Model:RefreshUnit(unit)
         end
         for _, unit in ipairs(HealBot_Model.raidMembers) do
             HealBot_Model:RefreshUnit(unit)
+        end
+        if HealBot_Model and HealBot_Model.PopulateAllGUIDs then
+            HealBot_Model:PopulateAllGUIDs()
         end
         HealBot_Model:NotifyObservers("ROSTER_CHANGED")
         HealBot_OnEvent_PartyMembersChanged(this)

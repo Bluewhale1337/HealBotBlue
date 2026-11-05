@@ -47,7 +47,10 @@ HealBot_Model = {
     
     -- Integration maps
     unitGUIDs = {}, -- unit -> GUID
-    guidUnits = {}  -- GUID -> unit
+    guidUnits = {},  -- GUID -> unit
+
+    -- Delayed resolution queue
+    unresolvedUnits = {}
 }
 
 --------------------------------------------------------------------------------
@@ -87,6 +90,7 @@ end
 
 -- HealBot_Model:Initialize: Pre-allocates the unit state dictionary.
 function HealBot_Model:Initialize()
+    for k in pairs(self.unresolvedUnits) do self.unresolvedUnits[k] = nil end
     self:InitUnitState("player")
     self:InitUnitState("target")
     self:InitUnitState("pet")
@@ -149,7 +153,36 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     local oldName = self.units[unit].name
     local oldEnglishClass = self.units[unit].englishClass
     local name = UnitName(unit)
+    
+    -- If UnitName is not ready, attempt raid roster fallback for raid units
+    if not name or name == "Unknown" then
+        local _, _, raidIdx = string.find(unit, "^raid(%d+)$")
+        if raidIdx and GetNumRaidMembers() > 0 then
+            local rName = GetRaidRosterInfo(tonumber(raidIdx))
+            if rName and rName ~= "" and rName ~= "Unknown" then
+                name = rName
+            end
+        end
+    end
+
+    -- If name is still nil, retain oldName if unit exists
+    if not name and oldName and UnitExists(unit) then
+        name = oldName
+    end
+
     local englishClass = HealBot_UnitClass(unit)
+
+    -- If name is identical, do NOT overwrite an existing valid englishClass with nil
+    if oldName and name == oldName and not englishClass and oldEnglishClass then
+        englishClass = oldEnglishClass
+    end
+
+    -- Track unresolved units (unit exists with a name, but missing englishClass)
+    if name and not englishClass then
+        self.unresolvedUnits[unit] = true
+    else
+        self.unresolvedUnits[unit] = nil
+    end
     
     if oldName ~= name or oldEnglishClass ~= englishClass then
         self.units[unit].name = name
@@ -160,7 +193,9 @@ function HealBot_Model:UpdateUnitIdentity(unit)
             local guid = HealBot_GetUnitGUID(unit)
             if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
                 self.unitGUIDs[unit] = guid
-                self.guidUnits[guid] = unit
+                if unit ~= "target" then
+                    self.guidUnits[guid] = unit
+                end
             end
         end
         return true -- Identity changed
@@ -168,10 +203,74 @@ function HealBot_Model:UpdateUnitIdentity(unit)
     return false
 end
 
+-- HealBot_Model:PopulateAllGUIDs: Refreshes unit-to-GUID and GUID-to-unit mappings for all current roster units.
+function HealBot_Model:PopulateAllGUIDs()
+    if not (HealBot_Integrations_SuperWoW_Active or HealBot_Integrations_ClassicAPI_Active or HealBot_Integrations_Nampower_Active) or not HealBot_GetUnitGUID then return end
+    
+    local playerGuid = HealBot_GetUnitGUID("player")
+    if playerGuid and playerGuid ~= "0" and playerGuid ~= "0x0000000000000000" then
+        self.unitGUIDs["player"] = playerGuid
+        self.guidUnits[playerGuid] = "player"
+        HealBot_PlayerGUID = playerGuid
+    end
+    
+    for _, unit in ipairs(self.partyMembers) do
+        local guid = HealBot_GetUnitGUID(unit)
+        if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
+            self.unitGUIDs[unit] = guid
+            self.guidUnits[guid] = unit
+        end
+    end
+    
+    for _, unit in ipairs(self.raidMembers) do
+        local guid = HealBot_GetUnitGUID(unit)
+        if guid and guid ~= "0" and guid ~= "0x0000000000000000" then
+            self.unitGUIDs[unit] = guid
+            self.guidUnits[guid] = unit
+        end
+    end
+end
+
 -- HealBot_Model:GetUnitByGUID: Internal utility: HealBot_Model:GetUnitByGUID
 function HealBot_Model:GetUnitByGUID(guid)
     if not guid then return nil end
-    return self.guidUnits[guid]
+    local unit = self.guidUnits[guid]
+    if unit and UnitExists(unit) then return unit end
+    
+    local lowerGuid = string.lower(guid)
+    if HealBot_PlayerGUID and string.lower(HealBot_PlayerGUID) == lowerGuid then
+        self.guidUnits[guid] = "player"
+        return "player"
+    end
+    if HealBot_GetUnitGUID then
+        local pGuid = HealBot_GetUnitGUID("player")
+        if pGuid and string.lower(pGuid) == lowerGuid then
+            self.guidUnits[guid] = "player"
+            HealBot_PlayerGUID = pGuid
+            return "player"
+        end
+        for i = 1, 40 do
+            local u = "raid" .. i
+            if UnitExists(u) then
+                local uGuid = HealBot_GetUnitGUID(u)
+                if uGuid and string.lower(uGuid) == lowerGuid then
+                    self.guidUnits[guid] = u
+                    return u
+                end
+            end
+        end
+        for i = 1, 4 do
+            local u = "party" .. i
+            if UnitExists(u) then
+                local uGuid = HealBot_GetUnitGUID(u)
+                if uGuid and string.lower(uGuid) == lowerGuid then
+                    self.guidUnits[guid] = u
+                    return u
+                end
+            end
+        end
+    end
+    return nil
 end
 
 -- HealBot_Model:GetUnitIDByName: Looks up a group unit token by player name.
