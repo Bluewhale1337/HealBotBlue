@@ -152,6 +152,30 @@
           </Anchor>
         </Anchors>
       </StatusBar>
+      <Frame name="$parentDebuffOverlay" frameStrata="FOREGROUND" enableMouse="false" hidden="true">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="-2" y="2"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="2" y="-2"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+          <EdgeSize>
+            <AbsValue val="10"/>
+          </EdgeSize>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <Texture name="$parentGlow" file="Interface\AddOns\HealBotBlue\Images\glow1.tga" setAllPoints="true" alphaMode="BLEND" hidden="true"/>
+          </Layer>
+        </Layers>
+      </Frame>
     </Frames>
   </Button>
 

@@ -341,6 +341,7 @@ function HealBot_Options_OnShow(this)
   HealBot_Options_CDCButRight_Refresh()
   HealBot_SetCDCBarColours()
   HealBot_Options_CDCMonitor_Refresh()
+  HealBot_Options_CDCOverlay_Refresh()
   HealBot_ComboButtons_Button_OnClick(nil,HealBot_Options_ComboButtons_Button);
   HealBot_Options_EnableHealthy:SetChecked(HealBot_Config.EnableHealthy);
   HealBot_Options_NewSkinb:Disable();
