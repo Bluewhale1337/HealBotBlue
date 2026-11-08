@@ -31,13 +31,14 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 * **Talent-Based Calculations & Equipment Bonus:** Dynamic spell healing calculations for Druid, Priest, and Paladin based on talents, and automatically scans equipped gear to scale healing predictions.
 * **Modifier-Aware Tooltips:** Tooltips dynamically update to show exact bound actions (Shift/Ctrl/Alt) and required mana costs (turns red if insufficient mana).
 * **Blizzard Party Frame Toggle:** Toggle to automatically hide Blizzard's default party frames when in a group in favor of HealBot's layouts.
-* **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward). Optional extended HoT timer tracker togglable below frames. 
+* **HoT & Buff Tracking:** Intelligently track active HoTs and buffs directly on the grid frames with custom icons (e.g., Renew, Rejuvenation, Regrowth, Fear Ward). Optional extended HoT timer tracker togglable below frames. With integration modules enabled there are timers as icon overlay, a list or both combined togglable. 
 * **Mana Bars for Healers:** Enable and position mini-mana status bars next to unit frames, toggleable to display for healer classes only or all classes.
 * **Curse & Debuff Warning (CDC):** Dynamic visual and audio alerts for cleanable debuffs. Customizable colors based on debuff type (Curse, Poison, Disease, Magic), with selectable display modes: classic Whole Bar tinting, Frame / Border highlights, Glow Overlays, and animated flipbooks (poison drips, rising curse flames, disease, magic).
 * **Pet & Familiar Frames:** Dedicated, toggleable frames for tracking and healing player pets.
 * **Customizable Health Text:** Dynamic unit health display (Name Only, Percentage, Real Health, or Health Deficit).
 * **Non-Mana Resource Tracking:** Track Rage, Energy, and Focus for non-mana classes.
 * **Highly Customizable Skins:** Fully configure dimensions (width, height), row spacing, column layouts, custom textures, opacity, class-colored frames, and outline of fonts.
+* **Skin swap on different raid sizes** Togglable option to iterate over skin presets for different raid sizes - chaning frames styles dynamicly dependning on player count.
 * **Additional Mods Integration:** Navigate to 'Extras' tab in Options to optionally enable integrations with `UnitXP_SP3` (for ultra-precise 3D range and Line of Sight checks), `nampower` (for accurate real-time heal/buff tracking), `SuperWoW` (for robust GUID-based state tracking), and `ClassicAPI` (for native +Healing bonuses and fast 3D distance checks).
 
 ### To be implemented
