@@ -50,6 +50,9 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
+**v1.7.7**
+* **Bug Fix - Lua 5.0 Compatibility (Test Bars):** Replaced Lua 5.1 `#` length operators with `table.getn` in test bar generator, resolving `unexpected symbol near '#'` in `HealBot_View_Layout.lua` and resulting `attempt to call global 'HealBot_Action_ResetSkin' (a nil value)` startup crash on Vanilla 1.12.
+
 **v1.7.6**
 * **Feature - All-Class Support & Raid Frame Replacement:** Removed legacy restriction that disabled HealBot event listeners and UI frames for classes without native healing spells. HealBot now initializes and functions as a full party/raid frame replacement for all classes (Warrior, Mage, Rogue, Hunter, Warlock).
 * **Targeting & Binding Defaults:** Added default `Left` click `"Target"` binding for non-healer classes, recognized `"target"` in spell resolution, and prevented non-healer buttons from disabling on full-health allies.
