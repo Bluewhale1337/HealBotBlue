@@ -584,11 +584,13 @@ function HealBot_GetHealSpell(unit, pattern)
   
   -- Handle Inline Scripts
   if string.sub(pattern, 1, 1) == "/" then
+      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
   -- Handle Special Targeting Pattern
   if string.lower(pattern) == "target" then
+      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
@@ -598,7 +600,17 @@ function HealBot_GetHealSpell(unit, pattern)
     local range = 40;
     if HealBot_Spells[spell] then
       if not HealBot_CanCastSpell(spell, unit) then return nil end;
-      range = HealBot_Spells[spell].range or 40;
+      range = HealBot_Spells[spell].Range or HealBot_Spells[spell].range or 40;
+    else
+      local parenIdx = string.find(spell, "%s*%(")
+      if parenIdx then
+        local baseSpell = string.sub(spell, 1, parenIdx - 1)
+        baseSpell = string.gsub(baseSpell, "%s+$", "")
+        if HealBot_Spells[baseSpell] then
+          if not HealBot_CanCastSpell(baseSpell, unit) then return nil end;
+          range = HealBot_Spells[baseSpell].Range or HealBot_Spells[baseSpell].range or 40;
+        end
+      end
     end
     if HealBot_Range_Check(unit, range) == 0 then return nil end;
     return spell;
@@ -606,13 +618,18 @@ function HealBot_GetHealSpell(unit, pattern)
 
   -- Handle Named Macros
   if GetMacroIndexByName(pattern) ~= 0 then
+      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
   -- Handle Items
   local bag, slot = HealBot_FindBagSlot(pattern)
   if bag then
-      -- optionally check item range, but skipping for now as it's complex in vanilla
+      local range = 40;
+      if HealBot_Spells[pattern] then
+          range = HealBot_Spells[pattern].Range or HealBot_Spells[pattern].range or 40;
+      end
+      if HealBot_Range_Check(unit, range) == 0 then return nil end;
       return pattern;
   end
   

@@ -30,7 +30,8 @@ end
 -- HealBot_HealthColor: Computes health bar RGBA based on debuffs and class.
 function HealBot_HealthColor(unit, hlth, maxhlth)
     local cached_debuff = HealBot_UnitDebuff[unit]
-    if cached_debuff then
+    local overlayMode = HealBot_Config.CDCOverlay or 1
+    if cached_debuff and overlayMode == 1 then
         local color = HealBot_Config.CDCBarColour[cached_debuff]
         if color then
             local dr = color.R
@@ -243,6 +244,103 @@ function HealBot_Action_EnableButton(button)
         bar:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
         bar2:SetStatusBarColor(r, g, b, HealBot_Config.bardisa[HealBot_Config.Current_Skin]);
     end
+
+    if not button.debuffOverlay then
+        button.debuffOverlay = getglobal(button:GetName() .. "DebuffOverlay")
+    end
+    if not button.debuffGlow then
+        button.debuffGlow = getglobal(button:GetName() .. "DebuffOverlayGlow")
+    end
+
+    if button.debuffOverlay then
+        local debuffType = HealBot_UnitDebuff[unit]
+        local isDead = state.isDead or state.isGhost or UnitIsDeadOrGhost(unit)
+        local overlayMode = HealBot_Config.CDCOverlay or 1
+
+        if debuffType and not isDead and overlayMode > 1 and overlayMode < 6 then
+            local color = HealBot_Config.CDCBarColour[debuffType]
+            local cr, cg, cb = 1, 0, 0
+            if color then
+                cr, cg, cb = color.R, color.G, color.B
+            end
+
+            button.debuffOverlay:SetFrameLevel(bar:GetFrameLevel() + 2)
+            button.debuffOverlay:Show()
+
+            local alphaBorder = 1.0
+            local alphaOverlay = 1.0
+            if not button:IsEnabled() then
+                local disAlpha = HealBot_Config.bardisa[HealBot_Config.Current_Skin] or 0.4
+                alphaBorder = disAlpha
+                alphaOverlay = disAlpha
+            end
+
+            if overlayMode == 2 then
+                button.isAnimatedDebuff = false
+                button.debuffOverlay:SetBackdropBorderColor(cr, cg, cb, alphaBorder)
+                if button.debuffGlow then
+                    button.debuffGlow:Hide()
+                    button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+                end
+            elseif overlayMode == 3 then
+                button.isAnimatedDebuff = false
+                button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                if button.debuffGlow then
+                    local glowTex = HealBot_Config.CDCOverlayTexture or "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga"
+                    button.debuffGlow:SetTexture(glowTex)
+                    button.debuffGlow:SetBlendMode("BLEND")
+                    button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+                    button.debuffGlow:SetVertexColor(cr, cg, cb, alphaOverlay)
+                    button.debuffGlow:Show()
+                end
+            elseif overlayMode == 4 then
+                button.isAnimatedDebuff = false
+                button.debuffOverlay:SetBackdropBorderColor(cr, cg, cb, alphaBorder)
+                if button.debuffGlow then
+                    local glowTex = HealBot_Config.CDCOverlayTexture or "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga"
+                    button.debuffGlow:SetTexture(glowTex)
+                    button.debuffGlow:SetBlendMode("BLEND")
+                    button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+                    button.debuffGlow:SetVertexColor(cr, cg, cb, alphaOverlay)
+                    button.debuffGlow:Show()
+                end
+            elseif overlayMode == 5 then -- Animated
+                button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                if button.debuffGlow then
+                    local glowTex
+                    if debuffType == HEALBOT_POISON_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_poison.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_CURSE_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_curse.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_DISEASE_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_disease.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_MAGIC_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_magic.tga"
+                        button.isAnimatedDebuff = true
+                    else
+                        glowTex = HealBot_Config.CDCOverlayTexture or "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga"
+                        button.isAnimatedDebuff = false
+                        button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+                    end
+                    button.debuffGlow:SetTexture(glowTex)
+                    button.debuffGlow:SetBlendMode("BLEND")
+                    button.debuffGlow:SetVertexColor(cr, cg, cb, alphaOverlay)
+                    button.debuffGlow:Show()
+                end
+            end
+        else
+            button.isAnimatedDebuff = false
+            button.debuffOverlay:Hide()
+            if button.debuffGlow then
+                button.debuffGlow:Hide()
+                button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+            end
+        end
+    end
+
     local healthTextOpt = HealBot_Config.ShowHealthText or 0
     local displayText = name
     if healthTextOpt == 1 then
@@ -275,11 +373,13 @@ function HealBot_Action_EnableButton(button)
     bar.txt:SetText(displayText);
     bar.txt:SetTextColor(sr, sg, sb, sa);
     local fontName, fontHeight, fontFlags = bar.txt:GetFont()
+    local btextheight = (HealBot_Config.btextheight and HealBot_Config.btextheight[HealBot_Config.Current_Skin]) or 10
+    local fontHeightToUse = (fontHeight and fontHeight >= 6) and fontHeight or btextheight
     local fontOutline = HealBot_Config.bfontoutline[HealBot_Config.Current_Skin] or 0
     local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
     local expectedFont = (HealBot_Config.bfont and HealBot_Config.bfont[HealBot_Config.Current_Skin]) or fontName
-    if fontFlags ~= expectedFlags or fontName ~= expectedFont then
-        bar.txt:SetFont(expectedFont, fontHeight, expectedFlags)
+    if fontFlags ~= expectedFlags or fontName ~= expectedFont or (fontHeight and fontHeight < 6) then
+        bar.txt:SetFont(expectedFont, fontHeightToUse, expectedFlags)
     end
       
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
@@ -335,13 +435,18 @@ function HealBot_Action_EnableButton(button)
                         iconText:SetTextColor(1, 1, 1, 1)
                         bar["iconText"..i] = iconText
                     end
-                    local timeLeft = unitMap and (unitMap[newTexture] or (newTexture and unitMap[string.lower(newTexture)]))
+                    local cleanTex = newTexture and string.lower(string.gsub(newTexture, "/", "\\"))
+                    local shortTex = cleanTex and string.match(cleanTex, "([^\\]+)$")
+                    local timeLeft = unitMap and (unitMap[newTexture] or (cleanTex and unitMap[cleanTex]) or (shortTex and unitMap[shortTex]))
                     if timeLeft then
+                        if bar.overlayFrame then bar.overlayFrame:Show() end
                         iconText:SetText(timeLeft)
                         iconText:Show()
                     else
-                        iconText:SetText("")
-                        iconText:Hide()
+                        if iconText and iconText:IsVisible() then
+                            iconText:SetText("")
+                            iconText:Hide()
+                        end
                     end
                 elseif iconText and iconText:IsVisible() then
                     iconText:SetText("")
@@ -369,6 +474,32 @@ function HealBot_Action_EnableButton(button)
             raidIcon:Show()
         else
             raidIcon:Hide()
+        end
+    end
+end
+
+local HealBot_AnimTimer = 0
+local HealBot_AnimFrame = 0
+
+-- HealBot_Action_UpdateDebuffAnimation: Advances animated overlay frames on active debuffed buttons.
+function HealBot_Action_UpdateDebuffAnimation(elapsed)
+    if not HealBot_Config or HealBot_Config.CDCOverlay ~= 5 then return end
+
+    HealBot_AnimTimer = HealBot_AnimTimer + elapsed
+    if HealBot_AnimTimer < 0.066 then return end -- ~15 FPS
+    HealBot_AnimTimer = 0
+
+    HealBot_AnimFrame = math.mod(HealBot_AnimFrame + 1, 16)
+    local col = math.mod(HealBot_AnimFrame, 2)
+    local row = math.floor(HealBot_AnimFrame / 2)
+    local left = col * 0.5
+    local right = left + 0.5
+    local top = row * 0.125
+    local bottom = top + 0.125
+
+    for _, button in pairs(HealBot_Action_HealButtons) do
+        if button and button.isAnimatedDebuff and button.debuffOverlay and button.debuffOverlay:IsVisible() and button.debuffGlow and button.debuffGlow:IsVisible() then
+            button.debuffGlow:SetTexCoord(left, right, top, bottom)
         end
     end
 end
@@ -1493,7 +1624,9 @@ function HealBot_RenderHoTOverlays()
                     local iconText = bar["iconText"..i]
                     if icon and icon:IsVisible() then
                         local tex = icon:GetTexture()
-                        local timeLeft = unitMap and (unitMap[tex] or (tex and unitMap[string.lower(tex)]))
+                        local cleanTex = tex and string.lower(string.gsub(tex, "/", "\\"))
+                        local shortTex = cleanTex and string.match(cleanTex, "([^\\]+)$")
+                        local timeLeft = unitMap and (unitMap[tex] or (cleanTex and unitMap[cleanTex]) or (shortTex and unitMap[shortTex]))
                         if timeLeft then
                             if not iconText then
                                 local overlayFrame = bar.overlayFrame
@@ -1509,6 +1642,7 @@ function HealBot_RenderHoTOverlays()
                                 iconText:SetTextColor(1, 1, 1, 1)
                                 bar["iconText"..i] = iconText
                             end
+                            if bar.overlayFrame then bar.overlayFrame:Show() end
                             iconText:SetText(timeLeft)
                             iconText:Show()
                         else
@@ -1603,13 +1737,23 @@ function HealBot_UpdateActiveHoTTimers()
 
     if HealBot_Integrations_Nampower_Active and HealBot_Nampower_Auras then
         for targetKey, auras in pairs(HealBot_Nampower_Auras) do
-            local unitID = HealBot_Model and HealBot_Model:GetUnitByGUID(targetKey)
-            if not unitID and HealBot_PlayerGUID and (targetKey == HealBot_PlayerGUID or string.lower(targetKey) == string.lower(HealBot_PlayerGUID)) then
-                unitID = "player"
+            local lowerKey = string.lower(targetKey)
+            local unitID = HealBot_Model and (HealBot_Model:GetUnitByGUID(targetKey) or HealBot_Model:GetUnitByGUID(lowerKey))
+            
+            if not unitID then
+                local isPlayer = (HealBot_PlayerGUID and (targetKey == HealBot_PlayerGUID or lowerKey == string.lower(HealBot_PlayerGUID)))
+                                 or (UnitName("player") and (targetKey == UnitName("player") or lowerKey == string.lower(UnitName("player"))))
+                                 or (HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("player") or lowerKey == string.lower(HealBot_GetUnitGUID("player") or "")))
+                if isPlayer then
+                    unitID = "player"
+                end
             end
-            if not unitID and UnitName("player") and (targetKey == UnitName("player") or string.lower(targetKey) == string.lower(UnitName("player"))) then
-                unitID = "player"
+            
+            if not unitID and HealBot_Model and HealBot_Model.GetUnitIDByName then
+                unitID = HealBot_Model:GetUnitIDByName(targetKey)
             end
+
+            -- Multi-tier player name resolution
             local displayName = nil
             if unitID and unitID ~= "target" then
                 if HealBot_Model and HealBot_Model.units[unitID] and HealBot_Model.units[unitID].name then
@@ -1620,16 +1764,32 @@ function HealBot_UpdateActiveHoTTimers()
                 end
             end
             if not displayName and HealBot_Nampower_NameCache then
-                displayName = HealBot_Nampower_NameCache[targetKey]
+                displayName = HealBot_Nampower_NameCache[targetKey] or HealBot_Nampower_NameCache[lowerKey]
+            end
+            if not displayName and UnitExists("target") and HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("target") or lowerKey == string.lower(HealBot_GetUnitGUID("target") or "")) then
+                displayName = UnitName("target")
+            end
+            if not displayName and UnitExists("mouseover") and HealBot_GetUnitGUID and (targetKey == HealBot_GetUnitGUID("mouseover") or lowerKey == string.lower(HealBot_GetUnitGUID("mouseover") or "")) then
+                displayName = UnitName("mouseover")
+            end
+            if not displayName then
+                local uName = UnitName(targetKey)
+                if uName and uName ~= targetKey and uName ~= "Unknown" then
+                    displayName = uName
+                end
             end
             if displayName and HealBot_Nampower_NameCache then
                 HealBot_Nampower_NameCache[targetKey] = displayName
+                HealBot_Nampower_NameCache[lowerKey] = displayName
             end
 
             -- Exclude pets
             if not (unitID and string.find(unitID, "pet")) then
                 for spellName, expiration in pairs(auras) do
                     local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                    if not auraInfo and HealBot_TrackedAuras and HealBot_TrackedAuras[spellName] then
+                        auraInfo = HealBot_TrackedAuras[spellName]
+                    end
                     if auraInfo and auraInfo.showTimer and expiration > currentTime then
                         local timeLeft = math.floor(expiration - currentTime)
                         local tex = auraInfo.texture or "Interface\\Icons\\INV_Misc_QuestionMark"
@@ -1640,7 +1800,7 @@ function HealBot_UpdateActiveHoTTimers()
                         end
                         local hot = HealBot_PlayerHoTs_ListCache[numHoTs]
                         hot.unit = unitID
-                        hot.name = displayName or targetKey
+                        hot.name = displayName or "Unknown"
                         hot.spell = spellName
                         hot.texture = tex
                         hot.expires = expiration
@@ -1650,8 +1810,29 @@ function HealBot_UpdateActiveHoTTimers()
                             if not HealBot_ActiveHoTUnitMap[unitID] then
                                 HealBot_ActiveHoTUnitMap[unitID] = {}
                             end
+                            local cleanTex = string.lower(string.gsub(tex, "/", "\\"))
+                            local shortTex = string.match(cleanTex, "([^\\]+)$")
                             HealBot_ActiveHoTUnitMap[unitID][tex] = timeLeft
-                            HealBot_ActiveHoTUnitMap[unitID][string.lower(tex)] = timeLeft
+                            HealBot_ActiveHoTUnitMap[unitID][cleanTex] = timeLeft
+                            if shortTex then
+                                HealBot_ActiveHoTUnitMap[unitID][shortTex] = timeLeft
+                            end
+
+                            -- If player in raid, map under raid token button as well
+                            if unitID == "player" and HealBot_Action_UnitButtons then
+                                for btnUnit in pairs(HealBot_Action_UnitButtons) do
+                                    if btnUnit ~= "player" and UnitIsUnit(btnUnit, "player") then
+                                        if not HealBot_ActiveHoTUnitMap[btnUnit] then
+                                            HealBot_ActiveHoTUnitMap[btnUnit] = {}
+                                        end
+                                        HealBot_ActiveHoTUnitMap[btnUnit][tex] = timeLeft
+                                        HealBot_ActiveHoTUnitMap[btnUnit][cleanTex] = timeLeft
+                                        if shortTex then
+                                            HealBot_ActiveHoTUnitMap[btnUnit][shortTex] = timeLeft
+                                        end
+                                    end
+                                end
+                            end
                         end
                     end
                 end

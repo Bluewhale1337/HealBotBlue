@@ -62,30 +62,61 @@ function HealBot_Integrations_Toggle()
                 HealBot_Nampower_Auras[target][spellName] = expirationTime
                 
                 if not HealBot_Nampower_NameCache then HealBot_Nampower_NameCache = HealBot_GetTable() end
-                if event == "AURA_CAST_ON_SELF" then
-                    HealBot_Nampower_NameCache[target] = UnitName("player")
-                    HealBot_OnEvent_UnitAura(nil, "player")
+                local unitID = nil
+                local tName = nil
+
+                if event == "AURA_CAST_ON_SELF" or (HealBot_PlayerGUID and (target == HealBot_PlayerGUID or string.lower(target) == string.lower(HealBot_PlayerGUID))) then
+                    unitID = "player"
+                    tName = UnitName("player")
+                    if not HealBot_PlayerGUID then
+                        HealBot_PlayerGUID = target
+                    end
                 else
-                    local tName = nil
+                    unitID = HealBot_Model and (HealBot_Model:GetUnitByGUID(target) or HealBot_Model:GetUnitByGUID(string.lower(target)))
+                    if not unitID and HealBot_PlayerGUID and (target == HealBot_PlayerGUID or string.lower(target) == string.lower(HealBot_PlayerGUID)) then
+                        unitID = "player"
+                    end
+
                     if UnitExists("target") then
                         local curTargetGuid = HealBot_GetUnitGUID and HealBot_GetUnitGUID("target")
                         if curTargetGuid and (curTargetGuid == target or string.lower(curTargetGuid) == string.lower(target)) then
                             tName = UnitName("target")
+                            if not unitID and UnitIsUnit("target", "player") then unitID = "player" end
                         end
                     end
-                    local unitID = HealBot_Model and HealBot_Model:GetUnitByGUID(target)
-                    if not unitID and HealBot_PlayerGUID and (target == HealBot_PlayerGUID or string.lower(target) == string.lower(HealBot_PlayerGUID)) then
-                        unitID = "player"
+                    if not tName and UnitExists("mouseover") then
+                        local curMOGuid = HealBot_GetUnitGUID and HealBot_GetUnitGUID("mouseover")
+                        if curMOGuid and (curMOGuid == target or string.lower(curMOGuid) == string.lower(target)) then
+                            tName = UnitName("mouseover")
+                            if not unitID and UnitIsUnit("mouseover", "player") then unitID = "player" end
+                        end
                     end
                     if not tName and unitID then
                         tName = UnitName(unitID) or (HealBot_Model and HealBot_Model.units[unitID] and HealBot_Model.units[unitID].name)
                     end
-                    if tName then
-                        HealBot_Nampower_NameCache[target] = tName
+                end
+
+                if tName then
+                    HealBot_Nampower_NameCache[target] = tName
+                    HealBot_Nampower_NameCache[string.lower(target)] = tName
+                end
+                if unitID and HealBot_Model then
+                    if HealBot_Model.guidUnits then
+                        HealBot_Model.guidUnits[target] = unitID
+                        HealBot_Model.guidUnits[string.lower(target)] = unitID
                     end
-                    if unitID then
-                        HealBot_OnEvent_UnitAura(nil, unitID)
+                    if HealBot_Model.unitGUIDs then
+                        HealBot_Model.unitGUIDs[unitID] = target
                     end
+                end
+
+                if unitID and HealBot_View_DirtyUnits then
+                    HealBot_View_DirtyUnits[unitID] = true
+                end
+                if HealBot_UpdateActiveHoTTimers then
+                    HealBot_UpdateActiveHoTTimers()
+                elseif HealBot_Action_UpdatePlayerHoTs then
+                    HealBot_Action_UpdatePlayerHoTs()
                 end
             end
         end)
@@ -157,23 +188,29 @@ function HealBot_Integrations_PruneNampower()
     
     local currentTime = GetTime()
     for targetName, auras in pairs(HealBot_Nampower_Auras) do
-        -- Check if target is still in the raid/party, or is the player
-        local isPlayer = (HealBot_PlayerGUID and string.lower(targetName) == string.lower(HealBot_PlayerGUID))
-                         or (UnitName("player") and string.lower(targetName) == string.lower(UnitName("player")))
-        if not isPlayer and not HealBot_Model:GetUnitByGUID(targetName) and not HealBot_Model:GetUnitIDByName(targetName) then
+        local lowerName = string.lower(targetName)
+        local isPlayer = (HealBot_PlayerGUID and lowerName == string.lower(HealBot_PlayerGUID))
+                         or (UnitName("player") and lowerName == string.lower(UnitName("player")))
+                         or (HealBot_GetUnitGUID and (targetName == HealBot_GetUnitGUID("player") or lowerName == string.lower(HealBot_GetUnitGUID("player") or "")))
+        
+        -- Prune expired auras
+        local hasAuras = false
+        for spellName, expiration in pairs(auras) do
+            if currentTime > expiration then
+                auras[spellName] = nil
+            else
+                hasAuras = true
+            end
+        end
+
+        if not hasAuras then
             HealBot_ReleaseTable(auras)
             HealBot_Nampower_Auras[targetName] = nil
-        else
-            -- Prune expired auras
-            local hasAuras = false
-            for spellName, expiration in pairs(auras) do
-                if currentTime > expiration then
-                    auras[spellName] = nil
-                else
-                    hasAuras = true
-                end
-            end
-            if not hasAuras then
+        elseif not isPlayer and not (HealBot_Model and (HealBot_Model:GetUnitByGUID(targetName) or HealBot_Model:GetUnitByGUID(lowerName))) and not (HealBot_Model and HealBot_Model:GetUnitIDByName(targetName)) then
+            -- Target left group or disconnected and is not player
+            if GetNumPartyMembers() == 0 and GetNumRaidMembers() == 0 then
+                -- Solo: keep non-player auras until expired
+            else
                 HealBot_ReleaseTable(auras)
                 HealBot_Nampower_Auras[targetName] = nil
             end

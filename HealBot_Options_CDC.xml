@@ -132,7 +132,7 @@
 
       <Frame name="HealBot_Options_CureDispelCleanseCol">
         <Size>
-          <AbsDimension y="95"/>
+          <AbsDimension y="125"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT">
@@ -142,7 +142,7 @@
           </Anchor>
           <Anchor point="TOPRIGHT">
             <Offset>
-              <AbsDimension x="-21" y="-190"/>
+              <AbsDimension x="-21" y="-185"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -152,7 +152,7 @@
 	  <Anchors>
 	   <Anchor point="TOP">
 	    <Offset>
-		<AbsDimension x="0" y="-12" />
+		<AbsDimension x="0" y="-10" />
 	    </Offset>
 	   </Anchor>
 	  </Anchors>
@@ -160,6 +160,33 @@
 	</Layer>
 	</Layers>
     </Frame>  
+    <Frame name="HealBot_Options_CDCOverlay" inherits="UIDropDownMenuTemplate" id="1">
+        <Anchors>
+          <Anchor point="TOP" relativeTo="HealBot_Options_CureDispelCleanseCol" relativePoint="TOP">
+            <Offset>
+              <AbsDimension x="40" y="-28" /> 
+            </Offset>
+          </Anchor>
+       </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CDCOVERLAY">
+              <Anchors>
+                <Anchor point="RIGHT" relativeTo="HealBot_Options_CDCOverlay" relativePoint="LEFT">
+                  <Offset>
+                    <AbsDimension x="-5" y="3"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+     <Scripts>
+          <OnLoad>
+             HealBot_Options_CDCOverlay_OnLoad(this)
+          </OnLoad>
+	</Scripts>
+   </Frame>
    <Button name="HealBot_DiseaseColorpickb">
 	<Size>
 	  <AbsDimension x="130" y="20"/>
@@ -167,7 +194,7 @@
 	<Anchors>
 	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="-2" y="-35"/>
+		  <AbsDimension x="-2" y="-62"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -182,7 +209,7 @@
 	<Anchors>
 	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="-2" y="-35"/>
+		  <AbsDimension x="-2" y="-62"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -259,7 +286,7 @@
 	<Anchors>
 	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="-2" y="-65"/>
+		  <AbsDimension x="-2" y="-92"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -274,7 +301,7 @@
 	<Anchors>
 	  <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CureDispelCleanseCol"  relativePoint="TOP">
 		<Offset>
-		  <AbsDimension x="-2" y="-65"/>
+		  <AbsDimension x="-2" y="-92"/>
 		</Offset>
 	  </Anchor>
 	</Anchors>
@@ -346,17 +373,17 @@
 
       <Frame name="HealBot_Options_CureDispelCleanseWarn">
         <Size>
-          <AbsDimension y="120"/>
+          <AbsDimension y="115"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="21" y="-285"/>
+              <AbsDimension x="21" y="-318"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT">
             <Offset>
-              <AbsDimension x="-21" y="-290"/>
+              <AbsDimension x="-21" y="-318"/>
             </Offset>
           </Anchor>
         </Anchors>

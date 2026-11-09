@@ -339,19 +339,15 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local guid = HealBot_GetUnitGUID and HealBot_GetUnitGUID(unit)
             if guid then
                 if not HealBot_Nampower_NameCache then HealBot_Nampower_NameCache = HealBot_GetTable() end
-                HealBot_Nampower_NameCache[guid] = UnitName(unit)
-                
-                if HealBot_Nampower_Auras[guid] then
-                    for spellName, _ in pairs(HealBot_Nampower_Auras[guid]) do
-                        local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
-                        if auraInfo then
-                            local tex = auraInfo.texture
-                            local isActive = auraInfo.isDebuff and activeDebuffs[tex] or activeBuffs[tex]
-                            if not isActive then
-                                HealBot_Nampower_Auras[guid][spellName] = nil
-                            end
-                        end
-                    end
+                local uName = UnitName(unit)
+                if uName then
+                    HealBot_Nampower_NameCache[guid] = uName
+                    HealBot_Nampower_NameCache[string.lower(guid)] = uName
+                end
+                if HealBot_Model and HealBot_Model.guidUnits then
+                    HealBot_Model.guidUnits[guid] = unit
+                    HealBot_Model.guidUnits[string.lower(guid)] = unit
+                    HealBot_Model.unitGUIDs[unit] = guid
                 end
             end
         end

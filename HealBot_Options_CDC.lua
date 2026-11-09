@@ -43,6 +43,51 @@ function HealBot_WarningSound_OnClick(this,id)
     end
   end
 end
+-- HealBot_Options_CDCOverlay_DropDown: UI handler for DropDown options panel.
+function HealBot_Options_CDCOverlay_DropDown()
+  local list = {
+    HEALBOT_OPTIONS_CDCOVERLAY_BAR or "Whole Bar",
+    HEALBOT_OPTIONS_CDCOVERLAY_FRAME or "Frame / Border",
+    HEALBOT_OPTIONS_CDCOVERLAY_GLOW or "Glow Effect",
+    HEALBOT_OPTIONS_CDCOVERLAY_GLOWFRAME or "Glow + Frame",
+    HEALBOT_OPTIONS_CDCOVERLAY_ANIMATED or "Animated",
+    HEALBOT_OPTIONS_CDCOVERLAY_NONE or "Disabled",
+  };
+  for i=1, getn(list), 1 do
+    local info = {};
+    info.text = list[i];
+    info.func = HealBot_Options_CDCOverlay_OnSelect;
+    UIDropDownMenu_AddButton(info);
+  end
+end
+
+-- HealBot_Options_CDCOverlay_Initialize: UI handler for Initialize options panel.
+function HealBot_Options_CDCOverlay_Initialize()
+  UIDropDownMenu_Initialize(HealBot_Options_CDCOverlay, HealBot_Options_CDCOverlay_DropDown)
+end
+
+-- HealBot_Options_CDCOverlay_Refresh: UI handler for Refresh options panel.
+function HealBot_Options_CDCOverlay_Refresh(onselect)
+  if not HealBot_Config.CDCOverlay then HealBot_Config.CDCOverlay = 1 end
+  if not onselect then HealBot_Options_CDCOverlay_Initialize() end
+  HealBot_UIDropDownMenu_SetSelectedID(HealBot_Options_CDCOverlay, HealBot_Config.CDCOverlay)
+end
+
+-- HealBot_Options_CDCOverlay_OnLoad: UI handler for OnLoad options panel.
+function HealBot_Options_CDCOverlay_OnLoad()
+  UIDropDownMenu_Initialize(this, HealBot_Options_CDCOverlay_DropDown)
+  UIDropDownMenu_SetWidth(120, this)
+end
+
+-- HealBot_Options_CDCOverlay_OnSelect: UI handler for OnSelect options panel.
+function HealBot_Options_CDCOverlay_OnSelect()
+  HealBot_Config.CDCOverlay = this:GetID()
+  HealBot_Options_CDCOverlay_Refresh(true)
+  if HealBot_Action_EnableButtons then
+    HealBot_Action_EnableButtons()
+  end
+end
+
 -- HealBot_Options_CDCMonitor_DropDown: UI handler for DropDown options panel.
 function HealBot_Options_CDCMonitor_DropDown()
   for i=1, getn(HealBot_Options_EmergencyFilter_List), 1 do

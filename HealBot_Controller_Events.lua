@@ -172,6 +172,10 @@ function HealBot_OnUpdate(this, arg1)
     for unitID in pairs(powerToRefresh) do
         HealBot_Action_RefreshPower(unitID)
     end
+
+    if HealBot_Action_UpdateDebuffAnimation then
+        HealBot_Action_UpdateDebuffAnimation(arg1)
+    end
     -- Periodic resolution of units with missing class identity
     if HealBot_Model and HealBot_Model.unresolvedUnits and next(HealBot_Model.unresolvedUnits) then
         HealBot_UnresolvedTimer = (HealBot_UnresolvedTimer or 0) + arg1
@@ -333,6 +337,9 @@ local HealBot_EventHandlers = {
     ["PLAYER_ENTERING_WORLD"] = function(this)
         HealBot_Model:RefreshUnit("player")
         HealBot_Model:RefreshUnit("pet")
+        if HealBot_Model and HealBot_Model.PopulateAllGUIDs then
+            HealBot_Model:PopulateAllGUIDs()
+        end
         HealBot_OnEvent_PlayerEnteringWorld(this)
     end,
     ["VARIABLES_LOADED"] = function(this)

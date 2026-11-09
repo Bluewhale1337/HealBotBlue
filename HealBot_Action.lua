@@ -66,7 +66,7 @@ function HealBot_CanHeal(unit)
   if string.find(unit, "^Test") then return true end
   local class = HealBot_UnitClass("player")
   if class ~= "PRIEST" and class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
-    if UnitExists(unit) and not UnitIsDeadOrGhost(unit) then
+    if UnitExists(unit) and not UnitIsDeadOrGhost(unit) and HealBot_Range_Check(unit, 40) == 1 then
       return true
     end
     return false
@@ -82,12 +82,17 @@ function HealBot_CanHeal(unit)
 
   local SHeal = HealBot_ShouldHeal(unit)
   if SHeal then
-    local spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Left"))
-    if not spell then spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Middle")) end
-    if not spell then spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Right")) end
-    if not spell then spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Button4")) end
-    if not spell then spell = HealBot_GetHealSpell(unit,HealBot_Action_SpellPattern("Button5")) end
+    local spell = HealBot_GetHealSpell(unit, HealBot_Action_SpellPattern("Left", true))
+    if not spell then spell = HealBot_GetHealSpell(unit, HealBot_Action_SpellPattern("Middle", true)) end
+    if not spell then spell = HealBot_GetHealSpell(unit, HealBot_Action_SpellPattern("Right", true)) end
+    if not spell then spell = HealBot_GetHealSpell(unit, HealBot_Action_SpellPattern("Button4", true)) end
+    if not spell then spell = HealBot_GetHealSpell(unit, HealBot_Action_SpellPattern("Button5", true)) end
     if not spell then
+      -- Fallback: if player has no base click spells bound but has modifier combos, check pure 40yd range
+      local combos = HealBot_Config.KeyCombo[UnitClass("player")]
+      if combos and next(combos) and HealBot_Range_Check(unit, 40) == 1 then
+        return true
+      end
       return false
     else
       return true
@@ -101,14 +106,16 @@ end
 -- Refresh and reset functions moved to HealBot_View_Layout.lua
 
 -- HealBot_Action_SpellPattern: Resolves spell string based on click modifiers.
-function HealBot_Action_SpellPattern(button)
+function HealBot_Action_SpellPattern(button, ignoreModifiers)
   local combos = HealBot_Config.KeyCombo[UnitClass("player")]
   if not combos then return nil end
-  local press = button;
-  if IsAltKeyDown() then press = "Alt"..press end
-  if IsControlKeyDown() then press = "Ctrl"..press end
-  if IsShiftKeyDown() then press = "Shift"..press end
-  return combos[press]
+  local press = button or "Left";
+  if not ignoreModifiers then
+    if IsAltKeyDown() then press = "Alt"..press end
+    if IsControlKeyDown() then press = "Ctrl"..press end
+    if IsShiftKeyDown() then press = "Shift"..press end
+  end
+  return combos[press];
 end
 
 -- HealBot_Decode_Button: Decodes click action to spell pattern.
@@ -134,6 +141,8 @@ end
 -- HealBot_Action_HealUnit_OnLoad: Internal utility: HealBot_Action_HealUnit_OnLoad
 function HealBot_Action_HealUnit_OnLoad(this)
   this:RegisterForClicks("LeftButtonUp", "RightButtonUp", "MiddleButtonUp", "Button4Up", "Button5Up");
+  this.debuffOverlay = getglobal(this:GetName() .. "DebuffOverlay");
+  this.debuffGlow = getglobal(this:GetName() .. "DebuffOverlayGlow");
 end
 
 -- HealBot_Action_HealUnit_OnEnter: Internal utility: HealBot_Action_HealUnit_OnEnter
@@ -447,19 +456,13 @@ function HealBot_Action_OnDragStop(this)
 end
 
 -- http://www.flexbarforums.com/viewtopic.php?t=66
--- no idea what it was link is dead
+-- Legacy handler preserved for compatibility
 function HealBot_Action_OnKey(this,key,state)
   local command = GetBindingAction(key); 
   if command then 
-    DEFAULT_CHAT_FRAME:AddMessage(key.." "..state.." "..(command or "nil"));
     keystate = state
     RunBinding(command,keystate)
   end 
-  DEFAULT_CHAT_FRAME:AddMessage("HealBot_Action_OnKey - "..key);
-  if key=="SHIFT" or key=="CTRL" or key=="ALT" then
-    DEFAULT_CHAT_FRAME:AddMessage((IsShiftKeyDown() or 0).." "..(IsControlKeyDown() or 0).." "..(IsAltKeyDown() or 0));
-    HealBot_Action_Refresh();
-  end
 end
 
 
