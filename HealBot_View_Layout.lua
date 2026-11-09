@@ -798,8 +798,8 @@ function HealBot_Action_PartyChanged()
                 local unit = "Test" .. j
                 HealBot_Action_SetHealButton(i, unit)
                 if not HealBot_Model.units[unit] then
-                    local rClass = testClasses[math.random(1, #testClasses)]
-                    local rName = testNames[math.random(1, #testNames)] .. j
+                    local rClass = testClasses[math.random(1, table.getn(testClasses))]
+                    local rName = testNames[math.random(1, table.getn(testNames))] .. j
                     local mHealth = math.random(4000, 8000)
                     local cHealth = math.random(1, mHealth)
                     local pt = 0
@@ -815,7 +815,7 @@ function HealBot_Action_PartyChanged()
                         "Interface\\Icons\\Spell_Holy_Excorcism" -- Fear Ward
                     }
                     -- Shuffle icons
-                    for k = #testIcons, 2, -1 do
+                    for k = table.getn(testIcons), 2, -1 do
                         local j = math.random(k)
                         testIcons[k], testIcons[j] = testIcons[j], testIcons[k]
                     end
