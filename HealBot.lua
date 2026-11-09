@@ -50,11 +50,122 @@ function HealBot_StopMoving(frame)
 
 end
 
+-- HealBot_SetTestDebuff: Simulates debuff effects for testing animations and overlays.
+function HealBot_SetTestDebuff(debuffType)
+  local iconMap = {
+    [HEALBOT_POISON_en] = "Interface\\Icons\\Spell_Nature_NullifyPoison",
+    [HEALBOT_CURSE_en] = "Interface\\Icons\\Spell_Shadow_GatherShadows",
+    [HEALBOT_DISEASE_en] = "Interface\\Icons\\Spell_Nature_NullifyDisease",
+    [HEALBOT_MAGIC_en] = "Interface\\Icons\\Spell_Holy_DispelMagic",
+  };
+
+  if debuffType then
+    HealBot_TestDebuff = debuffType;
+    if HealBot_Config then
+      HealBot_Config.CDCOverlay = 5; -- Automatically switch to Animated mode
+    end
+    if not HealBot_UnitDebuff then HealBot_UnitDebuff = {} end
+    HealBot_UnitDebuff["player"] = debuffType;
+    if not HealBot_UnitIcons then HealBot_UnitIcons = {} end
+    if not HealBot_UnitIcons["player"] then HealBot_UnitIcons["player"] = {} end
+    HealBot_UnitIcons["player"][1] = iconMap[debuffType];
+
+    -- If test bars active, apply to dummy units as well
+    for i = 1, 40 do
+      local tUnit = "Test" .. i;
+      if HealBot_Action_UnitButtons and HealBot_Action_UnitButtons[tUnit] then
+        HealBot_UnitDebuff[tUnit] = debuffType;
+        if not HealBot_UnitIcons[tUnit] then HealBot_UnitIcons[tUnit] = {} end
+        HealBot_UnitIcons[tUnit][1] = iconMap[debuffType];
+      end
+    end
+
+    if HealBot_Options_CDCOverlay_Refresh and HealBot_Options and HealBot_Options:IsVisible() then
+      HealBot_Options_CDCOverlay_Refresh(true);
+    end
+
+    if DEFAULT_CHAT_FRAME then
+      DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Simulating |cFF00FF00" .. debuffType .. "|r debuff animation. (Type |cFFFFFF00/hb test clear|r to stop)");
+    end
+  else
+    HealBot_TestDebuff = nil;
+    if HealBot_UnitDebuff then
+      HealBot_UnitDebuff["player"] = nil;
+    end
+    if HealBot_UnitIcons and HealBot_UnitIcons["player"] then
+      HealBot_UnitIcons["player"][1] = nil;
+    end
+    for i = 1, 40 do
+      local tUnit = "Test" .. i;
+      if HealBot_UnitDebuff then HealBot_UnitDebuff[tUnit] = nil end
+      if HealBot_UnitIcons and HealBot_UnitIcons[tUnit] then
+        HealBot_UnitIcons[tUnit][1] = nil;
+      end
+    end
+
+    if DEFAULT_CHAT_FRAME then
+      DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Test debuff cleared.");
+    end
+  end
+
+  HealBot_Action_RefreshButtons();
+end
+
 -- HealBot_SlashCmd: Handles '/hb' or '/healbot' chat commands.
 function HealBot_SlashCmd(cmd)
   if (cmd=="") then
     HealBot_TogglePanel(HealBot_Action);
     return
+  end
+
+  local lowCmd = string.lower(cmd or "");
+  local sub1, sub2 = nil, nil;
+  for word in string.gfind(lowCmd, "%S+") do
+    if not sub1 then
+      sub1 = word;
+    elseif not sub2 then
+      sub2 = word;
+      break;
+    end
+  end
+
+  if (sub1 == "test" or sub1 == "debuff" or sub1 == "anim") then
+    local typeMap = {
+      ["poison"] = HEALBOT_POISON_en,
+      ["p"] = HEALBOT_POISON_en,
+      ["curse"] = HEALBOT_CURSE_en,
+      ["c"] = HEALBOT_CURSE_en,
+      ["disease"] = HEALBOT_DISEASE_en,
+      ["d"] = HEALBOT_DISEASE_en,
+      ["magic"] = HEALBOT_MAGIC_en,
+      ["m"] = HEALBOT_MAGIC_en,
+      ["clear"] = "clear",
+      ["off"] = "clear",
+      ["stop"] = "clear",
+      ["none"] = "clear",
+    };
+    local chosen = sub2 and typeMap[sub2];
+    if chosen == "clear" then
+      HealBot_SetTestDebuff(nil);
+    elseif chosen then
+      HealBot_SetTestDebuff(chosen);
+    else
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Usage: /hb test <poison|curse|disease|magic|clear>");
+      end
+    end
+    return;
+  end
+
+  if (sub1 == "poison" or sub1 == "curse" or sub1 == "disease" or sub1 == "magic") then
+    local quickMap = {
+      ["poison"] = HEALBOT_POISON_en,
+      ["curse"] = HEALBOT_CURSE_en,
+      ["disease"] = HEALBOT_DISEASE_en,
+      ["magic"] = HEALBOT_MAGIC_en,
+    };
+    HealBot_SetTestDebuff(quickMap[sub1]);
+    return;
   end
   if (cmd=="options" or cmd=="opt" or cmd=="config" or cmd=="cfg") then
     HealBot_TogglePanel(HealBot_Options);
@@ -231,6 +342,12 @@ end
 -- HealBot_UnitClass: Returns English class string for a unit.
 function HealBot_UnitClass(unit)
     if not unit then return nil end
+    if string.find(unit, "^Test") then
+        if HealBot_Model and HealBot_Model.units[unit] then
+            return HealBot_Model.units[unit].englishClass
+        end
+        return nil
+    end
     if not HealBot_ClassMap then HealBot_InitClassMap() end
 
     -- 1. If player self, query "player" directly

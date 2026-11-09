@@ -20,12 +20,13 @@ end
 
 -- HealBot_ShouldHeal: Checks if unit needs immediate healing.
 function HealBot_ShouldHeal(unit)
+  if not unit then return false end
+  if string.find(unit, "^Test") then return true end
   if HealBot_UnitDebuff[unit] and not UnitIsDeadOrGhost(unit) then
     if HealBot_Range_Check(unit, 30)==1 then
       return true;
     end
   end
-  if string.find(unit, "^Test") then return true end
   return HealBot_MayHeal(unit) and UnitHealth(unit)>0 and not UnitIsDeadOrGhost(unit)
     and (UnitHealth(unit)<UnitHealthMax(unit)*HealBot_Config.AlertLevel or HealBot_AlwaysHeal());
 end
@@ -233,6 +234,7 @@ end
 
 -- HealBot_Action_HealUnit_OnClick: Click event handler.
 function HealBot_Action_HealUnit_OnClick(this,button)
+    if not this.unit or string.find(this.unit, "^Test") then return end
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
     

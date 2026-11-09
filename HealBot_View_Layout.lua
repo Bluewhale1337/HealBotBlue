@@ -254,7 +254,7 @@ function HealBot_Action_EnableButton(button)
 
     if button.debuffOverlay then
         local debuffType = HealBot_UnitDebuff[unit]
-        local isDead = state.isDead or state.isGhost or UnitIsDeadOrGhost(unit)
+        local isDead = state.isDead or state.isGhost or (not string.find(unit, "^Test") and UnitIsDeadOrGhost(unit))
         local overlayMode = HealBot_Config.CDCOverlay or 1
 
         if debuffType and not isDead and overlayMode > 1 and overlayMode < 6 then
@@ -804,7 +804,7 @@ function HealBot_Action_PartyChanged()
                     local cHealth = math.random(1, mHealth)
                     local pt = 0
                     if rClass == "WARRIOR" then pt = 1 elseif rClass == "ROGUE" then pt = 3 end
-                    HealBot_Model.units[unit] = { name = rName, guid = "TestGuid"..j, class = rClass, englishClass = rClass, health = cHealth, maxHealth = mHealth, mana = 2000, maxMana = 4000, powerType = pt, incomingHeal = 0, hasAggro = false, range = 1 }
+                    HealBot_Model.units[unit] = { name = rName, guid = "TestGuid"..j, class = rClass, englishClass = rClass, health = cHealth, maxHealth = mHealth, mana = 2000, maxMana = 4000, powerType = pt, incomingHeal = 0, hasAggro = false, range = 1, isDead = false, isGhost = false, isConnected = true }
                     if not HealBot_UnitIcons then HealBot_UnitIcons = {} end
                     HealBot_UnitIcons[unit] = {}
                     local testIcons = {
@@ -1821,7 +1821,7 @@ function HealBot_UpdateActiveHoTTimers()
                             -- If player in raid, map under raid token button as well
                             if unitID == "player" and HealBot_Action_UnitButtons then
                                 for btnUnit in pairs(HealBot_Action_UnitButtons) do
-                                    if btnUnit ~= "player" and UnitIsUnit(btnUnit, "player") then
+                                    if btnUnit ~= "player" and not string.find(btnUnit, "^Test") and UnitIsUnit(btnUnit, "player") then
                                         if not HealBot_ActiveHoTUnitMap[btnUnit] then
                                             HealBot_ActiveHoTUnitMap[btnUnit] = {}
                                         end

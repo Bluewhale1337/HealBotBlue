@@ -33,7 +33,7 @@ function HealBot_Range_Check(unit, range)
         return _rangeCache[range][unit]
     end
 
-    if ( unit and (unit == "player" or UnitIsUnit(unit, "player") or string.find(unit, "^Test")) ) then 
+    if ( unit and (unit == "player" or string.find(unit, "^Test") or UnitIsUnit(unit, "player")) ) then 
         return_val = 1;
     else
         local checked = false
