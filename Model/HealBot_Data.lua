@@ -1,0 +1,729 @@
+HealBot_ConfigDefaults = {
+  DebugMode = 0,
+  ShowManaBars=0,
+  ManaBarsHealersOnly=0,
+  Version = HEALBOT_VERSION,
+  AutoSwap_Enabled = 0,
+  AutoSwap_Profiles = {
+    [1] = HEALBOT_SKINS_STD,
+    [2] = HEALBOT_SKINS_STD,
+    [3] = HEALBOT_SKINS_STD,
+    [4] = HEALBOT_SKINS_STD,
+    [5] = HEALBOT_SKINS_STD,
+  },
+  bmaxrows = {
+    [HEALBOT_SKINS_STD] = 0,
+  },
+  GridOrientation = {
+    [HEALBOT_SKINS_STD] = 1,
+  },
+  AlertLevel = 0.95,
+  AutoClose = 1,
+  PanelSounds = 1,
+  GroupHeals = 1,
+  TankHeals = 1,
+  TargetHeals = 1,
+  EmergencyHeals = 1,
+  ActionLocked = 0,
+  ActionVisible = 1,
+  HideSolo = 0,
+  OverHeal = 0.25,
+  UpdateFreq = 0.5,
+  AutoUnshift = 1,
+  Integrations_Nampower_Active = true,
+  ChatMessages = {
+    [1] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
+    [2] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
+    [3] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
+    [4] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
+    [5] = { Spell = "None", Message = "Casting #Spell# on #Target#", Channel = "None" },
+  },
+  HideOptions = 0,
+  HideAbort = 1,
+  ShowTooltip = 1,
+  ShowHealthText = 0,
+  GrowUpwards = 0,
+  ProtectPvP = 1,
+  QualityRange = 0,
+  EmergIncMonitor = 1,
+  EmergencyFClass = 4,
+  ExtraOrder      = 1,
+  ShowDebuffWarning = 0,
+  SoundDebuffWarning = 0,
+  SoundDebuffPlay = 1,
+  CDCMonitor = 2,
+  CDCOverlay = 1,
+  CDCOverlayTexture = "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga",
+  PanelAnchorX = -1,
+  PanelAnchorY = -1,
+  CDCBarColour = {
+    [HEALBOT_DISEASE_en] = { R = 0.55, G = 0.19, B = 0.70, }, -- Bright Purple
+    [HEALBOT_MAGIC_en] = { R = 0.01, G = 0.30, B = 0.90, }, -- Bright Blue
+    [HEALBOT_POISON_en] = { R = 0.12, G = 0.46, B = 0.24, }, -- Bright Green
+    [HEALBOT_CURSE_en] = { R = 0.83, G = 0.01, B = 0.01, }, -- Bright Red
+  },
+
+  Debuff_Left = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_PALADIN]  = 1,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_SHAMAN]   = 1,
+    [HEALBOT_MAGE]     = 1,
+    [HEALBOT_WARRIOR]  = 1,
+    [HEALBOT_ROGUE]    = 1,
+    [HEALBOT_HUNTER]   = 1,
+    [HEALBOT_WARLOCK]  = 1,
+  },
+  Debuff_Right = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_PALADIN]  = 1,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_SHAMAN]   = 1,
+    [HEALBOT_MAGE]     = 1,
+    [HEALBOT_WARRIOR]  = 1,
+    [HEALBOT_ROGUE]    = 1,
+    [HEALBOT_HUNTER]   = 1,
+    [HEALBOT_WARLOCK]  = 1,
+  },
+  BuffWatch = 1,
+  BuffWatchInCombat = 0,
+  BuffWatchSelf = {0,0,0,0,0,0,0,0},
+  Buff_Left = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_PALADIN]  = 1,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_MAGE]     = 1,
+  },
+  Buff_Right = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_PALADIN]  = 1,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_MAGE]     = 1,
+  },
+  EmergIncRange = {
+    [HEALBOT_DRUID]    = 0,
+    [HEALBOT_HUNTER]   = 1,
+    [HEALBOT_MAGE]     = 1,
+    [HEALBOT_PALADIN]  = 0,
+    [HEALBOT_PRIEST]   = 0,
+    [HEALBOT_ROGUE]    = 0,
+    [HEALBOT_SHAMAN]   = 0,
+    [HEALBOT_WARLOCK]  = 1,
+    [HEALBOT_WARRIOR]  = 0,
+  },
+  EmergIncMelee = {
+    [HEALBOT_DRUID]    = 0,
+    [HEALBOT_HUNTER]   = 0,
+    [HEALBOT_MAGE]     = 0,
+    [HEALBOT_PALADIN]  = 0,
+    [HEALBOT_PRIEST]   = 0,
+    [HEALBOT_ROGUE]    = 1,
+    [HEALBOT_SHAMAN]   = 0,
+    [HEALBOT_WARLOCK]  = 0,
+    [HEALBOT_WARRIOR]  = 1,
+  },
+  EmergIncHealers = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_HUNTER]   = 0,
+    [HEALBOT_MAGE]     = 0,
+    [HEALBOT_PALADIN]  = 0,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_ROGUE]    = 0,
+    [HEALBOT_SHAMAN]   = 0,
+    [HEALBOT_WARLOCK]  = 0,
+    [HEALBOT_WARRIOR]  = 0,
+  },
+  EmergIncCustom = {
+    [HEALBOT_DRUID]    = 1,
+    [HEALBOT_HUNTER]   = 0,
+    [HEALBOT_MAGE]     = 1,
+    [HEALBOT_PALADIN]  = 1,
+    [HEALBOT_PRIEST]   = 1,
+    [HEALBOT_ROGUE]    = 0,
+    [HEALBOT_SHAMAN]   = 1,
+    [HEALBOT_WARLOCK]  = 1,
+    [HEALBOT_WARRIOR]  = 0,
+  },
+  KeyCombo = {
+    [HEALBOT_DRUID] = {
+      ["Left"] = HEALBOT_REGROWTH,
+      ["ShiftLeft"] = HEALBOT_REGROWTH .. HEALBOT_RANK_7,
+      ["CtrlLeft"] = HEALBOT_REGROWTH .. HEALBOT_RANK_5,
+      ["ShiftCtrlLeft"] = HEALBOT_REGROWTH .. HEALBOT_RANK_3,
+      ["Right"] = HEALBOT_HEALING_TOUCH,
+      ["ShiftRight"] = HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_8,
+      ["CtrlRight"] = HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_6,
+      ["ShiftCtrlRight"] = HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_4,
+      ["Middle"] = HEALBOT_REJUVENATION,
+      ["ShiftMiddle"] = HEALBOT_REJUVENATION .. HEALBOT_RANK_8,
+      ["CtrlMiddle"] = HEALBOT_REJUVENATION .. HEALBOT_RANK_6,
+      ["ShiftCtrlMiddle"] = HEALBOT_REJUVENATION .. HEALBOT_RANK_4,
+      ["Button4"] = HEALBOT_MARK_OF_THE_WILD,
+    },
+    [HEALBOT_PALADIN] = {
+      ["Left"] = HEALBOT_FLASH_OF_LIGHT,
+      ["ShiftLeft"] = HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_5,
+      ["CtrlLeft"] = HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_3,
+      ["ShiftCtrlLeft"] = HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_1,
+      ["Right"] = HEALBOT_HOLY_LIGHT,
+      ["ShiftRight"] = HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_8,
+      ["CtrlRight"] = HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_6,
+      ["ShiftCtrlRight"] = HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_4,
+      ["Middle"] =  HEALBOT_BLESSING_OF_SALVATION,
+    },
+    [HEALBOT_PRIEST] = {
+      ["Left"] = HEALBOT_FLASH_HEAL,
+      ["ShiftLeft"] = HEALBOT_FLASH_HEAL .. HEALBOT_RANK_5,
+      ["CtrlLeft"] = HEALBOT_FLASH_HEAL .. HEALBOT_RANK_3,
+      ["ShiftCtrlLeft"] = HEALBOT_FLASH_HEAL .. HEALBOT_RANK_1,
+      ["Right"] = HEALBOT_GREATER_HEAL,
+      ["ShiftRight"] = HEALBOT_GREATER_HEAL .. HEALBOT_RANK_2,
+      ["CtrlRight"] = HEALBOT_HEAL .. HEALBOT_RANK_4,
+      ["ShiftCtrlRight"] = HEALBOT_HEAL .. HEALBOT_RANK_2,
+      ["Middle"] = HEALBOT_RENEW,
+      ["ShiftMiddle"] = HEALBOT_RENEW .. HEALBOT_RANK_7,
+      ["CtrlMiddle"] = HEALBOT_RENEW .. HEALBOT_RANK_5,
+      ["ShiftCtrlMiddle"] = HEALBOT_RENEW .. HEALBOT_RANK_3,
+      ["Button4"] = HEALBOT_POWER_WORD_SHIELD,
+      ["ShiftButton4"] = HEALBOT_POWER_WORD_FORTITUDE,
+      ["Button5"] = HEALBOT_PRAYER_OF_HEALING,
+    },
+    [HEALBOT_SHAMAN] = {
+      ["Left"] = HEALBOT_LESSER_HEALING_WAVE,
+      ["ShiftLeft"] = HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_5,
+      ["CtrlLeft"] = HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_3,
+      ["ShiftCtrlLeft"] = HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_1,
+      ["Right"] = HEALBOT_HEALING_WAVE,
+      ["ShiftRight"] = HEALBOT_HEALING_WAVE .. HEALBOT_RANK_8,
+      ["CtrlRight"] = HEALBOT_HEALING_WAVE .. HEALBOT_RANK_6,
+      ["ShiftCtrlRight"] = HEALBOT_HEALING_WAVE .. HEALBOT_RANK_4,
+      ["Middle"] = HEALBOT_CHAIN_HEAL,
+    },
+    [HEALBOT_WARRIOR] = {
+      ["Left"] = "Target",
+    },
+    [HEALBOT_MAGE] = {
+      ["Left"] = "Target",
+    },
+    [HEALBOT_ROGUE] = {
+      ["Left"] = "Target",
+    },
+    [HEALBOT_HUNTER] = {
+      ["Left"] = "Target",
+    },
+    [HEALBOT_WARLOCK] = {
+      ["Left"] = "Target",
+    },
+  },
+  EnableHealthy = 0,
+  ShowNonManaBars = 0,
+  ActionVisible = 0,
+  ActionMouseover = 1,
+  CDCLeftText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None", [HEALBOT_MAGE]="None", [HEALBOT_WARRIOR]="None", [HEALBOT_ROGUE]="None", [HEALBOT_HUNTER]="None", [HEALBOT_WARLOCK]="None",},
+  CDCRightText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None", [HEALBOT_MAGE]="None", [HEALBOT_WARRIOR]="None", [HEALBOT_ROGUE]="None", [HEALBOT_HUNTER]="None", [HEALBOT_WARLOCK]="None",},
+  Current_Skin = "Modern Flat",
+  Skin_ID = 1,
+  Skins = {"Modern Flat", HEALBOT_SKINS_STD, "HealBot Party", "HealBot Raid", "Alteric Valley"},
+  AutoSwap_Enabled = 0,
+  AutoSwap_Profiles = {
+    [1] = "Modern Flat",   -- Solo
+    [2] = "HealBot Party", -- Party (2-5)
+    [3] = "HealBot Raid",  -- Raid 15 (6-15)
+    [4] = "HealBot Raid",  -- Raid 25 (16-25)
+    [5] = "HealBot Raid",  -- Raid 40 (26-40)
+  },
+  numcols = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 4, ["Alteric Valley"] = 2, ["Modern Flat"] = 1},
+  bmaxrows = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  GridOrientation = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btexture = {[HEALBOT_SKINS_STD] = 8,["HealBot Party"] = 6, ["HealBot Raid"] = 7, ["Alteric Valley"] = 9, ["Modern Flat"] = 10},
+  bcspace = {[HEALBOT_SKINS_STD] = 4, ["HealBot Party"] = 4, ["HealBot Raid"] = 2, ["Alteric Valley"] = 2, ["Modern Flat"] = 4},
+  brspace = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 2, ["HealBot Raid"] = 2, ["Alteric Valley"] = 1, ["Modern Flat"] = 2},
+  bwidth =  {[HEALBOT_SKINS_STD] = 122, ["HealBot Party"] = 115, ["HealBot Raid"] = 90, ["Alteric Valley"] = 85, ["Modern Flat"] = 100},
+  bheight = {[HEALBOT_SKINS_STD] = 19, ["HealBot Party"] = 18, ["HealBot Raid"] = 14, ["Alteric Valley"] = 16, ["Modern Flat"] = 40},
+  btextenabledcolr = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextenabledcolg = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextenabledcolb = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 1},
+  btextenabledcola = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextdisbledcolr = {[HEALBOT_SKINS_STD] = 0.5, ["HealBot Party"] = 0.5, ["HealBot Raid"] = 0.5, ["Alteric Valley"] = 0.4, ["Modern Flat"] = 0.5},
+  btextdisbledcolg = {[HEALBOT_SKINS_STD] = 0.5, ["HealBot Party"] = 0.5, ["HealBot Raid"] = 0.5, ["Alteric Valley"] = 0.4, ["Modern Flat"] = 0.5},
+  btextdisbledcolb = {[HEALBOT_SKINS_STD] = 0.5, ["HealBot Party"] = 0.5, ["HealBot Raid"] = 0.5, ["Alteric Valley"] = 0.4, ["Modern Flat"] = 0.5},
+  btextdisbledcola = {[HEALBOT_SKINS_STD] = 0.45, ["HealBot Party"] = 0.75, ["HealBot Raid"] = 0.75, ["Alteric Valley"] = 0, ["Modern Flat"] = 0.8},
+  btextcursecolr = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextcursecolg = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextcursecolb = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  btextcursecola = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  backcola = {[HEALBOT_SKINS_STD] = 0.05, ["HealBot Party"] = 0.25, ["HealBot Raid"] = 0.25, ["Alteric Valley"] = 0, ["Modern Flat"] = 0.8},
+  Barcola    = {[HEALBOT_SKINS_STD] = 0.85, ["HealBot Party"] = 0.85, ["HealBot Raid"] = 0.85, ["Alteric Valley"] = 0.85, ["Modern Flat"] = 1.0},
+  BarcolaInHeal = {[HEALBOT_SKINS_STD] = 0.40, ["HealBot Party"] = 0.35, ["HealBot Raid"] = 0.35, ["Alteric Valley"] = 0.5, ["Modern Flat"] = 0.6},
+  backcolr = {[HEALBOT_SKINS_STD] = 0.1, ["HealBot Party"] = 0.1, ["HealBot Raid"] = 0.1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0.1},
+  backcolg = {[HEALBOT_SKINS_STD] = 0.1, ["HealBot Party"] = 0.1, ["HealBot Raid"] = 0.1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0.1},
+  backcolb = {[HEALBOT_SKINS_STD] = 0.7, ["HealBot Party"] = 0.7, ["HealBot Raid"] = 0.7, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0.1},
+  borcolr = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0},
+  borcolg = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0},
+  borcolb = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0},
+  borcola = {[HEALBOT_SKINS_STD] = 0.25, ["HealBot Party"] = 0.8, ["HealBot Raid"] = 0.8, ["Alteric Valley"] = 0.1, ["Modern Flat"] = 1},
+  btextheight = {[HEALBOT_SKINS_STD] = 10, ["HealBot Party"] = 10, ["HealBot Raid"] = 9, ["Alteric Valley"] = 10, ["Modern Flat"] = 11},
+  bardisa = {[HEALBOT_SKINS_STD] = 0.15, ["HealBot Party"] = 0.75, ["HealBot Raid"] = 0.75, ["Alteric Valley"] = 0, ["Modern Flat"] = 0.3},
+  abortsize = {[HEALBOT_SKINS_STD] = 7, ["HealBot Party"] = 10, ["HealBot Raid"] = 5, ["Alteric Valley"] = 6, ["Modern Flat"] = 8},
+  babortcolr = {[HEALBOT_SKINS_STD] = 0.1, ["HealBot Party"] = 0.1, ["HealBot Raid"] = 0.1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0.1},
+  babortcolg = {[HEALBOT_SKINS_STD] = 0.1, ["HealBot Party"] = 0.1, ["HealBot Raid"] = 0.1, ["Alteric Valley"] = 0.2, ["Modern Flat"] = 0.1},
+  babortcolb = {[HEALBOT_SKINS_STD] = 0.5, ["HealBot Party"] = 0.5, ["HealBot Raid"] = 0.5, ["Alteric Valley"] = 0.6, ["Modern Flat"] = 0.5},
+  babortcola = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  ShowHeader = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  bcolormode = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 2},
+  bborder = {[HEALBOT_SKINS_STD] = 2, ["HealBot Party"] = 2, ["HealBot Raid"] = 2, ["Alteric Valley"] = 2, ["Modern Flat"] = 1},
+  bpadding = {[HEALBOT_SKINS_STD] = 10, ["HealBot Party"] = 10, ["HealBot Raid"] = 10, ["Alteric Valley"] = 10, ["Modern Flat"] = 10},
+  bboffset = {[HEALBOT_SKINS_STD] = 16, ["HealBot Party"] = 16, ["HealBot Raid"] = 16, ["Alteric Valley"] = 16, ["Modern Flat"] = 3},
+  bfontoutline = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 1},
+  biconsize = {[HEALBOT_SKINS_STD] = 12, ["HealBot Party"] = 12, ["HealBot Raid"] = 12, ["Alteric Valley"] = 12, ["Modern Flat"] = 12},
+  bcolormaxr = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  bcolormaxg = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  bcolormaxb = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  bcolorminr = {[HEALBOT_SKINS_STD] = 1, ["HealBot Party"] = 1, ["HealBot Raid"] = 1, ["Alteric Valley"] = 1, ["Modern Flat"] = 1},
+  bcolorming = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  bcolorminb = {[HEALBOT_SKINS_STD] = 0, ["HealBot Party"] = 0, ["HealBot Raid"] = 0, ["Alteric Valley"] = 0, ["Modern Flat"] = 0},
+  bfont = {[HEALBOT_SKINS_STD] = "Fonts\\FRIZQT__.TTF", ["HealBot Party"] = "Fonts\\FRIZQT__.TTF", ["HealBot Raid"] = "Fonts\\FRIZQT__.TTF", ["Alteric Valley"] = "Fonts\\FRIZQT__.TTF", ["Modern Flat"] = "Fonts\\FRIZQT__.TTF"},
+  ShowTooltip = 1,
+  ShowManaBars = 0,
+  ManaBarsHealersOnly = 0,
+  Tooltip_ShowSpellDetail = 0,
+  Tooltip_ShowTarget = 1,
+  Tooltip_Recommend = 1,
+  TooltipPos = 1,  
+  HideParty = 0,
+  HealBot_Integrations_UnitXP = 0,
+  HealBot_Integrations_Nampower = 0,
+  HealBot_Integrations_SuperWoW = 0,
+  HealBot_Integrations_ClassicAPI = 0,
+  HealBot_Integrations_ShowHoTTimers = 0,
+  HealBot_Integrations_HoTTimerPosition = "BELOW",
+  HealBot_Integrations_HoTTimerDisplayMode = 0,
+};
+
+HealBot_Config = {};
+
+HealBot_HealsIn = {};
+HealBot_Healers = {};
+HealBot_UnitDebuff = {};
+HealBot_UnitIcons = {};
+
+HealBot_ResetHealsInFlag=true;
+
+HEALBOT_ADDON_ID="HealBot_Heals"
+
+HealBot_AbortButton=1;
+
+HealBot_Spells = {
+-- Cast     = secs until effect starts
+-- Channel  = secs until caster available
+-- Duration = secs until effect ends
+-- Shield   = maximum duration
+
+  [HEALBOT_LINEN_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 6.0, 
+    Mana =  0, HealsExt =   66, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_HEAVY_LINEN_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 6.0, 
+    Mana =  0, HealsExt =  114, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_WOOL_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 7.0, 
+    Mana =  0, HealsExt =  161, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_HEAVY_WOOL_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 7.0, 
+    Mana =  0, HealsExt =  301, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_SILK_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt =  400, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_HEAVY_SILK_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt =  640, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_MAGEWEAVE_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt =  800, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_HEAVY_MAGEWEAVE_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt = 1104, Level =  1,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_RUNECLOTH_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt = 1360, Level = 52,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+  [HEALBOT_HEAVY_RUNECLOTH_BANDAGE] = {
+    Group = HEALBOT_BANDAGES, Range = 15, Channel = 8.0, 
+    Mana =  0, HealsExt = 2000, Level = 58,
+    Buff = HEALBOT_BUFF_FIRST_AID, Debuff = HEALBOT_DEBUFF_RECENTLY_BANDAGED },
+
+  [HEALBOT_MINOR_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =   70, HealsMax =   90, Level =  5 },
+  [HEALBOT_LESSER_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  140, HealsMax =  180, Level = 13 },
+  [HEALBOT_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  280, HealsMax =  360, Level = 22 },
+  [HEALBOT_GREATER_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  455, HealsMax =  585, Level = 31 },
+  [HEALBOT_SUPERIOR_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  700, HealsMax =  900, Level = 45 },
+  [HEALBOT_MAJOR_HEALING_POTION] = {
+    Group = HEALBOT_HEALING_POTIONS, Range = 15, Target = {"player"},
+    Mana =  0, HealsMin = 1050, HealsMax = 1750, Level = 55 },
+
+  [HEALBOT_MINOR_HEALTHSTONE] = {
+    Group = HEALBOT_HEALTHSTONES, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  110, HealsMax =  110, Level = 10 },
+  [HEALBOT_LESSER_HEALTHSTONE] = {
+    Group = HEALBOT_HEALTHSTONES, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  275, HealsMax =  275, Level = 22 },
+  [HEALBOT_HEALTHSTONE] = {
+    Group = HEALBOT_HEALTHSTONES, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  500, HealsMax =  500, Level = 34 },
+  [HEALBOT_GREATER_HEALTHSTONE] = {
+    Group = HEALBOT_HEALTHSTONES, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin =  880, HealsMax =  880, Level = 46 },
+  [HEALBOT_MAJOR_HEALTHSTONE] = {
+    Group = HEALBOT_HEALTHSTONES, Range = 1, Target = {"player"},
+    Mana =  0, HealsMin = 1440, HealsMax = 1440, Level = 58 },
+
+-- PALADIN
+
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_1] = { Group = HEALBOT_HOLY_LIGHT, Level =  1 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_2] = { Group = HEALBOT_HOLY_LIGHT, Level =  6 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_3] = { Group = HEALBOT_HOLY_LIGHT, Level = 14 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_4] = { Group = HEALBOT_HOLY_LIGHT, Level = 22 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_5] = { Group = HEALBOT_HOLY_LIGHT, Level = 30 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_6] = { Group = HEALBOT_HOLY_LIGHT, Level = 38 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_7] = { Group = HEALBOT_HOLY_LIGHT, Level = 46 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_8] = { Group = HEALBOT_HOLY_LIGHT, Level = 54 },
+  [HEALBOT_HOLY_LIGHT .. HEALBOT_RANK_9] = { Group = HEALBOT_HOLY_LIGHT, Level = 60 },
+
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_1] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 20 },
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_2] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 26 },
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_3] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 34 },
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_4] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 42 },
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_5] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 50 },
+  [HEALBOT_FLASH_OF_LIGHT .. HEALBOT_RANK_6] = { Group = HEALBOT_FLASH_OF_LIGHT, Level = 58 },
+
+-- DRUID
+
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_1 ] = { Group = HEALBOT_REJUVENATION, Level =  4, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_2 ] = { Group = HEALBOT_REJUVENATION, Level = 10, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_3 ] = { Group = HEALBOT_REJUVENATION, Level = 16, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_4 ] = { Group = HEALBOT_REJUVENATION, Level = 22, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_5 ] = { Group = HEALBOT_REJUVENATION, Level = 28, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_6 ] = { Group = HEALBOT_REJUVENATION, Level = 34, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_7 ] = { Group = HEALBOT_REJUVENATION, Level = 40, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_8 ] = { Group = HEALBOT_REJUVENATION, Level = 46, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_9 ] = { Group = HEALBOT_REJUVENATION, Level = 52, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_10] = { Group = HEALBOT_REJUVENATION, Level = 58, Buff = HEALBOT_BUFF_REJUVENATION },
+  [HEALBOT_REJUVENATION .. HEALBOT_RANK_11] = { Group = HEALBOT_REJUVENATION, Level = 60, Buff = HEALBOT_BUFF_REJUVENATION },
+
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_1 ] = { Group = HEALBOT_HEALING_TOUCH, Level =  1 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_2 ] = { Group = HEALBOT_HEALING_TOUCH, Level =  8 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_3 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 14 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_4 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 20 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_5 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 26 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_6 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 32 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_7 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 38 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_8 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 44 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_9 ] = { Group = HEALBOT_HEALING_TOUCH, Level = 50 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_10] = { Group = HEALBOT_HEALING_TOUCH, Level = 56 },
+  [HEALBOT_HEALING_TOUCH .. HEALBOT_RANK_11] = { Group = HEALBOT_HEALING_TOUCH, Level = 60 },
+
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_1] = { Group = HEALBOT_REGROWTH, Level = 12, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_2] = { Group = HEALBOT_REGROWTH, Level = 18, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_3] = { Group = HEALBOT_REGROWTH, Level = 24, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_4] = { Group = HEALBOT_REGROWTH, Level = 30, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_5] = { Group = HEALBOT_REGROWTH, Level = 36, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_6] = { Group = HEALBOT_REGROWTH, Level = 42, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_7] = { Group = HEALBOT_REGROWTH, Level = 48, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_8] = { Group = HEALBOT_REGROWTH, Level = 54, Buff = HEALBOT_BUFF_REGROWTH },
+  [HEALBOT_REGROWTH .. HEALBOT_RANK_9] = { Group = HEALBOT_REGROWTH, Level = 60, Buff = HEALBOT_BUFF_REGROWTH },
+
+-- PRIEST
+
+  [HEALBOT_LESSER_HEAL .. HEALBOT_RANK_1] = { Group = HEALBOT_LESSER_HEAL, Level =  1 }, 
+  [HEALBOT_LESSER_HEAL .. HEALBOT_RANK_2] = { Group = HEALBOT_LESSER_HEAL, Level =  4 }, 
+  [HEALBOT_LESSER_HEAL .. HEALBOT_RANK_3] = { Group = HEALBOT_LESSER_HEAL, Level = 10 }, 
+
+  [HEALBOT_HEAL .. HEALBOT_RANK_1] = { Group = HEALBOT_HEAL, Level = 16 }, 
+  [HEALBOT_HEAL .. HEALBOT_RANK_2] = { Group = HEALBOT_HEAL, Level = 22 }, 
+  [HEALBOT_HEAL .. HEALBOT_RANK_3] = { Group = HEALBOT_HEAL, Level = 28 }, 
+  [HEALBOT_HEAL .. HEALBOT_RANK_4] = { Group = HEALBOT_HEAL, Level = 34 }, 
+
+  [HEALBOT_GREATER_HEAL .. HEALBOT_RANK_1] = { Group = HEALBOT_GREATER_HEAL, Level = 40 }, 
+  [HEALBOT_GREATER_HEAL .. HEALBOT_RANK_2] = { Group = HEALBOT_GREATER_HEAL, Level = 46 }, 
+  [HEALBOT_GREATER_HEAL .. HEALBOT_RANK_3] = { Group = HEALBOT_GREATER_HEAL, Level = 52 }, 
+  [HEALBOT_GREATER_HEAL .. HEALBOT_RANK_4] = { Group = HEALBOT_GREATER_HEAL, Level = 58 }, 
+  [HEALBOT_GREATER_HEAL .. HEALBOT_RANK_5] = { Group = HEALBOT_GREATER_HEAL, Level = 60 }, 
+
+  [HEALBOT_RENEW .. HEALBOT_RANK_1] = { Group = HEALBOT_RENEW, Level =  8, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_2] = { Group = HEALBOT_RENEW, Level = 14, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_3] = { Group = HEALBOT_RENEW, Level = 20, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_4] = { Group = HEALBOT_RENEW, Level = 26, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_5] = { Group = HEALBOT_RENEW, Level = 32, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_6] = { Group = HEALBOT_RENEW, Level = 38, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_7] = { Group = HEALBOT_RENEW, Level = 44, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_8] = { Group = HEALBOT_RENEW, Level = 50, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_9] = { Group = HEALBOT_RENEW, Level = 56, Buff = HEALBOT_BUFF_RENEW }, 
+  [HEALBOT_RENEW .. HEALBOT_RANK_10] = { Group = HEALBOT_RENEW, Level = 60, Buff = HEALBOT_BUFF_RENEW },
+
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_1] = { Group = HEALBOT_FLASH_HEAL, Level = 20 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_2] = { Group = HEALBOT_FLASH_HEAL, Level = 26 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_3] = { Group = HEALBOT_FLASH_HEAL, Level = 32 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_4] = { Group = HEALBOT_FLASH_HEAL, Level = 38 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_5] = { Group = HEALBOT_FLASH_HEAL, Level = 44 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_6] = { Group = HEALBOT_FLASH_HEAL, Level = 50 }, 
+  [HEALBOT_FLASH_HEAL .. HEALBOT_RANK_7] = { Group = HEALBOT_FLASH_HEAL, Level = 56 }, 
+	  
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_1] = { Group = HEALBOT_POWER_WORD_SHIELD, Level =  6, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_2] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 12, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_3] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 18, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_4] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 24, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_5] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 30, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_6] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 36, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_7] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 42, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_8] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 48, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_9] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 54, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+  [HEALBOT_POWER_WORD_SHIELD .. HEALBOT_RANK_10] = { Group = HEALBOT_POWER_WORD_SHIELD, Level = 60, Buff= HEALBOT_BUFF_POWER_WORD_SHIELD, Debuff = HEALBOT_DEBUF_WEAKENED_SOUL }, 
+
+-- SHAMAN
+
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_1] = { Group = HEALBOT_HEALING_WAVE, Level =  1 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_2] = { Group = HEALBOT_HEALING_WAVE, Level =  6 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_3] = { Group = HEALBOT_HEALING_WAVE, Level = 12 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_4] = { Group = HEALBOT_HEALING_WAVE, Level = 18 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_5] = { Group = HEALBOT_HEALING_WAVE, Level = 24 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_6] = { Group = HEALBOT_HEALING_WAVE, Level = 32 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_7] = { Group = HEALBOT_HEALING_WAVE, Level = 40 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_8] = { Group = HEALBOT_HEALING_WAVE, Level = 48 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_9] = { Group = HEALBOT_HEALING_WAVE, Level = 56 }, 
+  [HEALBOT_HEALING_WAVE .. HEALBOT_RANK_10] = { Group = HEALBOT_HEALING_WAVE, Level = 60 }, 
+
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_1] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 20 }, 
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_2] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 28 }, 
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_3] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 36 }, 
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_4] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 44 }, 
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_5] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 52 }, 
+  [HEALBOT_LESSER_HEALING_WAVE .. HEALBOT_RANK_6] = { Group = HEALBOT_LESSER_HEALING_WAVE, Level = 60 }, 
+
+};
+   
+HealBot_Debuff_Spells = {
+  [HEALBOT_PALADIN] = {
+    HEALBOT_PURIFY,
+    HEALBOT_CLEANSE,
+                      },
+  [HEALBOT_DRUID] = {
+    HEALBOT_CURE_POISON,
+    HEALBOT_REMOVE_CURSE,
+    HEALBOT_ABOLISH_POISON,
+                      },
+  [HEALBOT_PRIEST] = {
+    HEALBOT_CURE_DISEASE,
+    HEALBOT_ABOLISH_DISEASE,
+    HEALBOT_DISPEL_MAGIC..HEALBOT_RANK_1,
+    HEALBOT_DISPEL_MAGIC..HEALBOT_RANK_2,
+                      },
+  [HEALBOT_SHAMAN] = {
+    HEALBOT_CURE_POISON,
+    HEALBOT_CURE_DISEASE,
+                       },
+  [HEALBOT_MAGE] = {
+    HEALBOT_REMOVE_LESSER_CURSE,
+  },
+}
+
+HealBot_Buff_Spells = {
+  [HEALBOT_PALADIN] = {
+    HEALBOT_BLESSING_OF_KINGS,
+    HEALBOT_BLESSING_OF_MIGHT,
+    HEALBOT_BLESSING_OF_WISDOM,
+    HEALBOT_BLESSING_OF_SALVATION,
+    HEALBOT_BLESSING_OF_LIGHT,
+    HEALBOT_BLESSING_OF_SANCTUARY,
+    HEALBOT_GREATER_BLESSING_OF_KINGS,
+    HEALBOT_GREATER_BLESSING_OF_MIGHT,
+    HEALBOT_GREATER_BLESSING_OF_WISDOM,
+    HEALBOT_GREATER_BLESSING_OF_SALVATION,
+    HEALBOT_GREATER_BLESSING_OF_LIGHT,
+    HEALBOT_GREATER_BLESSING_OF_SANCTUARY,
+    HEALBOT_RIGHTEOUS_FURY,
+  },
+  [HEALBOT_DRUID] = {
+    HEALBOT_MARK_OF_THE_WILD,
+    HEALBOT_GIFT_OF_THE_WILD,
+    HEALBOT_THORNS,
+    HEALBOT_OMEN_OF_CLARITY,
+  },
+  [HEALBOT_PRIEST] = {
+    HEALBOT_POWER_WORD_FORTITUDE,
+    HEALBOT_PRAYER_OF_FORTITUDE,
+    HEALBOT_DIVINE_SPIRIT,
+    HEALBOT_PRAYER_OF_SPIRIT,
+    HEALBOT_SHADOW_PROTECTION,
+    HEALBOT_PRAYER_OF_SHADOW_PROTECTION,
+    HEALBOT_INNER_FIRE,
+    HEALBOT_FEAR_WARD,
+    HEALBOT_SHADOWFORM,
+    HEALBOT_ENLIGHTEN,
+  },
+  [HEALBOT_MAGE] = {
+    HEALBOT_ARCANE_INTELLECT,
+    HEALBOT_ARCANE_BRILLIANCE,
+    HEALBOT_DAMPEN_MAGIC,
+    HEALBOT_AMPLIFY_MAGIC,
+    HEALBOT_FROST_ARMOR,
+    HEALBOT_ICE_ARMOR,
+    HEALBOT_MAGE_ARMOR,
+    HEALBOT_ICE_BARRIER,
+  },
+  [HEALBOT_SHAMAN] = {
+    HEALBOT_ROCKBITER_WEAPON,
+    HEALBOT_FLAMETONGUE_WEAPON,
+    HEALBOT_FROSTBRAND_WEAPON,
+    HEALBOT_WINDFURY_WEAPON,
+    HEALBOT_LIGHTNING_SHIELD,
+    HEALBOT_WATER_SHIELD,
+    HEALBOT_WATER_WALKING,
+    HEALBOT_WATER_BREATHING,
+  },
+  [HEALBOT_WARRIOR] = {
+    HEALBOT_BATTLE_SHOUT,
+  },
+  [HEALBOT_WARLOCK] = {
+    HEALBOT_DEMON_SKIN,
+    HEALBOT_DEMON_ARMOR,
+    HEALBOT_UNENDING_BREATH,
+    HEALBOT_DETECT_LESSER_INVISIBILITY,
+    HEALBOT_DETECT_INVISIBILITY,
+  },
+  [HEALBOT_HUNTER] = {
+    HEALBOT_TRUESHOT_AURA,
+    HEALBOT_ASPECT_OF_THE_HAWK,
+    HEALBOT_ASPECT_OF_THE_MONKEY,
+    HEALBOT_ASPECT_OF_THE_CHEETAH,
+    HEALBOT_ASPECT_OF_THE_PACK,
+    HEALBOT_ASPECT_OF_THE_WILD,
+    HEALBOT_ASPECT_OF_THE_BEAST,
+  },
+  [HEALBOT_ROGUE] = {},
+}
+
+HealBot_SelfOnly_Buffs = {
+  [HEALBOT_DEMON_SKIN] = true,
+  [HEALBOT_DEMON_ARMOR] = true,
+  [HEALBOT_ASPECT_OF_THE_HAWK] = true,
+  [HEALBOT_ASPECT_OF_THE_MONKEY] = true,
+  [HEALBOT_ASPECT_OF_THE_CHEETAH] = true,
+  [HEALBOT_ASPECT_OF_THE_BEAST] = true,
+  [HEALBOT_FROST_ARMOR] = true,
+  [HEALBOT_ICE_ARMOR] = true,
+  [HEALBOT_MAGE_ARMOR] = true,
+  [HEALBOT_ICE_BARRIER] = true,
+  [HEALBOT_RIGHTEOUS_FURY] = true,
+  [HEALBOT_INNER_FIRE] = true,
+  [HEALBOT_SHADOWFORM] = true,
+  [HEALBOT_LIGHTNING_SHIELD] = true,
+  [HEALBOT_WATER_SHIELD] = true,
+  [HEALBOT_ROCKBITER_WEAPON] = true,
+  [HEALBOT_FLAMETONGUE_WEAPON] = true,
+  [HEALBOT_FROSTBRAND_WEAPON] = true,
+  [HEALBOT_WINDFURY_WEAPON] = true,
+}
+
+HealBot_Debuff_Types = {
+  [HEALBOT_PURIFY] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+  [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
+  [HEALBOT_CURE_POISON] = {HEALBOT_POISON_en},
+  [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
+  [HEALBOT_ABOLISH_POISON] = {HEALBOT_POISON_en},
+  [HEALBOT_CURE_DISEASE] = {HEALBOT_DISEASE_en},
+  [HEALBOT_ABOLISH_DISEASE] = {HEALBOT_DISEASE_en},
+  [HEALBOT_DISPEL_MAGIC..HEALBOT_RANK_1] = {HEALBOT_MAGIC_en},
+  [HEALBOT_DISPEL_MAGIC..HEALBOT_RANK_2] = {HEALBOT_MAGIC_en},  
+  [HEALBOT_REMOVE_LESSER_CURSE] = {HEALBOT_CURSE_en},
+}
+
+HealBot_IsFighting = false;
+
+HealBot_DebuffPriority = {"none"};
+HealBot_DebuffWatch = {[HEALBOT_DISEASE_en]=false, [HEALBOT_MAGIC_en]=false, [HEALBOT_POISON_en]=false, [HEALBOT_CURSE_en]=false};
+
+HealBot_Heals = {};
+
+HealBot_CurrentSpells = {};
+
+HealBot_EmergInc = {};
+HealBot_CDCInc = {};
+HealBot_Skins = {};
+HealBot_ErrorCnt=0;
+HealBot_SpamCnt=0;
+HealBot_Action_TooltipUnit=nil;
+HealBot_Ressing = {};
+HealBot_IamRessing = false;
+
+-- Table Recycling Pool
+local tablePool = {}
+-- HealBot_GetTable: Internal utility: HealBot_GetTable
+function HealBot_GetTable()
+    local t = table.remove(tablePool)
+    if not t then
+        t = {}
+    end
+    return t
+end
+
+-- HealBot_ReleaseTable: Internal utility: HealBot_ReleaseTable
+function HealBot_ReleaseTable(t)
+    if type(t) == "table" then
+        for k in pairs(t) do
+            t[k] = nil
+        end
+        table.insert(tablePool, t)
+    end
+end
+
+HealBot_TrackedAuras = {
+    ["Renew"]                  = { texture = "Interface\\Icons\\Spell_Holy_Renew",           isDebuff = false, showTimer = true,  locKey = "HEALBOT_RENEW" },
+    ["Rejuvenation"]           = { texture = "Interface\\Icons\\Spell_Nature_Rejuvenation",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_REJUVENATION" },
+    ["Regrowth"]               = { texture = "Interface\\Icons\\Spell_Nature_ResistNature",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_REGROWTH" },
+    ["Power Word: Shield"]     = { texture = "Interface\\Icons\\Spell_Holy_PowerWordShield", isDebuff = false, showTimer = true,  locKey = "HEALBOT_POWER_WORD_SHIELD" },
+    ["Fear Ward"]              = { texture = "Interface\\Icons\\Spell_Holy_Excorcism",       isDebuff = false, showTimer = true,  locKey = "HEALBOT_FEAR_WARD" },
+    ["Abolish Disease"]        = { texture = "Interface\\Icons\\Spell_Nature_NullifyDisease",isDebuff = false, showTimer = true,  locKey = "HEALBOT_ABOLISH_DISEASE" },
+    ["Abolish Poison"]         = { texture = "Interface\\Icons\\Spell_Nature_NullifyPoison",  isDebuff = false, showTimer = true,  locKey = "HEALBOT_ABOLISH_POISON" },
+    ["Weakened Soul"]          = { texture = "Interface\\Icons\\Spell_Holy_AshesToAshes",    isDebuff = true,  showTimer = true,  locKey = "HEALBOT_WEAKENED_SOUL" },
+    ["Blessing of Protection"] = { texture = "Interface\\Icons\\Spell_Holy_SealOfProtection", isDebuff = false, showTimer = false },
+    ["Holy Scriptures"]        = { texture = "Interface\\Icons\\btnholyscriptures",          isDebuff = false, showTimer = false },
+};
+
+HealBot_TrackedAura_Textures = {};
+HealBot_TrackedAura_Spells = {};
+
+function HealBot_Init_TrackedAuras()
+    for spell, info in pairs(HealBot_TrackedAuras) do
+        info.spell = spell
+        HealBot_TrackedAura_Textures[info.texture] = info
+        HealBot_TrackedAura_Spells[spell] = info
+        if info.locKey then
+            local locName = getglobal(info.locKey)
+            if locName and locName ~= "" then
+                info.locName = locName
+                HealBot_TrackedAura_Spells[locName] = info
+            end
+        end
+    end
+end
+HealBot_Init_TrackedAuras();
+
+

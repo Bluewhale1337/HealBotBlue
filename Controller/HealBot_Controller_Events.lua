@@ -7,6 +7,9 @@ local unitsToRefresh = {}
 local powerToRefresh = {}
 local HealBot_Timer1, HealsIn_Timer = 0, 0;
 HealBot_LastModState = ""
+HealBot_EquipChangeTimer = 0
+HealBot_SpellsInitFlag = 1
+HealBot_Delay_RecalcParty = 0
 
 -- HealBot_OnLoad: Registers core events and observers on addon load.
 function HealBot_OnLoad(this)
@@ -189,7 +192,7 @@ function HealBot_OnUpdate(this, arg1)
         end
     end
 
-    if HealBot_EquipChangeTimer > 0 then
+    if (HealBot_EquipChangeTimer or 0) > 0 then
         HealBot_EquipChangeTimer = HealBot_EquipChangeTimer - arg1
         if HealBot_EquipChangeTimer <= 0 then
             HealBot_EquipChangeTimer = 0
