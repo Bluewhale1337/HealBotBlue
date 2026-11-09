@@ -43,6 +43,19 @@ function HealBot_Options_BarMaxRowsS_OnValueChanged(this)
   HealBot_Action_PartyChanged()
 end
 
+function HealBot_Options_BarFrame_OnClick(this)
+  if not HealBot_Config.bframe then HealBot_Config.bframe = {} end
+  HealBot_Config.bframe[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 0)
+  HealBot_Action_ResetSkin()
+end
+
+function HealBot_Options_BarFrameWidthS_OnValueChanged(this)
+  if not HealBot_Config.bframewidth then HealBot_Config.bframewidth = {} end
+  HealBot_Config.bframewidth[HealBot_Config.Current_Skin] = this:GetValue()
+  getglobal(this:GetName().."Text"):SetText(this.text .. ": " .. this:GetValue())
+  HealBot_Action_ResetSkin()
+end
+
 function HealBot_Options_GridOrientationDD_OnLoad(this)
   UIDropDownMenu_Initialize(this, HealBot_Options_GridOrientationDD_Initialize);
   UIDropDownMenu_SetWidth(110, this);
@@ -139,6 +152,12 @@ function HealBot_Options_NewSkinb_OnClick(this)
   if not HealBot_Config.bcolorming then HealBot_Config.bcolorming = {} end
   if not HealBot_Config.bcolorminb then HealBot_Config.bcolorminb = {} end
   if not HealBot_Config.bfont then HealBot_Config.bfont = {} end
+  if not HealBot_Config.bframe then HealBot_Config.bframe = {} end
+  if not HealBot_Config.bframewidth then HealBot_Config.bframewidth = {} end
+  if not HealBot_Config.bframecolr then HealBot_Config.bframecolr = {} end
+  if not HealBot_Config.bframecolg then HealBot_Config.bframecolg = {} end
+  if not HealBot_Config.bframecolb then HealBot_Config.bframecolb = {} end
+  if not HealBot_Config.bframecola then HealBot_Config.bframecola = {} end
 
   local curSkin = HealBot_Config.Current_Skin
   local newSkin = HealBot_Options_NewSkin:GetText()
@@ -149,6 +168,12 @@ function HealBot_Options_NewSkinb_OnClick(this)
   HealBot_Config.bcolorming[newSkin] = HealBot_Config.bcolorming[curSkin] or 0
   HealBot_Config.bcolorminb[newSkin] = HealBot_Config.bcolorminb[curSkin] or 0
   HealBot_Config.bfont[newSkin] = HealBot_Config.bfont[curSkin] or "Fonts\\FRIZQT__.TTF"
+  HealBot_Config.bframe[newSkin] = HealBot_Config.bframe[curSkin] or 0
+  HealBot_Config.bframewidth[newSkin] = HealBot_Config.bframewidth[curSkin] or 10
+  HealBot_Config.bframecolr[newSkin] = HealBot_Config.bframecolr[curSkin] or 1
+  HealBot_Config.bframecolg[newSkin] = HealBot_Config.bframecolg[curSkin] or 1
+  HealBot_Config.bframecolb[newSkin] = HealBot_Config.bframecolb[curSkin] or 1
+  HealBot_Config.bframecola[newSkin] = HealBot_Config.bframecola[curSkin] or 1
 
   table.insert(HealBot_Skins,2,HealBot_Options_NewSkin:GetText())
   HealBot_Config.Skin_ID = 2;
@@ -204,6 +229,12 @@ function HealBot_Options_DeleteSkin_OnClick(this)
     if HealBot_Config.bcolorming then HealBot_Config.bcolorming[HealBot_Options_SkinsText:GetText()] = nil end
     if HealBot_Config.bcolorminb then HealBot_Config.bcolorminb[HealBot_Options_SkinsText:GetText()] = nil end
     if HealBot_Config.bfont then HealBot_Config.bfont[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframe then HealBot_Config.bframe[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframewidth then HealBot_Config.bframewidth[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframecolr then HealBot_Config.bframecolr[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframecolg then HealBot_Config.bframecolg[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframecolb then HealBot_Config.bframecolb[HealBot_Options_SkinsText:GetText()] = nil end
+    if HealBot_Config.bframecola then HealBot_Config.bframecola[HealBot_Options_SkinsText:GetText()] = nil end
     table.remove(HealBot_Skins,HealBot_Config.Skin_ID)
     HealBot_Config.Skin_ID = 1;
     HealBot_Config.Skins = HealBot_Skins;  

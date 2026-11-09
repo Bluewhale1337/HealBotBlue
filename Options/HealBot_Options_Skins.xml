@@ -93,23 +93,36 @@
         </Scripts>
       </Button>
       
-            <Frame name="HealBot_Options_Scale">
+      <ScrollFrame name="HealBot_Options_Skins_ScrollFrame" inherits="UIPanelScrollFrameTemplate">
         <Size>
-          <AbsDimension y="325"/>
+          <AbsDimension x="475" y="330"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="20" y="-88"/>
-            </Offset>
-          </Anchor>
-          <Anchor point="TOPRIGHT">
-            <Offset>
-              <AbsDimension x="-20" y="-180"/>
+              <AbsDimension x="20" y="-85"/>
             </Offset>
           </Anchor>
         </Anchors>
-	<Frames>
+        <Scripts>
+          <OnMouseWheel>
+            local scrollBar = getglobal(this:GetName().."ScrollBar");
+            if not scrollBar then return end
+            local current = scrollBar:GetValue();
+            local minVal, maxVal = scrollBar:GetMinMaxValues();
+            if arg1 &gt; 0 then
+              scrollBar:SetValue(math.max(minVal, current - 25));
+            else
+              scrollBar:SetValue(math.min(maxVal, current + 25));
+            end
+          </OnMouseWheel>
+        </Scripts>
+        <ScrollChild>
+          <Frame name="HealBot_Options_Scale">
+            <Size>
+              <AbsDimension x="475" y="490"/>
+            </Size>
+            <Frames>
 <!-- COLUMN 1: Geometry -->
       <Slider name="HealBot_Options_BarHeightS" inherits="HealBot_Options_SliderTemplate">
         <Size><AbsDimension x="123" y="18" /></Size>
@@ -286,9 +299,16 @@
           <OnClick>HealBot_Config.bborder[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 2); HealBot_Action_ResetSkin()</OnClick> 
         </Scripts>
       </CheckButton>      
+      <CheckButton name="HealBot_Options_BarFrame" inherits="SendMailRadioButtonTemplate">
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_1pxBorders" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Bar Frames")</OnLoad> 
+          <OnClick>HealBot_Options_BarFrame_OnClick(this)</OnClick> 
+        </Scripts>
+      </CheckButton>
       <Slider name="HealBot_Options_BarTextureS" inherits="HealBot_Options_SliderTemplate">
         <Size><AbsDimension x="123" y="17" /></Size>
-        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_1pxBorders" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-15" /></Offset></Anchor></Anchors>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarFrame" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-15" /></Offset></Anchor></Anchors>
         <Scripts>
           <OnLoad>HealBot_Options_val_OnLoad(this,HEALBOT_OPTIONS_SKINTEXTURE,1,14)</OnLoad> 
           <OnValueChanged>HealBot_Options_BarTextureS_OnValueChanged(this)</OnValueChanged> 
@@ -326,13 +346,21 @@
           <OnValueChanged>HealBot_Options_BorderThicknessS_OnValueChanged(this)</OnValueChanged> 
         </Scripts>
       </Slider> 
+      <Slider name="HealBot_Options_BarFrameWidthS" inherits="HealBot_Options_SliderTemplate">
+        <Size><AbsDimension x="123" y="17" /></Size>
+        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_BorderThicknessS" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-20" /></Offset></Anchor></Anchors>
+        <Scripts>
+          <OnLoad>HealBot_Options_val_OnLoad(this,"Frame Width",1,20)</OnLoad> 
+          <OnValueChanged>HealBot_Options_BarFrameWidthS_OnValueChanged(this)</OnValueChanged> 
+        </Scripts>
+      </Slider> 
 
       <!-- BOTTOM ROW 1: Max HP, Min HP, Font Enabled, Font Disabled -->
       <StatusBar name="HealBot_MaxHPColorpick" inherits="TextStatusBar">
         <Size><AbsDimension x="87" y="18"/></Size>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IconSizeS" relativePoint="BOTTOMLEFT">
-            <Offset><AbsDimension x="-25" y="-30"/></Offset>
+          <Anchor point="TOPLEFT">
+            <Offset><AbsDimension x="20" y="-345"/></Offset>
           </Anchor>
         </Anchors>
         <Layers>
@@ -639,10 +667,50 @@
           <OnClick>HealBot_SkinColorpick_OnClick("Abort")</OnClick>
         </Scripts>
       </Button>
+
+      <!-- BOTTOM ROW 3: Bar Frame Color -->
+      <StatusBar name="HealBot_BarFrameColorpick" inherits="TextStatusBar">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="BOTTOMLEFT">
+            <Offset><AbsDimension x="0" y="-22"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString inherits="GameFontNormalSmall" text="Bar Frame">
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="TOP">
+                  <Offset><AbsDimension x="0" y="2"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString inherits="GameFontHighlightSmall" text="Bar Frame">
+              <Anchors><Anchor point="CENTER"/></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts><OnLoad>this:SetMinMaxValues(0,100); this:SetValue(100);</OnLoad></Scripts>
+        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+        <BarColor r="1" g="1" b="1"/>
+      </StatusBar>
+      <Button name="HealBot_BarFrameColorpickb">
+        <Size><AbsDimension x="87" y="18"/></Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_BarFrameColorpick" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="0" y="0"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnLoad>this:SetFrameLevel(this:GetParent():GetFrameLevel() + 2)</OnLoad>
+          <OnClick>HealBot_SkinColorpick_OnClick("BarFrame")</OnClick>
+        </Scripts>
+      </Button>
       </Frames>
-   </Frame> 
-   
- </Frames>
+    </Frame>
+    </ScrollChild>
+    </ScrollFrame>
+  </Frames>
 </Frame>
 
 </Ui>

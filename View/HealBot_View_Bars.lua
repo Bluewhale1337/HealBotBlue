@@ -2,6 +2,10 @@
 -- Status bar rendering, color calculations, button styling, and debuff pulsing
 
 local HealBot_AnimTimer = 0
+local HealBot_BarFrame_Backdrop = {
+    tile = false,
+    insets = { left = 0, right = 0, top = 0, bottom = 0 }
+}
 
 -- HealBot_Action_SetTexture: Internal utility: HealBot_Action_SetTexture
 function HealBot_Action_SetTexture(bar, btexture)
@@ -242,8 +246,23 @@ function HealBot_Action_EnableButton(button)
         local debuffType = HealBot_UnitDebuff[unit]
         local isDead = state.isDead or state.isGhost or (not string.find(unit, "^Test") and UnitIsDeadOrGhost(unit))
         local overlayMode = HealBot_Config.CDCOverlay or 1
+        local skin = HealBot_Config.Current_Skin
+        local hasBarFrame = (HealBot_Config.bframe and HealBot_Config.bframe[skin] == 1)
+        local bfr = (HealBot_Config.bframecolr and HealBot_Config.bframecolr[skin]) or 1.0
+        local bfg = (HealBot_Config.bframecolg and HealBot_Config.bframecolg[skin]) or 1.0
+        local bfb = (HealBot_Config.bframecolb and HealBot_Config.bframecolb[skin]) or 1.0
+        local bfa = (HealBot_Config.bframecola and HealBot_Config.bframecola[skin]) or 1.0
 
-        if debuffType and not isDead and overlayMode > 1 and overlayMode < 6 then
+        local alphaBorder = 1.0
+        local alphaOverlay = 1.0
+        if not button:IsEnabled() then
+            local disAlpha = HealBot_Config.bardisa[skin] or 0.4
+            alphaBorder = disAlpha
+            alphaOverlay = disAlpha
+            bfa = bfa * disAlpha
+        end
+
+        if debuffType and not isDead and overlayMode > 1 and overlayMode < 7 then
             local color = HealBot_Config.CDCBarColour[debuffType]
             local cr, cg, cb = 1, 0, 0
             if color then
@@ -252,14 +271,6 @@ function HealBot_Action_EnableButton(button)
 
             button.debuffOverlay:SetFrameLevel(bar:GetFrameLevel() + 2)
             button.debuffOverlay:Show()
-
-            local alphaBorder = 1.0
-            local alphaOverlay = 1.0
-            if not button:IsEnabled() then
-                local disAlpha = HealBot_Config.bardisa[HealBot_Config.Current_Skin] or 0.4
-                alphaBorder = disAlpha
-                alphaOverlay = disAlpha
-            end
 
             if overlayMode == 2 then
                 button.isAnimatedDebuff = false
@@ -270,7 +281,11 @@ function HealBot_Action_EnableButton(button)
                 end
             elseif overlayMode == 3 then
                 button.isAnimatedDebuff = false
-                button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                if hasBarFrame then
+                    button.debuffOverlay:SetBackdropBorderColor(bfr, bfg, bfb, bfa)
+                else
+                    button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                end
                 if button.debuffGlow then
                     local glowTex = HealBot_Config.CDCOverlayTexture or "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga"
                     button.debuffGlow:SetTexture(glowTex)
@@ -291,7 +306,37 @@ function HealBot_Action_EnableButton(button)
                     button.debuffGlow:Show()
                 end
             elseif overlayMode == 5 then -- Animated
-                button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                if hasBarFrame then
+                    button.debuffOverlay:SetBackdropBorderColor(bfr, bfg, bfb, bfa)
+                else
+                    button.debuffOverlay:SetBackdropBorderColor(0, 0, 0, 0)
+                end
+                if button.debuffGlow then
+                    local glowTex
+                    if debuffType == HEALBOT_POISON_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_poison.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_CURSE_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_curse.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_DISEASE_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_disease.tga"
+                        button.isAnimatedDebuff = true
+                    elseif debuffType == HEALBOT_MAGIC_en then
+                        glowTex = "Interface\\AddOns\\HealBotBlue\\Images\\debuff_magic.tga"
+                        button.isAnimatedDebuff = true
+                    else
+                        glowTex = HealBot_Config.CDCOverlayTexture or "Interface\\AddOns\\HealBotBlue\\Images\\glow1.tga"
+                        button.isAnimatedDebuff = false
+                        button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+                    end
+                    button.debuffGlow:SetTexture(glowTex)
+                    button.debuffGlow:SetBlendMode("BLEND")
+                    button.debuffGlow:SetVertexColor(cr, cg, cb, alphaOverlay)
+                    button.debuffGlow:Show()
+                end
+            elseif overlayMode == 6 then -- Animated + Frame
+                button.debuffOverlay:SetBackdropBorderColor(cr, cg, cb, alphaBorder)
                 if button.debuffGlow then
                     local glowTex
                     if debuffType == HEALBOT_POISON_en then
@@ -319,10 +364,16 @@ function HealBot_Action_EnableButton(button)
             end
         else
             button.isAnimatedDebuff = false
-            button.debuffOverlay:Hide()
             if button.debuffGlow then
                 button.debuffGlow:Hide()
                 button.debuffGlow:SetTexCoord(0, 1, 0, 1)
+            end
+            if hasBarFrame and not isDead then
+                button.debuffOverlay:SetFrameLevel(bar:GetFrameLevel() + 2)
+                button.debuffOverlay:SetBackdropBorderColor(bfr, bfg, bfb, bfa)
+                button.debuffOverlay:Show()
+            else
+                button.debuffOverlay:Hide()
             end
         end
     end
@@ -469,7 +520,7 @@ local HealBot_AnimFrame = 0
 
 -- HealBot_Action_UpdateDebuffAnimation: Advances animated overlay frames on active debuffed buttons.
 function HealBot_Action_UpdateDebuffAnimation(elapsed)
-    if not HealBot_Config or HealBot_Config.CDCOverlay ~= 5 then return end
+    if not HealBot_Config or (HealBot_Config.CDCOverlay ~= 5 and HealBot_Config.CDCOverlay ~= 6) then return end
 
     HealBot_AnimTimer = HealBot_AnimTimer + elapsed
     if HealBot_AnimTimer < 0.066 then return end -- ~15 FPS
@@ -515,6 +566,27 @@ function HealBot_Action_ResetSkin()
     local fontOutline = (HealBot_Config.bfontoutline and HealBot_Config.bfontoutline[skin]) or 0
     local expectedFlags = fontOutline == 1 and "OUTLINE" or ""
 
+    local borderStyle = (HealBot_Config.bborder and HealBot_Config.bborder[skin]) or 2
+    local width = (HealBot_Config.bframewidth and HealBot_Config.bframewidth[skin]) or 10
+    local edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border"
+    if borderStyle == 1 then
+        edgeFile = "Interface\\Buttons\\WHITE8X8"
+    end
+    HealBot_BarFrame_Backdrop.edgeFile = edgeFile
+    HealBot_BarFrame_Backdrop.edgeSize = width
+
+    for i = 1, 84 do
+        local btn = getglobal("HealBot_Action_HealUnit" .. i)
+        if btn then
+            if not btn.debuffOverlay then
+                btn.debuffOverlay = getglobal(btn:GetName() .. "DebuffOverlay")
+            end
+            if btn.debuffOverlay then
+                btn.debuffOverlay:SetBackdrop(HealBot_BarFrame_Backdrop)
+            end
+        end
+    end
+
     if HealBot_Action_OptionsButton and HealBot_Action_OptionsButton:GetFontString() then
         HealBot_Action_OptionsButton:GetFontString():SetFont(bfont, btextheight, expectedFlags)
     end
@@ -537,8 +609,12 @@ function HealBot_Action_ResetSkin()
         HealBot_Action_SetTexture(HealBot_EnTextColorpickin, HealBot_Config.btexture[skin])
         HealBot_Action_SetTexture(HealBot_DisTextColorpick, HealBot_Config.btexture[skin])
         HealBot_Action_SetTexture(HealBot_DebTextColorpick, HealBot_Config.btexture[skin])
+        if HealBot_BarFrameColorpick then
+            HealBot_Action_SetTexture(HealBot_BarFrameColorpick, HealBot_Config.btexture[skin])
+        end
         HealBot_SetSkinColours()
     end
+    HealBot_Action_EnableButtons()
 end
 
 -- HealBot_Action_RefreshButtons: Refreshes all active unit buttons.

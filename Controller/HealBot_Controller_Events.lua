@@ -417,6 +417,13 @@ function HealBot_OnEvent_VariablesLoaded(this)
     
     HealBot_InitData();
 
+    if HealBot_Config and HealBot_Config.CDCOverlay == 6 and not HealBot_Config.CDCOverlay_v2 then
+        HealBot_Config.CDCOverlay = 7
+    end
+    if HealBot_Config then
+        HealBot_Config.CDCOverlay_v2 = 1
+    end
+
     if not HealBot_PartyFrameHooked then
         local origShowPartyFrame = ShowPartyFrame;
         ShowPartyFrame = function()
@@ -436,6 +443,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
     HealBot_BonusScanner:ScanEquipment();
 
     HealBot_Action_ShowFrame();
+    HealBot_Action_ResetSkin();
 
     this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
     this:RegisterEvent("PLAYER_REGEN_DISABLED");

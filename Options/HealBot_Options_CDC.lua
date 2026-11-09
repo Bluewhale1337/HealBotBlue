@@ -51,6 +51,7 @@ function HealBot_Options_CDCOverlay_DropDown()
     HEALBOT_OPTIONS_CDCOVERLAY_GLOW or "Glow Effect",
     HEALBOT_OPTIONS_CDCOVERLAY_GLOWFRAME or "Glow + Frame",
     HEALBOT_OPTIONS_CDCOVERLAY_ANIMATED or "Animated",
+    HEALBOT_OPTIONS_CDCOVERLAY_ANIMFRAME or "Animated + Frame",
     HEALBOT_OPTIONS_CDCOVERLAY_NONE or "Disabled",
   };
   for i=1, getn(list), 1 do

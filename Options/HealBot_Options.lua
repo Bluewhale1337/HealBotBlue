@@ -216,6 +216,16 @@ function HealBot_Returned_Colours()
     HealBot_Config.bcolorminr[HealBot_Config.Current_Skin],
     HealBot_Config.bcolorming[HealBot_Config.Current_Skin],
     HealBot_Config.bcolorminb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
+  elseif HealBot_ColourObjWaiting=="BarFrame" then
+    if not HealBot_Config.bframecolr then HealBot_Config.bframecolr = {} end
+    if not HealBot_Config.bframecolg then HealBot_Config.bframecolg = {} end
+    if not HealBot_Config.bframecolb then HealBot_Config.bframecolb = {} end
+    if not HealBot_Config.bframecola then HealBot_Config.bframecola = {} end
+    HealBot_Config.bframecolr[HealBot_Config.Current_Skin],
+    HealBot_Config.bframecolg[HealBot_Config.Current_Skin],
+    HealBot_Config.bframecolb[HealBot_Config.Current_Skin] = ColorPickerFrame:GetColorRGB();
+    HealBot_Config.bframecola[HealBot_Config.Current_Skin] = A;
+    HealBot_Action_ResetSkin()
   else
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].R,
     HealBot_Config.CDCBarColour[HealBot_ColourObjWaiting].G,
@@ -407,6 +417,16 @@ function HealBot_Options_SetSkins()
   
   local is1pxBorder = (HealBot_Config.bborder[HealBot_Config.Current_Skin] == 1)
   HealBot_Options_1pxBorders:SetChecked(is1pxBorder and 1 or nil)
+
+  local isBarFrame = (HealBot_Config.bframe and HealBot_Config.bframe[HealBot_Config.Current_Skin] == 1)
+  HealBot_Options_BarFrame:SetChecked(isBarFrame and 1 or nil)
+
+  local frameWidth = (HealBot_Config.bframewidth and HealBot_Config.bframewidth[HealBot_Config.Current_Skin]) or 10
+  HealBot_Options_BarFrameWidthS:SetValue(frameWidth)
+
+  if HealBot_Options_Skins_ScrollFrame then
+    HealBot_Options_Skins_ScrollFrame:UpdateScrollChildRect()
+  end
 
   HealBot_SetSkinColours()
   if HealBot_Config.Current_Skin==HEALBOT_SKINS_STD then

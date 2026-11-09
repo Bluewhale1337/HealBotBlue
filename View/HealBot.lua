@@ -62,7 +62,9 @@ function HealBot_SetTestDebuff(debuffType)
   if debuffType then
     HealBot_TestDebuff = debuffType;
     if HealBot_Config then
-      HealBot_Config.CDCOverlay = 5; -- Automatically switch to Animated mode
+      if HealBot_Config.CDCOverlay ~= 5 and HealBot_Config.CDCOverlay ~= 6 then
+        HealBot_Config.CDCOverlay = 5; -- Automatically switch to Animated mode
+      end
     end
     if not HealBot_UnitDebuff then HealBot_UnitDebuff = {} end
     HealBot_UnitDebuff["player"] = debuffType;
