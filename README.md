@@ -51,7 +51,7 @@ Default installation path: `C:\Program Files\World of Warcraft\Interface\AddOns\
 
 ### Change Log
 
-**v1.7.7**
+**v1.7.X unreleased**
 * **Bug Fix - Line of Sight & Target Range Resolution:** Resolved Line of Sight regression where the target bar failed to update or dim when obstructed. Fixed `UnitInLineOfSight` parameter mismatch with ClassicAPI (1-arg signature required), added multi-tier fallback chaining to `UnitXP`, and enforced `CheckInteractDistance` on `target` units during Vanilla map coordinate fallbacks. Added range validation to non-healer class bar evaluation.
 * **Bug Fix - Out-of-Range Bar Glow on Modifier Press:** Decoupled unit bar enable/range evaluation from physical modifier keys (`IsShiftKeyDown()`, etc.) in `HealBot_CanHeal`, preventing out-of-range and obstructed units from falsely brightening to full alpha when holding Shift/Ctrl/Alt. Enforced range checking across all action patterns (`"Target"`, macros, items, scripts) in `HealBot_GetHealSpell`, and fixed table key case sensitivity on spell range extraction (`Range` vs `range`).
 * **Feature - HoT Timer Display Modes & Positioning:** Added configurable HoT timer list position dropdown (`Below`, `Above`, `Left`, `Right`) relative to raid frames. Added `Icon Overlay` mode rendering countdown timers directly on health bar HoT icons, and a `Both` mode allowing simultaneous timer list and on-bar icon countdown numbers. Excluded pets from HoT timer lists and overlays. Optimized expiration lookups with O(1) texture-to-spell mappings.
