@@ -221,6 +221,7 @@ HealBot_ConfigDefaults = {
   ActionMouseover = 1,
   CDCLeftText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None", [HEALBOT_MAGE]="None", [HEALBOT_WARRIOR]="None", [HEALBOT_ROGUE]="None", [HEALBOT_HUNTER]="None", [HEALBOT_WARLOCK]="None",},
   CDCRightText = {[HEALBOT_PRIEST]="None", [HEALBOT_SHAMAN]="None", [HEALBOT_DRUID]="None", [HEALBOT_PALADIN]="None", [HEALBOT_MAGE]="None", [HEALBOT_WARRIOR]="None", [HEALBOT_ROGUE]="None", [HEALBOT_HUNTER]="None", [HEALBOT_WARLOCK]="None",},
+  CDCShowAllDebuffs = 0,
   Current_Skin = "Modern Flat",
   Skin_ID = 1,
   Skins = {"Modern Flat", HEALBOT_SKINS_STD, "HealBot Party", "HealBot Raid", "Alteric Valley"},

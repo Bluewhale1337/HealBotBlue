@@ -295,7 +295,7 @@
       <CheckButton name="HealBot_Options_1pxBorders" inherits="SendMailRadioButtonTemplate">
         <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontOutline" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="0" y="-5" /></Offset></Anchor></Anchors>
         <Scripts>
-          <OnLoad>getglobal(this:GetName().."Text"):SetText("1px Borders")</OnLoad> 
+          <OnLoad>getglobal(this:GetName().."Text"):SetText("Sharp Edge Frames")</OnLoad> 
           <OnClick>HealBot_Config.bborder[HealBot_Config.Current_Skin] = (this:GetChecked() and 1 or 2); HealBot_Action_ResetSkin()</OnClick> 
         </Scripts>
       </CheckButton>      

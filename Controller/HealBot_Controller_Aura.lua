@@ -315,7 +315,8 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local buff = UnitBuff(unit, b)
             if not buff then break end
             activeBuffs[buff] = true
-            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[buff] and iconCount < 10 then
+            local info = HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[buff]
+            if info and not info.isDebuff and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
@@ -328,7 +329,8 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local debuff = UnitDebuff(unit, d)
             if not debuff then break end
             activeDebuffs[debuff] = true
-            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[debuff] and iconCount < 10 then
+            local info = HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[debuff]
+            if info and info.isDebuff and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = debuff
             end
