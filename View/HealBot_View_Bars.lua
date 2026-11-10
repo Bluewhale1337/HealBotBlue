@@ -422,7 +422,7 @@ function HealBot_Action_EnableButton(button)
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
     local dMode = HealBot_Config.HealBot_Integrations_HoTTimerDisplayMode or 0
     local overlayMode = (HealBot_Config.HealBot_Integrations_ShowHoTTimers == 1) and (dMode == 1 or dMode == 2)
-    local unitMap = overlayMode and HealBot_ActiveHoTUnitMap and HealBot_ActiveHoTUnitMap[unit]
+    local unitMap = overlayMode and HealBot_ActiveHoTUnitMap and (HealBot_ActiveHoTUnitMap[unit] or (name and HealBot_ActiveHoTUnitMap[name]))
     
     for i = 1, 10 do
         local icon = button["icon"..i]

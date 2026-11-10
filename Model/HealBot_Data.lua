@@ -313,6 +313,7 @@ HealBot_HealsIn = {};
 HealBot_Healers = {};
 HealBot_UnitDebuff = {};
 HealBot_UnitIcons = {};
+HealBot_ActiveHoTUnitMap = {};
 
 HealBot_ResetHealsInFlag=true;
 

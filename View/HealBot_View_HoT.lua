@@ -4,7 +4,7 @@
 local HealBot_PlayerHoTsListFrame = nil
 local HealBot_PlayerHoTFrames = {}
 local HealBot_PlayerHoTs_ListCache = {}
-local HealBot_ActiveHoTUnitMap = {}
+HealBot_ActiveHoTUnitMap = HealBot_ActiveHoTUnitMap or {}
 
 local function HealBot_PlayerHoTs_SortComparator(a, b)
     return (a.expires or 0) < (b.expires or 0)
@@ -47,10 +47,11 @@ end
 
 -- Clear all icon overlay timer texts
 function HealBot_ClearHoTOverlays()
+    HealBot_Overlays_Active = false
     if not HealBot_Action_UnitButtons then return end
     for unit, btnList in pairs(HealBot_Action_UnitButtons) do
         for _, button in pairs(btnList) do
-            local bar = button.bar or getglobal(button:GetName() .. "Bar")
+            local bar = HealBot_Action_HealthBar(button)
             if bar then
                 for i = 1, 10 do
                     local iconText = bar["iconText"..i]
@@ -67,11 +68,12 @@ end
 -- Render countdown numbers directly on unit bar icons
 function HealBot_RenderHoTOverlays()
     if not HealBot_Action_UnitButtons then return end
+    HealBot_Overlays_Active = true
     local iconSize = HealBot_Config.biconsize[HealBot_Config.Current_Skin] or 12
     local fontSize = math.min(11, math.max(8, iconSize - 2))
 
     for unit, btnList in pairs(HealBot_Action_UnitButtons) do
-        local unitMap = HealBot_ActiveHoTUnitMap[unit]
+        local unitMap = HealBot_ActiveHoTUnitMap[unit] or (UnitName(unit) and HealBot_ActiveHoTUnitMap[UnitName(unit)])
         for _, button in pairs(btnList) do
             local bar = HealBot_Action_HealthBar(button)
             if bar and bar:IsVisible() then
@@ -274,10 +276,10 @@ function HealBot_UpdateActiveHoTTimers()
                                 HealBot_ActiveHoTUnitMap[unitID][shortTex] = timeLeft
                             end
 
-                            -- If player in raid, map under raid token button as well
-                            if unitID == "player" and HealBot_Action_UnitButtons then
+                            -- Map to any aliased buttons (player in raid, target bar, MTs, etc.)
+                            if HealBot_Action_UnitButtons then
                                 for btnUnit in pairs(HealBot_Action_UnitButtons) do
-                                    if btnUnit ~= "player" and not string.find(btnUnit, "^Test") and UnitIsUnit(btnUnit, "player") then
+                                    if btnUnit ~= unitID and not string.find(btnUnit, "^Test") and UnitExists(btnUnit) and UnitIsUnit(btnUnit, unitID) then
                                         if not HealBot_ActiveHoTUnitMap[btnUnit] then
                                             HealBot_ActiveHoTUnitMap[btnUnit] = {}
                                         end
@@ -288,6 +290,20 @@ function HealBot_UpdateActiveHoTTimers()
                                         end
                                     end
                                 end
+                            end
+                            if displayName and not HealBot_ActiveHoTUnitMap[displayName] then
+                                HealBot_ActiveHoTUnitMap[displayName] = HealBot_ActiveHoTUnitMap[unitID]
+                            end
+                        elseif displayName then
+                            if not HealBot_ActiveHoTUnitMap[displayName] then
+                                HealBot_ActiveHoTUnitMap[displayName] = {}
+                            end
+                            local cleanTex = string.lower(string.gsub(tex, "/", "\\"))
+                            local shortTex = string.match(cleanTex, "([^\\]+)$")
+                            HealBot_ActiveHoTUnitMap[displayName][tex] = timeLeft
+                            HealBot_ActiveHoTUnitMap[displayName][cleanTex] = timeLeft
+                            if shortTex then
+                                HealBot_ActiveHoTUnitMap[displayName][shortTex] = timeLeft
                             end
                         end
                     end

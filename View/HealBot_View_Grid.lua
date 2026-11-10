@@ -978,8 +978,3 @@ function HealBot_Action_AppendNewUnits()
     HealBot_ReleaseTable(unitsToCheck)
 end
 
-local HealBot_PlayerHoTsListFrame = nil
-local HealBot_PlayerHoTFrames = {}
-local HealBot_PlayerHoTs_ListCache = {}
-HealBot_ActiveHoTUnitMap = {} -- unitID -> { [texture] = timeLeft }
-

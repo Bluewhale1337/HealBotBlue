@@ -1,6 +1,6 @@
 --[[
 
-  HealBot Contined
+  HealBotBlue by Bluewhale1337 built upon HealBot Contined by Strife
 	
 ]]
 
