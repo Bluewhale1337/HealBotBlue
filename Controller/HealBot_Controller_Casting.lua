@@ -39,54 +39,111 @@ function HealBot_CastSpellByName(spell)
   CastSpell(id, BOOKTYPE_SPELL);
 end
 
+local function HealBot_StripSpellRank(spellName)
+  if not spellName then return "" end
+  local parenIndex = string.find(spellName, "%s*%(")
+  if parenIndex then
+    spellName = string.sub(spellName, 1, parenIndex - 1)
+  end
+  spellName = string.gsub(spellName, "^%s+", "")
+  spellName = string.gsub(spellName, "%s+$", "")
+  return spellName
+end
+
+local function HealBot_GetSpellRank(spellName)
+  if not spellName then return "" end
+  local _, _, r = string.find(spellName, "%s*%((.-)%)")
+  return r or ""
+end
+
+local function HealBot_NormalizeSpellName(name)
+  if not name then return "" end
+  name = HealBot_StripSpellRank(name)
+  name = string.lower(name)
+  name = string.gsub(name, "ss", "s")
+  name = string.gsub(name, "rr", "r")
+  return name
+end
+
+local function HealBot_IsRezSpell(s)
+  if not s then return false end
+  local base = string.lower(HealBot_StripSpellRank(s))
+  if base == "resurrection" or base == "ancestral spirit" or base == "redemption" or base == "rebirth" then
+    return true
+  end
+  if (HEALBOT_RESURRECTION and base == string.lower(HEALBOT_RESURRECTION)) or
+     (HEALBOT_ANCESTRALSPIRIT and base == string.lower(HEALBOT_ANCESTRALSPIRIT)) or
+     (HEALBOT_REDEMPTION and base == string.lower(HEALBOT_REDEMPTION)) or
+     (HEALBOT_REBIRTH and base == string.lower(HEALBOT_REBIRTH)) then
+    return true
+  end
+  local norm = HealBot_NormalizeSpellName(s)
+  if norm == HealBot_NormalizeSpellName("resurrection") then
+    return true
+  end
+  return false
+end
+
 -- HealBot_AnnounceCast: Internal utility: HealBot_AnnounceCast
 function HealBot_AnnounceCast(spell, target)
   if not spell or not target then return end
 
   if UnitIsDeadOrGhost(target) then
-      local spellLower = string.lower(spell)
-      if not (string.find(spellLower, "resurrection") or string.find(spellLower, "ancestral spirit") or string.find(spellLower, "redemption") or string.find(spellLower, "rebirth")) then
-          return
-      end
+    if not HealBot_IsRezSpell(spell) then
+      return
+    end
   end
 
   if HealBot_Config.ChatMessages then
-    local tName = target
-    if target == "target" then tName = HealBot_TargetName() or "target" else tName = UnitName(target) end
-    if not tName then tName = target end
-    local baseSpell = spell
-    local parenIndex = string.find(spell, " %(")
-    if parenIndex then
-      baseSpell = string.sub(spell, 1, parenIndex - 1)
-    else
-      parenIndex = string.find(spell, "%(")
-      if parenIndex then
-        baseSpell = string.sub(spell, 1, parenIndex - 1)
-      end
+    local tName = UnitName(target)
+    if not tName and target == "target" then
+      tName = UnitName("target")
     end
-    
-    -- Strip trailing spaces from base spell
-    baseSpell = string.gsub(baseSpell, "%s+$", "")
+    if not tName then
+      tName = target
+    end
+
+    local baseSpell = HealBot_StripSpellRank(spell)
+    local spellRank = HealBot_GetSpellRank(spell)
+    local normSpell = HealBot_NormalizeSpellName(spell)
 
     for i = 1, 5 do
       local msgConf = HealBot_Config.ChatMessages[i]
       local configSpell = msgConf and msgConf.Spell or ""
-      -- Strip trailing spaces from config spell just in case
+      configSpell = string.gsub(configSpell, "^%s+", "")
       configSpell = string.gsub(configSpell, "%s+$", "")
       
-      if msgConf and configSpell ~= "" and msgConf.Channel ~= "None" and (configSpell == spell or configSpell == baseSpell) then
-        local msg = msgConf.Message or ""
-        msg = string.gsub(msg, "#Spell#", spell)
-        msg = string.gsub(msg, "#Target#", tName)
-        local chan = msgConf.Channel
-        if chan == "Say" then
-          SendChatMessage(msg, "SAY")
-        elseif chan == "Party" and GetNumPartyMembers() > 0 then
-          SendChatMessage(msg, "PARTY")
-        elseif chan == "Raid" and GetNumRaidMembers() > 0 then
-          SendChatMessage(msg, "RAID")
-        elseif chan == "Whisper" and UnitIsPlayer(target) then
-          SendChatMessage(msg, "WHISPER", nil, tName)
+      if msgConf and configSpell ~= "" and configSpell ~= "None" and msgConf.Channel and msgConf.Channel ~= "None" then
+        local configBase = HealBot_StripSpellRank(configSpell)
+        local normConfig = HealBot_NormalizeSpellName(configSpell)
+        
+        local match = false
+        if string.lower(configSpell) == string.lower(spell) or
+           string.lower(configBase) == string.lower(baseSpell) or
+           normConfig == normSpell then
+          match = true
+        end
+
+        if match then
+          local msg = msgConf.Message or ""
+          -- Strip rank by substituting baseSpell for spell tokens
+          -- Support #Spell#, #spell#, #SPELL#, #Spell, #spell, #SPELL
+          msg = string.gsub(msg, "#[sS][pP][eE][lL][lL]#?", baseSpell)
+          -- Support #Rank#, #rank#, #RANK#, #Rank, #rank, #RANK
+          msg = string.gsub(msg, "#[rR][aA][nN][kK]#?", spellRank)
+          -- Support #Target#, #target#, #TARGET#, #Target, #target, #TARGET
+          msg = string.gsub(msg, "#[tT][aA][rR][gG][eE][tT]#?", tName)
+          
+          local chan = msgConf.Channel
+          if chan == "Say" then
+            SendChatMessage(msg, "SAY")
+          elseif chan == "Party" and GetNumPartyMembers() > 0 then
+            SendChatMessage(msg, "PARTY")
+          elseif chan == "Raid" and GetNumRaidMembers() > 0 then
+            SendChatMessage(msg, "RAID")
+          elseif chan == "Whisper" and UnitIsPlayer(target) then
+            SendChatMessage(msg, "WHISPER", nil, tName)
+          end
         end
       end
     end
@@ -105,12 +162,12 @@ function HealBot_StartCasting(spell, target, ttype)
     SpellTargetUnit(target);
     SpellStopTargeting()
   elseif ttype == "direct" then
-    if ( UnitIsUnit(target, "player") or CheckInteractDistance(target, 4) ) then
+    if ( UnitIsUnit(target, "player") or CheckInteractDistance(target, 4) or UnitIsDeadOrGhost(target) ) then
       ttype = "fired";
     end
   end
 
-  if ttype == "fired" and HealBot_Spells[spell] then
+  if ttype == "fired" then
     if not HealBot_CastFailed then
       HealBot_CastingSpell  = spell;
       HealBot_CastingTarget = target;
