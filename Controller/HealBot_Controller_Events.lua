@@ -49,6 +49,10 @@ end
 
 -- HealBot_OnUpdate: Main loop: processes dirty queues and timers.
 function HealBot_OnUpdate(this, arg1)
+    if HealBot_Comms_OnUpdate then
+        HealBot_Comms_OnUpdate(arg1);
+    end
+
     if HealBot_Action_TooltipUnit and HealBot_Tooltip:IsVisible() then
         local s = IsShiftKeyDown() and true or false
         local c = IsControlKeyDown() and true or false
@@ -371,7 +375,8 @@ local HealBot_EventHandlers = {
         HealBot_OnEvent_PlayerEquipmentChanged2(this, arg1)
     end,
     ["UNIT_PET"] = function(this, arg1) HealBot_OnEvent_PartyMembersChanged(this) end,
-    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end
+    ["SPELLS_CHANGED"] = function(this, arg1) HealBot_OnEvent_SpellsChanged(this, arg1) end,
+    ["SPELLCAST_DELAYED"] = function(this, arg1) HealBot_OnEvent_SpellcastDelayed(this, arg1) end
 }
 
 -- HealBot_OnEvent: Event dispatcher for WoW UI events.
@@ -465,6 +470,7 @@ function HealBot_OnEvent_VariablesLoaded(this)
     this:RegisterEvent("SPELLCAST_STOP");
     this:RegisterEvent("SPELLCAST_INTERRUPTED");
     this:RegisterEvent("SPELLCAST_FAILED");
+    this:RegisterEvent("SPELLCAST_DELAYED");
     this:RegisterEvent("UNIT_AURA");
     this:RegisterEvent("UPDATE_INVENTORY_ALERTS");
     this:RegisterEvent("UNIT_INVENTORY_CHANGED");
@@ -644,10 +650,22 @@ function HealBot_OnEvent_SpellcastStart(this, spell, duration)
     HealBot_RecalcHeals();
     HealBot_CheckCasting();
     if spell == HEALBOT_RESURRECTION or spell == HEALBOT_ANCESTRALSPIRIT or spell == HEALBOT_REBIRTH or spell == HEALBOT_REDEMPTION then
-        if UnitName("Target") then 
-            HealBot_SendAddonMessage("CTRA", "RES " .. UnitName("Target"));
+        local tName = UnitName("target") or (HealBot_CastingTarget and UnitName(HealBot_CastingTarget));
+        if tName then 
+            HealBot_SendAddonMessage("CTRA", "RES " .. tName);
+            HealBot_SendAddonMessage("HealComm", "Resurrection/" .. tName .. "/start/");
             HealBot_IamRessing = true;
         end
+    end
+end
+
+-- HealBot_OnEvent_SpellcastDelayed: Broadcasts spell pushback delay to HealComm
+function HealBot_OnEvent_SpellcastDelayed(this, delay)
+    if not HealBot_IsCasting or not delay then return end
+    if HealBot_CastingTarget and HealBot_CastingGroupMembers and table.getn(HealBot_CastingGroupMembers) > 1 then
+        HealBot_SendAddonMessage("HealComm", "GrpHealdelay/" .. delay .. "/");
+    elseif HealBot_CastingTarget then
+        HealBot_SendAddonMessage("HealComm", "Healdelay/" .. delay .. "/");
     end
 end
 
@@ -670,11 +688,33 @@ function HealBot_OnEvent_SpellcastStop(this, eventName)
         end
     end
 
+    if eventName == "SPELLCAST_STOP" and not HealBot_CastFailed and HealBot_CastingSpell and HealBot_CastingTarget then
+        local hotTarget = UnitName(HealBot_CastingTarget);
+        if hotTarget then
+            local normSpell = string.lower(HealBot_CastingSpell);
+            local parenIndex = string.find(normSpell, "%(");
+            if parenIndex then
+                normSpell = string.sub(normSpell, 1, parenIndex - 1);
+            end
+            normSpell = string.gsub(normSpell, "^%s+", "");
+            normSpell = string.gsub(normSpell, "%s+$", "");
+
+            if normSpell == "renew" or (HEALBOT_RENEW and normSpell == string.lower(HEALBOT_RENEW)) then
+                HealBot_SendAddonMessage("HealComm", "Renew/" .. hotTarget .. "/15/");
+            elseif normSpell == "rejuvenation" or (HEALBOT_REJUVENATION and normSpell == string.lower(HEALBOT_REJUVENATION)) then
+                HealBot_SendAddonMessage("HealComm", "Reju/" .. hotTarget .. "/12/");
+            elseif normSpell == "regrowth" or (HEALBOT_REGROWTH and normSpell == string.lower(HEALBOT_REGROWTH)) then
+                HealBot_SendAddonMessage("HealComm", "Regr/" .. hotTarget .. "/21/");
+            end
+        end
+    end
+
     HealBot_PendingShapeshiftCast = nil;
     HealBot_StopCasting();
     HealBot_RecalcHeals();
     if HealBot_IamRessing then
         HealBot_SendAddonMessage("CTRA", "RESNO");
+        HealBot_SendAddonMessage("HealComm", "Resurrection/stop/");
         HealBot_IamRessing = false;
     end
 end

@@ -312,6 +312,69 @@ function HealBot_UpdateActiveHoTTimers()
         end
     end
 
+    if HealBot_Comms_HoTs then
+        for targetName, auras in pairs(HealBot_Comms_HoTs) do
+            local unitID = HealBot_Model and HealBot_Model.GetUnitIDByName and HealBot_Model:GetUnitIDByName(targetName)
+            if not unitID and HealBot_FindUnitID then unitID = HealBot_FindUnitID(targetName) end
+            local displayName = targetName
+            if unitID and HealBot_Model and HealBot_Model.units and HealBot_Model.units[unitID] and HealBot_Model.units[unitID].name then
+                displayName = HealBot_Model.units[unitID].name
+            end
+
+            for spellName, info in pairs(auras) do
+                local expiration = info.expires
+                if expiration and expiration > currentTime then
+                    local auraInfo = HealBot_TrackedAura_Spells and HealBot_TrackedAura_Spells[spellName]
+                    if not auraInfo and HealBot_TrackedAuras and HealBot_TrackedAuras[spellName] then
+                        auraInfo = HealBot_TrackedAuras[spellName]
+                    end
+                    local tex = (auraInfo and auraInfo.texture) or "Interface\\Icons\\INV_Misc_QuestionMark"
+                    local cleanTex = tex and string.lower(string.gsub(tex, "/", "\\"))
+                    local shortTex = nil
+                    if cleanTex then
+                        local _, _, m = string.find(cleanTex, "([^\\]+)$")
+                        shortTex = m
+                    end
+                    local timeLeft = math.floor(expiration - currentTime)
+
+                    local alreadyPresent = false
+                    if unitID and HealBot_ActiveHoTUnitMap[unitID] and HealBot_ActiveHoTUnitMap[unitID][tex] then
+                        alreadyPresent = true
+                    elseif displayName and HealBot_ActiveHoTUnitMap[displayName] and HealBot_ActiveHoTUnitMap[displayName][tex] then
+                        alreadyPresent = true
+                    end
+
+                    if not alreadyPresent and timeLeft > 0 then
+                        numHoTs = numHoTs + 1
+                        if not HealBot_PlayerHoTs_ListCache[numHoTs] then
+                            HealBot_PlayerHoTs_ListCache[numHoTs] = {}
+                        end
+                        local hot = HealBot_PlayerHoTs_ListCache[numHoTs]
+                        hot.unit = unitID
+                        hot.name = displayName
+                        hot.spell = spellName
+                        hot.texture = tex
+                        hot.expires = expiration
+                        hot.timeLeft = timeLeft
+
+                        if unitID then
+                            if not HealBot_ActiveHoTUnitMap[unitID] then HealBot_ActiveHoTUnitMap[unitID] = {} end
+                            HealBot_ActiveHoTUnitMap[unitID][tex] = timeLeft
+                            if cleanTex then HealBot_ActiveHoTUnitMap[unitID][cleanTex] = timeLeft end
+                            if shortTex then HealBot_ActiveHoTUnitMap[unitID][shortTex] = timeLeft end
+                        end
+                        if displayName then
+                            if not HealBot_ActiveHoTUnitMap[displayName] then HealBot_ActiveHoTUnitMap[displayName] = {} end
+                            HealBot_ActiveHoTUnitMap[displayName][tex] = timeLeft
+                            if cleanTex then HealBot_ActiveHoTUnitMap[displayName][cleanTex] = timeLeft end
+                            if shortTex then HealBot_ActiveHoTUnitMap[displayName][shortTex] = timeLeft end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     -- Blank out remaining cache entries so sort doesn't read them
     for i = numHoTs + 1, table.getn(HealBot_PlayerHoTs_ListCache) do
         HealBot_PlayerHoTs_ListCache[i].expires = 9999999999

@@ -211,6 +211,7 @@ function HealBot_StopCasting()
   end
   HealBot_CastingSpell  = nil;
   HealBot_CastingTarget = nil;
+  HealBot_CastingGroupMembers = nil;
   local bar = HealBot_Action_HealthBar(HealBot_Action_AbortButton);
   local ar = HealBot_Config.babortcolr[HealBot_Config.Current_Skin] or 0.1;
   local ag = HealBot_Config.babortcolg[HealBot_Config.Current_Skin] or 0.1;

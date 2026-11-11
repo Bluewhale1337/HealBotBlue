@@ -1,3 +1,14 @@
+-- Lua 5.0 string.match polyfill for clear Vanilla 1.12 clients
+if not string.match then
+    string.match = function(s, pattern, init)
+        if not s then return nil end
+        local start_pos, end_pos, c1, c2, c3, c4, c5 = string.find(s, pattern, init)
+        if not start_pos then return nil end
+        if c1 then return c1, c2, c3, c4, c5 end
+        return string.sub(s, start_pos, end_pos)
+    end
+end
+
 HealBot_ConfigDefaults = {
   DebugMode = 0,
   ShowManaBars=0,

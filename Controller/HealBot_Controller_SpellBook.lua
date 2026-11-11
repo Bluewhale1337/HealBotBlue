@@ -94,7 +94,11 @@ function HealBot_Process_HealValue(spell, target)
       end
       
       if table.getn(HealBot_CastingGroupMembers) > 1 then
-        local commsStr = "GrpHeal/" .. HealBot_HealValue .. "/1500/"
+        local castTimeMs = 3000
+        if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime and HealBot_Spells[spell].CastTime > 0 then
+          castTimeMs = math.floor(HealBot_Spells[spell].CastTime * 1000)
+        end
+        local commsStr = "GrpHeal/" .. HealBot_HealValue .. "/" .. castTimeMs .. "/"
         for _, memberName in ipairs(HealBot_CastingGroupMembers) do
           commsStr = commsStr .. memberName .. "/"
         end
@@ -106,7 +110,11 @@ function HealBot_Process_HealValue(spell, target)
           HealBot_RecalcHeals(HealBot_FindUnitID(memberName))
         end
       else
-        HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/1500/")
+        local castTimeMs = 1500
+        if HealBot_Spells[spell] and HealBot_Spells[spell].CastTime and HealBot_Spells[spell].CastTime > 0 then
+          castTimeMs = math.floor(HealBot_Spells[spell].CastTime * 1000)
+        end
+        HealBot_SendAddonMessage("HealComm", "Heal/" .. uname .. "/" .. HealBot_HealValue .. "/" .. castTimeMs .. "/")
         HealBot_SendAddonMessage(HEALBOT_ADDON_ID, ">> " .. uname .. " <<=>> " .. HealBot_HealValue .. " << ")
         if not HealBot_HealsIn[uname] then HealBot_HealsIn[uname] = 0 end
         HealBot_HealsIn[uname] = HealBot_HealsIn[uname] + HealBot_HealValue
