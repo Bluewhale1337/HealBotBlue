@@ -29,7 +29,7 @@ HealBot_ConfigDefaults = {
     [HEALBOT_SKINS_STD] = 1,
   },
   AlertLevel = 0.95,
-  AutoClose = 1,
+  AutoClose = 0,
   PanelSounds = 1,
   GroupHeals = 1,
   TankHeals = 1,
