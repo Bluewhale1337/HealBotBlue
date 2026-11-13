@@ -129,6 +129,12 @@ function HealBot_SkinColorpick_OnClick(SkinType)
     local g = HealBot_Config.bcolorming and HealBot_Config.bcolorming[HealBot_Config.Current_Skin] or 0.0
     local b = HealBot_Config.bcolorminb and HealBot_Config.bcolorminb[HealBot_Config.Current_Skin] or 0.0
     HealBot_UseColourPick(r, g, b, 1.0)
+  elseif SkinType=="BarFrame" then
+    local r = (HealBot_Config.bframecolr and HealBot_Config.bframecolr[HealBot_Config.Current_Skin]) or 1.0
+    local g = (HealBot_Config.bframecolg and HealBot_Config.bframecolg[HealBot_Config.Current_Skin]) or 1.0
+    local b = (HealBot_Config.bframecolb and HealBot_Config.bframecolb[HealBot_Config.Current_Skin]) or 1.0
+    local a = (HealBot_Config.bframecola and HealBot_Config.bframecola[HealBot_Config.Current_Skin]) or 1.0
+    HealBot_UseColourPick(r, g, b, a)
   end
 end
 -- HealBot_SetSkinColours: Applies skin configuration to UI elements.
@@ -184,6 +190,13 @@ function HealBot_SetSkinColours()
     HealBot_Config.babortcolr[skin], HealBot_Config.babortcolg[skin], 
     HealBot_Config.babortcolb[skin], HealBot_Config.babortcola[skin]
   )
+  if HealBot_BarFrameColorpick then
+    local bfr = (HealBot_Config.bframecolr and HealBot_Config.bframecolr[skin]) or 1.0
+    local bfg = (HealBot_Config.bframecolg and HealBot_Config.bframecolg[skin]) or 1.0
+    local bfb = (HealBot_Config.bframecolb and HealBot_Config.bframecolb[skin]) or 1.0
+    local bfa = (HealBot_Config.bframecola and HealBot_Config.bframecola[skin]) or 1.0
+    HealBot_BarFrameColorpick:SetStatusBarColor(bfr, bfg, bfb, bfa)
+  end
 
   -- 4. Setup Main Panel Backdrop (Fixed scoping bugs)
   local borderStyle = HealBot_Config.bborder[skin] or 2

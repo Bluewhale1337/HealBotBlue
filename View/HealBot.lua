@@ -1,0 +1,532 @@
+--[[
+
+  HealBotBlue by Bluewhale1337 built upon HealBot Contined by Strife
+	
+]]
+
+-- local _scale=0; -- moved to HealBot_Controller_Range.lua
+HealBot_CalcEquipBonus=false;
+HealBot_EquipChangeTimer = 0;
+HealBot_HealValue=0;
+HealBot_SpellsInitFlag=1;
+local DebugDebuff=false;
+HealBot_Delay_RecalcParty=0;
+
+
+-- Debugging and Error functions moved to HealBot_Controller_Comms.lua
+
+-- HealBot_TogglePanel: Toggles visibility of a frame panel.
+function HealBot_TogglePanel(panel)
+  if (not panel) then return end
+  if ( panel:IsVisible() ) then
+    HideUIPanel(panel);
+  else
+    ShowUIPanel(panel);
+  end
+end
+
+-- HealBot_StartMoving: Initiates frame dragging when unlocked.
+function HealBot_StartMoving(frame)
+  if ( not frame.isMoving ) and ( frame.isLocked ~= 1 ) then
+    frame:StartMoving();
+    frame.isMoving = true;
+  end
+end
+
+-- HealBot_StopMoving: Stops frame dragging.
+function HealBot_StopMoving(frame)
+  if ( frame.isMoving ) then
+    frame:StopMovingOrSizing();
+    frame.isMoving = false;
+  end
+  if HealBot_Config.GrowUpwards==1 then
+    local left,bottom = HealBot_Action:GetLeft(),HealBot_Action:GetBottom();
+    if left and bottom then
+      HealBot_Config.PanelAnchorX=left;
+      HealBot_Config.PanelAnchorY=bottom;
+    end
+--    HealBot_AddDebug("Pos X="..HealBot_Config.PanelAnchorX.."  Pos Y="..HealBot_Config.PanelAnchorY)
+  end
+
+end
+
+-- HealBot_SetTestDebuff: Simulates debuff effects for testing animations and overlays.
+function HealBot_SetTestDebuff(debuffType)
+  local iconMap = {
+    [HEALBOT_POISON_en] = "Interface\\Icons\\Spell_Nature_NullifyPoison",
+    [HEALBOT_CURSE_en] = "Interface\\Icons\\Spell_Shadow_GatherShadows",
+    [HEALBOT_DISEASE_en] = "Interface\\Icons\\Spell_Nature_NullifyDisease",
+    [HEALBOT_MAGIC_en] = "Interface\\Icons\\Spell_Holy_DispelMagic",
+  };
+
+  if debuffType then
+    HealBot_TestDebuff = debuffType;
+    if HealBot_Config then
+      if HealBot_Config.CDCOverlay ~= 5 and HealBot_Config.CDCOverlay ~= 6 then
+        HealBot_Config.CDCOverlay = 5; -- Automatically switch to Animated mode
+      end
+    end
+    if not HealBot_UnitDebuff then HealBot_UnitDebuff = {} end
+    HealBot_UnitDebuff["player"] = debuffType;
+    if not HealBot_UnitIcons then HealBot_UnitIcons = {} end
+    if not HealBot_UnitIcons["player"] then HealBot_UnitIcons["player"] = {} end
+    HealBot_UnitIcons["player"][1] = iconMap[debuffType];
+
+    -- If test bars active, apply to dummy units as well
+    for i = 1, 40 do
+      local tUnit = "Test" .. i;
+      if HealBot_Action_UnitButtons and HealBot_Action_UnitButtons[tUnit] then
+        HealBot_UnitDebuff[tUnit] = debuffType;
+        if not HealBot_UnitIcons[tUnit] then HealBot_UnitIcons[tUnit] = {} end
+        HealBot_UnitIcons[tUnit][1] = iconMap[debuffType];
+      end
+    end
+
+    if HealBot_Options_CDCOverlay_Refresh and HealBot_Options and HealBot_Options:IsVisible() then
+      HealBot_Options_CDCOverlay_Refresh(true);
+    end
+
+    if DEFAULT_CHAT_FRAME then
+      DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Simulating |cFF00FF00" .. debuffType .. "|r debuff animation. (Type |cFFFFFF00/hb test clear|r to stop)");
+    end
+  else
+    HealBot_TestDebuff = nil;
+    if HealBot_UnitDebuff then
+      HealBot_UnitDebuff["player"] = nil;
+    end
+    if HealBot_UnitIcons and HealBot_UnitIcons["player"] then
+      HealBot_UnitIcons["player"][1] = nil;
+    end
+    for i = 1, 40 do
+      local tUnit = "Test" .. i;
+      if HealBot_UnitDebuff then HealBot_UnitDebuff[tUnit] = nil end
+      if HealBot_UnitIcons and HealBot_UnitIcons[tUnit] then
+        HealBot_UnitIcons[tUnit][1] = nil;
+      end
+    end
+
+    if DEFAULT_CHAT_FRAME then
+      DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Test debuff cleared.");
+    end
+  end
+
+  HealBot_Action_RefreshButtons();
+end
+
+-- HealBot_SlashCmd: Handles '/hb' or '/healbot' chat commands.
+function HealBot_SlashCmd(cmd)
+  if (cmd=="") then
+    HealBot_TogglePanel(HealBot_Action);
+    return
+  end
+
+  local lowCmd = string.lower(cmd or "");
+  local sub1, sub2 = nil, nil;
+  for word in string.gfind(lowCmd, "%S+") do
+    if not sub1 then
+      sub1 = word;
+    elseif not sub2 then
+      sub2 = word;
+      break;
+    end
+  end
+
+  if (sub1 == "test" or sub1 == "debuff" or sub1 == "anim") then
+    local typeMap = {
+      ["poison"] = HEALBOT_POISON_en,
+      ["p"] = HEALBOT_POISON_en,
+      ["curse"] = HEALBOT_CURSE_en,
+      ["c"] = HEALBOT_CURSE_en,
+      ["disease"] = HEALBOT_DISEASE_en,
+      ["d"] = HEALBOT_DISEASE_en,
+      ["magic"] = HEALBOT_MAGIC_en,
+      ["m"] = HEALBOT_MAGIC_en,
+      ["clear"] = "clear",
+      ["off"] = "clear",
+      ["stop"] = "clear",
+      ["none"] = "clear",
+    };
+    local chosen = sub2 and typeMap[sub2];
+    if chosen == "clear" then
+      HealBot_SetTestDebuff(nil);
+    elseif chosen then
+      HealBot_SetTestDebuff(chosen);
+    else
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Usage: /hb test <poison|curse|disease|magic|clear>");
+      end
+    end
+    return;
+  end
+
+  if (sub1 == "poison" or sub1 == "curse" or sub1 == "disease" or sub1 == "magic") then
+    local quickMap = {
+      ["poison"] = HEALBOT_POISON_en,
+      ["curse"] = HEALBOT_CURSE_en,
+      ["disease"] = HEALBOT_DISEASE_en,
+      ["magic"] = HEALBOT_MAGIC_en,
+    };
+    HealBot_SetTestDebuff(quickMap[sub1]);
+    return;
+  end
+  if (cmd=="options" or cmd=="opt" or cmd=="config" or cmd=="cfg") then
+    HealBot_TogglePanel(HealBot_Options);
+    return
+  end
+  if (cmd=="forms" or cmd=="form") then
+    local forms = GetNumShapeshiftForms();
+    if forms and forms > 0 then
+      HealBot_AddChat("HealBot: Available shapeshift forms:");
+      for i=1,forms do
+        local icon, name, active = GetShapeshiftFormInfo(i);
+        local actStr = "false"
+        if active then actStr = "true" end
+        HealBot_AddChat("  Form " .. i .. ": " .. (name or "nil") .. " | Icon: " .. (icon or "nil") .. " | Active: " .. actStr);
+      end
+    else
+      HealBot_AddChat("HealBot: No shapeshift forms found.");
+    end
+    return
+  end
+
+  if (cmd=="reset" or cmd=="recalc" or cmd=="defaults") then
+    HealBot_SpellsInitFlag=2;
+    HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults);
+    return
+  end
+  if (cmd=="ui") then
+    ReloadUI();
+    return;
+  end
+  if (cmd=="init") then
+  	HealBot_RegisterThis(this);
+  end
+  if (cmd=="x") then
+    HealBot_SpellsInitFlag=2;
+	NeedEquipUpdate=1
+  	HealBot_RecalcSpells();
+    return;
+  end
+  if (cmd=="ver") then
+    local text=UnitName("player");
+    HealBot_SendAddonMessage( "HealBot", ">> RequestVersion <<=>> "..text.." <<=>> nil <<" );
+    return;
+  end
+  if (cmd=="chan") then
+    HealBot_AddDebug( "Channel active" );
+    return;
+  end
+  if (cmd=="debug" or cmd=="dbg") then
+    if not HealBot_Config then return; end
+    if HealBot_Config.DebugMode == 1 then
+      HealBot_Config.DebugMode = 0;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFFFF0000DISABLED|r.");
+      end
+    else
+      HealBot_Config.DebugMode = 1;
+      if DEFAULT_CHAT_FRAME then
+        DEFAULT_CHAT_FRAME:AddMessage("|cFFFFD100HealBot|r: Debug mode |cFF00FF00ENABLED|r.");
+      end
+    end
+    return;
+  end
+end
+
+-- HealBot_SendAddonMessage moved to HealBot_Controller_Comms.lua
+
+-- HealBot_TargetName: Retrieves the name of the current target, ignoring enemies.
+function HealBot_TargetName()
+  if UnitIsEnemy("target","player") then return nil end
+--  if not UnitPlayerControlled("target") then return nil end
+  if (UnitIsPlayer("target")) then
+    if UnitIsUnit("target","player") then return "player" end
+    if (UnitInParty("target")) then 
+      for i=1,4 do
+        if UnitIsUnit("target","party"..i) then return "party"..i end
+      end
+    end
+    if (UnitInRaid("target")) then 
+      for i=1,40 do
+        if UnitIsUnit("target","raid"..i) then return "raid"..i end
+      end
+    end
+  else
+    if UnitIsUnit("target","pet") then return "pet" end
+    if (UnitInParty("player")) then 
+      for i=1,4 do
+        if UnitIsUnit("target","partypet"..i) then return "partypet"..i end
+      end
+    end
+    if (UnitInRaid("player")) then 
+      for i=1,40 do
+        if UnitIsUnit("target","raidpet"..i) then return "raidpet"..i end
+      end
+    end
+  end
+  return nil
+end
+
+
+
+-- HealBot_PackBagSlot: Combines bag and slot into a single ID.
+function HealBot_PackBagSlot(bag,slot)
+  return bag*100+slot;
+end
+
+-- HealBot_UnpackBagSlot: Extracts bag and slot from a combined ID.
+function HealBot_UnpackBagSlot(bagslot)
+  return math.floor(bagslot/100),math.mod(bagslot,100);
+end
+
+-- HealBot_GetItemName: Gets item name from bag slot link.
+function HealBot_GetItemName(bag,slot)
+  local link = GetContainerItemLink(bag,slot);
+  if not link then return nil end;
+  local _,_,item = string.find(link,"%[(.*)%]");
+  local _,count = GetContainerItemInfo(bag,slot);
+  return item,count;
+end
+
+-- HealBot_GetBagSlot: Finds bag slot ID for an item name.
+function HealBot_GetBagSlot(item)
+  local BagSlot,BestCount;
+  for bag=0,NUM_BAG_FRAMES do
+    for slot=1,GetContainerNumSlots(bag) do
+      local bagitem,count = HealBot_GetItemName(bag,slot);
+      if (item==bagitem) then
+        if not BestCount or BestCount>count then
+          BagSlot = HealBot_PackBagSlot(bag,slot);
+          BestCount = count;
+        end
+      end
+    end
+  end
+  return BagSlot;
+end
+
+-- HealBot_UseItem: Uses an item from inventory.
+function HealBot_UseItem(item)
+  local bagslot = HealBot_GetBagSlot(item);
+  if not bagslot then return end;
+  local bag,slot = HealBot_UnpackBagSlot(bagslot);
+  local Link = GetContainerItemLink(bag,slot);
+  UseContainerItem(bag,slot);
+end
+
+-- Spell parsing and casting functions moved to HealBot_Controller_Spells.lua
+
+HealBot_ClassMap = nil
+
+function HealBot_InitClassMap()
+    HealBot_ClassMap = {
+        ["DRUID"] = "DRUID", ["Druid"] = "DRUID",
+        ["HUNTER"] = "HUNTER", ["Hunter"] = "HUNTER",
+        ["MAGE"] = "MAGE", ["Mage"] = "MAGE",
+        ["PALADIN"] = "PALADIN", ["Paladin"] = "PALADIN",
+        ["PRIEST"] = "PRIEST", ["Priest"] = "PRIEST",
+        ["ROGUE"] = "ROGUE", ["Rogue"] = "ROGUE",
+        ["SHAMAN"] = "SHAMAN", ["Shaman"] = "SHAMAN",
+        ["WARLOCK"] = "WARLOCK", ["Warlock"] = "WARLOCK",
+        ["WARRIOR"] = "WARRIOR", ["Warrior"] = "WARRIOR",
+    }
+    if HEALBOT_DRUID then HealBot_ClassMap[HEALBOT_DRUID] = "DRUID" end
+    if HEALBOT_HUNTER then HealBot_ClassMap[HEALBOT_HUNTER] = "HUNTER" end
+    if HEALBOT_MAGE then HealBot_ClassMap[HEALBOT_MAGE] = "MAGE" end
+    if HEALBOT_PALADIN then HealBot_ClassMap[HEALBOT_PALADIN] = "PALADIN" end
+    if HEALBOT_PRIEST then HealBot_ClassMap[HEALBOT_PRIEST] = "PRIEST" end
+    if HEALBOT_ROGUE then HealBot_ClassMap[HEALBOT_ROGUE] = "ROGUE" end
+    if HEALBOT_SHAMAN then HealBot_ClassMap[HEALBOT_SHAMAN] = "SHAMAN" end
+    if HEALBOT_WARLOCK then HealBot_ClassMap[HEALBOT_WARLOCK] = "WARLOCK" end
+    if HEALBOT_WARRIOR then HealBot_ClassMap[HEALBOT_WARRIOR] = "WARRIOR" end
+end
+
+-- HealBot_UnitClass: Returns English class string for a unit.
+function HealBot_UnitClass(unit)
+    if not unit then return nil end
+    if string.find(unit, "^Test") then
+        if HealBot_Model and HealBot_Model.units[unit] then
+            return HealBot_Model.units[unit].englishClass
+        end
+        return nil
+    end
+    if not HealBot_ClassMap then HealBot_InitClassMap() end
+
+    -- 1. If player self, query "player" directly
+    if unit == "player" or UnitIsUnit(unit, "player") then
+        local locClass, enClass = UnitClass("player")
+        if enClass and enClass ~= "" then return string.upper(enClass) end
+        if locClass and HealBot_ClassMap[locClass] then return HealBot_ClassMap[locClass] end
+        if locClass then return string.upper(locClass) end
+    end
+
+    -- 2. If raid member, query GetRaidRosterInfo (server authoritative English class token)
+    local _, _, raidIdx = string.find(unit, "^raid(%d+)$")
+    if raidIdx and GetNumRaidMembers() > 0 then
+        local _, _, _, _, class, fileName = GetRaidRosterInfo(tonumber(raidIdx))
+        if fileName and fileName ~= "" then
+            return string.upper(fileName)
+        elseif class and HealBot_ClassMap[class] then
+            return HealBot_ClassMap[class]
+        end
+    end
+
+    -- 3. General fallback via UnitClass API
+    local locClass, enClass = UnitClass(unit)
+    if enClass and enClass ~= "" then return string.upper(enClass) end
+    if locClass and HealBot_ClassMap[locClass] then return HealBot_ClassMap[locClass] end
+    
+    return locClass
+end
+
+---- HealBot_UnitAffected moved to HealBot_Controller_Aura.lua
+-- safer to use GameTooltip:SetUnitBuff and read the lines in the tooltip ...
+-- maybe make an additional GameTooltip frame if possible ?
+
+-- Spell parsing, default setup, finding, casting, and recalculating functions moved to HealBot_Controller_Spells.lua
+
+--------------------------------------------------------------------------------------------------
+-- OnFoo functions
+--------------------------------------------------------------------------------------------------
+
+-- Event loop handlers and event dispatcher moved to HealBot_Controller_Events.lua
+
+-- SpiBonus and GetBonus functions moved to HealBot_Controller_Spells.lua
+
+local HealBot_RaidUnitTokens = {}
+for i=1, 40 do HealBot_RaidUnitTokens[i] = "raid"..i end
+
+HealBot_NameToUnitID = {}
+
+function HealBot_UpdateUnitIDCache()
+  HealBot_NameToUnitID = {}
+  local name = UnitName("player")
+  if name then HealBot_NameToUnitID[name] = "player" end
+  
+  for i=1, 4 do
+    local unit = "party"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "partypet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+  
+  local petName = UnitName("pet")
+  if petName then HealBot_NameToUnitID[petName] = "pet" end
+
+  for i=1, 40 do
+    local unit = "raid"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+    unit = "raidpet"..i
+    name = UnitName(unit)
+    if name then HealBot_NameToUnitID[name] = unit end
+  end
+end
+
+-- HealBot_FindUnitID: Finds a unit token for a given player name.
+function HealBot_FindUnitID(unitname)
+  if not unitname then return nil end
+  return HealBot_NameToUnitID[unitname]
+end
+
+-- HealBot_PlaySound: Plays an audio alert based on ID.
+function HealBot_PlaySound(id)
+  if id==1 then
+    PlaySoundFile("Sound\\Doodad\\BellTollTribal.wav");
+  elseif id==2 then
+    PlaySoundFile("Sound\\Spells\\Thorns.wav");
+  elseif id==3 then
+    PlaySoundFile("Sound\\Doodad\\BellTollNightElf.wav");
+  end
+end
+
+-- HealBot_InitSpells moved to HealBot_Controller_Spells.lua
+
+-- HealBot_InitData: Registers options and basic setup on variables loaded.
+function HealBot_InitData() 
+  HealBot_Skins = HealBot_Config.Skins;
+  if(CT_RegisterMod) then
+    CT_RegisterMod(HEALBOT_ADDON,"HealBot Options",5,"Interface\\AddOns\\HealBotBlue\\Images\\HealBot","Opens HealBot Options","off",nil,HealBot_ToggleOptions);
+  end
+
+--  remove after 1.126
+  local tmp=HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] or 0
+  HealBot_Config.ShowHeader[HealBot_Config.Current_Skin]=tmp
+  
+  HealBot_Options_CDCMonitor_Reset()
+  HealBot_Options_EmergencyFilter_Reset()
+  HealBot_Options_Debuff_Reset()
+end
+
+-- HealBot_ToggleOptions: Toggles the main options menu.
+function HealBot_ToggleOptions()
+  HealBot_TogglePanel(HealBot_Options)
+end
+  
+-- HealBot_InitGetSpellData and HealBot_Generic_Patten moved to HealBot_Controller_Spells.lua
+
+-- HealBot_Get_DebugChan moved to HealBot_Controller_Comms.lua
+
+-- HealBot_Range_Check moved to HealBot_Controller_Range.lua
+
+--------------------------------------------------------------------------------
+-- Native Action Bar Hovercasting (Mouseover Hook)
+--------------------------------------------------------------------------------
+do
+  local pass = function() end
+  local orig = UseAction
+  -- UseAction: Intercepts standard clicks for mouseover support.
+  function UseAction(slot, checkCursor, onSelf)
+    if HealBot_Config.ActionMouseover == 1 then
+      local mouseover = HealBot_Action_TooltipUnit
+      if mouseover and mouseover ~= 'target' then
+        local _PlaySound = PlaySound
+        local target = UnitName("target")
+        
+        PlaySound = pass
+        ClearTarget()
+        PlaySound = _PlaySound
+        
+        do
+          local autoSelfCast = GetCVar("autoSelfCast")
+          SetCVar("autoSelfCast", "0") -- Ensure disabled
+          
+          local spellName = nil
+          if not GetActionText(slot) then
+            HealBot_ScanTooltip:SetOwner(HealBot_ScanTooltip, "ANCHOR_NONE")
+            HealBot_ScanTooltip:SetAction(slot)
+            spellName = HealBot_ScanTooltipTextLeft1 and HealBot_ScanTooltipTextLeft1:GetText()
+          end
+          
+          HealBot_CastFailed = false
+          orig(slot, checkCursor, onSelf)
+          if autoSelfCast then
+            SetCVar("autoSelfCast", autoSelfCast)
+          end
+          
+          if spellName and not HealBot_CastFailed then
+             HealBot_CastingSpell = spellName
+             HealBot_CastingTarget = mouseover
+             HealBot_Process_HealValue(spellName, mouseover)
+             HealBot_AnnounceCast(spellName, mouseover)
+          end
+        end
+        
+        SpellTargetUnit(mouseover)
+        
+        if target then
+          PlaySound = pass
+          TargetLastTarget()
+          PlaySound = _PlaySound
+        end
+        
+        return
+      end
+    end
+    orig(slot, checkCursor, onSelf)
+  end
+end
+
+

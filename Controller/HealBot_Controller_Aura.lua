@@ -315,7 +315,8 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local buff = UnitBuff(unit, b)
             if not buff then break end
             activeBuffs[buff] = true
-            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[buff] and iconCount < 10 then
+            local info = HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[buff]
+            if info and not info.isDebuff and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = buff
             end
@@ -328,7 +329,8 @@ function HealBot_OnEvent_UnitAura(this, unit)
             local debuff = UnitDebuff(unit, d)
             if not debuff then break end
             activeDebuffs[debuff] = true
-            if HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[debuff] and iconCount < 10 then
+            local info = HealBot_TrackedAura_Textures and HealBot_TrackedAura_Textures[debuff]
+            if info and info.isDebuff and iconCount < 10 then
                 iconCount = iconCount + 1
                 HealBot_UnitIcons[unit][iconCount] = debuff
             end
@@ -354,6 +356,20 @@ function HealBot_OnEvent_UnitAura(this, unit)
         HealBot_ReleaseTable(activeBuffs)
         HealBot_ReleaseTable(activeDebuffs)
         
+        if HealBot_TestDebuff and unit == "player" then
+            HealBot_UnitDebuff[unit] = HealBot_TestDebuff
+            if not HealBot_UnitIcons[unit] then HealBot_UnitIcons[unit] = {} end
+            if not HealBot_UnitIcons[unit][1] then
+                local testIcons = {
+                    [HEALBOT_POISON_en] = "Interface\\Icons\\Spell_Nature_NullifyPoison",
+                    [HEALBOT_CURSE_en] = "Interface\\Icons\\Spell_Shadow_GatherShadows",
+                    [HEALBOT_DISEASE_en] = "Interface\\Icons\\Spell_Nature_NullifyDisease",
+                    [HEALBOT_MAGIC_en] = "Interface\\Icons\\Spell_Holy_DispelMagic",
+                }
+                HealBot_UnitIcons[unit][1] = testIcons[HealBot_TestDebuff]
+            end
+        end
+
         if HealBot_UnitDebuff[unit] then
             if DebuffType and HealBot_Range_Check(unit, 40) == 1 then
                 if HealBot_AuraWarningPlayed[unit] ~= DebuffType then

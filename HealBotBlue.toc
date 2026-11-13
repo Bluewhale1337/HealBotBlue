@@ -1,32 +1,55 @@
 ## Interface: 11200
 ## Title: HealBotBlue
-## Version: 1.7.7
+## Version: 1.7.8
 ## Author: Bluewhale
 ## Notes: Raidframe replacement for healing, decursing, resource tracking and buffing with optional support for SuperWow, ClassicAPI, UnitXP_SP3 and Nampower.
 ## SavedVariablesPerCharacter:  HealBot_Config
+
 ..\..\FrameXML\Fonts.xml
 ..\..\FrameXML\OptionsFrameTemplates.xml
 ..\..\FrameXML\UIPanelTemplates.xml
 ..\..\FrameXML\UIDropDownMenu.xml
-HealBot_Error.xml
-HealBot_Model.lua
-HealBot_Integrations.lua
-HealBot_Controller_Range.lua
-HealBot_Controller_Comms.lua
-HealBot_Controller_Aura.lua
-HealBot_Controller_Spells.lua
-HealBot_Controller_Events.lua
+Locales\HealBot_Localization.en.lua
+Locales\HealBot_Localization.de.lua
+Locales\HealBot_Localization.fr.lua
+Locales\HealBot_Localization.kr.lua
+Model\HealBot_Data.lua
+Model\HealBot_Model.lua
+Integrations\HealBot_BonusScanner.lua
+Integrations\HealBot_Integrations.lua
+Controller\HealBot_Controller_Range.lua
+Controller\HealBot_Controller_Comms.lua
+Controller\HealBot_Controller_Aura.lua
+Controller\HealBot_Controller_SpellBook.lua
+Controller\HealBot_Controller_Casting.lua
+Controller\HealBot_Controller_Events.lua
+View\HealBot.lua
 HealBot.xml
-HealBot_View_Layout.lua
-HealBot_View_Tooltip.lua
-HealBot_Action.xml
-HealBot_Options.xml
-HealBot_Options_General.xml
-HealBot_Options_Spells.xml
-HealBot_Options_Healing.xml
-HealBot_Options_CDC.xml
-HealBot_Options_Skins.xml
-HealBot_Options_Buffs.xml
-HealBot_Options_Chat.xml
-HealBot_Options_Auto.xml
-HealBot_Options_Integrations.xml
+View\HealBot_Errors.lua
+View\HealBot_Error.xml
+View\HealBot_View_Grid.lua
+View\HealBot_View_Bars.lua
+View\HealBot_View_HoT.lua
+View\HealBot_View_Tooltip.lua
+View\HealBot_Action.lua
+View\HealBot_Action.xml
+Options\HealBot_Options.lua
+Options\HealBot_Options.xml
+Options\HealBot_Options_General.lua
+Options\HealBot_Options_General.xml
+Options\HealBot_Options_Spells.lua
+Options\HealBot_Options_Spells.xml
+Options\HealBot_Options_Healing.lua
+Options\HealBot_Options_Healing.xml
+Options\HealBot_Options_CDC.lua
+Options\HealBot_Options_CDC.xml
+Options\HealBot_Options_Skins.lua
+Options\HealBot_Options_Skins.xml
+Options\HealBot_Options_Buffs.lua
+Options\HealBot_Options_Buffs.xml
+Options\HealBot_Options_Chat.lua
+Options\HealBot_Options_Chat.xml
+Options\HealBot_Options_Auto.lua
+Options\HealBot_Options_Auto.xml
+Options\HealBot_Options_Integrations.lua
+Options\HealBot_Options_Integrations.xml

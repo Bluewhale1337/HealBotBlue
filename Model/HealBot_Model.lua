@@ -421,7 +421,7 @@ end
 
 -- Updates health/maxHealth values. Returns true if changed.
 function HealBot_Model:UpdateUnitHealth(unit)
-    if not self.units[unit] then return false end
+    if not self.units[unit] or string.find(unit, "^Test") then return false end
     
     local oldHealth = self.units[unit].health
     local oldMax = self.units[unit].maxHealth
@@ -440,7 +440,7 @@ end
 
 -- Updates power values (mana, rage, energy). Returns true if changed.
 function HealBot_Model:UpdateUnitPower(unit)
-    if not self.units[unit] then return false end
+    if not self.units[unit] or string.find(unit, "^Test") then return false end
     
     local oldMana = self.units[unit].mana
     local oldMax = self.units[unit].maxMana
@@ -462,7 +462,7 @@ end
 
 -- Updates status flags (Dead, Ghost, Offline). Returns true if changed.
 function HealBot_Model:UpdateUnitStatus(unit)
-    if not self.units[unit] then return false end
+    if not self.units[unit] or string.find(unit, "^Test") then return false end
     
     local oldDead = self.units[unit].isDead
     local oldGhost = self.units[unit].isGhost
