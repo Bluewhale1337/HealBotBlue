@@ -11,12 +11,12 @@
         <Anchors>
           <Anchor point="TOPLEFT">
             <Offset>
-              <AbsDimension x="50" y="-30"/>
+              <AbsDimension x="20" y="-30"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT">
             <Offset>
-              <AbsDimension x="-50" y="-30"/>
+              <AbsDimension x="-20" y="-30"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -81,7 +81,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWatchInCombat" relativePoint="BOTTOMLEFT">
             <Offset>
-              <AbsDimension x="-5" y="-30"/>
+              <AbsDimension x="5" y="-30"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -92,7 +92,7 @@
       <CheckButton name="HealBot_Options_Buff1Self" inherits="UICheckButtonTemplate" id="1">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -100,6 +100,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff1Exclude" inherits="OptionsButtonTemplate" id="1" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff2" inherits="UIDropDownMenuTemplate" id="2">
         <Layers>
@@ -129,7 +144,7 @@
       <CheckButton name="HealBot_Options_Buff2Self" inherits="UICheckButtonTemplate" id="2">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -137,6 +152,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff2Exclude" inherits="OptionsButtonTemplate" id="2" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff3" inherits="UIDropDownMenuTemplate" id="3">
         <Layers>
@@ -166,7 +196,7 @@
       <CheckButton name="HealBot_Options_Buff3Self" inherits="UICheckButtonTemplate" id="3">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -174,6 +204,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff3Exclude" inherits="OptionsButtonTemplate" id="3" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff4" inherits="UIDropDownMenuTemplate" id="4">
         <Layers>
@@ -203,7 +248,7 @@
       <CheckButton name="HealBot_Options_Buff4Self" inherits="UICheckButtonTemplate" id="4">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -211,6 +256,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff4Exclude" inherits="OptionsButtonTemplate" id="4" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <!-- Column 2 (Buffs 5-8, anchored relative to Buff 1) -->
       <Frame name="HealBot_Options_Buff5" inherits="UIDropDownMenuTemplate" id="5">
@@ -228,9 +288,9 @@
           </Layer>
         </Layers>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPRIGHT">
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="60" y="0"/>
+              <AbsDimension x="265" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -241,7 +301,7 @@
       <CheckButton name="HealBot_Options_Buff5Self" inherits="UICheckButtonTemplate" id="5">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -249,6 +309,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff5Exclude" inherits="OptionsButtonTemplate" id="5" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff6" inherits="UIDropDownMenuTemplate" id="6">
         <Layers>
@@ -278,7 +353,7 @@
       <CheckButton name="HealBot_Options_Buff6Self" inherits="UICheckButtonTemplate" id="6">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -286,6 +361,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff6Exclude" inherits="OptionsButtonTemplate" id="6" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff7" inherits="UIDropDownMenuTemplate" id="7">
         <Layers>
@@ -315,7 +405,7 @@
       <CheckButton name="HealBot_Options_Buff7Self" inherits="UICheckButtonTemplate" id="7">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -323,6 +413,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff7Exclude" inherits="OptionsButtonTemplate" id="7" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
 
       <Frame name="HealBot_Options_Buff8" inherits="UIDropDownMenuTemplate" id="8">
         <Layers>
@@ -352,7 +457,7 @@
       <CheckButton name="HealBot_Options_Buff8Self" inherits="UICheckButtonTemplate" id="8">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="145" y="8"/></Offset>
+            <Offset><AbsDimension x="125" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -360,6 +465,21 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
+      <Button name="HealBot_Options_Buff8Exclude" inherits="OptionsButtonTemplate" id="8" text="Exclude">
+        <Size>
+          <AbsDimension x="52" y="20"/>
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
+            <Offset><AbsDimension x="205" y="6"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
     </Frames>
   </Frame>
 </Ui>

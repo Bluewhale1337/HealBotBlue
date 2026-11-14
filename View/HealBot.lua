@@ -458,6 +458,9 @@ function HealBot_InitData()
   HealBot_Options_CDCMonitor_Reset()
   HealBot_Options_EmergencyFilter_Reset()
   HealBot_Options_Debuff_Reset()
+  if HealBot_Init_BuffExcludeLookup then
+    HealBot_Init_BuffExcludeLookup()
+  end
 end
 
 -- HealBot_ToggleOptions: Toggles the main options menu.

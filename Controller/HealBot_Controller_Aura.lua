@@ -3,6 +3,7 @@ local HealBot_Buff_Equivalents = nil
 -- Handles tracking buffs/debuffs (auras) on group/raid units
 
 HealBot_MissingBuffs = {}
+HealBot_BuffExcludeLookup = {}
 local StaticHasBuff = {}
 
 -- HealBot_UnitAffected: Checks if a specific buff/debuff exists on a unit.
@@ -183,25 +184,36 @@ function HealBot_CheckBuffs(unit)
                 local spellName = HealBot_Buff_Spells[myClass][val]
                 local isSelfOnly = (HealBot_Config.BuffWatchSelf and HealBot_Config.BuffWatchSelf[j] == 1) or (HealBot_SelfOnly_Buffs and HealBot_SelfOnly_Buffs[spellName])
                 if not (isSelfOnly and not UnitIsUnit(unit, "player")) then
-                    local hasIt = hasBuff[spellName]
-                    if not hasIt and HealBot_Buff_Equivalents[spellName] then
-                        for _, equiv in ipairs(HealBot_Buff_Equivalents[spellName]) do
-                            if hasBuff[equiv] then
-                                hasIt = true
-                                break
+                    local uName = UnitName(unit)
+                    local filterMode = (HealBot_Config.BuffFilterMode and HealBot_Config.BuffFilterMode[spellName]) or "EXCLUDE"
+                    local inList = (uName and HealBot_BuffExcludeLookup[spellName] and HealBot_BuffExcludeLookup[spellName][uName])
+                    local isFiltered = false
+                    if filterMode == "INCLUDE" then
+                        if not inList then isFiltered = true end
+                    else
+                        if inList then isFiltered = true end
+                    end
+                    if not isFiltered then
+                        local hasIt = hasBuff[spellName]
+                        if not hasIt and HealBot_Buff_Equivalents[spellName] then
+                            for _, equiv in ipairs(HealBot_Buff_Equivalents[spellName]) do
+                                if hasBuff[equiv] then
+                                    hasIt = true
+                                    break
+                                end
                             end
                         end
-                    end
-                    
-                    if not hasIt then
-                        if myClass == HEALBOT_SHAMAN and UnitIsUnit(unit, "player") and string.find(spellName, " Weapon") then
-                            hasIt = HealBot_CheckShamanWeaponBuff(spellName)
+                        
+                        if not hasIt then
+                            if myClass == HEALBOT_SHAMAN and UnitIsUnit(unit, "player") and string.find(spellName, " Weapon") then
+                                hasIt = HealBot_CheckShamanWeaponBuff(spellName)
+                            end
                         end
-                    end
-                    
-                    if not hasIt then
-                        HealBot_MissingBuffs[unit] = spellName
-                        break
+                        
+                        if not hasIt then
+                            HealBot_MissingBuffs[unit] = spellName
+                            break
+                        end
                     end
                 end
             end
