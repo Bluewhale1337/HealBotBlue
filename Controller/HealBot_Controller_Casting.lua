@@ -338,11 +338,11 @@ end
 
 -- HealBot_CanCastSpell: Internal utility: HealBot_CanCastSpell
 function HealBot_CanCastSpell(spell, unit)
-  local this = HealBot_Spells[spell];
+  local spellInfo = HealBot_Spells[spell];
   -- Removed manual mana check so WoW can properly handle 0-cost buffs (Clearcasting/Inner Focus)
   -- and so tooltips can render in red instead of disappearing.
-  if this.BagSlot then
-    local bag, slot = HealBot_UnpackBagSlot(this.BagSlot);
+  if spellInfo and spellInfo.BagSlot then
+    local bag, slot = HealBot_UnpackBagSlot(spellInfo.BagSlot);
     local start, duration, enable = GetContainerItemCooldown(bag, slot);
     if (start > 0 and duration > 0 and enable > 0) then
       return false;
@@ -352,7 +352,8 @@ function HealBot_CanCastSpell(spell, unit)
 end
 
 -- HealBot_GetHealSpell: Resolves spell rank based on health deficit.
-function HealBot_GetHealSpell(unit, pattern)
+function HealBot_GetHealSpell(unit, pattern, isCasting)
+  if not unit then return nil end;
   if not string.find(unit, "^Test") then
       if (not UnitName(unit)) then return nil end;
   end
@@ -367,13 +368,13 @@ function HealBot_GetHealSpell(unit, pattern)
   
   -- Handle Inline Scripts
   if string.sub(pattern, 1, 1) == "/" then
-      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
+      if not isCasting and HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
   -- Handle Special Targeting Pattern
   if string.lower(pattern) == "target" then
-      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
+      if not isCasting and HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
@@ -395,13 +396,13 @@ function HealBot_GetHealSpell(unit, pattern)
         end
       end
     end
-    if HealBot_Range_Check(unit, range) == 0 then return nil end;
+    if not isCasting and HealBot_Range_Check(unit, range) == 0 then return nil end;
     return spell;
   end
 
   -- Handle Named Macros
   if GetMacroIndexByName(pattern) ~= 0 then
-      if HealBot_Range_Check(unit, 40) == 0 then return nil end;
+      if not isCasting and HealBot_Range_Check(unit, 40) == 0 then return nil end;
       return pattern;
   end
 
@@ -412,7 +413,7 @@ function HealBot_GetHealSpell(unit, pattern)
       if HealBot_Spells[pattern] then
           range = HealBot_Spells[pattern].Range or HealBot_Spells[pattern].range or 40;
       end
-      if HealBot_Range_Check(unit, range) == 0 then return nil end;
+      if not isCasting and HealBot_Range_Check(unit, range) == 0 then return nil end;
       return pattern;
   end
   
@@ -421,7 +422,7 @@ end
 
 -- HealBot_HealUnit: Main entry point for healing a unit.
 function HealBot_HealUnit(unit, pattern)
-  HealBot_CastSpellOnFriend(HealBot_GetHealSpell(unit, pattern), unit);
+  HealBot_CastSpellOnFriend(HealBot_GetHealSpell(unit, pattern, true), unit);
 end
 
 -- HealBot_RecalcHeals: Flags unit for visual refresh.

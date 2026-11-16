@@ -503,6 +503,9 @@ end
 
 -- HealBot_OnEvent_PlayerRegenDisabled: Internal utility: HealBot_OnEvent_PlayerRegenDisabled
 function HealBot_OnEvent_PlayerRegenDisabled(this)
+  if HealBot_Options_BuffOverrideDialog and HealBot_Options_BuffOverrideDialog:IsVisible() then
+      HealBot_Options_BuffOverrideDialog:Hide()
+  end
   -- Removed HealBot_RecalcParty();
   if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then
     if HealBot_Config.AutoClose==1 and HealBot_Config.ActionVisible~=0 then 

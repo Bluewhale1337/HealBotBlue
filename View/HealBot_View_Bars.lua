@@ -208,8 +208,9 @@ function HealBot_Action_EnableButton(button)
         bar2:SetValue(0);
     end
     if not bar.txt then bar.txt = getglobal(bar:GetName() .. "_text") end
-    if (not HealBot_IsCasting and (HealBot_CanHeal(unit) or HealBot_MissingBuffs[unit])) then
-        button:Enable();
+    button:Enable();
+    local isEnabled = (not HealBot_IsCasting and (HealBot_CanHeal(unit) or HealBot_MissingBuffs[unit]))
+    if isEnabled then
         if HealBot_UnitDebuff[unit] then
             sr = HealBot_Config.btextcursecolr[HealBot_Config.Current_Skin];
             sg = HealBot_Config.btextcursecolg[HealBot_Config.Current_Skin];
@@ -226,7 +227,6 @@ function HealBot_Action_EnableButton(button)
         bar:SetStatusBarColor(r, g, b, HealBot_Config.Barcola[HealBot_Config.Current_Skin]);
         bar2:SetStatusBarColor(r, g, b, HealBot_Config.BarcolaInHeal[HealBot_Config.Current_Skin]);
     else
-        button:Disable();
         sr = HealBot_Config.btextdisbledcolr[HealBot_Config.Current_Skin];
         sg = HealBot_Config.btextdisbledcolg[HealBot_Config.Current_Skin];
         sb = HealBot_Config.btextdisbledcolb[HealBot_Config.Current_Skin];
@@ -255,7 +255,7 @@ function HealBot_Action_EnableButton(button)
 
         local alphaBorder = 1.0
         local alphaOverlay = 1.0
-        if not button:IsEnabled() then
+        if not isEnabled then
             local disAlpha = HealBot_Config.bardisa[skin] or 0.4
             alphaBorder = disAlpha
             alphaOverlay = disAlpha

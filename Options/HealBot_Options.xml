@@ -229,6 +229,7 @@
     <Scripts>
        <OnLoad>HealBot_Options_OnLoad(this);</OnLoad>
        <OnShow>HealBot_Options_OnShow(this);</OnShow>
+       <OnHide>HealBot_Options_OnHide(this);</OnHide>
     </Scripts>
   </Frame>
 </Ui>

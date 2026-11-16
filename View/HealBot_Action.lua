@@ -235,6 +235,13 @@ end
 -- HealBot_Action_HealUnit_OnClick: Click event handler.
 function HealBot_Action_HealUnit_OnClick(this,button)
     if not this.unit or string.find(this.unit, "^Test") then return end
+    if HealBot_Options_BuffOverrideDialog and HealBot_Options_BuffOverrideDialog:IsVisible() and IsShiftKeyDown() then
+        local uName = UnitName(this.unit)
+        if uName and HealBot_Options_ToggleOverrideNameFromFrame then
+            HealBot_Options_ToggleOverrideNameFromFrame(uName)
+        end
+        return
+    end
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
     

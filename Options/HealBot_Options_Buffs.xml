@@ -92,7 +92,7 @@
       <CheckButton name="HealBot_Options_Buff1Self" inherits="UICheckButtonTemplate" id="1">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -100,17 +100,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff1Exclude" inherits="OptionsButtonTemplate" id="1" text="Exclude">
+      <Button name="HealBot_Options_Buff1Exclude" inherits="OptionsButtonTemplate" id="1" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -144,7 +144,7 @@
       <CheckButton name="HealBot_Options_Buff2Self" inherits="UICheckButtonTemplate" id="2">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -152,17 +152,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff2Exclude" inherits="OptionsButtonTemplate" id="2" text="Exclude">
+      <Button name="HealBot_Options_Buff2Exclude" inherits="OptionsButtonTemplate" id="2" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -196,7 +196,7 @@
       <CheckButton name="HealBot_Options_Buff3Self" inherits="UICheckButtonTemplate" id="3">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -204,17 +204,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff3Exclude" inherits="OptionsButtonTemplate" id="3" text="Exclude">
+      <Button name="HealBot_Options_Buff3Exclude" inherits="OptionsButtonTemplate" id="3" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -248,7 +248,7 @@
       <CheckButton name="HealBot_Options_Buff4Self" inherits="UICheckButtonTemplate" id="4">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -256,17 +256,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff4Exclude" inherits="OptionsButtonTemplate" id="4" text="Exclude">
+      <Button name="HealBot_Options_Buff4Exclude" inherits="OptionsButtonTemplate" id="4" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -290,7 +290,7 @@
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="265" y="0"/>
+              <AbsDimension x="235" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -301,7 +301,7 @@
       <CheckButton name="HealBot_Options_Buff5Self" inherits="UICheckButtonTemplate" id="5">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -309,17 +309,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff5Exclude" inherits="OptionsButtonTemplate" id="5" text="Exclude">
+      <Button name="HealBot_Options_Buff5Exclude" inherits="OptionsButtonTemplate" id="5" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -353,7 +353,7 @@
       <CheckButton name="HealBot_Options_Buff6Self" inherits="UICheckButtonTemplate" id="6">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -361,17 +361,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff6Exclude" inherits="OptionsButtonTemplate" id="6" text="Exclude">
+      <Button name="HealBot_Options_Buff6Exclude" inherits="OptionsButtonTemplate" id="6" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -405,7 +405,7 @@
       <CheckButton name="HealBot_Options_Buff7Self" inherits="UICheckButtonTemplate" id="7">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -413,17 +413,17 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff7Exclude" inherits="OptionsButtonTemplate" id="7" text="Exclude">
+      <Button name="HealBot_Options_Buff7Exclude" inherits="OptionsButtonTemplate" id="7" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
@@ -457,7 +457,7 @@
       <CheckButton name="HealBot_Options_Buff8Self" inherits="UICheckButtonTemplate" id="8">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="125" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="8"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -465,21 +465,174 @@
           <OnClick>HealBot_Options_BuffSelf_OnClick(this)</OnClick>
         </Scripts>
       </CheckButton>
-      <Button name="HealBot_Options_Buff8Exclude" inherits="OptionsButtonTemplate" id="8" text="Exclude">
+      <Button name="HealBot_Options_Buff8Exclude" inherits="OptionsButtonTemplate" id="8" text="Override">
         <Size>
-          <AbsDimension x="52" y="20"/>
+          <AbsDimension x="56" y="20"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="205" y="6"/></Offset>
+            <Offset><AbsDimension x="170" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_BuffExclude_OnClick(this, arg1)</OnClick>
+          <OnClick>HealBot_Options_BuffExclude_OnClick(this)</OnClick>
           <OnEnter>HealBot_Options_BuffExclude_OnEnter(this)</OnEnter>
           <OnLeave>HealBot_Options_BuffExclude_OnLeave(this)</OnLeave>
         </Scripts>
       </Button>
+
+      <Button name="HealBot_Options_ClearBuffOverrides" inherits="OptionsButtonTemplate" text="Clear buff overrides">
+        <Size><AbsDimension x="160" y="24"/></Size>
+        <Anchors>
+          <Anchor point="TOP" relativeTo="HealBot_Options_Buff4" relativePoint="BOTTOM">
+            <Offset><AbsDimension x="115" y="-30"/></Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_ClearBuffOverrides_OnClick(this)</OnClick>
+          <OnEnter>HealBot_Options_ClearBuffOverrides_OnEnter(this)</OnEnter>
+          <OnLeave>HealBot_Options_ClearBuffOverrides_OnLeave(this)</OnLeave>
+        </Scripts>
+      </Button>
+
+      <Frame name="HealBot_Options_BuffOverrideDialog" toplevel="true" frameStrata="FULLSCREEN_DIALOG" hidden="true" enableMouse="true" parent="UIParent">
+        <Size>
+          <AbsDimension x="330" y="195"/>
+        </Size>
+        <Anchors>
+          <Anchor point="CENTER"/>
+        </Anchors>
+        <Backdrop tile="true"
+            bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+            edgeFile="Interface\DialogFrame\UI-DialogBox-Border">
+          <BackgroundInsets>
+            <AbsInset left="11" right="12" top="12" bottom="11"/>
+          </BackgroundInsets>
+          <TileSize>
+            <AbsValue val="32"/>
+          </TileSize>
+          <EdgeSize>
+            <AbsValue val="32"/>
+          </EdgeSize>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="HealBot_Options_BuffOverrideTitleText" inherits="GameFontNormal">
+              <Anchors>
+                <Anchor point="TOP">
+                  <Offset><AbsDimension x="0" y="-16"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+            <FontString name="HealBot_Options_BuffOverrideHintText" text="Shift-click unit frames to add/remove players live." inherits="GameFontHighlightSmall">
+              <Anchors>
+                <Anchor point="TOP">
+                  <Offset><AbsDimension x="0" y="-112"/></Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Frames>
+          <CheckButton name="HealBot_Options_BuffOverrideModeExclude" inherits="SendMailRadioButtonTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset><AbsDimension x="25" y="-38"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>HealBot_Options_BuffOverrideMode_OnClick("EXCLUDE")</OnClick>
+            </Scripts>
+          </CheckButton>
+          <CheckButton name="HealBot_Options_BuffOverrideModeInclude" inherits="SendMailRadioButtonTemplate">
+            <Anchors>
+              <Anchor point="TOPLEFT">
+                <Offset><AbsDimension x="175" y="-38"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>HealBot_Options_BuffOverrideMode_OnClick("INCLUDE")</OnClick>
+            </Scripts>
+          </CheckButton>
+          <Frame name="HealBot_Options_BuffOverrideEditBoxFrame">
+            <Size>
+              <AbsDimension x="280" y="32"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOP">
+                <Offset><AbsDimension x="0" y="-68"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Backdrop tile="true"
+                bgFile="Interface\Tooltips\UI-Tooltip-Background"
+                edgeFile="Interface\Tooltips\UI-Tooltip-Border">
+              <EdgeSize>
+                <AbsValue val="16"/>
+              </EdgeSize>
+              <TileSize>
+                <AbsValue val="16"/>
+              </TileSize>
+              <BackgroundInsets>
+                <AbsInset left="5" right="5" top="5" bottom="5"/>
+              </BackgroundInsets>
+            </Backdrop>
+            <Scripts>
+              <OnLoad>this:SetBackdropColor(0, 0, 0, 0.8);</OnLoad>
+            </Scripts>
+            <Frames>
+              <EditBox name="HealBot_Options_BuffOverrideEditBox" autoFocus="false" historyLines="0">
+                <Size>
+                  <AbsDimension x="264" y="24"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="CENTER"/>
+                </Anchors>
+                <FontString inherits="GameFontHighlightSmall"/>
+                <Scripts>
+                  <OnEscapePressed>HealBot_Options_BuffOverrideCancel_OnClick()</OnEscapePressed>
+                  <OnEnterPressed>HealBot_Options_BuffOverrideSave_OnClick()</OnEnterPressed>
+                </Scripts>
+              </EditBox>
+            </Frames>
+          </Frame>
+          <Button name="HealBot_Options_BuffOverrideSave" inherits="OptionsButtonTemplate" text="Save">
+            <Size><AbsDimension x="75" y="22"/></Size>
+            <Anchors>
+              <Anchor point="BOTTOMLEFT">
+                <Offset><AbsDimension x="25" y="20"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>HealBot_Options_BuffOverrideSave_OnClick()</OnClick>
+            </Scripts>
+          </Button>
+          <Button name="HealBot_Options_BuffOverrideClear" inherits="OptionsButtonTemplate" text="Clear">
+            <Size><AbsDimension x="75" y="22"/></Size>
+            <Anchors>
+              <Anchor point="BOTTOM">
+                <Offset><AbsDimension x="0" y="20"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>HealBot_Options_BuffOverrideClear_OnClick()</OnClick>
+            </Scripts>
+          </Button>
+          <Button name="HealBot_Options_BuffOverrideCancel" inherits="OptionsButtonTemplate" text="Cancel">
+            <Size><AbsDimension x="75" y="22"/></Size>
+            <Anchors>
+              <Anchor point="BOTTOMRIGHT">
+                <Offset><AbsDimension x="-25" y="20"/></Offset>
+              </Anchor>
+            </Anchors>
+            <Scripts>
+              <OnClick>HealBot_Options_BuffOverrideCancel_OnClick()</OnClick>
+            </Scripts>
+          </Button>
+        </Frames>
+        <Scripts>
+          <OnLoad>table.insert(UISpecialFrames, 1, this:GetName());</OnLoad>
+        </Scripts>
+      </Frame>
     </Frames>
   </Frame>
 </Ui>

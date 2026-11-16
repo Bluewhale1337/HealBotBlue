@@ -451,3 +451,10 @@ function HealBot_Options_ShowPanel(id)
     end
   end
 end
+
+-- HealBot_Options_OnHide: UI handler for OnHide options panel.
+function HealBot_Options_OnHide()
+  if HealBot_Options_BuffOverrideDialog and HealBot_Options_BuffOverrideDialog:IsVisible() then
+    HealBot_Options_BuffOverrideDialog:Hide()
+  end
+end
