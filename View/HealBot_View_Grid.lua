@@ -270,7 +270,8 @@ function HealBot_Action_PartyChanged()
                 HeaderPos[i + 1] = HEALBOT_OPTIONS_GROUPHEALS
             end
             for _, unit in ipairs(HealBot_Action_HealGroup) do
-                if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
+                local isTank = (HealBot_Config.TankHeals == 1) and HealBot_IsTank and HealBot_IsTank(UnitName(unit))
+                if not isTank and not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
                     i = i + 1;
                     HealBot_Action_SetHealButton(i, unit);
                     numBars = numBars + 1;
@@ -286,29 +287,41 @@ function HealBot_Action_PartyChanged()
         last = last + 10
         local TankValid = numBars;
         if HealBot_Config.TankHeals == 1 then
-            if GetNumRaidMembers() > 0 and CT_RA_MainTanks then
+            local tankNames = HealBot_GetTankNames and HealBot_GetTankNames()
+            local numTanks = tankNames and table.getn(tankNames) or 0
+            if numTanks > 0 and (GetNumRaidMembers() > 0 or GetNumPartyMembers() > 0) then
                 if HealBot_Config.ShowHeader[HealBot_Config.Current_Skin] == 1 then
                     HeaderPos[i + 1] = HEALBOT_OPTIONS_TANKHEALS
                 end
-                for j = 1, 10 do
-                    if CT_RA_MainTanks[j] then
-                        for k = 1, GetNumRaidMembers() do
-                            local unit = "raid" .. k;
-                            local PossibleMT = 1;
-                            if UnitInParty(unit) and HealBot_Config.GroupHeals == 1 then 
-                                if not UnitIsUnit(unit, "player") then
-                                    PossibleMT = 0;
+                for j = 1, numTanks do
+                    local tName = tankNames[j]
+                    if tName then
+                        local foundUnit = nil
+                        if GetNumRaidMembers() > 0 then
+                            for k = 1, GetNumRaidMembers() do
+                                local unit = "raid" .. k
+                                if UnitName(unit) and string.lower(UnitName(unit)) == string.lower(tName) then
+                                    foundUnit = unit
+                                    break
                                 end
                             end
-                            if PossibleMT == 1 then 
-                                if UnitName(unit) == CT_RA_MainTanks[j] then
-                                    if not HealBot_Action_UnitButtons[unit] and HealBot_MayHeal(unit) then
-                                        i = i + 1;
-                                        HealBot_Action_SetHealButton(i, unit);
-                                        numBars = numBars + 1;
+                        else
+                            if UnitName("player") and string.lower(UnitName("player")) == string.lower(tName) then
+                                foundUnit = "player"
+                            else
+                                for k = 1, GetNumPartyMembers() do
+                                    local unit = "party" .. k
+                                    if UnitName(unit) and string.lower(UnitName(unit)) == string.lower(tName) then
+                                        foundUnit = unit
+                                        break
                                     end
                                 end
                             end
+                        end
+                        if foundUnit and not HealBot_Action_UnitButtons[foundUnit] and HealBot_MayHeal(foundUnit) then
+                            i = i + 1
+                            HealBot_Action_SetHealButton(i, foundUnit)
+                            numBars = numBars + 1
                         end
                     end
                     if i == last then break end
@@ -913,21 +926,38 @@ function HealBot_Action_AppendNewUnits()
     -- Gather units based on config, similar to PartyChanged
     if HealBot_Config.GroupHeals == 1 then
         for _, unit in ipairs(HealBot_Action_HealGroup) do
-            table.insert(unitsToCheck, unit)
+            local isTank = (HealBot_Config.TankHeals == 1) and HealBot_IsTank and HealBot_IsTank(UnitName(unit))
+            if not isTank then
+                table.insert(unitsToCheck, unit)
+            end
         end
     end
     
-    if HealBot_Config.TankHeals == 1 and GetNumRaidMembers() > 0 and CT_RA_MainTanks then
-        for j = 1, 10 do
-            if CT_RA_MainTanks[j] then
-                for k = 1, GetNumRaidMembers() do
-                    local unit = "raid" .. k
-                    local skip = false
-                    if UnitInParty(unit) and HealBot_Config.GroupHeals == 1 and not UnitIsUnit(unit, "player") then
-                        skip = true
+    if HealBot_Config.TankHeals == 1 and (GetNumRaidMembers() > 0 or GetNumPartyMembers() > 0) then
+        local tankNames = HealBot_GetTankNames and HealBot_GetTankNames()
+        local numTanks = tankNames and table.getn(tankNames) or 0
+        for j = 1, numTanks do
+            local tName = tankNames[j]
+            if tName then
+                if GetNumRaidMembers() > 0 then
+                    for k = 1, GetNumRaidMembers() do
+                        local unit = "raid" .. k
+                        if UnitName(unit) and string.lower(UnitName(unit)) == string.lower(tName) then
+                            table.insert(unitsToCheck, unit)
+                            break
+                        end
                     end
-                    if not skip and UnitName(unit) == CT_RA_MainTanks[j] then
-                        table.insert(unitsToCheck, unit)
+                else
+                    if UnitName("player") and string.lower(UnitName("player")) == string.lower(tName) then
+                        table.insert(unitsToCheck, "player")
+                    else
+                        for k = 1, GetNumPartyMembers() do
+                            local unit = "party" .. k
+                            if UnitName(unit) and string.lower(UnitName(unit)) == string.lower(tName) then
+                                table.insert(unitsToCheck, unit)
+                                break
+                            end
+                        end
                     end
                 end
             end

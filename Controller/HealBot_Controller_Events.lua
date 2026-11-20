@@ -447,6 +447,10 @@ function HealBot_OnEvent_VariablesLoaded(this)
     
     HealBot_BonusScanner:ScanEquipment();
 
+    if HealBot_Init_CustomTanksLookup then
+        HealBot_Init_CustomTanksLookup();
+    end
+
     HealBot_Action_ShowFrame();
     HealBot_Action_ResetSkin();
 
@@ -505,6 +509,9 @@ end
 function HealBot_OnEvent_PlayerRegenDisabled(this)
   if HealBot_Options_BuffOverrideDialog and HealBot_Options_BuffOverrideDialog:IsVisible() then
       HealBot_Options_BuffOverrideDialog:Hide()
+  end
+  if HealBot_Options_TanksDialog and HealBot_Options_TanksDialog:IsVisible() then
+      HealBot_Options_TanksDialog:Hide()
   end
   -- Removed HealBot_RecalcParty();
   if (UnitIsDeadOrGhost("player")) or (UnitOnTaxi("player")) then

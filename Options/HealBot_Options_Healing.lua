@@ -374,3 +374,186 @@ function HealBot_Options_EmergencyFilter_Reset()
 
   HealBot_Action_PartyChanged()
 end
+
+--------------------------------------------------------------------------------
+-- Custom Tanks Management
+--------------------------------------------------------------------------------
+
+HealBot_CustomTanksLookup = HealBot_CustomTanksLookup or {}
+HealBot_CustomTanksList = HealBot_CustomTanksList or {}
+HealBot_CachedTankNames = HealBot_CachedTankNames or {}
+
+function HealBot_Init_CustomTanksLookup()
+  if not HealBot_Config then return end
+  if not HealBot_Config.CustomTanks then
+    HealBot_Config.CustomTanks = ""
+  end
+  HealBot_ParseCustomTanksString(HealBot_Config.CustomTanks)
+end
+
+function HealBot_ParseCustomTanksString(rawText)
+  rawText = rawText or ""
+  HealBot_Config.CustomTanks = rawText
+  for k in pairs(HealBot_CustomTanksLookup) do
+    HealBot_CustomTanksLookup[k] = nil
+  end
+  for k in pairs(HealBot_CustomTanksList) do
+    HealBot_CustomTanksList[k] = nil
+  end
+  for name in string.gfind(rawText, "[^,%s]+") do
+    local lower = string.lower(name)
+    if not HealBot_CustomTanksLookup[lower] then
+      HealBot_CustomTanksLookup[lower] = true
+      table.insert(HealBot_CustomTanksList, name)
+    end
+  end
+end
+
+function HealBot_IsTank(name)
+  if not name then return false end
+  if (not HealBot_CustomTanksList or table.getn(HealBot_CustomTanksList) == 0) and HealBot_Config and HealBot_Config.CustomTanks and HealBot_Config.CustomTanks ~= "" then
+    HealBot_ParseCustomTanksString(HealBot_Config.CustomTanks)
+  end
+  local lower = string.lower(name)
+  if HealBot_CustomTanksLookup and HealBot_CustomTanksLookup[lower] then
+    return true
+  end
+  if CT_RA_MainTanks then
+    for j = 1, 10 do
+      if CT_RA_MainTanks[j] and string.lower(CT_RA_MainTanks[j]) == lower then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function HealBot_GetTankNames()
+  if (not HealBot_CustomTanksList or table.getn(HealBot_CustomTanksList) == 0) and HealBot_Config and HealBot_Config.CustomTanks and HealBot_Config.CustomTanks ~= "" then
+    HealBot_ParseCustomTanksString(HealBot_Config.CustomTanks)
+  end
+  for k in pairs(HealBot_CachedTankNames) do
+    HealBot_CachedTankNames[k] = nil
+  end
+  local added = HealBot_GetTable()
+  if HealBot_CustomTanksList then
+    for i = 1, table.getn(HealBot_CustomTanksList) do
+      local name = HealBot_CustomTanksList[i]
+      if name then
+        local lower = string.lower(name)
+        if not added[lower] then
+          table.insert(HealBot_CachedTankNames, name)
+          added[lower] = true
+        end
+      end
+    end
+  end
+  if CT_RA_MainTanks then
+    for j = 1, 10 do
+      local name = CT_RA_MainTanks[j]
+      if name then
+        local lower = string.lower(name)
+        if not added[lower] then
+          table.insert(HealBot_CachedTankNames, name)
+          added[lower] = true
+        end
+      end
+    end
+  end
+  HealBot_ReleaseTable(added)
+  return HealBot_CachedTankNames
+end
+
+function HealBot_Options_OpenTanksDialog()
+  if HealBot_Options_TanksEditBox then
+    HealBot_Options_TanksEditBox:SetText(HealBot_Config.CustomTanks or "")
+  end
+  if HealBot_Options_TanksDialog then
+    HealBot_Options_TanksDialog:Show()
+  end
+end
+
+function HealBot_Options_ToggleTankNameFromFrame(unitName)
+  if not unitName then return end
+  local raw = ""
+  if HealBot_Options_TanksEditBox and HealBot_Options_TanksDialog and HealBot_Options_TanksDialog:IsVisible() then
+    raw = HealBot_Options_TanksEditBox:GetText() or ""
+  else
+    raw = HealBot_Config.CustomTanks or ""
+  end
+  local names = HealBot_GetTable()
+  local found = false
+  local lowerUnit = string.lower(unitName)
+  for name in string.gfind(raw, "[^,%s]+") do
+    if string.lower(name) == lowerUnit then
+      found = true
+    else
+      table.insert(names, name)
+    end
+  end
+  if not found then
+    table.insert(names, unitName)
+  end
+  local newText = table.concat(names, ", ")
+  HealBot_ReleaseTable(names)
+  HealBot_ParseCustomTanksString(newText)
+  if HealBot_Options_TanksEditBox then
+    HealBot_Options_TanksEditBox:SetText(newText)
+  end
+  HealBot_RecalcParty()
+  if DEFAULT_CHAT_FRAME then
+    if found then
+      DEFAULT_CHAT_FRAME:AddMessage("HealBot: Removed " .. unitName .. " from Tanks.", 1.0, 0.8, 0.2)
+    else
+      DEFAULT_CHAT_FRAME:AddMessage("HealBot: Added " .. unitName .. " to Tanks.", 0.2, 1.0, 0.2)
+    end
+  end
+end
+
+function HealBot_Options_TanksSave_OnClick()
+  if HealBot_Options_TanksEditBox then
+    local text = HealBot_Options_TanksEditBox:GetText() or ""
+    HealBot_ParseCustomTanksString(text)
+  end
+  if HealBot_Options_TanksDialog then
+    HealBot_Options_TanksDialog:Hide()
+  end
+  HealBot_RecalcParty()
+end
+
+function HealBot_Options_TanksClear_OnClick()
+  HealBot_ParseCustomTanksString("")
+  if HealBot_Options_TanksEditBox then
+    HealBot_Options_TanksEditBox:SetText("")
+  end
+  if HealBot_Options_TanksDialog then
+    HealBot_Options_TanksDialog:Hide()
+  end
+  HealBot_RecalcParty()
+  if DEFAULT_CHAT_FRAME then
+    DEFAULT_CHAT_FRAME:AddMessage("HealBot: Cleared all custom tanks.", 1.0, 0.8, 0.2)
+  end
+end
+
+function HealBot_Options_TanksCancel_OnClick()
+  if HealBot_Options_TanksDialog then
+    HealBot_Options_TanksDialog:Hide()
+  end
+end
+
+function HealBot_Options_TanksButton_OnClick(this)
+  HealBot_Options_OpenTanksDialog()
+end
+
+function HealBot_Options_TanksButton_OnEnter(this)
+  GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
+  GameTooltip:SetText("Tanks", 1, 1, 1)
+  local list = HealBot_Config.CustomTanks or ""
+  GameTooltip:AddLine("Tanks: " .. (list ~= "" and list or "None"), 1, 0.82, 0)
+  GameTooltip:AddLine("Click to configure tanks.", 0.7, 0.7, 0.7)
+  GameTooltip:Show()
+end
+
+function HealBot_Options_TanksButton_OnLeave(this)
+  GameTooltip:Hide()
+end

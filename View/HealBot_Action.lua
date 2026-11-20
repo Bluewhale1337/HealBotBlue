@@ -242,6 +242,13 @@ function HealBot_Action_HealUnit_OnClick(this,button)
         end
         return
     end
+    if HealBot_Options_TanksDialog and HealBot_Options_TanksDialog:IsVisible() and IsShiftKeyDown() then
+        local uName = UnitName(this.unit)
+        if uName and HealBot_Options_ToggleTankNameFromFrame then
+            HealBot_Options_ToggleTankNameFromFrame(uName)
+        end
+        return
+    end
     local decode_button = HealBot_Decode_Button(button);
     local pattern = HealBot_Action_SpellPattern(decode_button);
     

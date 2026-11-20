@@ -33,6 +33,7 @@ HealBot_ConfigDefaults = {
   PanelSounds = 1,
   GroupHeals = 1,
   TankHeals = 1,
+  CustomTanks = "",
   TargetHeals = 1,
   EmergencyHeals = 1,
   ActionLocked = 0,

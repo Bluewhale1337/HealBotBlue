@@ -307,12 +307,9 @@ function HealBot_Options_OnShow(this)
   if HealBot_Config.ActionMouseover == nil then HealBot_Config.ActionMouseover = 1; end
   HealBot_Options_ActionMouseover:SetChecked(HealBot_Config.ActionMouseover);
   HealBot_Options_GroupHeals:SetChecked(HealBot_Config.GroupHeals);
-  if CT_RA_MainTanks then
-    HealBot_Options_TankHeals:SetChecked(HealBot_Config.TankHeals);
-  else
-    HealBot_Options_TankHeals:Disable();
-    HealBot_Options_TankHealsText:SetTextColor(0.6,0.6,0.6,0.75);
-  end
+  HealBot_Options_TankHeals:Enable();
+  HealBot_Options_TankHealsText:SetTextColor(1, 0.82, 0);
+  HealBot_Options_TankHeals:SetChecked(HealBot_Config.TankHeals);
   HealBot_Options_TargetHeals:SetChecked(HealBot_Config.TargetHeals);
   HealBot_Options_EmergencyHeals:SetChecked(HealBot_Config.EmergencyHeals);
   HealBot_Options_OverHeal:SetValue(HealBot_Config.OverHeal);
@@ -456,5 +453,8 @@ end
 function HealBot_Options_OnHide()
   if HealBot_Options_BuffOverrideDialog and HealBot_Options_BuffOverrideDialog:IsVisible() then
     HealBot_Options_BuffOverrideDialog:Hide()
+  end
+  if HealBot_Options_TanksDialog and HealBot_Options_TanksDialog:IsVisible() then
+    HealBot_Options_TanksDialog:Hide()
   end
 end

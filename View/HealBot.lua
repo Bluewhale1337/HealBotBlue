@@ -131,6 +131,25 @@ function HealBot_SlashCmd(cmd)
     end
   end
 
+  if (sub1 == "tank" or sub1 == "tanks") then
+    if sub2 and sub2 ~= "" then
+      local tName = string.upper(string.sub(sub2, 1, 1)) .. string.sub(sub2, 2)
+      if HealBot_Options_ToggleTankNameFromFrame then
+        HealBot_Options_ToggleTankNameFromFrame(tName)
+      end
+    elseif UnitExists("target") and UnitIsFriend("player", "target") then
+      local tName = UnitName("target")
+      if tName and HealBot_Options_ToggleTankNameFromFrame then
+        HealBot_Options_ToggleTankNameFromFrame(tName)
+      end
+    else
+      if HealBot_Options_OpenTanksDialog then
+        HealBot_Options_OpenTanksDialog()
+      end
+    end
+    return;
+  end
+
   if (sub1 == "test" or sub1 == "debuff" or sub1 == "anim") then
     local typeMap = {
       ["poison"] = HEALBOT_POISON_en,
@@ -460,6 +479,9 @@ function HealBot_InitData()
   HealBot_Options_Debuff_Reset()
   if HealBot_Init_BuffExcludeLookup then
     HealBot_Init_BuffExcludeLookup()
+  end
+  if HealBot_Init_CustomTanksLookup then
+    HealBot_Init_CustomTanksLookup()
   end
 end
 
