@@ -90,9 +90,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff1Self" inherits="UICheckButtonTemplate" id="1">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -102,11 +103,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff1Exclude" inherits="OptionsButtonTemplate" id="1" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff1" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -142,9 +143,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff2Self" inherits="UICheckButtonTemplate" id="2">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -154,11 +156,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff2Exclude" inherits="OptionsButtonTemplate" id="2" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff2" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -194,9 +196,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff3Self" inherits="UICheckButtonTemplate" id="3">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -206,11 +209,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff3Exclude" inherits="OptionsButtonTemplate" id="3" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff3" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -246,9 +249,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff4Self" inherits="UICheckButtonTemplate" id="4">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -258,11 +262,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff4Exclude" inherits="OptionsButtonTemplate" id="4" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff4" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -299,9 +303,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff5Self" inherits="UICheckButtonTemplate" id="5">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -311,11 +316,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff5Exclude" inherits="OptionsButtonTemplate" id="5" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff5" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -351,9 +356,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff6Self" inherits="UICheckButtonTemplate" id="6">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -363,11 +369,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff6Exclude" inherits="OptionsButtonTemplate" id="6" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff6" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -403,9 +409,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff7Self" inherits="UICheckButtonTemplate" id="7">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -415,11 +422,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff7Exclude" inherits="OptionsButtonTemplate" id="7" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff7" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -455,9 +462,10 @@
         </Scripts>
       </Frame>
       <CheckButton name="HealBot_Options_Buff8Self" inherits="UICheckButtonTemplate" id="8">
+        <Size><AbsDimension x="24" y="24"/></Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="110" y="8"/></Offset>
+            <Offset><AbsDimension x="110" y="6"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
@@ -467,11 +475,11 @@
       </CheckButton>
       <Button name="HealBot_Options_Buff8Exclude" inherits="OptionsButtonTemplate" id="8" text="Override">
         <Size>
-          <AbsDimension x="56" y="20"/>
+          <AbsDimension x="60" y="18"/>
         </Size>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Buff8" relativePoint="TOPLEFT">
-            <Offset><AbsDimension x="170" y="6"/></Offset>
+            <Offset><AbsDimension x="112" y="-18"/></Offset>
           </Anchor>
         </Anchors>
         <Scripts>
